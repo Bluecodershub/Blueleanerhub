@@ -1,0 +1,120 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kubernetes CronJob for MongoDB Backups
+# ═══════════════════════════════════════════════════════════════════════════════
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongodb-backup-daily
+  namespace: bluelearnerhub
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: mongo:7-jammy
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  apt-get update && apt-get install -y awscli
+                  /scripts/backup.sh daily
+              env:
+                - name: MONGODB_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: bluelearnerhub-secrets
+                      key: MONGODB_URL
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: bluelearnerhub-secrets
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: bluelearnerhub-secrets
+                      key: AWS_SECRET_ACCESS_KEY
+                - name: AWS_REGION
+                  value: "us-east-1"
+                - name: AWS_S3_BUCKET
+                  value: "bluelearnerhub-backups"
+                - name: RETENTION_DAYS
+                  value: "7"
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                - name: backups
+                  mountPath: /backups
+          volumes:
+            - name: scripts
+              configMap:
+                name: backup-scripts
+                defaultMode: 0755
+            - name: backups
+              emptyDir: {}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongodb-backup-weekly
+  namespace: bluelearnerhub
+spec:
+  schedule: "0 3 * * 0"  # Weekly on Sunday at 3 AM
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: mongo:7-jammy
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  apt-get update && apt-get install -y awscli
+                  /scripts/backup.sh weekly
+              env:
+                - name: MONGODB_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: bluelearnerhub-secrets
+                      key: MONGODB_URL
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: bluelearnerhub-secrets
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: bluelearnerhub-secrets
+                      key: AWS_SECRET_ACCESS_KEY
+                - name: AWS_REGION
+                  value: "us-east-1"
+                - name: AWS_S3_BUCKET
+                  value: "bluelearnerhub-backups"
+                - name: RETENTION_DAYS
+                  value: "30"
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                - name: backups
+                  mountPath: /backups
+          volumes:
+            - name: scripts
+              configMap:
+                name: backup-scripts
+                defaultMode: 0755
+            - name: backups
+              emptyDir: {}

@@ -1,0 +1,29 @@
+{
+  "name": "bluelearner-inbuilt-ai-seed",
+  "version": "1.0.0",
+  "description": "Offline seed data for BlueLearnerHub's inbuilt AI model. No external AI APIs are required.",
+  "format": "jsonl",
+  "splits": {
+    "train": [
+      "instruction_train.jsonl",
+      "quiz_train.jsonl",
+      "feature_train.jsonl",
+      "safety_train.jsonl"
+    ],
+    "validation": [
+      "validation.jsonl"
+    ]
+  },
+  "domains": [
+    "computer_science",
+    "career",
+    "project_review",
+    "quiz_generation",
+    "learning_path",
+    "hackathon",
+    "study_notebooks",
+    "safety"
+  ],
+  "recommended_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter_output": "models/bluelearner-v1"
+}

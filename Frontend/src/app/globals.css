@@ -1,0 +1,455 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Typography ── */
+    --font-heading: 'Space Mono', 'Roboto Mono', 'Courier New', monospace;
+    --font-sans:    'Inter', 'Helvetica Neue', Helvetica, sans-serif;
+    --font-mono:    'Space Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    --radius: 0.625rem;
+
+    /* ── Color Palette - Hacksplaining Light ── */
+    /* Background: very light blue-lavender */
+    --background:           220 40% 96%;   /* #eef2fb */
+    --background-secondary: 220 35% 93%;   /* #e4eaf6 */
+    --background-tertiary:  220 30% 90%;
+    --foreground:           222 47% 11%;   /* Hacksplaining near-black */
+
+    /* Surface / Cards */
+    --card:             0 0% 100%;         /* pure white */
+    --card-foreground:  222 47% 11%;       /* near-black */
+
+    /* Popovers */
+    --popover:            0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Hacksplaining Blue */
+    --primary:            231 72% 50%;     /* #2d47d8 */
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary:            220 30% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted */
+    --muted:            220 30% 92%;
+    --muted-foreground: 220 15% 44%;
+
+    /* Accent */
+    --accent:            231 72% 95%;
+    --accent-foreground: 231 72% 30%;
+
+    /* Borders */
+    --border:        220 20% 86%;
+    --border-accent: 231 72% 70%;
+    --input:         220 20% 86%;
+    --ring:          231 72% 50%;
+
+    /* Destructive */
+    --destructive:            0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Sidebar (matches main bg) */
+    --sidebar:                  220 40% 96%;
+    --sidebar-foreground:       222 47% 11%;
+    --sidebar-primary:          231 72% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent:           220 30% 92%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border:           220 20% 86%;
+    --sidebar-ring:             231 72% 50%;
+
+    /* Semantic */
+    --success: 142 72% 40%;
+    --warning: 38 92% 50%;
+    --error:   0 84% 60%;
+    --info:    199 89% 48%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+    --shadow:    0 2px 8px 0 rgb(0 0 0 / 0.08);
+    --shadow-md: 0 4px 16px 0 rgb(0 0 0 / 0.10);
+    --shadow-lg: 0 8px 32px 0 rgb(0 0 0 / 0.12);
+    --shadow-xl: 0 20px 48px -8px rgb(0 0 0 / 0.14);
+
+    /* Domain Colors */
+    --cs-blue:     231 72% 50%;
+    --mech-orange: 30 100% 50%;
+    --elec-yellow: 48 100% 46%;
+    --civil-teal:  171 100% 36%;
+    --mgmt-purple: 270 80% 54%;
+  }
+
+  .dark {
+    /* ── Dark Mode ── */
+    --background:           222 47% 8%;
+    --background-secondary: 222 47% 11%;
+    --background-tertiary:  222 47% 14%;
+    --foreground:           220 40% 96%;   /* Hacksplaining near-white */
+
+    --card:             222 47% 11%;
+    --card-foreground:  220 40% 96%;
+
+    --popover:            222 47% 11%;
+    --popover-foreground: 220 40% 96%;
+
+    --primary:            231 80% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary:            222 30% 18%;
+    --secondary-foreground: 220 40% 90%;
+
+    --muted:            222 30% 18%;
+    --muted-foreground: 220 15% 55%;
+
+    --accent:            231 50% 20%;
+    --accent-foreground: 231 80% 75%;
+
+    --border:        222 20% 22%;
+    --border-accent: 231 50% 40%;
+    --input:         222 20% 22%;
+    --ring:          231 80% 65%;
+
+    --destructive:            0 62% 48%;
+    --destructive-foreground: 220 40% 96%;
+
+    --sidebar:                  222 47% 8%;
+    --sidebar-foreground:       220 40% 96%;
+    --sidebar-primary:          231 80% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent:           222 30% 18%;
+    --sidebar-accent-foreground: 220 40% 96%;
+    --sidebar-border:           222 20% 22%;
+    --sidebar-ring:             231 80% 65%;
+
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.30);
+    --shadow:    0 2px 8px 0 rgb(0 0 0 / 0.35);
+    --shadow-md: 0 4px 16px 0 rgb(0 0 0 / 0.40);
+    --shadow-lg: 0 8px 32px 0 rgb(0 0 0 / 0.45);
+    --shadow-xl: 0 20px 48px -8px rgb(0 0 0 / 0.50);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary) / 0.18);
+    color: hsl(var(--card-foreground));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased overflow-x-hidden;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Dot-grid pattern like Hacksplaining */
+    background-image: radial-gradient(
+      circle,
+      hsl(var(--primary) / 0.12) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+    background-attachment: fixed;
+  }
+
+  /* ── Typography ── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    @apply font-bold tracking-tight text-foreground;
+    line-height: 1.15;
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    letter-spacing: -0.018em;
+  }
+
+  h3 {
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    font-family: var(--font-sans);
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: 1.0625rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+
+  /* ── Dot-grid panel (for section backgrounds) ── */
+  .dotgrid-panel {
+    background-color: hsl(var(--background-secondary));
+    background-image: radial-gradient(
+      circle,
+      hsl(var(--primary) / 0.10) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-card text-card-foreground rounded-xl border border-border;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .lesson-card {
+    @apply bg-card rounded-xl border border-border flex items-start gap-4 p-5 transition-all duration-200 cursor-pointer;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .lesson-card:hover {
+    @apply border-primary/60;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-mono text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-lg;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary/90 shadow-sm;
+    padding: 0.75rem 1.75rem;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 16px hsl(var(--primary) / 0.35);
+  }
+
+  .btn-outline {
+    @apply border-2 border-border bg-card text-foreground hover:border-primary hover:text-primary;
+    padding: 0.6875rem 1.75rem;
+  }
+
+  .btn-ghost {
+    @apply text-muted-foreground hover:text-foreground hover:bg-secondary/70;
+    padding: 0.5rem 0.875rem;
+  }
+
+  /* ── Navigation ── */
+  .nav-link {
+    @apply text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
+  }
+
+  .nav-link-active {
+    @apply text-foreground font-semibold;
+  }
+
+  /* ── Section tag (e.g. "FREE LESSONS") ── */
+  .section-tag {
+    font-family: var(--font-mono);
+    @apply text-xs font-bold tracking-widest uppercase text-primary mb-3 block;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-mono font-medium;
+  }
+
+  .badge-primary {
+    @apply border-primary/20 bg-primary/10 text-primary;
+  }
+
+  .badge-success {
+    @apply border-green-200 bg-green-50 text-green-700;
+  }
+
+  .badge-free {
+    @apply border-primary/30 bg-card text-foreground;
+  }
+
+  /* ── Glass effect ── */
+  .glass {
+    @apply bg-card/90 backdrop-blur-md border border-border/60;
+  }
+
+  /* ── Interactive ── */
+  .interactive {
+    @apply transition-all duration-200 ease-out cursor-pointer;
+  }
+
+  .interactive:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* ── Section Spacing ── */
+  .section {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .section-sm {
+    @apply py-10 md:py-16;
+  }
+
+  /* ── Containers ── */
+  .container-content { @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8; }
+  .container-wide    { @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .container-narrow  { @apply mx-auto max-w-3xl px-4 sm:px-6 lg:px-8; }
+
+  /* ── Terminal window ── */
+  .terminal {
+    background: hsl(222 47% 9%);
+    @apply rounded-xl border border-border overflow-hidden;
+    box-shadow: var(--shadow-xl);
+  }
+
+  .terminal-header {
+    @apply flex items-center gap-2 px-4 py-3 border-b border-white/10;
+    background: hsl(222 47% 12%);
+  }
+
+  .terminal-dot {
+    @apply rounded-full;
+    width: 12px;
+    height: 12px;
+  }
+
+  .terminal-body {
+    @apply p-5 font-mono text-sm overflow-auto;
+    color: #c9d1d9;
+    line-height: 1.7;
+  }
+
+  /* ── XP / progress ── */
+  .xp-bar {
+    height: 6px;
+    border-radius: 9999px;
+    background: hsl(var(--muted));
+    overflow: hidden;
+  }
+
+  .xp-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(199 89% 48%));
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ── Code Block (light card variant only — not inside terminals) ── */
+  :not(.terminal-block) > pre {
+    @apply rounded-xl border border-border bg-card p-4 overflow-x-auto;
+    box-shadow: var(--shadow-sm);
+  }
+
+  code {
+    @apply rounded bg-muted px-1.5 py-0.5 text-sm font-mono;
+  }
+
+  pre code {
+    @apply bg-transparent p-0 text-sm;
+  }
+
+  /* ── Scrollbar ── */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer utilities {
+  /* ── Animations ── */
+  .animate-fade-in    { animation: fade-in 0.4s ease-out forwards; }
+  .animate-slide-up   { animation: slide-up 0.45s ease-out forwards; }
+  .animate-scale-in   { animation: scale-in 0.25s ease-out forwards; }
+  .animate-pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
+  .animate-blink      { animation: blink 1s step-end infinite; }
+
+  .stagger-1 { animation-delay: 0.10s; }
+  .stagger-2 { animation-delay: 0.20s; }
+  .stagger-3 { animation-delay: 0.30s; }
+  .stagger-4 { animation-delay: 0.40s; }
+  .stagger-5 { animation-delay: 0.50s; }
+
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(199 89% 48%));
+  }
+
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+/* ── Keyframes ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes terminal-scroll {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+/* ── Global Scrollbar ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}

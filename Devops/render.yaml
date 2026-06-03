@@ -1,0 +1,38 @@
+services:
+  # ─── Express Backend ─────────────────────────────────────────────────────────
+  - type: web
+    name: bluelearnerhub-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URL
+        sync: false   # Set in Render Dashboard - your MongoDB Atlas connection string
+      - key: FRONTEND_URL
+        sync: false   # Set after deploying frontend
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false   # Set in Render Dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: COOKIE_SECRET
+        generateValue: true
+      - key: TRUST_PROXY
+        value: "true"
+
+  # ─── Redis ───────────────────────────────────────────────────────────────────
+  - type: redis
+    name: bluelearnerhub-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru

@@ -1,0 +1,20 @@
+{
+  "name": "BlueLearnerHub",
+  "short_name": "BlueLearner",
+  "description": "Free online courses in Python, JavaScript, React, System Design & more. AI-powered quizzes, hackathons, verified certificates.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "scope": "/"
+}

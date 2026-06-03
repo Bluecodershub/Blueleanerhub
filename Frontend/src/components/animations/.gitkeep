@@ -1,0 +1,13 @@
+# Animations Directory
+
+This directory contains animated components for the platform:
+
+- **animations/** - Reusable animated React components
+  - IsometricHero.tsx - Main landing page hero
+  - IsometricCoding.tsx - Coding animation
+  - IsometricLearning.tsx - Learning animation
+  - FloatingElements.tsx - Floating UI elements
+  - CountUp.tsx - Number animations
+  - LottiePlayer.tsx - Lottie animation wrapper
+
+Add your animated components here following the naming convention.

@@ -1,0 +1,33 @@
+{
+  "name": "bluelearnerhub-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@11.10.1",
+  "workspaces": [
+    "../Backend",
+    "../Frontend",
+    "../Worker/ai-services",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace edtech-backend",
+    "dev:frontend": "npm run dev --workspace bluelearnerhub-frontend",
+    "dev:ai-services": "npm run dev --workspace bluelearnerhub-ai-services",
+    "build:backend": "npm run build --workspace edtech-backend",
+    "build:frontend": "npm run build --workspace bluelearnerhub-frontend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "test:backend": "npm run test --workspace edtech-backend -- --runInBand",
+    "test:frontend": "npm run test --workspace bluelearnerhub-frontend -- --runInBand",
+    "test:ai-services": "npm run test --workspace bluelearnerhub-ai-services -- --passWithNoTests",
+    "test": "npm run test:backend && npm run test:frontend && npm run test:ai-services",
+    "lint:backend": "npm run lint --workspace edtech-backend",
+    "lint:frontend": "npm run lint --workspace bluelearnerhub-frontend",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "type-check:frontend": "npm run type-check --workspace bluelearnerhub-frontend",
+    "verify:python": "python -m compileall ..\\Worker\\ai-agent ..\\Worker\\ai-services\\app",
+    "verify": "npm run build && npm run test && npm run verify:python"
+  }
+}

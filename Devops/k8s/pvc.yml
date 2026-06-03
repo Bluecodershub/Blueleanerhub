@@ -1,0 +1,15 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Persistent Volume Claim for file uploads
+# ═══════════════════════════════════════════════════════════════════════════════
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads-pvc
+  namespace: bluelearnerhub
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: standard

@@ -1,0 +1,261 @@
+/* Isometric Scene Styles */
+
+.isometric-scene {
+  perspective: 1200px;
+  perspective-origin: 50% 40%;
+  transform-style: preserve-3d;
+}
+
+.isometric-grid {
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 40%,
+      rgba(59, 130, 246, 0.1) 40%,
+      rgba(59, 130, 246, 0.1) 60%,
+      transparent 60%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 40%,
+      rgba(59, 130, 246, 0.1) 40%,
+      rgba(59, 130, 246, 0.1) 60%,
+      transparent 60%
+    );
+  background-size: 60px 60px;
+  background-position:
+    0 0,
+    30px 30px;
+  will-change: transform;
+}
+
+.isometric-grid-floor {
+  transform: rotateX(60deg) rotateZ(45deg) scale(2);
+  transform-origin: center center;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
+  will-change: transform;
+}
+
+.isometric-card {
+  transform: rotateX(55deg) rotateZ(45deg);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.isometric-card:hover {
+  transform: rotateX(55deg) rotateZ(45deg) translateZ(20px);
+}
+
+.isometric-building {
+  animation: iso-building-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.isometric-building:nth-child(1) {
+  animation-delay: 0s;
+}
+.isometric-building:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.isometric-building:nth-child(3) {
+  animation-delay: 1s;
+}
+.isometric-building:nth-child(4) {
+  animation-delay: 1.5s;
+}
+
+@keyframes iso-building-float {
+  0%,
+  100% {
+    transform: translateY(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(-8px) translateZ(0);
+  }
+}
+
+@keyframes iso-building-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes iso-glow-line {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.3;
+  }
+}
+
+@keyframes iso-particle-float {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  20% {
+    opacity: 0.6;
+    transform: translateY(-20px) scale(1);
+  }
+  80% {
+    opacity: 0.4;
+    transform: translateY(-80px) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(0.3);
+  }
+}
+
+@keyframes iso-badge-bounce {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+}
+
+@keyframes iso-grid-shimmer {
+  0% {
+    opacity: 0.04;
+  }
+  50% {
+    opacity: 0.08;
+  }
+  100% {
+    opacity: 0.04;
+  }
+}
+
+.iso-building-enter {
+  animation: iso-building-entrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.iso-particle {
+  animation: iso-particle-float 5s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+.iso-glow {
+  animation: iso-glow-line 1.2s ease-out both;
+  will-change: stroke-dashoffset, opacity;
+}
+
+.iso-badge-float {
+  animation: iso-badge-bounce 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.iso-grid-pulse {
+  animation: iso-grid-shimmer 4s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.parallax-layer {
+  position: absolute;
+  will-change: transform;
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.glow-amber {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+}
+
+.iso-connection-line {
+  stroke-dasharray: 4 4;
+  will-change: stroke-dashoffset;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+  will-change: transform, opacity;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isometric-building,
+  .iso-building-enter,
+  .iso-particle,
+  .iso-glow,
+  .iso-badge-float,
+  .iso-grid-pulse,
+  .animate-slide-in-left,
+  .animate-slide-in-right {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .isometric-card {
+    transition: none !important;
+  }
+
+  .isometric-card:hover {
+    transform: rotateX(55deg) rotateZ(45deg);
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm run build:all"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "restartPolicyType": "ON_FAILURE"
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "NODE_ENV": "production",
+        "PORT": "$PORT",
+        "DATABASE_URL": "$DATABASE_URL",
+        "REDIS_URL": "$REDIS_URL",
+        "JWT_SECRET": "$JWT_SECRET",
+        "JWT_REFRESH_SECRET": "$JWT_REFRESH_SECRET",
+        "FRONTEND_URL": "$RAILWAY_STATIC_URL",
+        "AI_SERVICE_URL": "$AI_SERVICE_URL"
+      }
+    }
+  },
+  "services": [
+    {
+      "name": "frontend",
+      "source": {
+        "repo": "bluelearnerhub/edtech-platform",
+        "rootDirectory": "/frontend"
+      },
+      "build": {
+        "buildCommand": "npm ci && npm run build"
+      },
+      "variables": {
+        "NEXT_PUBLIC_API_URL": "${{backend.RAILWAY_STATIC_URL}}/api",
+        "NEXT_PUBLIC_WS_URL": "${{backend.RAILWAY_STATIC_URL}}"
+      }
+    },
+    {
+      "name": "backend",
+      "source": {
+        "repo": "bluelearnerhub/edtech-platform", 
+        "rootDirectory": "/backend"
+      },
+      "build": {
+        "buildCommand": "npm ci && npm run build"
+      },
+      "variables": {
+        "DATABASE_URL": "${{Postgres.DATABASE_URL}}",
+        "REDIS_URL": "${{Redis.REDIS_URL}}"
+      }
+    },
+    {
+      "name": "ai-services",
+      "source": {
+        "repo": "bluelearnerhub/edtech-platform",
+        "rootDirectory": "worker/ai-services"
+      },
+      "build": {
+        "buildCommand": "pip install -r requirements.txt"
+      },
+      "variables": {
+        "DATABASE_URL": "${{Postgres.DATABASE_URL}}",
+        "REDIS_URL": "${{Redis.REDIS_URL}}"
+      }
+    }
+  ]
+}

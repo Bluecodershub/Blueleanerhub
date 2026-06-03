@@ -1,0 +1,6 @@
+# dependencies for the BlueLearnerAI agent
+# note: the OpenClaw SDK is not available on PyPI; install it via npm
+# (e.g. `npm install -g openclaw@latest`) or add a valid package source.
+# If an internal Python package exists, point to it here with git+https or
+# a local path. For now we only require python-dotenv.
+python-dotenv
