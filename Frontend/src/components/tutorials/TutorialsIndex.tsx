@@ -156,13 +156,14 @@ export function TutorialsIndex() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex max-w-full gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:overflow-visible sm:pb-0">
           {[null, 'Beginner', 'Intermediate', 'Advanced'].map((level) => (
             <button
               key={level || 'all'}
               onClick={() => setSelectedLevel(level)}
+              aria-pressed={selectedLevel === level}
               className={cn(
-                'rounded-lg border px-4 py-2 text-sm font-medium transition-colors',
+                'shrink-0 rounded-lg border px-4 py-2 text-sm font-medium transition-colors',
                 selectedLevel === level
                   ? 'border-primary bg-primary text-primary-foreground'
                   : 'border-border bg-card hover:bg-secondary'

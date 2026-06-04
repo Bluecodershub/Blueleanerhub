@@ -35,25 +35,21 @@ function CodeBlock({ example }: { example: CodeExample }) {
   }
 
   return (
-    <div className="rounded-xl overflow-hidden border border-border" style={{ background: 'hsl(222 47% 9%)' }}>
+    <div className="overflow-hidden rounded-xl border border-border bg-secondary/50">
       {/* Header bar */}
       <div
-        className="flex items-center justify-between px-4 py-2.5 border-b"
-        style={{ background: 'hsl(222 47% 12%)', borderColor: 'hsl(222 47% 20%)' }}
+        className="flex items-center justify-between border-b border-border bg-card px-4 py-2.5"
       >
         <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-[#ff5f57] inline-block" />
-          <span className="h-3 w-3 rounded-full bg-[#ffbd2e] inline-block" />
-          <span className="h-3 w-3 rounded-full bg-[#28c840] inline-block" />
-          <span className="ml-2 text-xs font-mono text-gray-400">{example.title}</span>
+          <span className="ml-2 text-xs font-semibold text-muted-foreground">{example.title}</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded" style={{ background: 'hsl(222 47% 20%)', color: '#7dd3fc' }}>
+          <span className="rounded bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
             {example.language}
           </span>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 text-xs font-mono text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-1 text-xs font-semibold text-muted-foreground transition-colors hover:text-primary"
           >
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? 'Copied!' : 'Copy'}
@@ -63,8 +59,8 @@ function CodeBlock({ example }: { example: CodeExample }) {
 
       {/* Code */}
       <pre
-        className="p-5 overflow-x-auto text-sm"
-        style={{ color: '#e6edf3', fontFamily: 'var(--font-mono)', lineHeight: 1.75 }}
+        className="overflow-x-auto p-5 text-sm text-foreground"
+        style={{ fontFamily: 'var(--font-mono)', lineHeight: 1.75 }}
       >
         <code>{example.code}</code>
       </pre>
@@ -72,21 +68,19 @@ function CodeBlock({ example }: { example: CodeExample }) {
       {/* Output block */}
       {example.output && (
         <div
-          className="border-t px-5 py-3"
-          style={{ background: 'hsl(222 47% 7%)', borderColor: 'hsl(222 47% 20%)' }}
+          className="border-t border-border bg-card px-5 py-3"
         >
-          <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-1">Output</p>
-          <pre className="text-sm font-mono text-green-400 whitespace-pre-wrap">{example.output}</pre>
+          <p className="mb-1 text-[10px] font-semibold uppercase text-muted-foreground">Output</p>
+          <pre className="whitespace-pre-wrap font-mono text-sm text-success">{example.output}</pre>
         </div>
       )}
 
       {/* Explanation */}
       {example.explanation && (
         <div
-          className="border-t px-5 py-3"
-          style={{ background: 'hsl(222 47% 11%)', borderColor: 'hsl(222 47% 20%)' }}
+          className="border-t border-border bg-card px-5 py-3"
         >
-          <p className="text-xs font-mono text-gray-400 leading-relaxed whitespace-pre-line">{example.explanation}</p>
+          <p className="whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{example.explanation}</p>
         </div>
       )}
     </div>
@@ -98,7 +92,7 @@ function SectionHeading({ icon: Icon, label }: { icon: React.ElementType; label:
   return (
     <div className="flex items-center gap-2 mb-3">
       <Icon className="h-4 w-4 text-primary" />
-      <h3 className="text-sm font-bold uppercase tracking-wider text-primary font-mono">{label}</h3>
+      <h3 className="font-sans text-sm font-bold uppercase text-primary">{label}</h3>
     </div>
   )
 }
@@ -112,21 +106,21 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
       <div className="card p-7 space-y-5">
         <div>
           <SectionHeading icon={BookOpen} label="Introduction" />
-          <p className="text-sm text-foreground leading-relaxed">{lesson.intro}</p>
+          <p className="text-base leading-7 text-foreground">{lesson.intro}</p>
         </div>
 
         <div className="border-t border-border pt-5 grid gap-5 sm:grid-cols-2">
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 font-mono">
+            <h4 className="mb-2 font-sans text-xs font-bold uppercase text-muted-foreground">
               What Is It?
             </h4>
-            <p className="text-sm text-foreground leading-relaxed">{lesson.whatIsIt}</p>
+            <p className="text-base leading-7 text-foreground">{lesson.whatIsIt}</p>
           </div>
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 font-mono">
+            <h4 className="mb-2 font-sans text-xs font-bold uppercase text-muted-foreground">
               Why Does It Matter?
             </h4>
-            <p className="text-sm text-foreground leading-relaxed">{lesson.whyImportant}</p>
+            <p className="text-base leading-7 text-foreground">{lesson.whyImportant}</p>
           </div>
         </div>
       </div>
@@ -134,20 +128,20 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
       {/* ── Simple Explanation ── */}
       <div className="rounded-xl border border-primary/20 p-6" style={{ background: 'hsl(var(--primary) / 0.05)' }}>
         <SectionHeading icon={Lightbulb} label="Simple Explanation" />
-        <p className="text-sm text-foreground leading-relaxed">{lesson.simpleExplanation}</p>
+        <p className="text-base leading-7 text-foreground">{lesson.simpleExplanation}</p>
       </div>
 
       {/* ── Detailed Explanation ── */}
       <div className="card p-7">
         <SectionHeading icon={FileText} label="Detailed Explanation" />
-        <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">{lesson.detailedExplanation}</p>
+        <p className="whitespace-pre-line text-base leading-7 text-foreground">{lesson.detailedExplanation}</p>
 
         {lesson.formula && (
           <div
             className="mt-5 rounded-lg border border-border p-4"
             style={{ background: 'hsl(var(--secondary))' }}
           >
-            <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-1">Formula / Rule</p>
+            <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground">Formula / Rule</p>
             <pre className="font-mono text-sm text-foreground">{lesson.formula}</pre>
           </div>
         )}
@@ -155,10 +149,10 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
         {lesson.syntaxBlock && (
           <div
             className="mt-5 rounded-lg border border-border p-4"
-            style={{ background: 'hsl(222 47% 9%)' }}
+            style={{ background: 'hsl(var(--secondary))' }}
           >
-            <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">Syntax</p>
-            <pre className="font-mono text-sm text-green-300">{lesson.syntaxBlock}</pre>
+            <p className="mb-2 text-xs font-semibold uppercase text-muted-foreground">Syntax</p>
+            <pre className="font-mono text-sm text-foreground">{lesson.syntaxBlock}</pre>
           </div>
         )}
       </div>
@@ -166,14 +160,14 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
       {/* ── Real-World Example ── */}
       <div className="rounded-xl border border-border p-6" style={{ background: 'hsl(var(--secondary) / 0.5)' }}>
         <SectionHeading icon={Target} label="Real-World Example" />
-        <p className="text-sm text-foreground leading-relaxed">{lesson.realWorldExample}</p>
+        <p className="text-base leading-7 text-foreground">{lesson.realWorldExample}</p>
       </div>
 
       {/* ── Technical Details ── */}
       {lesson.technicalDetails && (
         <div className="card p-7">
           <SectionHeading icon={Code2} label="Technical Details" />
-          <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">{lesson.technicalDetails}</p>
+          <p className="whitespace-pre-line text-base leading-7 text-foreground">{lesson.technicalDetails}</p>
         </div>
       )}
 
@@ -194,8 +188,8 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
           <ul className="space-y-2">
             {lesson.commonMistakes.map((m, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-foreground">
-                <span className="mt-0.5 h-5 w-5 flex-shrink-0 rounded-full bg-red-500/10 flex items-center justify-center">
-                  <span className="text-xs font-bold text-red-500">{i + 1}</span>
+                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-destructive/10">
+                  <span className="text-xs font-bold text-destructive">{i + 1}</span>
                 </span>
                 {m}
               </li>
@@ -211,7 +205,7 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
           <ul className="space-y-2">
             {lesson.bestPractices.map((b, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-foreground">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
+                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-success" />
                 {b}
               </li>
             ))}
@@ -227,7 +221,7 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
             {lesson.exercises.map((ex, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-foreground">
                 <span
-                  className="mt-0.5 h-6 w-6 flex-shrink-0 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                  className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold text-primary-foreground"
                   style={{ background: 'hsl(var(--primary))' }}
                 >
                   {i + 1}
@@ -274,9 +268,9 @@ function LessonContent({ lesson }: { lesson: TopicLesson }) {
         style={{ background: 'hsl(var(--primary) / 0.06)' }}
       >
         <SectionHeading icon={CheckCircle2} label="Summary" />
-        <p className="text-sm text-foreground leading-relaxed">{lesson.summary}</p>
+        <p className="text-base leading-7 text-foreground">{lesson.summary}</p>
         {lesson.nextTopic && (
-          <p className="mt-3 text-xs font-mono text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground">
             Up Next: <span className="text-primary font-semibold">{lesson.nextTopic}</span>
           </p>
         )}
@@ -299,9 +293,9 @@ function QuizItem({ question, index }: { question: { question: string; options: 
         {question.options.map((opt, oi) => (
           <li
             key={oi}
-            className={`text-sm px-3 py-1.5 rounded-lg border font-mono transition-colors ${
+            className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
               revealed && oi === question.answer
-                ? 'border-green-500 bg-green-500/10 text-green-400'
+                ? 'border-success/30 bg-success-light text-success'
                 : 'border-border text-muted-foreground'
             }`}
           >
@@ -311,12 +305,12 @@ function QuizItem({ question, index }: { question: { question: string; options: 
       </ul>
       <button
         onClick={() => setRevealed(!revealed)}
-        className="text-xs font-mono text-primary hover:underline"
+        className="text-xs font-semibold text-primary hover:underline"
       >
         {revealed ? 'Hide Answer' : 'Reveal Answer'}
       </button>
       {revealed && (
-        <p className="mt-2 text-xs text-muted-foreground font-mono">{question.explanation}</p>
+        <p className="mt-2 text-xs leading-5 text-muted-foreground">{question.explanation}</p>
       )}
     </div>
   )
@@ -361,14 +355,14 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
       <div className="flex pt-14">
         {/* ══════════════════ LEFT SIDEBAR ══════════════════ */}
         <aside
-          className="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-64 border-r border-border bg-card overflow-y-auto z-20"
+          className="fixed left-0 top-14 z-20 hidden h-[calc(100vh-3.5rem)] w-64 overflow-y-auto border-r border-border bg-card md:block"
           style={{ scrollbarWidth: 'thin' }}
         >
           <div className="p-4">
             {/* Back */}
             <Link
               href="/library"
-              className="mb-5 flex items-center gap-2 text-sm font-mono font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="mb-5 flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Library
@@ -383,7 +377,7 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
                 <DomainIcon className="h-4 w-4" style={{ color: domainColor }} />
               </div>
               <div>
-                <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">Domain</p>
+                <p className="text-[10px] font-bold uppercase text-muted-foreground">Domain</p>
                 <p className="text-sm font-bold text-foreground">{domainLabel}</p>
               </div>
             </div>
@@ -391,7 +385,7 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
             <div className="mb-4 border-t border-border" />
 
             {/* Topics */}
-            <p className="mb-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground px-1">Topics</p>
+            <p className="mb-2 px-1 text-[10px] font-bold uppercase text-muted-foreground">Topics</p>
             <nav className="space-y-0.5">
               {topics.map((topic) => {
                 const isActive = topic.id === selectedTopicId
@@ -414,7 +408,7 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
 
             {/* Lessons sub-list */}
             <div className="mt-5">
-              <p className="mb-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground px-1">
+              <p className="mb-2 px-1 text-[10px] font-bold uppercase text-muted-foreground">
                 {currentTopic.name} — {currentTopic.lessons.length} Topics
               </p>
               <div className="space-y-0.5">
@@ -422,7 +416,7 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
                   <button
                     key={lesson.id}
                     onClick={() => setSelectedLessonId(lesson.id)}
-                    className={`w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors font-mono flex items-center gap-2 ${
+                    className={`flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-xs transition-colors ${
                       selectedLessonId === lesson.id
                         ? 'bg-primary/10 text-primary font-medium'
                         : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
@@ -438,12 +432,12 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
         </aside>
 
         {/* ══════════════════ MAIN CONTENT ══════════════════ */}
-        <main className="ml-64 flex-1 min-h-[calc(100vh-3.5rem)]">
-          <div className="mx-auto max-w-4xl px-6 py-8">
+        <main className="min-h-[calc(100vh-3.5rem)] flex-1 md:ml-64">
+          <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
 
             {/* Breadcrumb + title */}
             <div className="mb-8">
-              <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-2">
+              <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
                 <Link href="/library" className="hover:text-primary transition-colors">Library</Link>
                 <span>/</span>
                 <span>{domainLabel}</span>
@@ -452,8 +446,8 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
                 <span>/</span>
                 <span className="text-foreground">{currentLesson.title}</span>
               </div>
-              <h1 className="text-2xl font-bold text-foreground">{currentLesson.title}</h1>
-              <p className="text-sm text-muted-foreground font-mono mt-1">
+              <h1>{currentLesson.title}</h1>
+              <p className="mt-2 text-sm text-muted-foreground">
                 Topic {lessonIndex + 1} of {currentTopic.lessons.length}
               </p>
             </div>
@@ -478,7 +472,7 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
                 <ArrowLeft className="h-4 w-4" />
                 Previous
               </button>
-              <span className="text-xs font-mono text-muted-foreground">
+              <span className="text-xs font-semibold text-muted-foreground">
                 {lessonIndex + 1} / {currentTopic.lessons.length}
               </span>
               <button

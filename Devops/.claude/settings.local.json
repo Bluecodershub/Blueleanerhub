@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "PowerShell(Get-ChildItem -Recurse \"D:\\\\Bluelearnerhub\\\\frontend\\\\src\\\\app\\\\\\(corporate\\)\" -File | ForEach-Object { $_.FullName })"
+    ]
+  }
+}

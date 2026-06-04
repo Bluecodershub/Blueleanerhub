@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
 import { User, KeyRound, MailIcon } from 'lucide-react'
 import { Github } from '@/components/ui/BrandIcons'
+import { authOAuthUrl } from '@/lib/api'
 
 interface StudentSignupFormProps {
   onSubmit: (userData: any) => Promise<void>
@@ -35,9 +36,9 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border border-red-500/20 bg-red-500/5 p-4 text-[11px] font-bold leading-relaxed text-red-500"
+          className="rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm font-bold leading-relaxed text-destructive"
         >
-          <span className="uppercase tracking-widest">[AUTH_ERROR]:</span> {error}
+          <span>Signup error:</span> {error}
         </motion.div>
       )}
 
@@ -47,9 +48,9 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
           type="button"
           variant="outline"
           onClick={() => {
-            window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/github`
+            window.location.href = authOAuthUrl('github')
           }}
-          className="flex h-10 items-center justify-center gap-2 rounded-2xl border-border bg-background/50 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
+          className="h-10 gap-2"
         >
           <Github size={14} /> GitHub
         </Button>
@@ -57,9 +58,9 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
           type="button"
           variant="outline"
           onClick={() => {
-            window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/google`
+            window.location.href = authOAuthUrl('google')
           }}
-          className="flex h-10 items-center justify-center gap-2 rounded-2xl border-border bg-background/50 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
+          className="h-10 gap-2"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path
@@ -87,8 +88,8 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border/50" />
         </div>
-        <div className="relative flex justify-center text-[10px] font-black uppercase tracking-[0.4em]">
-          <span className="bg-[#121214] px-4 text-[9px] text-muted-foreground/40">
+        <div className="relative flex justify-center">
+          <span className="bg-card px-4 text-xs text-muted-foreground">
             or continue with email
           </span>
         </div>
@@ -98,13 +99,16 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
       <form onSubmit={handleSubmit} className="space-y-2">
         <div className="space-y-1.5">
           <div className="group relative">
+            <label htmlFor="student-signup-name" className="sr-only">Full name</label>
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
             <Input
+              id="student-signup-name"
               type="text"
-              placeholder="Biological Name / Alias"
+              placeholder="Full name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="h-10 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
+              className="h-10 pl-12"
+              autoComplete="name"
               required
             />
           </div>
@@ -112,13 +116,16 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
 
         <div className="space-y-1.5">
           <div className="group relative">
+            <label htmlFor="student-signup-email" className="sr-only">Email address</label>
             <MailIcon className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
             <Input
+              id="student-signup-email"
               type="email"
-              placeholder="Communication Uplink (Email)"
+              placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-10 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
+              className="h-10 pl-12"
+              autoComplete="email"
               required
             />
           </div>
@@ -126,27 +133,30 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
 
         <div className="space-y-1.5">
           <div className="group relative">
+            <label htmlFor="student-signup-password" className="sr-only">Create a password</label>
             <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
             <Input
+              id="student-signup-password"
               type="password"
-              placeholder="Master Encryption Key"
+              placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-10 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
+              className="h-10 pl-12"
+              autoComplete="new-password"
               required
             />
           </div>
         </div>
 
         <div className="px-2">
-          <p className="text-[10px] font-bold uppercase leading-relaxed tracking-widest text-muted-foreground/40">
-            By initializing identity, you agree to the{' '}
-            <span className="cursor-pointer text-white underline underline-offset-2 transition-colors hover:text-primary">
-              Platform Protocol
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            By creating an account, you agree to the{' '}
+            <span className="cursor-pointer text-primary underline underline-offset-2 transition-colors hover:text-primary/80">
+              Terms
             </span>{' '}
             &{' '}
-            <span className="cursor-pointer text-white underline underline-offset-2 transition-colors hover:text-primary">
-              Data Governance
+            <span className="cursor-pointer text-primary underline underline-offset-2 transition-colors hover:text-primary/80">
+              Privacy Policy
             </span>
             .
           </p>
@@ -156,18 +166,18 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
           <Button
             type="submit"
             disabled={loading}
-            className="h-11 w-full rounded-2xl bg-primary font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+            className="h-11 w-full"
           >
-            {loading ? 'Synchronizing Node...' : 'Initialize Identity'}
+            {loading ? 'Creating account...' : 'Create account'}
           </Button>
         </div>
       </form>
 
       <div className="pt-2 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/40">
-          Already a recognized entity?{' '}
-          <Link href="/login" className="ml-2 text-white transition-colors hover:text-primary">
-            Access Portal
+        <p className="text-sm text-muted-foreground">
+          Already have an account?{' '}
+          <Link href="/login/student" className="ml-2 font-semibold text-primary transition-colors hover:text-primary/80">
+            Sign in
           </Link>
         </p>
       </div>

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Mail, Lock, ArrowLeft, AlertCircle } from 'lucide-react'
 import { Github } from '@/components/ui/BrandIcons'
 import { getHomeByRole } from '@/lib/authRoutes'
+import { authOAuthUrl } from '@/lib/api'
 
 function LoginContent() {
   const { login, isAuthenticated } = useAuth()
@@ -46,16 +47,11 @@ function LoginContent() {
   }
 
   const handleOAuth = (provider: 'github' | 'google') => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/${provider}`
+    window.location.href = authOAuthUrl(provider)
   }
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 py-12">
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/5 blur-[120px]" />
-      </div>
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -70,7 +66,7 @@ function LoginContent() {
           
           <div className="mb-6 flex justify-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary">
-              <Lock className="h-7 w-7 text-white" />
+              <Lock className="h-7 w-7 text-primary-foreground" />
             </div>
           </div>
           

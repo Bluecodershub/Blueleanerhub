@@ -58,14 +58,14 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:flex">
         <div className="flex h-16 items-center justify-between px-6">
           <Link href="/corporate/dashboard" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-primary shadow-lg shadow-violet-600/25">
-              <ShieldCheck className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-sm">
+              <ShieldCheck className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
               <span className="font-semibold text-lg tracking-tight text-foreground">
                 BlueLearnerHub
               </span>
-              <span className="ml-1 rounded bg-violet-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-400">
+              <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
                 for Teams
               </span>
             </div>
@@ -101,21 +101,21 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
                 className={cn(
                   'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
                   isActive
-                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                 )}
               >
                 <Icon
                   className={cn(
                     'h-5 w-5',
-                    isActive ? 'text-white' : 'text-primary/70'
+                    isActive ? 'text-primary-foreground' : 'text-primary/70'
                   )}
                 />
                 <span className="truncate">{item.title}</span>
                 {isActive && (
                   <motion.div
                     layoutId="active-pill"
-                    className="absolute left-0 h-5 w-1 rounded-full bg-white"
+                    className="absolute left-0 h-5 w-1 rounded-full bg-primary-foreground"
                   />
                 )}
               </Link>
@@ -135,14 +135,14 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
                 className={cn(
                   'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
                   isActive
-                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                 )}
               >
                 <Icon
                   className={cn(
                     'h-5 w-5',
-                    isActive ? 'text-white' : 'text-primary/70'
+                    isActive ? 'text-primary-foreground' : 'text-primary/70'
                   )}
                 />
                 <span className="truncate">{item.title}</span>
@@ -154,12 +154,12 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
         {/* Profile + Logout */}
         <div className="border-t border-border/50 p-4 space-y-2">
           <div className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/40 bg-gradient-to-br from-violet-600 to-primary font-bold text-white shadow-inner">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
               {user?.fullName?.[0]?.toUpperCase() ?? 'C'}
             </div>
             <div className="min-w-0 flex-1 text-left">
               <p className="truncate text-sm font-semibold text-foreground">{user?.fullName ?? 'Corporate'}</p>
-              <p className="text-xs text-violet-400">Corporate</p>
+              <p className="text-xs text-primary">Corporate</p>
             </div>
           </div>
           <button
@@ -192,7 +192,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                    <ShieldCheck className="h-6 w-6 text-white" />
+                    <ShieldCheck className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <span className="font-semibold text-lg text-foreground">
                     BlueLearnerHub
@@ -220,7 +220,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
                       className={cn(
                         'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
                         isActive
-                          ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                          ? 'bg-primary text-primary-foreground shadow-sm'
                           : 'text-muted-foreground hover:bg-secondary/50'
                       )}
                     >
@@ -238,8 +238,6 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
       {/* ─── MAIN CONTENT ─────────────────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <main className="relative flex-1 overflow-y-auto pb-24">
-          <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-full bg-gradient-to-b from-violet-500/5 to-transparent" />
-
           <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
             {children}
           </div>

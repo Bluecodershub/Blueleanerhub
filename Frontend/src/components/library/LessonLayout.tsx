@@ -23,6 +23,35 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import type { Lesson, TopicContent, ContentSection } from '@/data/library/types'
 
+function formatInlineText(text: string, codeClassName: string): React.ReactNode[] {
+  const nodes: React.ReactNode[] = []
+  const pattern = /(\*\*[^*]+\*\*|`[^`]+`)/g
+  let cursor = 0
+  let key = 0
+  let match: RegExpExecArray | null
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > cursor) {
+      nodes.push(text.slice(cursor, match.index))
+    }
+
+    const token = match[0]
+    if (token.startsWith('**')) {
+      nodes.push(<strong key={`strong-${key++}`}>{token.slice(2, -2)}</strong>)
+    } else {
+      nodes.push(<code key={`code-${key++}`} className={codeClassName}>{token.slice(1, -1)}</code>)
+    }
+
+    cursor = match.index + token.length
+  }
+
+  if (cursor < text.length) {
+    nodes.push(text.slice(cursor))
+  }
+
+  return nodes
+}
+
 // ─── Static Code Block ──────────────────────────────────────────────────────
 function StaticCodeBlock({ code, output, language = 'python', fileName }: {
   code: string; output?: string; language?: string; fileName?: string
@@ -70,9 +99,9 @@ function SectionBlock({ section }: { section: ContentSection }) {
       return (
         <div className="prose-custom mb-5">
           {section.content.split('\n\n').map((para, i) => (
-            <p key={i} className="mb-4 text-foreground/90 leading-relaxed text-[0.95rem]"
-              dangerouslySetInnerHTML={{ __html: para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary">$1</code>') }}
-            />
+            <p key={i} className="mb-4 text-foreground/90 leading-relaxed text-[0.95rem]">
+              {formatInlineText(para, 'bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary')}
+            </p>
           ))}
           {section.example && (
             <StaticCodeBlock
@@ -155,9 +184,9 @@ function SectionBlock({ section }: { section: ContentSection }) {
           {section.steps.map((step, i) => (
             <li key={i} className="flex gap-3">
               <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white text-xs font-bold">{i + 1}</span>
-              <span className="text-sm text-foreground/85 leading-relaxed pt-0.5"
-                dangerouslySetInnerHTML={{ __html: step.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-xs font-mono text-primary">$1</code>') }}
-              />
+              <span className="text-sm text-foreground/85 leading-relaxed pt-0.5">
+                {formatInlineText(step, 'bg-muted px-1 py-0.5 rounded text-xs font-mono text-primary')}
+              </span>
             </li>
           ))}
         </ol>
@@ -169,7 +198,7 @@ function SectionBlock({ section }: { section: ContentSection }) {
           {section.items.map((item, i) => (
             <li key={i} className="flex gap-2.5 text-sm text-foreground/85">
               <ChevronRight className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-              <span dangerouslySetInnerHTML={{ __html: item.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-xs font-mono text-primary">$1</code>') }} />
+              <span>{formatInlineText(item, 'bg-muted px-1 py-0.5 rounded text-xs font-mono text-primary')}</span>
             </li>
           ))}
         </ul>

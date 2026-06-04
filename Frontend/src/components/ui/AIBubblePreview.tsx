@@ -138,7 +138,7 @@ export function AIBubblePreview() {
                 </button>
               </div>
               <p className="mt-2 text-center text-[10px] text-muted-foreground">
-                 AI-powered by BlueLearnerHub Gemini Pro integration.
+                 AI-powered by the BlueLearnerHub inbuilt model stack.
               </p>
             </div>
           </motion.div>

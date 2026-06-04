@@ -1,0 +1,1240 @@
+[
+  {
+    "viewportName": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "results": [
+      {
+        "route": "/",
+        "finalUrl": "http://localhost:3000/",
+        "navError": null,
+        "metrics": {
+          "path": "/",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Learn engineering with calm lessons, thoughtful practice, and AI-guided feedback."
+          ],
+          "h2": [
+            "Start with the fundamentals",
+            "Engineering lessons that actually stick",
+            "Pick your engineering domain",
+            "Start learning in a space designed for focus."
+          ],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started ENGINEERING LEARNING ACADEMY Learn engineering with calm lessons, thoughtful practice, and AI-guided feedback. Bluelearnerhub brings lessons, coding exercises, quizzes, and hackathons into one clean workspace for engineering students. Courses and mentors are opening after beta. Browse lessons Create free account Today in your academy A focused plan for the next study block. READ System design: caching and co",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 4325,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 1,
+            "links": 38,
+            "inputs": 0,
+            "images": 0,
+            "main": 1,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-home.png"
+      },
+      {
+        "route": "/get-started",
+        "finalUrl": "http://localhost:3000/get-started",
+        "navError": null,
+        "metrics": {
+          "path": "/get-started",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Create your account"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started Back to home Create your account Start your learning journey today Sign Up Sign In Full Name Email Password Create Account By signing up, you agree to our Terms and Privacy Policy or continue with GitHub Google",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 6,
+            "links": 9,
+            "inputs": 3,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-get-started.png"
+      },
+      {
+        "route": "/login",
+        "finalUrl": "http://localhost:3000/login",
+        "navError": null,
+        "metrics": {
+          "path": "/login",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Welcome back"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started Back to home Welcome back Sign in to continue your learning journey GitHub Google or continue with email Email Password Forgot password? Sign In Don't have an account? Sign up free Are you a company? Corporate Login",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 10,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-login.png"
+      },
+      {
+        "route": "/login/student",
+        "finalUrl": "http://localhost:3000/login/student",
+        "navError": null,
+        "metrics": {
+          "path": "/login/student",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started BlueLearnerHub GitHub Google or continue with email Forgot password? Sign In No account? Sign up free Need help? Support Center",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 9,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-login-student.png"
+      },
+      {
+        "route": "/student/dashboard",
+        "finalUrl": "http://localhost:3000/login/student?from=%2Fstudent%2Fdashboard",
+        "navError": null,
+        "metrics": {
+          "path": "/login/student",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started BlueLearnerHub GitHub Google or continue with email Forgot password? Sign In No account? Sign up free Need help? Support Center",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 9,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-student-dashboard.png"
+      },
+      {
+        "route": "/courses",
+        "finalUrl": "http://localhost:3000/courses",
+        "navError": null,
+        "metrics": {
+          "path": "/courses",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Courses are coming soon"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started COURSES LOCKED DURING BETA Courses are coming soon The structured course catalog, enrollment flow, modules, and course certificates are locked while Bluelearnerhub is in beta. Lessons, library tracks, quizzes, and hackathons remain available. Explore lessons View hackathons Bluelearnerhub A calm engineering learning space for lessons, practice, hackathons, and mentorship. Free for personal use LEARN All Less",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 1226,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 1,
+            "links": 25,
+            "inputs": 0,
+            "images": 0,
+            "main": 1,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-courses.png"
+      },
+      {
+        "route": "/hackathons",
+        "finalUrl": "http://localhost:3000/hackathons",
+        "navError": null,
+        "metrics": {
+          "path": "/hackathons",
+          "title": "AI Hackathons — Compete Globally & Win Prizes | Bluelearnerhub",
+          "h1": [
+            "Hackathons"
+          ],
+          "h2": [
+            "Capstone",
+            "Practice",
+            "Live Hackathons"
+          ],
+          "bodyTextStart": "Skip to main content Hackathons Compete in university, corporate, and platform hackathons. Build real solutions, win prizes, and get noticed by top companies. My Registrations Host a Hackathon 0 Active Hackathons View All Total Prize Pool 0 University Events 0 Corporate Events Capstone Submit course projects, receive mentor review, and publish final outcomes. Open Practice Solve coding problems, run code in the IDE, and build submission history. Open Live Hackathons Register for active events, v",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 1200,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 15,
+            "links": 5,
+            "inputs": 1,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-hackathons.png"
+      },
+      {
+        "route": "/library",
+        "finalUrl": "http://localhost:3000/library",
+        "navError": null,
+        "metrics": {
+          "path": "/library",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Explore Lessons"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started Explore Lessons Free interactive lessons covering CS, Mechanical, Electrical, Civil, and Management — written by engineers, not content mills. All Lessons Computer Science Mechanical Electrical Civil Management Popular Python Programming From variables and loops to classes and generators — a complete Python tour for beginners and intermediates. 20–35 min Explore Lesson New Data Structures & Algorithms Arrays",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 3993,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 7,
+            "links": 43,
+            "inputs": 1,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-library.png"
+      },
+      {
+        "route": "/library/computer-science",
+        "finalUrl": "http://localhost:3000/library/computer-science",
+        "navError": null,
+        "metrics": {
+          "path": "/library/computer-science",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "What is Python?"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started Back to Library DOMAIN Computer Science TOPICS Python Programming Data Structures & Algorithms Web Development Machine Learning & AI SQL & Databases PYTHON PROGRAMMING — 34 TOPICS 1. What is Python? 2. Python Introduction 3. Python Getting Started 4. Python Syntax 5. Python Comments 6. Python Variables 7. Python Data Types 8. Python Numbers 9. Python Casting 10. Python Strings 11. Python Booleans 12. Python ",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 4975,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 45,
+            "links": 25,
+            "inputs": 0,
+            "images": 0,
+            "main": 1,
+            "nav": 2
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 2
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-library-computer-science.png"
+      },
+      {
+        "route": "/tutorials",
+        "finalUrl": "http://localhost:3000/tutorials",
+        "navError": null,
+        "metrics": {
+          "path": "/tutorials",
+          "title": "Free Online Tutorials — Python, JavaScript, React & More | Bluelearnerhub",
+          "h1": [
+            "Interactive Tutorials"
+          ],
+          "h2": [
+            "Most Popular",
+            "All Tutorials",
+            "Guided Learning"
+          ],
+          "bodyTextStart": "Skip to main content Interactive Tutorials Learn to code with our interactive step-by-step tutorials. Write and run code directly in your browser, track your progress, and earn certificates. All Levels Beginner Intermediate Advanced Most Popular Trending Python Tutorial Learn Python, one of the most popular programming languages. Perfect for beginners and professionals alike. 45 lessons Beginner JavaScript Tutorial Master JavaScript, the language of the web. Build interactive websites and applic",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 1727,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 13,
+            "inputs": 1,
+            "images": 0,
+            "main": 1,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-tutorials.png"
+      },
+      {
+        "route": "/ai-companion",
+        "finalUrl": "http://localhost:3000/ai-companion",
+        "navError": null,
+        "metrics": {
+          "path": "/ai-companion",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 0,
+            "links": 1,
+            "inputs": 0,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-ai-companion.png"
+      },
+      {
+        "route": "/daily-quiz",
+        "finalUrl": "http://localhost:3000/daily-quiz",
+        "navError": null,
+        "metrics": {
+          "path": "/daily-quiz",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 0,
+            "links": 1,
+            "inputs": 0,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-daily-quiz.png"
+      },
+      {
+        "route": "/quiz",
+        "finalUrl": "http://localhost:3000/quiz",
+        "navError": null,
+        "metrics": {
+          "path": "/quiz",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 0,
+            "links": 1,
+            "inputs": 0,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-quiz.png"
+      },
+      {
+        "route": "/student/skill-report",
+        "finalUrl": "http://localhost:3000/login/student?from=%2Fstudent%2Fskill-report",
+        "navError": null,
+        "metrics": {
+          "path": "/login/student",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Lessons Courses Hackathons Mentors Login Get Started BlueLearnerHub GitHub Google or continue with email Forgot password? Sign In No account? Sign up free Need help? Support Center",
+          "viewport": {
+            "w": 1440,
+            "h": 900
+          },
+          "scroll": {
+            "width": 1440,
+            "height": 900,
+            "viewportWidth": 1440,
+            "viewportHeight": 900
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 9,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "desktop-student-skill-report.png"
+      }
+    ]
+  },
+  {
+    "viewportName": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "results": [
+      {
+        "route": "/",
+        "finalUrl": "http://localhost:3000/",
+        "navError": null,
+        "metrics": {
+          "path": "/",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Learn engineering with calm lessons, thoughtful practice, and AI-guided feedback."
+          ],
+          "h2": [
+            "Start with the fundamentals",
+            "Engineering lessons that actually stick",
+            "Pick your engineering domain",
+            "Start learning in a space designed for focus."
+          ],
+          "bodyTextStart": "Skip to main content Bluelearnerhub ENGINEERING LEARNING ACADEMY Learn engineering with calm lessons, thoughtful practice, and AI-guided feedback. Bluelearnerhub brings lessons, coding exercises, quizzes, and hackathons into one clean workspace for engineering students. Courses and mentors are opening after beta. Browse lessons Create free account Today in your academy A focused plan for the next study block. READ System design: caching and consistency PRACTICE Solve two graph traversal problems",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 7244,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 1,
+            "links": 38,
+            "inputs": 0,
+            "images": 0,
+            "main": 1,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-home.png"
+      },
+      {
+        "route": "/get-started",
+        "finalUrl": "http://localhost:3000/get-started",
+        "navError": null,
+        "metrics": {
+          "path": "/get-started",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Create your account"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Back to home Create your account Start your learning journey today Sign Up Sign In Full Name Email Password Create Account By signing up, you agree to our Terms and Privacy Policy or continue with GitHub Google",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 897,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 6,
+            "links": 9,
+            "inputs": 3,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-get-started.png"
+      },
+      {
+        "route": "/login",
+        "finalUrl": "http://localhost:3000/login",
+        "navError": null,
+        "metrics": {
+          "path": "/login",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Welcome back"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Back to home Welcome back Sign in to continue your learning journey GitHub Google or continue with email Email Password Forgot password? Sign In Don't have an account? Sign up free Are you a company? Corporate Login",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 10,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-login.png"
+      },
+      {
+        "route": "/login/student",
+        "finalUrl": "http://localhost:3000/login/student",
+        "navError": null,
+        "metrics": {
+          "path": "/login/student",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub BlueLearnerHub GitHub Google or continue with email Forgot password? Sign In No account? Sign up free Need help? Support Center",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 9,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-login-student.png"
+      },
+      {
+        "route": "/student/dashboard",
+        "finalUrl": "http://localhost:3000/login/student?from=%2Fstudent%2Fdashboard",
+        "navError": null,
+        "metrics": {
+          "path": "/login/student",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub BlueLearnerHub GitHub Google or continue with email Forgot password? Sign In No account? Sign up free Need help? Support Center",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 9,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-student-dashboard.png"
+      },
+      {
+        "route": "/courses",
+        "finalUrl": "http://localhost:3000/courses",
+        "navError": null,
+        "metrics": {
+          "path": "/courses",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Courses are coming soon"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub COURSES LOCKED DURING BETA Courses are coming soon The structured course catalog, enrollment flow, modules, and course certificates are locked while Bluelearnerhub is in beta. Lessons, library tracks, quizzes, and hackathons remain available. Explore lessons View hackathons Bluelearnerhub A calm engineering learning space for lessons, practice, hackathons, and mentorship. Free for personal use LEARN All Lessons AI & Python Hackathons Mentors (Soon) Leaderboard",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 2032,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 1,
+            "links": 25,
+            "inputs": 0,
+            "images": 0,
+            "main": 1,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-courses.png"
+      },
+      {
+        "route": "/hackathons",
+        "finalUrl": "http://localhost:3000/hackathons",
+        "navError": null,
+        "metrics": {
+          "path": "/hackathons",
+          "title": "AI Hackathons — Compete Globally & Win Prizes | Bluelearnerhub",
+          "h1": [
+            "Hackathons"
+          ],
+          "h2": [
+            "Capstone",
+            "Practice",
+            "Live Hackathons"
+          ],
+          "bodyTextStart": "Skip to main content Hackathons Compete in university, corporate, and platform hackathons. Build real solutions, win prizes, and get noticed by top companies. My Registrations Host a Hackathon 0 Active Hackathons View All Total Prize Pool 0 University Events 0 Corporate Events Capstone Submit course projects, receive mentor review, and publish final outcomes. Open Practice Solve coding problems, run code in the IDE, and build submission history. Open Live Hackathons Register for active events, v",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 1928,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 15,
+            "links": 5,
+            "inputs": 1,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-hackathons.png"
+      },
+      {
+        "route": "/library",
+        "finalUrl": "http://localhost:3000/library",
+        "navError": null,
+        "metrics": {
+          "path": "/library",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "Explore Lessons"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Explore Lessons Free interactive lessons covering CS, Mechanical, Electrical, Civil, and Management — written by engineers, not content mills. All Lessons Computer Science Mechanical Electrical Civil Management Popular Python Programming From variables and loops to classes and generators — a complete Python tour for beginners and intermediates. 20–35 min Explore Lesson New Data Structures & Algorithms Arrays, linked lists, trees, graphs, sorting, searching, an",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 10176,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [
+            {
+              "tag": "button",
+              "className": "flex-shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40",
+              "text": "Mechanical",
+              "left": 301,
+              "right": 413,
+              "width": 112
+            },
+            {
+              "tag": "button",
+              "className": "flex-shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40",
+              "text": "Electrical",
+              "left": 421,
+              "right": 518,
+              "width": 97
+            },
+            {
+              "tag": "button",
+              "className": "flex-shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40",
+              "text": "Civil",
+              "left": 526,
+              "right": 589,
+              "width": 64
+            },
+            {
+              "tag": "button",
+              "className": "flex-shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40",
+              "text": "Management",
+              "left": 597,
+              "right": 720,
+              "width": 123
+            }
+          ],
+          "counts": {
+            "buttons": 7,
+            "links": 43,
+            "inputs": 1,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-library.png"
+      },
+      {
+        "route": "/library/computer-science",
+        "finalUrl": "http://localhost:3000/library/computer-science",
+        "navError": null,
+        "metrics": {
+          "path": "/library/computer-science",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [
+            "What is Python?"
+          ],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub Library / Computer Science / Python Programming / What is Python? What is Python? Topic 1 of 34 INTRODUCTION Python is a high-level, general-purpose programming language known for its readable syntax and wide applicability — from web servers to artificial intelligence. Created by Guido van Rossum and first released in 1991, it has grown into one of the most popular languages in the world. WHAT IS IT? Python is an interpreted, dynamically typed programming lang",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 7551,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 45,
+            "links": 25,
+            "inputs": 0,
+            "images": 0,
+            "main": 1,
+            "nav": 2
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 2
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-library-computer-science.png"
+      },
+      {
+        "route": "/tutorials",
+        "finalUrl": "http://localhost:3000/tutorials",
+        "navError": null,
+        "metrics": {
+          "path": "/tutorials",
+          "title": "Free Online Tutorials — Python, JavaScript, React & More | Bluelearnerhub",
+          "h1": [
+            "Interactive Tutorials"
+          ],
+          "h2": [
+            "Most Popular",
+            "All Tutorials",
+            "Guided Learning"
+          ],
+          "bodyTextStart": "Skip to main content Interactive Tutorials Learn to code with our interactive step-by-step tutorials. Write and run code directly in your browser, track your progress, and earn certificates. All Levels Beginner Intermediate Advanced Most Popular Trending Python Tutorial Learn Python, one of the most popular programming languages. Perfect for beginners and professionals alike. 45 lessons Beginner JavaScript Tutorial Master JavaScript, the language of the web. Build interactive websites and applic",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 439,
+            "height": 4169,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [
+            {
+              "tag": "button",
+              "className": "rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-border bg-card hover:bg-secondary",
+              "text": "Advanced",
+              "left": 337,
+              "right": 439,
+              "width": 102
+            }
+          ],
+          "counts": {
+            "buttons": 4,
+            "links": 13,
+            "inputs": 1,
+            "images": 0,
+            "main": 1,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-tutorials.png"
+      },
+      {
+        "route": "/ai-companion",
+        "finalUrl": "http://localhost:3000/ai-companion",
+        "navError": null,
+        "metrics": {
+          "path": "/ai-companion",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 0,
+            "links": 1,
+            "inputs": 0,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-ai-companion.png"
+      },
+      {
+        "route": "/daily-quiz",
+        "finalUrl": "http://localhost:3000/daily-quiz",
+        "navError": null,
+        "metrics": {
+          "path": "/daily-quiz",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 0,
+            "links": 1,
+            "inputs": 0,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-daily-quiz.png"
+      },
+      {
+        "route": "/quiz",
+        "finalUrl": "http://localhost:3000/quiz",
+        "navError": null,
+        "metrics": {
+          "path": "/quiz",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 0,
+            "links": 1,
+            "inputs": 0,
+            "images": 0,
+            "main": 0,
+            "nav": 0
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 0
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-quiz.png"
+      },
+      {
+        "route": "/student/skill-report",
+        "finalUrl": "http://localhost:3000/login/student?from=%2Fstudent%2Fskill-report",
+        "navError": null,
+        "metrics": {
+          "path": "/login/student",
+          "title": "Bluelearnerhub — Engineering Learning Platform",
+          "h1": [],
+          "h2": [],
+          "bodyTextStart": "Skip to main content Bluelearnerhub BlueLearnerHub GitHub Google or continue with email Forgot password? Sign In No account? Sign up free Need help? Support Center",
+          "viewport": {
+            "w": 390,
+            "h": 844
+          },
+          "scroll": {
+            "width": 390,
+            "height": 844,
+            "viewportWidth": 390,
+            "viewportHeight": 844
+          },
+          "overflowing": [],
+          "counts": {
+            "buttons": 4,
+            "links": 9,
+            "inputs": 2,
+            "images": 0,
+            "main": 0,
+            "nav": 1
+          },
+          "unlabeledButtons": 0,
+          "badLinks": 0,
+          "inputsWithoutLabels": 0,
+          "imagesMissingAlt": 0,
+          "fixedOrSticky": 1
+        },
+        "consoleMessages": [],
+        "failedRequests": [],
+        "responseErrors": [],
+        "screenshot": "mobile-student-skill-report.png"
+      }
+    ]
+  }
+]

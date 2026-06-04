@@ -10,7 +10,7 @@
 import axios from 'axios';
 import logger from '../utils/logger';
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL ?? 'http://localhost:8001';
+const AI_SERVICE_URL = process.env.AI_SERVICE_URL ?? 'http://localhost:8000';
 const ENABLE_DAILY_QUIZ_CRON = process.env.ENABLE_DAILY_QUIZ_CRON !== 'false';
 const DAILY_QUIZ_WARMUP_ON_START = process.env.DAILY_QUIZ_WARMUP_ON_START === 'true';
 
@@ -117,6 +117,59 @@ interface CacheEntry<T> {
 
 const quizCache = new Map<string, CacheEntry<DailyQuiz>>();
 
+function normalizeDifficulty(value: unknown): MCQ['difficulty'] | null {
+  const difficulty = typeof value === 'string' ? value.toLowerCase() : '';
+  if (difficulty === 'easy' || difficulty === 'medium' || difficulty === 'hard') {
+    return difficulty;
+  }
+  return null;
+}
+
+function normalizeQuestion(value: unknown, index: number): MCQ {
+  if (!value || typeof value !== 'object') {
+    throw new Error(`Question ${index + 1} is not an object`);
+  }
+
+  const raw = value as {
+    question?: unknown;
+    options?: unknown;
+    correctIndex?: unknown;
+    explanation?: unknown;
+    difficulty?: unknown;
+  };
+
+  const question = typeof raw.question === 'string' ? raw.question.trim() : '';
+  const options = Array.isArray(raw.options)
+    ? raw.options.map((option) => (typeof option === 'string' ? option.trim() : '')).filter(Boolean)
+    : [];
+  const correctIndex = Number(raw.correctIndex);
+  const explanation = typeof raw.explanation === 'string' ? raw.explanation.trim() : '';
+  const difficulty = normalizeDifficulty(raw.difficulty);
+
+  if (!question) throw new Error(`Question ${index + 1} is missing text`);
+  if (options.length !== 4) throw new Error(`Question ${index + 1} must have exactly 4 options`);
+  if (!Number.isInteger(correctIndex) || correctIndex < 0 || correctIndex > 3) {
+    throw new Error(`Question ${index + 1} has an invalid correctIndex`);
+  }
+  if (!explanation) throw new Error(`Question ${index + 1} is missing an explanation`);
+  if (!difficulty) throw new Error(`Question ${index + 1} has an invalid difficulty`);
+
+  return { question, options, correctIndex, explanation, difficulty };
+}
+
+function normalizeQuestions(value: unknown, expectedCount: number): MCQ[] {
+  if (!Array.isArray(value)) {
+    throw new Error('AI quiz response did not include a questions array');
+  }
+
+  const questions = value.slice(0, expectedCount).map(normalizeQuestion);
+  if (questions.length !== expectedCount) {
+    throw new Error(`AI quiz response included ${questions.length}/${expectedCount} questions`);
+  }
+
+  return questions;
+}
+
 function cleanupCache(): void {
   const now = Date.now();
   let removed = 0;
@@ -177,35 +230,21 @@ async function generateQuizForDomain(domain: string, date: string): Promise<Dail
       headers: internalSecret ? { 'X-Internal-Service': internalSecret } : {},
     });
 
+    const payload = data as { questions?: unknown };
     const quiz: DailyQuiz = {
       domain,
       date,
-      questions: data.questions ?? [],
+      questions: normalizeQuestions(payload.questions, 5),
     };
 
     quizCache.set(cacheKey, { value: quiz, createdAt: Date.now() });
     logger.info(`Daily quiz generated: ${domain} (${date})`);
     return quiz;
   } catch (err) {
-    logger.warn(`Daily quiz AI generation unavailable for ${domain}; using fallback quiz`, {
+    logger.warn(`Daily quiz AI generation failed for ${domain}`, {
       message: err instanceof Error ? err.message : String(err),
     });
-    // Return fallback static quiz so the endpoint never crashes
-    const fallback: DailyQuiz = {
-      domain,
-      date,
-      questions: [
-        {
-          question:    `What is a key concept in ${domain}?`,
-          options:     ['Option A', 'Option B', 'Option C', 'Option D'],
-          correctIndex: 0,
-          explanation: 'This is a placeholder question. AI service is unavailable.',
-          difficulty:  'easy',
-        },
-      ],
-    };
-    quizCache.set(cacheKey, { value: fallback, createdAt: Date.now() });
-    return fallback;
+    throw err;
   }
 }
 

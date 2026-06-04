@@ -18,11 +18,21 @@ export function RoleGuard({
   const pathname = usePathname()
   const role = normalizeRole(user?.role)
   const allowed = isAllowedRole(user?.role, allowedRoles)
+  const loginPath =
+    allowedRoles.includes('STUDENT') && allowedRoles.length <= 2
+      ? '/login/student'
+      : '/login'
 
   useEffect(() => {
-    if (loading || !user || allowed) return
-    router.replace(role ? getHomeByRole(role) : `/login?from=${encodeURIComponent(pathname)}`)
-  }, [allowed, loading, pathname, role, router, user])
+    if (loading) return
+    if (!user) {
+      router.replace(`${loginPath}?from=${encodeURIComponent(pathname)}`)
+      return
+    }
+    if (!allowed) {
+      router.replace(role ? getHomeByRole(role) : `/login?from=${encodeURIComponent(pathname)}`)
+    }
+  }, [allowed, loading, loginPath, pathname, role, router, user])
 
   if (loading || !user || !allowed) return <PageLoading />
   return <>{children}</>

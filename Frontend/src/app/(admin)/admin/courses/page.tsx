@@ -1,20 +1,13 @@
-import { AdminCollectionPage } from '@/components/admin/AdminCollectionPage'
+import { BetaComingSoon } from '@/components/beta/BetaComingSoon'
 
 export default function AdminCoursesPage() {
   return (
-    <AdminCollectionPage
-      title="Course Management"
-      description="Review published and draft courses, enrollment counts, and catalog metadata."
-      endpoint="/admin/courses"
-      itemKey="courses"
-      columns={[
-        { key: 'title', label: 'Title' },
-        { key: 'slug', label: 'Slug' },
-        { key: 'difficulty', label: 'Difficulty' },
-        { key: 'specializationId.name', label: 'Specialization' },
-        { key: 'isPublished', label: 'Published' },
-        { key: 'enrollmentCount', label: 'Enrollments' },
-      ]}
+    <BetaComingSoon
+      title="Course management is coming soon"
+      featureLabel="Admin course tools locked during beta"
+      description="Course publishing and catalog management are disabled in the beta version. This prevents draft course access and enrollment changes until the course system is ready."
+      backHref="/admin/dashboard"
+      backLabel="Back to admin dashboard"
     />
   )
 }

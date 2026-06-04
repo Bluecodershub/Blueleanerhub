@@ -60,8 +60,8 @@ const FALLBACK_HACKATHON = {
 }
 
 const diffColors: Record<string, string> = {
-  Easy: 'text-emerald-400 bg-emerald-400/10',
-  Medium: 'text-amber-400 bg-amber-400/10',
+  Easy: 'text-success bg-success-light',
+  Medium: 'text-warning bg-warning-light',
   Hard: 'text-red-400 bg-red-400/10',
 }
 
@@ -218,65 +218,64 @@ export default function HackathonDetailsPage() {
       <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
         {/* Hero Banner */}
         {loading ? (
-          <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600">
+          <div className="overflow-hidden rounded-xl border border-border bg-card">
             <HackathonSkeleton />
           </div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-8 text-white"
+            className="relative overflow-hidden rounded-xl border border-border bg-card p-8 text-foreground shadow-sm"
           >
-            <div className="pointer-events-none absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
             <div className="relative z-10 flex flex-col items-start justify-between gap-6 md:flex-row">
               <div className="flex-1">
                 <div className="mb-3 flex items-center gap-2">
                   <Badge
                     className={`border-0 text-xs font-bold ${
                       h.status === 'OPEN'
-                        ? 'bg-emerald-500/20 text-emerald-300'
+                        ? 'bg-success-light text-success'
                         : h.status === 'UPCOMING'
-                          ? 'bg-amber-500/20 text-amber-300'
+                          ? 'bg-warning-light text-warning'
                           : 'bg-muted/20 text-muted-foreground'
                     }`}
                   >
                     {h.status}
                   </Badge>
-                  <Badge className="border-0 bg-white/10 text-xs text-white/80">{h.domain}</Badge>
+                  <Badge className="border-border bg-secondary text-xs text-muted-foreground">{h.domain}</Badge>
                 </div>
 
                 <h1 className="mb-2 text-3xl font-bold leading-tight md:text-4xl">{h.title}</h1>
-                <p className="mb-5 max-w-xl text-base leading-relaxed text-blue-100">
+                <p className="mb-5 max-w-xl text-base leading-relaxed text-muted-foreground">
                   {h.description}
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  <span className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm font-medium">
+                  <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm font-medium text-muted-foreground">
                     <Trophy className="h-4 w-4" /> Prize Pool: {h.prizePool}
                   </span>
-                  <span className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm font-medium">
+                  <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm font-medium text-muted-foreground">
                     <Award className="h-4 w-4" /> Entry: {formattedEntryFee}
                   </span>
-                  <span className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm font-medium">
+                  <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm font-medium text-muted-foreground">
                     <Users className="h-4 w-4" /> {h.participantCount?.toLocaleString()}{' '}
                     Participants
                   </span>
-                  <span className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm font-medium">
+                  <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm font-medium text-muted-foreground">
                     <Clock className="h-4 w-4" /> {h.durationHours}h Duration
                   </span>
                 </div>
 
                 <div className="mt-6">
                   {registered ? (
-                    <button className="flex items-center gap-2 rounded-xl border border-white/30 bg-white/20 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/25">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-300" />
+                    <button className="flex items-center gap-2 rounded-xl border border-border bg-secondary px-8 py-3 font-semibold text-foreground transition-colors hover:bg-secondary/80">
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       Registered — Go to Dashboard
                     </button>
                   ) : (
                     <Button
                       onClick={handleRegister}
                       disabled={registering || h.status === 'CLOSED'}
-                      className="h-auto gap-2 rounded-xl bg-white px-8 py-3 font-bold text-blue-700 transition-colors hover:bg-blue-50 disabled:opacity-60"
+                      className="h-auto gap-2 px-8 py-3 font-bold disabled:opacity-60"
                     >
                       {registering && <Loader2 className="h-4 w-4 animate-spin" />}
                       {h.status === 'CLOSED'
@@ -292,7 +291,7 @@ export default function HackathonDetailsPage() {
               </div>
 
               <div className="shrink-0 text-center">
-                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-blue-200">
+                <p className="mb-2 text-xs font-bold uppercase text-muted-foreground">
                   Ends in
                 </p>
                 <CountdownTimer endTime={h.endDate} />
@@ -303,10 +302,10 @@ export default function HackathonDetailsPage() {
 
         {/* Adaptive Guidance */}
         {adaptiveGuidance.length > 0 && (
-          <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-4">
+          <div className="rounded-xl border border-primary/25 bg-primary/10 p-4">
             <div className="mb-2 flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-indigo-400" />
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-indigo-300">
+              <Lightbulb className="h-4 w-4 text-primary" />
+              <h3 className="font-sans text-sm font-semibold uppercase text-primary">
                 Adaptive Coaching
               </h3>
             </div>
@@ -314,9 +313,9 @@ export default function HackathonDetailsPage() {
               {adaptiveGuidance.map((tip, index) => (
                 <li
                   key={`${tip}-${index}`}
-                  className="flex items-start gap-2 text-sm text-indigo-100"
+                  className="flex items-start gap-2 text-sm text-muted-foreground"
                 >
-                  <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-indigo-400" />
+                  <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                   {tip}
                 </li>
               ))}
@@ -347,7 +346,7 @@ export default function HackathonDetailsPage() {
                       <ul className="space-y-2">
                         {h.rules.map((rule, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                             {rule}
                           </li>
                         ))}
@@ -379,7 +378,7 @@ export default function HackathonDetailsPage() {
                   <Card className="border-border bg-card">
                     <CardContent className="p-6">
                       <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
-                        <Award className="h-5 w-5 text-amber-400" /> Prizes
+                        <Award className="h-5 w-5 text-warning" /> Prizes
                       </h2>
                       <div className="space-y-3">
                         {h.prizes.map((prize) => (
@@ -397,7 +396,7 @@ export default function HackathonDetailsPage() {
                       </div>
                       <div className="mt-4 border-t border-border pt-4 text-center">
                         <p className="text-xs text-muted-foreground">Total Prize Pool</p>
-                        <p className="text-2xl font-black text-amber-400">{h.prizePool}</p>
+                        <p className="text-2xl font-bold text-warning">{h.prizePool}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -411,7 +410,7 @@ export default function HackathonDetailsPage() {
                   <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-lg font-bold text-foreground">Problems</h2>
                     {!registered && (
-                      <Badge className="border-amber-500/20 bg-amber-500/10 text-xs text-amber-400">
+                      <Badge className="border-warning/20 bg-warning-light text-xs text-warning">
                         Register to unlock all problems
                       </Badge>
                     )}
@@ -442,7 +441,7 @@ export default function HackathonDetailsPage() {
                           {problem.difficulty}
                         </Badge>
                         {problem.solved && (
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
                         )}
                         {registered && !problem.solved && (
                           <Code2 className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -455,7 +454,7 @@ export default function HackathonDetailsPage() {
                       <Button
                         onClick={handleRegister}
                         disabled={registering}
-                        className="gap-2 bg-blue-600 hover:bg-blue-700"
+                        className="gap-2"
                       >
                         {registering && <Loader2 className="h-4 w-4 animate-spin" />}
                         Register to Start Solving
@@ -499,7 +498,7 @@ export default function HackathonDetailsPage() {
                       <Button
                         onClick={handleRegister}
                         disabled={registering}
-                        className="mt-2 gap-2 bg-blue-600 hover:bg-blue-700"
+                        className="mt-2 gap-2"
                       >
                         {registering && <Loader2 className="h-4 w-4 animate-spin" />}
                         Register Now

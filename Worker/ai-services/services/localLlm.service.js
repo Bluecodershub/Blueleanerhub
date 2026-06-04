@@ -2,7 +2,7 @@
 /**
  * Local LLM Service (Ollama Integration)
  *
- * Provides fallback AI capabilities when Gemini API is unavailable.
+ * Provides fallback AI capabilities when the BlueLearner worker is unavailable.
  * This replaces the deprecated bridge.js with integrated service logic.
  */
 

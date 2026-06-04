@@ -56,10 +56,10 @@ export default function MentorDashboardPage() {
   useEffect(() => { load() }, [])
 
   const statCards = [
-    { title: 'Total Classes',   value: stats.totalClasses,       icon: BookOpen,      color: 'text-emerald-500', bg: 'bg-emerald-500/10', href: '/mentor/classes' },
-    { title: 'Total Students',  value: stats.totalStudents,      icon: Users,         color: 'text-blue-500',    bg: 'bg-blue-500/10',    href: '/mentor/students' },
-    { title: 'Sessions',        value: stats.upcomingSessions,   icon: GraduationCap, color: 'text-amber-500',   bg: 'bg-amber-500/10',   href: '/mentor/sessions' },
-    { title: 'Pending Grading', value: stats.pendingSubmissions, icon: ClipboardList, color: 'text-rose-500',    bg: 'bg-rose-500/10',    href: '/mentor/assignments' },
+    { title: 'Total Classes',   value: stats.totalClasses,       icon: BookOpen,      color: 'text-primary', bg: 'bg-primary/10', href: '/mentor/classes' },
+    { title: 'Total Students',  value: stats.totalStudents,      icon: Users,         color: 'text-success', bg: 'bg-success-light', href: '/mentor/students' },
+    { title: 'Sessions',        value: stats.upcomingSessions,   icon: GraduationCap, color: 'text-warning', bg: 'bg-warning-light', href: '/mentor/sessions' },
+    { title: 'Pending Grading', value: stats.pendingSubmissions, icon: ClipboardList, color: 'text-primary', bg: 'bg-primary/10', href: '/mentor/assignments' },
   ]
 
   return (
@@ -68,10 +68,10 @@ export default function MentorDashboardPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <GraduationCap className="h-4 w-4 text-emerald-600" />
-            <span className="text-xs font-mono font-bold text-emerald-600 uppercase tracking-widest">Mentor Portal</span>
+            <GraduationCap className="h-4 w-4 text-primary" />
+            <span className="text-xs font-bold uppercase text-primary">Mentor Portal</span>
           </div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1>Dashboard</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Here&apos;s what&apos;s happening in your classes.</p>
         </div>
         <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ export default function MentorDashboardPage() {
             <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </Button>
           <Link href="/mentor/classes/new">
-            <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+            <Button className="gap-2">
               <Plus className="h-4 w-4" /> Create Class
             </Button>
           </Link>
@@ -107,7 +107,7 @@ export default function MentorDashboardPage() {
                     <s.icon className={`h-5 w-5 ${s.color}`} />
                   </div>
                   <div className="mt-4">
-                    <p className="text-2xl font-bold font-mono">{s.value}</p>
+                    <p className="text-2xl font-bold">{s.value}</p>
                     <p className="text-sm text-muted-foreground">{s.title}</p>
                   </div>
                 </CardContent>
@@ -133,14 +133,14 @@ export default function MentorDashboardPage() {
             <CardContent>
               {loading ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 </div>
               ) : classes.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <BookOpen className="h-10 w-10 text-muted-foreground/40 mb-3" />
                   <p className="text-muted-foreground text-sm">No classes yet</p>
                   <Link href="/mentor/classes/new" className="mt-3">
-                    <Button size="sm" className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+                    <Button size="sm" className="gap-2">
                       <Plus className="h-4 w-4" /> Create your first class
                     </Button>
                   </Link>
@@ -154,8 +154,8 @@ export default function MentorDashboardPage() {
                       className="flex items-center justify-between rounded-lg border p-4 hover:bg-secondary/30 transition-colors"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
-                          <BookOpen className="h-5 w-5 text-emerald-500" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                          <BookOpen className="h-5 w-5 text-primary" />
                         </div>
                         <div>
                           <p className="font-medium">{cls.name}</p>
@@ -164,7 +164,7 @@ export default function MentorDashboardPage() {
                               <Users className="h-3 w-3" /> {cls.studentCount} students
                             </span>
                             {cls.isActive ? (
-                              <span className="text-emerald-500 font-medium">Active</span>
+                              <span className="font-medium text-success">Active</span>
                             ) : (
                               <span className="text-muted-foreground">Inactive</span>
                             )}
@@ -172,7 +172,7 @@ export default function MentorDashboardPage() {
                         </div>
                       </div>
                       {cls.endDate && (
-                        <p className="text-xs text-muted-foreground font-mono">
+                        <p className="text-xs text-muted-foreground">
                           Ends {new Date(cls.endDate).toLocaleDateString()}
                         </p>
                       )}
@@ -198,7 +198,7 @@ export default function MentorDashboardPage() {
                 { label: 'Schedule Session',   href: '/mentor/sessions',      icon: GraduationCap },
               ].map((a) => (
                 <Link key={a.href} href={a.href} className="flex items-center gap-3 rounded-lg border p-3 text-sm font-medium hover:bg-secondary/50 transition-colors">
-                  <a.icon className="h-4 w-4 text-emerald-600" />
+                  <a.icon className="h-4 w-4 text-primary" />
                   {a.label}
                 </Link>
               ))}

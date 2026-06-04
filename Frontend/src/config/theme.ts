@@ -1,34 +1,31 @@
 // src/config/theme.ts
 
 export const brandColors = {
-  // Primary Premium Theme (Royal Blue + Gold focus)
   primary: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6',
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
+    50: '#FFFCF5',
+    100: '#F7F2E8',
+    200: '#EFE6D8',
+    300: '#DDD3C4',
+    400: '#C8B8A3',
+    500: '#C96442',
+    600: '#B45A3C',
+    700: '#8F422C',
+    800: '#633225',
+    900: '#1F1F1A',
   },
 
-  // Accent Colors
   accent: {
-    purple: '#8b5cf6',
-    cyan: '#dbeafe',
-    blue: '#3b82f6',
-    yellow: '#f59e0b',
-    red: '#ef4444',
+    purple: '#75607B',
+    cyan: '#5E7C82',
+    blue: '#596F7C',
+    yellow: '#B7791F',
+    red: '#B42318',
   },
 
-  // Semantic Colors
-  success: '#3b82f6',
-  warning: '#f59e0b',
-  error: '#ef4444',
-  info: '#3b82f6',
+  success: '#3F7D5C',
+  warning: '#B7791F',
+  error: '#B42318',
+  info: '#596F7C',
 }
 
 export const brandConfig = {

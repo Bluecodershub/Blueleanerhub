@@ -20,7 +20,7 @@ function OAuthCallbackInner() {
     if (error) {
       setErrorMsg(decodeURIComponent(error))
       setStatus('error')
-      setTimeout(() => router.replace('/login'), 3500)
+      setTimeout(() => router.replace('/login/student'), 3500)
       return
     }
 
@@ -34,10 +34,10 @@ function OAuthCallbackInner() {
         .catch(() => {
           setErrorMsg('Session could not be established. Please try again.')
           setStatus('error')
-          setTimeout(() => router.replace('/login'), 3500)
+          setTimeout(() => router.replace('/login/student'), 3500)
         })
     } else {
-      router.replace('/login')
+      router.replace('/login/student')
     }
   }, [params, refreshUser, router])
 

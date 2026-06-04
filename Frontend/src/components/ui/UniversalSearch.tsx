@@ -60,15 +60,6 @@ export default function UniversalSearch() {
           tags: ['Python', 'Beginner'],
         },
         {
-          id: '2',
-          title: 'Data Structures & Algorithms',
-          description: 'Master DSA concepts with practical problems',
-          type: 'course',
-          url: '/courses/dsa-master',
-          domain: 'Computer Science',
-          tags: ['DSA', 'Advanced'],
-        },
-        {
           id: '3',
           title: 'Two Sum Problem',
           description: 'Find two numbers that add up to a target',
@@ -85,15 +76,6 @@ export default function UniversalSearch() {
           url: '/hackathons/winter-2024',
           domain: 'Computer Science',
           tags: ['Coding', 'Competition'],
-        },
-        {
-          id: '5',
-          title: 'Full Stack Academy Track',
-          description: 'A complete semester-long path for teams and individuals',
-          type: 'academy',
-          url: '/mentors',
-          domain: 'Engineering',
-          tags: ['Academy', 'Team Training'],
         },
       ]
 

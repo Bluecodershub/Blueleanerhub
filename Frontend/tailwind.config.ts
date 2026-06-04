@@ -8,11 +8,10 @@ export default {
   ],
   theme: {
     extend: {
-      // Typography - Playfair Display for headings, Inter for body
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-playfair)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-heading)', 'Georgia', 'serif'],
+        mono: ['var(--font-mono)', 'Consolas', 'monospace'],
       },
       
       // Colors - Using CSS custom properties
@@ -83,6 +82,11 @@ export default {
           DEFAULT: 'hsl(var(--info))',
           light: 'hsl(var(--info-light))',
         },
+        brand: {
+          DEFAULT: 'hsl(var(--brand))',
+          light: 'hsl(var(--brand-light))',
+          dark: 'hsl(var(--brand-dark))',
+        },
         
         // Gamification colors (Psychology: Achievement and progress)
         'xp-gold': 'hsl(var(--xp-gold))',
@@ -112,8 +116,11 @@ export default {
         lg: 'var(--shadow-lg)',
         xl: 'var(--shadow-xl)',
         card: 'var(--shadow)',
+        'card-md': 'var(--shadow-md)',
         'card-hover': 'var(--shadow-md)',
         'card-elevated': 'var(--shadow-lg)',
+        brand: 'var(--shadow-sm)',
+        'brand-lg': 'var(--shadow-md)',
       },
       
       // Animation keyframes

@@ -4,10 +4,10 @@
  *
  * Calls the fine-tuned BlueLearner LLM served by the Python worker.
  * Added to the fallback chain in aiProvider.service.js between
- * Gemini (primary) and Ollama (general local).
+ * the provider chain before Ollama (general local).
  *
  * Environment:
- *   BLUELEARNER_URL  — Python worker URL (default: http://localhost:8000)
+ *   BLUELEARNER_URL  — Python worker URL (default: http://localhost:8002)
  *   BLUELEARNER_ENABLED — set to 'true' to enable (default: false)
  */
 
@@ -15,7 +15,7 @@ const axios = require('axios');
 const config = require('../config');
 const logger = require('../utils/logger');
 
-const BASE_URL = process.env.BLUELEARNER_URL || 'http://localhost:8000';
+const BASE_URL = process.env.BLUELEARNER_URL || 'http://localhost:8002';
 
 function internalHeaders() {
   const secret = process.env.INTERNAL_SERVICE_SECRET;

@@ -128,18 +128,18 @@ export function AIAssistant() {
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="mb-4 h-[600px] w-[350px] md:w-[450px]"
           >
-            <Card className="glass-morphism flex h-full flex-col overflow-hidden border-border bg-card shadow-2xl">
-              <CardHeader className="flex flex-col gap-3 border-b border-border bg-background/50 p-4">
+            <Card className="flex h-full flex-col overflow-hidden border-border bg-card shadow-lg">
+              <CardHeader className="flex flex-col gap-3 border-b border-border bg-secondary/30 p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/20">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
                       {personaIcons[persona]}
                     </div>
                     <div>
-                      <CardTitle className="text-sm font-black uppercase italic tracking-widest text-white">
-                        BlueAI_{persona}
+                      <CardTitle className="font-sans text-sm font-semibold text-foreground">
+                        BlueAI {persona}
                       </CardTitle>
-                      <p className="text-[9px] font-bold uppercase text-muted-foreground">
+                      <p className="text-[10px] font-semibold uppercase text-muted-foreground">
                         Real-time Mentorship
                       </p>
                     </div>
@@ -170,9 +170,9 @@ export function AIAssistant() {
                     <button
                       key={p}
                       onClick={() => setPersona(p as any)}
-                      className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-[9px] font-black uppercase italic tracking-widest transition-all ${
+                      className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-[10px] font-semibold uppercase transition-colors ${
                         persona === p
-                          ? 'ai-glow bg-primary text-primary-foreground'
+                          ? 'bg-primary text-primary-foreground'
                           : 'bg-card text-muted-foreground hover:text-foreground/80'
                       }`}
                     >
@@ -193,8 +193,8 @@ export function AIAssistant() {
                         <div
                           className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed ${
                             m.role === 'user'
-                              ? 'bg-primary font-medium text-white shadow-lg'
-                              : 'border border-slate-800 bg-background/80 text-foreground'
+                              ? 'bg-primary font-medium text-primary-foreground'
+                              : 'border border-border bg-secondary/50 text-foreground'
                           }`}
                         >
                           {m.content}
@@ -203,9 +203,9 @@ export function AIAssistant() {
                             m.role === 'assistant' &&
                             m.content === '' && (
                               <div className="flex gap-1 py-1">
-                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500" />
-                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500 [animation-delay:0.2s]" />
-                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500 [animation-delay:0.4s]" />
+                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" />
+                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:0.2s]" />
+                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:0.4s]" />
                               </div>
                             )}
                         </div>
@@ -227,12 +227,12 @@ export function AIAssistant() {
                     placeholder={`Message the ${persona} assistant...`}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    className="h-10 flex-1 border-border bg-secondary italic text-white placeholder:text-muted-foreground"
+                    className="h-10 flex-1 border-border bg-card placeholder:text-muted-foreground"
                   />
                   <Button
                     type="submit"
                     size="icon"
-                    className="h-10 w-10 bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.3)] hover:bg-primary/90"
+                    className="h-10 w-10"
                     disabled={isLoading}
                   >
                     <Send className="h-4 w-4" />
@@ -252,13 +252,13 @@ export function AIAssistant() {
           setIsMinimized(false)
         }}
         className={`flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-all duration-300 ${
-          isOpen ? 'bg-primary shadow-blue-500/20' : 'border border-border bg-card shadow-black'
+          isOpen ? 'bg-primary shadow-sm' : 'border border-border bg-card shadow-sm'
         }`}
       >
         {isOpen ? (
-          <MessageSquare className="h-6 w-6 text-white" />
+          <MessageSquare className="h-6 w-6 text-primary-foreground" />
         ) : (
-          <Bot className="h-7 w-7 text-blue-400" />
+          <Bot className="h-7 w-7 text-primary" />
         )}
       </motion.button>
     </div>

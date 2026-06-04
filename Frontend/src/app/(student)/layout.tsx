@@ -25,6 +25,7 @@ import {
   Compass,
   Trophy,
   BarChart3,
+  LockKeyhole,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/context/AuthContext'
@@ -54,7 +55,7 @@ const navItems = [
   { title: 'AI Tutor', href: '/ai-companion', icon: Bot },
   { title: 'Hackathons', href: '/hackathons', icon: Flag },
   { title: 'Leaderboard', href: '/student/leaderboard', icon: Trophy },
-  { title: 'Mentors', href: '/mentors', icon: Users },
+  { title: 'Mentors', href: '/mentors', icon: Users, disabled: true },
   { title: 'Spaces', href: '/spaces', icon: Globe },
   { title: 'Premium', href: '/premium', icon: Crown },
 ]
@@ -92,8 +93,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:w-72 md:flex">
         <div className="flex h-16 items-center justify-between px-6">
           <Link href="/student/dashboard" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
-              <ShieldCheck className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-sm">
+              <ShieldCheck className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="font-semibold text-xl tracking-tight text-foreground">
               BlueLearnerHub
@@ -112,6 +113,22 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                 pathname === item.href ||
                 (item.href !== '/student/dashboard' && pathname.startsWith(item.href))
               const Icon = item.icon
+              if (item.disabled) {
+                return (
+                  <span
+                    key={item.href}
+                    aria-disabled="true"
+                    className="group relative flex cursor-not-allowed items-center gap-3 rounded-xl border border-border bg-secondary/40 px-3 py-2.5 text-sm font-medium text-muted-foreground"
+                  >
+                    <Icon className="h-5 w-5 text-primary/50" />
+                    <span className="truncate">{item.title}</span>
+                    <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase text-primary">
+                      Soon <LockKeyhole className="h-3 w-3" />
+                    </span>
+                  </span>
+                )
+              }
+
               return (
                 <Link
                   key={item.href}
@@ -119,21 +136,21 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   className={cn(
                     'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
                     isActive
-                      ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
                       : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-5 w-5',
-                      isActive ? 'text-white' : 'text-primary/70'
+                      isActive ? 'text-primary-foreground' : 'text-primary/70'
                     )}
                   />
                   <span className="truncate">{item.title}</span>
                   {isActive && (
                     <motion.div
                       layoutId="active-pill"
-                      className="absolute left-0 h-5 w-1 rounded-full bg-white"
+                      className="absolute left-0 h-5 w-1 rounded-full bg-primary-foreground"
                     />
                   )}
                 </Link>
@@ -159,9 +176,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         <div className="border-t border-border/50 p-4">
           <Link
             href="/student/profile"
-            className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3 transition-all hover:bg-secondary/50"
+            className="flex w-full items-center gap-3 rounded-xl border border-border bg-secondary/40 p-3 transition-colors hover:bg-secondary/70"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/40 bg-gradient-to-br from-primary to-violet-600 font-bold text-white shadow-inner">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
               {user?.fullName?.[0]?.toUpperCase() ?? 'S'}
             </div>
             <div className="min-w-0 flex-1 text-left">
@@ -193,7 +210,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                    <ShieldCheck className="h-6 w-6 text-white" />
+                    <ShieldCheck className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <span className="font-semibold text-lg text-foreground">
                     BlueLearnerHub
@@ -213,6 +230,22 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                 {navItems.map((item) => {
                   const isActive = pathname === item.href
                   const Icon = item.icon
+                  if (item.disabled) {
+                    return (
+                      <span
+                        key={item.href}
+                        aria-disabled="true"
+                        className="flex cursor-not-allowed items-center gap-3 rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm font-medium text-muted-foreground"
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{item.title}</span>
+                        <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase text-primary">
+                          Soon <LockKeyhole className="h-3 w-3" />
+                        </span>
+                      </span>
+                    )
+                  }
+
                   return (
                     <Link
                       key={item.href}
@@ -221,7 +254,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                       className={cn(
                         'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
                         isActive
-                          ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                          ? 'bg-primary text-primary-foreground shadow-sm'
                           : 'text-muted-foreground hover:bg-secondary/50'
                       )}
                     >
@@ -239,8 +272,6 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       {/* ─── MAIN CONTENT ─────────────────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <main className="relative flex-1 overflow-y-auto pb-24">
-          <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-full bg-gradient-to-b from-primary/5 to-transparent" />
-
           <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
             {children}
           </div>

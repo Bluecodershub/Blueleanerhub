@@ -887,7 +887,7 @@ export default function CodingPracticePage() {
                   {aiLoading && !aiOutput ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-10">
                       <Loader2 className="h-5 w-5 animate-spin text-indigo-500" />
-                      <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider animate-pulse">Consulting Gemini engine...</span>
+                      <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider animate-pulse">Consulting inbuilt AI engine...</span>
                     </div>
                   ) : aiOutput ? (
                     aiOutput

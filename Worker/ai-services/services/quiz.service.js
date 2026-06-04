@@ -5,7 +5,7 @@ const logger = require('../utils/logger');
 const DIFFICULTY_MAP = { easy: 'easy', medium: 'medium', hard: 'hard', 1: 'easy', 2: 'medium', 3: 'hard' };
 
 /**
- * Build the prompt that instructs Gemini to emit quiz JSON.
+ * Build the prompt that instructs the active local AI provider to emit quiz JSON.
  */
 function buildQuizPrompt({ topic, count = 5, difficulty = 'medium', context = '' }) {
   const diff = DIFFICULTY_MAP[difficulty] || 'medium';
@@ -36,7 +36,7 @@ Respond with ONLY valid JSON — no markdown, no extra text:
 }
 
 /**
- * Generate a quiz using AI provider with automatic fallback.
+ * Generate a quiz using the active AI provider.
  * @param {object} params
  * @param {string} params.topic
  * @param {number} [params.count=5]
@@ -54,47 +54,78 @@ async function generateQuiz({ topic, count = 5, difficulty = 'medium', context =
   try {
     parsed = await aiProvider.generateJSON(prompt, { temperature: 0.6, provider });
   } catch (err) {
-    logger.warn('Quiz generation failed, using fallback', { error: err.message });
-    return buildFallbackQuiz(topic, count, difficulty);
+    logger.warn('Quiz generation failed', { error: err.message });
+    throw err;
   }
 
   // Normalise: support both { questions: [...] } and a bare array
-  const questions = Array.isArray(parsed) ? parsed : (parsed.questions || []);
+  const questions = Array.isArray(parsed)
+    ? parsed
+    : (parsed && Array.isArray(parsed.questions) ? parsed.questions : []);
 
   if (!questions.length) {
-    logger.warn('Gemini returned empty questions array, using fallback');
-    return buildFallbackQuiz(topic, count, difficulty);
+    throw new Error('AI provider returned no quiz questions');
   }
 
-  // Sanitise each question
-  const sanitised = questions.slice(0, count).map((q, i) => ({
-    question:     String(q.question     || `Question ${i + 1} about ${topic}`),
-    options:      Array.isArray(q.options) && q.options.length === 4
-                    ? q.options.map(String)
-                    : ['Option A', 'Option B', 'Option C', 'Option D'],
-    correctIndex: Number.isInteger(q.correctIndex) && q.correctIndex >= 0 && q.correctIndex <= 3
-                    ? q.correctIndex
-                    : 0,
-    explanation:  String(q.explanation  || 'No explanation provided.'),
-    difficulty:   DIFFICULTY_MAP[q.difficulty] || difficulty,
-  }));
+  const sanitised = questions.slice(0, count).map((q, i) => normaliseQuestion(q, i, difficulty));
+  if (sanitised.length !== count) {
+    throw new Error(`AI provider returned ${sanitised.length}/${count} quiz questions`);
+  }
 
   return { questions: sanitised };
 }
 
-/**
- * Static fallback used when the AI service is unavailable.
- */
-function buildFallbackQuiz(topic, count, difficulty) {
-  const diff = DIFFICULTY_MAP[difficulty] || 'medium';
+function normaliseOptions(options) {
+  if (Array.isArray(options)) {
+    return options.map((option) => String(option).trim()).filter(Boolean);
+  }
+
+  if (options && typeof options === 'object') {
+    return ['A', 'B', 'C', 'D']
+      .map((key) => options[key])
+      .map((option) => (option == null ? '' : String(option).trim()))
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+function normaliseCorrectIndex(q) {
+  if (Number.isInteger(q.correctIndex) && q.correctIndex >= 0 && q.correctIndex <= 3) {
+    return q.correctIndex;
+  }
+
+  if (typeof q.correct_answer === 'string') {
+    const answer = q.correct_answer.trim().toUpperCase();
+    const index = ['A', 'B', 'C', 'D'].indexOf(answer);
+    if (index !== -1) return index;
+  }
+
+  return -1;
+}
+
+function normaliseQuestion(q, index, fallbackDifficulty) {
+  if (!q || typeof q !== 'object') {
+    throw new Error(`Question ${index + 1} is not an object`);
+  }
+
+  const question = typeof q.question === 'string' ? q.question.trim() : '';
+  const options = normaliseOptions(q.options);
+  const correctIndex = normaliseCorrectIndex(q);
+  const explanation = typeof q.explanation === 'string' ? q.explanation.trim() : '';
+  const diff = DIFFICULTY_MAP[q.difficulty] || DIFFICULTY_MAP[fallbackDifficulty] || 'medium';
+
+  if (!question) throw new Error(`Question ${index + 1} is missing text`);
+  if (options.length !== 4) throw new Error(`Question ${index + 1} must have exactly 4 options`);
+  if (correctIndex < 0) throw new Error(`Question ${index + 1} has an invalid correct answer`);
+  if (!explanation) throw new Error(`Question ${index + 1} is missing an explanation`);
+
   return {
-    questions: Array.from({ length: count }, (_, i) => ({
-      question:     `What is a fundamental concept in ${topic}? (Question ${i + 1})`,
-      options:      ['Concept A', 'Concept B', 'Concept C', 'Concept D'],
-      correctIndex: 0,
-      explanation:  `This is a placeholder. The AI service returned no content for ${topic}.`,
-      difficulty:   diff,
-    })),
+    question,
+    options,
+    correctIndex,
+    explanation,
+    difficulty: diff,
   };
 }
 

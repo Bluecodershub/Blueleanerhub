@@ -1,6 +1,11 @@
 import axios from 'axios'
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+export type OAuthProvider = 'github' | 'google'
+
+export function authOAuthUrl(provider: OAuthProvider): string {
+  return `${API_URL}/api/v1/auth/oauth/${provider}`
+}
 
 /**
  * Read the _csrf cookie value set by the backend on login.
@@ -58,7 +63,24 @@ function redirectToLogin() {
     window.location.pathname !== '/'
   ) {
     const from = encodeURIComponent(window.location.pathname + window.location.search)
-    window.location.href = `/login?from=${from}`
+    const studentAreaPrefixes = [
+      '/student',
+      '/ai-companion',
+      '/assessment',
+      '/daily-quiz',
+      '/dev',
+      '/hackathons',
+      '/ide',
+      '/learn',
+      '/notifications',
+      '/payment',
+      '/premium',
+      '/quiz',
+    ]
+    const loginPath = studentAreaPrefixes.some((prefix) => window.location.pathname.startsWith(prefix))
+      ? '/login/student'
+      : '/login'
+    window.location.href = `${loginPath}?from=${from}`
   }
 }
 
@@ -67,10 +89,19 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
+    const originalUrl = originalRequest?.url ?? ''
+    const isCredentialRequest = [
+      '/auth/login',
+      '/auth/register',
+      '/auth/corporate/login',
+      '/auth/corporate/register',
+      '/auth/mentor/login',
+      '/auth/refresh-token',
+    ].some((path) => originalUrl.includes(path))
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      // Don't retry the refresh endpoint itself — avoids infinite loops
-      if (originalRequest.url?.includes('/auth/refresh-token')) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      // Login/register 401s are final; refreshing would hide the real credential error.
+      if (isCredentialRequest) {
         redirectToLogin()
         return Promise.reject(error)
       }

@@ -5,7 +5,8 @@
  * Provides a unified interface for local AI generation:
  * 1. BlueLearner (fine-tuned inbuilt model)
  * 2. Local LLM (Ollama) - general local model fallback
- * 3. Stub response - development only
+ *
+ * If neither provider is available, generation fails explicitly.
  */
 
 const config = require('../config');
@@ -28,7 +29,7 @@ async function getProvider() {
     return { type: 'local', available: true };
   }
 
-  return { type: 'stub', available: true };
+  return { type: 'unavailable', available: false };
 }
 
 /**
@@ -47,7 +48,7 @@ async function generate(prompt, opts = {}) {
     throw new Error('Gemini provider is disabled. Use bluelearner, local, or auto.');
   }
 
-  // Try BlueLearner (fine-tuned custom model) as first fallback
+  // Try BlueLearner (fine-tuned custom model) first.
   if (provider === 'auto' || provider === 'bluelearner') {
     try {
       const result = await blueLearner.generate(prompt, opts);
@@ -59,7 +60,7 @@ async function generate(prompt, opts = {}) {
     }
   }
 
-  // Try Local LLM (Ollama) as fallback
+  // Try Local LLM (Ollama) as fallback.
   if (provider === 'auto' || provider === 'local') {
     try {
       const result = await localLlm.generate(prompt, opts);
@@ -71,12 +72,7 @@ async function generate(prompt, opts = {}) {
     }
   }
 
-  if (config.isProd) {
-    throw new Error('No local AI provider available');
-  }
-
-  logger.warn('aiProvider.generate: No AI provider available - returning development stub');
-  return `[AI stub] Response for: ${prompt.slice(0, 80)}...`;
+  throw new Error('No local AI provider available. Enable BlueLearner or configure Ollama.');
 }
 
 /**

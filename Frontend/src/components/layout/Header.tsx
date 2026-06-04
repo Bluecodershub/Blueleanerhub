@@ -4,28 +4,35 @@ import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Menu, X, LogOut, User as UserIcon, ShieldAlert, Award, Compass, LayoutDashboard, Bell } from 'lucide-react'
+import { Menu, X, LogOut, User as UserIcon, ShieldAlert, Award, Compass, LayoutDashboard, Bell, LockKeyhole } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import api from '@/lib/api'
 
+type HeaderNavItem = {
+  label: string
+  href: string
+  icon?: React.ElementType
+  disabled?: boolean
+}
+
 // ─── Role-Based Navigation Maps ─────────────────────────────────────────────
-const publicNav = [
+const publicNav: HeaderNavItem[] = [
   { label: 'Lessons',     href: '/library' },
-  { label: 'Courses',     href: '/courses' },
+  { label: 'Courses',     href: '/courses', disabled: true },
   { label: 'Hackathons',  href: '/hackathons' },
-  { label: 'Mentors',     href: '/mentors' },
+  { label: 'Mentors',     href: '/mentors', disabled: true },
 ]
 
-const studentNav = [
+const studentNav: HeaderNavItem[] = [
   { label: 'Dashboard',   href: '/student/dashboard', icon: LayoutDashboard },
   { label: 'Lessons',     href: '/library',           icon: Compass },
-  { label: 'Courses',     href: '/courses',           icon: Award },
+  { label: 'Courses',     href: '/courses',           icon: Award, disabled: true },
   { label: 'Hackathons',  href: '/student/hackathons',icon: ShieldAlert },
   { label: 'Practice',    href: '/exercises',          icon: Compass },
   { label: 'Profile',     href: '/student/profile',   icon: UserIcon },
 ]
 
-const mentorNav = [
+const mentorNav: HeaderNavItem[] = [
   { label: 'Dashboard',   href: '/mentor/dashboard' },
   { label: 'Students',    href: '/mentor/students' },
   { label: 'Submissions', href: '/mentor/submissions' },
@@ -35,7 +42,7 @@ const mentorNav = [
   { label: 'Profile',     href: '/mentor/profile' },
 ]
 
-const corporateNav = [
+const corporateNav: HeaderNavItem[] = [
   { label: 'Dashboard',   href: '/corporate/dashboard' },
   { label: 'Hackathons',  href: '/corporate/hackathons' },
   { label: 'Participants',href: '/corporate/participants' },
@@ -45,10 +52,10 @@ const corporateNav = [
   { label: 'Profile',     href: '/corporate/profile' },
 ]
 
-const adminNav = [
+const adminNav: HeaderNavItem[] = [
   { label: 'Dashboard',   href: '/admin/dashboard' },
   { label: 'Users',       href: '/admin/users' },
-  { label: 'Courses',     href: '/admin/courses' },
+  { label: 'Courses',     href: '/admin/courses', disabled: true },
   { label: 'Lessons',     href: '/admin/lessons' },
   { label: 'Assessments', href: '/admin/assessments' },
   { label: 'Hackathons',  href: '/admin/hackathons' },
@@ -114,8 +121,8 @@ export default function Header() {
         className={cn(
           'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300',
           scrolled
-            ? 'bg-card/95 backdrop-blur-md border-b border-border shadow-md'
-            : 'bg-card/85 backdrop-blur-sm border-b border-border/50 shadow-sm'
+            ? 'border-b border-border bg-card/95 shadow-sm'
+            : 'border-b border-border/70 bg-card/90'
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -134,27 +141,39 @@ export default function Header() {
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <path d="M9 12l2 2 4-4" />
               </svg>
-              <span className="text-base font-bold tracking-tight text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
+              <span className="text-lg font-semibold text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
                 <span className="text-primary">Blue</span>learnerhub
               </span>
             </Link>
 
             {/* ── Desktop Nav ── */}
             <nav className="hidden items-center gap-1 lg:flex">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'px-3.5 py-1.5 text-xs font-semibold font-mono tracking-wide uppercase rounded-lg transition-all duration-200',
-                    pathname === item.href || pathname.startsWith(item.href + '/')
-                      ? 'text-primary bg-primary/10 border border-primary/20'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) =>
+                item.disabled ? (
+                  <span
+                    key={item.href}
+                    aria-disabled="true"
+                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-border bg-secondary/50 px-3.5 py-1.5 text-sm font-semibold text-muted-foreground"
+                    title="Coming soon in beta"
+                  >
+                    {item.label}
+                    <LockKeyhole className="h-3 w-3" />
+                  </span>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      'rounded-lg px-3.5 py-1.5 text-sm font-semibold transition-colors duration-200',
+                      pathname === item.href || pathname.startsWith(item.href + '/')
+                        ? 'border border-primary/20 bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
             </nav>
 
             {/* ── Desktop Actions ── */}
@@ -174,9 +193,9 @@ export default function Header() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-bold font-mono hover:bg-secondary transition-all"
+                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-sm font-semibold transition-colors hover:bg-secondary"
                   >
-                    <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center font-mono text-[10px] font-bold text-primary">
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">
                       {user.fullName ? user.fullName[0].toUpperCase() : 'U'}
                     </div>
                     <span className="hidden sm:inline text-foreground max-w-[120px] truncate">{user.fullName || 'User'}</span>
@@ -187,7 +206,7 @@ export default function Header() {
                       <div className="px-3 py-2 border-b border-border mb-1">
                         <div className="text-xs font-bold text-foreground truncate">{user.fullName || 'User'}</div>
                         <div className="text-[10px] text-muted-foreground truncate">{user.email}</div>
-                        <span className="inline-block mt-1.5 px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-[9px] font-mono uppercase text-primary font-bold">
+                        <span className="mt-1.5 inline-block rounded border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase text-primary">
                           {user.role || 'STUDENT'}
                         </span>
                       </div>
@@ -202,7 +221,7 @@ export default function Header() {
                             : '/student/dashboard'
                         }
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                       >
                         <LayoutDashboard className="h-4.5 w-4.5" />
                         My Dashboard
@@ -212,7 +231,7 @@ export default function Header() {
                           setDropdownOpen(false)
                           logout()
                         }}
-                        className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono text-destructive hover:bg-destructive/10 transition-colors"
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/10"
                       >
                         <LogOut className="h-4.5 w-4.5" />
                         Sign Out
@@ -223,7 +242,7 @@ export default function Header() {
               ) : (
                 /* Unauthenticated Guest Actions */
                 <div className="hidden lg:flex items-center gap-2">
-                  <Link href="/login" className="px-4 py-2 text-xs font-bold font-mono text-muted-foreground hover:text-foreground transition-all">
+                  <Link href="/login" className="px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground">
                     Login
                   </Link>
                   <Link href="/get-started" className="btn btn-primary text-xs flex items-center gap-1.5 shadow-sm">
@@ -276,21 +295,34 @@ export default function Header() {
 
             {/* Mobile Navigation Links */}
             <nav className="flex-1 overflow-y-auto p-5 space-y-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    'flex items-center px-4 py-3 text-sm font-semibold font-mono tracking-wide uppercase rounded-lg transition-colors',
-                    pathname === item.href || pathname.startsWith(item.href + '/')
-                      ? 'text-primary bg-primary/10 border border-primary/20'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/70'
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) =>
+                item.disabled ? (
+                  <span
+                    key={item.href}
+                    aria-disabled="true"
+                    className="flex cursor-not-allowed items-center justify-between rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm font-semibold text-muted-foreground"
+                  >
+                    {item.label}
+                    <span className="inline-flex items-center gap-1 text-xs text-primary">
+                      Soon <LockKeyhole className="h-3 w-3" />
+                    </span>
+                  </span>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                      'flex items-center rounded-lg px-4 py-3 text-sm font-semibold transition-colors',
+                      pathname === item.href || pathname.startsWith(item.href + '/')
+                        ? 'text-primary bg-primary/10 border border-primary/20'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary/70'
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
             </nav>
 
             {/* Mobile Guest Buttons */}

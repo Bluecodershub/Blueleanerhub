@@ -315,7 +315,7 @@ class DifficultyPredictor:
         Example:
             difficulty, confidence, probs = predictor.predict(
                 "Design a distributed cache system",
-                ["Option A", "Option B", "Option C", "Option D"]
+                ["Use consistent hashing", "Store all keys on one node", "Disable replication", "Avoid eviction"]
             )
             # Output: ("hard", 0.87, {"easy": 0.05, "medium": 0.08, "hard": 0.87, "expert": 0.0})
         """

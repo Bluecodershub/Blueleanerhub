@@ -4,595 +4,293 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
-  Brain,
-  Code2,
-  Trophy,
-  GraduationCap,
+  BarChart3,
   BookOpen,
-  TrendingUp,
-  Zap,
+  Brain,
+  ChevronRight,
+  Code2,
+  Cpu,
   Database,
   Globe,
   ShieldCheck,
-  Cpu,
   Wrench,
-  BarChart3,
-  ChevronRight,
+  Zap,
 } from 'lucide-react'
 
-// ─── Lesson Cards (like Hacksplaining lesson grid) ─────────────────────────────
 const lessons = [
   {
     icon: Brain,
     title: 'AI-Powered Quizzes',
-    description: 'BlueLearner inbuilt AI generates personalized questions and gives real-time feedback on your answers.',
-    time: '10–25 min',
+    description: 'Personalized questions with immediate feedback and clear explanations.',
+    time: '10-25 min',
     href: '/library/ai-quizzes',
   },
   {
     icon: Code2,
     title: 'Data Structures & Algorithms',
-    description: 'Master arrays, trees, graphs, sorting, and dynamic programming with interactive problems.',
-    time: '20–45 min',
+    description: 'Arrays, trees, graphs, sorting, and dynamic programming through practice.',
+    time: '20-45 min',
     href: '/library/computer-science',
   },
   {
     icon: Database,
     title: 'SQL & Databases',
-    description: 'Write complex queries, understand indexing, and optimize database performance.',
-    time: '15–30 min',
+    description: 'Write better queries, understand indexes, and reason about performance.',
+    time: '15-30 min',
     href: '/library/databases',
   },
   {
     icon: Globe,
     title: 'Web Development',
-    description: 'Build full-stack apps with HTML, CSS, JavaScript, React, Node.js, and more.',
-    time: '20–40 min',
+    description: 'Build full-stack applications with modern frontend and backend foundations.',
+    time: '20-40 min',
     href: '/library/web-dev',
   },
   {
     icon: Cpu,
     title: 'Embedded Systems',
-    description: 'Learn microcontrollers, GPIO, UART, and real-time OS concepts hands-on.',
-    time: '25–50 min',
+    description: 'Microcontrollers, GPIO, UART, and real-time systems in practical lessons.',
+    time: '25-50 min',
     href: '/library/electrical',
   },
   {
     icon: Wrench,
     title: 'Mechanical Engineering',
-    description: 'Thermodynamics, CAD/CAM, manufacturing processes and engineering design.',
-    time: '20–40 min',
+    description: 'Thermodynamics, manufacturing, CAD/CAM, and engineering design basics.',
+    time: '20-40 min',
     href: '/library/mechanical',
   },
   {
     icon: BarChart3,
     title: 'Data Science & ML',
-    description: 'Pandas, NumPy, scikit-learn, model training, and deployment workflows.',
-    time: '30–60 min',
+    description: 'Pandas, NumPy, model training, evaluation, and deployment workflows.',
+    time: '30-60 min',
     href: '/library/data-science',
   },
   {
     icon: ShieldCheck,
     title: 'System Design',
-    description: 'Design scalable distributed systems — load balancing, caching, and microservices.',
-    time: '25–50 min',
+    description: 'Scalable systems, caching, queues, load balancing, and tradeoff analysis.',
+    time: '25-50 min',
     href: '/library/system-design',
   },
 ]
 
-// ─── Why Section (numbered like Hacksplaining) ─────────────────────────────────
 const whyItems = [
   {
     num: '01',
-    headline: 'Free learning that actually works.',
-    body: 'Curated by Bluecoderhub Engineers for all core branches — CS, Mechanical, Electrical, Civil, and Management. No paywalls. No fluff.',
+    headline: 'Learning paths with room to think.',
+    body: 'Lessons are paced like concise digital chapters, with enough context to understand the concept before practice begins.',
   },
   {
     num: '02',
-    headline: 'Practice in a real code editor.',
-    body: 'Our browser-based IDE supports 15+ languages. Write, run, and debug code instantly — no setup required.',
+    headline: 'Practice connected to real outcomes.',
+    body: 'Coding exercises, quizzes, and projects build toward portfolios, interviews, hackathons, and stronger fundamentals.',
   },
   {
     num: '03',
-    headline: 'Compete and earn recognition.',
-    body: 'Join AI-generated weekly hackathons, climb leaderboards, earn XP, and build a portfolio that gets you hired.',
+    headline: 'A platform for engineering breadth.',
+    body: 'Computer science, mechanical, electrical, civil, and management tracks live together in one consistent academy.',
   },
 ]
 
-// ─── Terminal lines ─────────────────────────────────────────────────────────────
-const terminalLines = [
-  { text: '$ bluelearnerhub start --track ai-python', color: '#e6edf3' },
-  { text: '✓ Loading Python environment...', color: '#3fb950' },
-  { text: '✓ AI Quiz Engine ready', color: '#3fb950' },
-  { text: '✓ 2,450 XP loaded for user @rajan', color: '#3fb950' },
-  { text: '', color: '' },
-  { text: '» Question 1 of 5 — Algorithms', color: '#58a6ff' },
-  { text: 'What is the time complexity of quicksort?', color: '#e6edf3' },
-  { text: '', color: '' },
-  { text: '  A) O(n)     B) O(n log n)', color: '#8b949e' },
-  { text: '  C) O(n²)    D) O(log n)', color: '#8b949e' },
-  { text: '', color: '' },
-  { text: '  Your answer: B', color: '#e6edf3' },
-  { text: '✓ Correct! Average case is O(n log n)', color: '#3fb950' },
-  { text: '', color: '' },
-  { text: '» +50 XP earned  🏆 Streak: 7 days', color: '#f78166' },
+const tracks = [
+  {
+    name: 'Computer Science',
+    icon: Code2,
+    color: 'hsl(var(--cs-blue))',
+    topics: ['Python', 'JavaScript', 'DSA', 'Algorithms'],
+    href: '/library/computer-science',
+  },
+  {
+    name: 'Mechanical',
+    icon: Wrench,
+    color: 'hsl(var(--mech-orange))',
+    topics: ['Thermodynamics', 'CAD/CAM', 'Manufacturing'],
+    href: '/library/mechanical',
+  },
+  {
+    name: 'Electrical',
+    icon: Zap,
+    color: 'hsl(var(--elec-yellow))',
+    topics: ['Circuits', 'Power Systems', 'Electronics'],
+    href: '/library/electrical',
+  },
+  {
+    name: 'Civil',
+    icon: Globe,
+    color: 'hsl(var(--civil-teal))',
+    topics: ['Structures', 'Geotechnical', 'Hydraulics'],
+    href: '/library/civil',
+  },
 ]
 
-// ─── Stats ─────────────────────────────────────────────────────────────────────
-const stats = [
-  { label: 'Status', value: 'Beta Launch' },
-  { label: 'Lessons Available', value: '50+' },
-  { label: 'Languages Supported', value: '15+' },
-  { label: 'Per Session', value: 'Earn XP & Level Up' },
-]
-
-// ─── Fade-up variant ───────────────────────────────────────────────────────────
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show:   (i: number) => ({
+  hidden: { opacity: 0, y: 18 },
+  show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay: i * 0.07, ease: 'easeOut' },
+    transition: { duration: 0.45, delay: i * 0.06, ease: 'easeOut' },
   }),
 }
 
 export default function LandingPage() {
   return (
     <main className="min-h-screen">
-
-      {/* ════════════════════════════════════════════════
-          HERO — left content + terminal on right
-      ════════════════════════════════════════════════ */}
-      <section className="pt-32 pb-20 sm:pt-40 sm:pb-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-            {/* Left content */}
+      <section className="px-4 pb-16 pt-32 sm:px-6 sm:pb-24 sm:pt-40 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
-              {/* Eyebrow */}
-              <motion.div
+              <motion.p
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="mb-5 flex items-center gap-2"
+                className="mb-5 text-sm font-semibold uppercase text-primary"
               >
-                <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-sm font-mono font-medium text-primary tracking-wide">
-                  Limited Beta Access · Join our Founding Cohort
-                </span>
-              </motion.div>
-
-              {/* Headline */}
+                Engineering learning academy
+              </motion.p>
               <motion.h1
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.08 }}
-                className="mb-4 text-foreground"
+                className="max-w-4xl text-balance"
               >
-                Learn the skills.
-                <br />
-                <span className="text-primary">Land your dream job.</span>
+                Learn engineering with calm lessons, thoughtful practice, and AI-guided feedback.
               </motion.h1>
-
-              {/* Description */}
               <motion.p
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.16 }}
-                className="text-base sm:text-lg text-muted-foreground mb-8 max-w-lg leading-relaxed"
-                style={{ fontFamily: 'var(--font-mono)' }}
+                className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground"
               >
-                Free interactive lessons for engineering students — covering
-                CS, Mechanical, Electrical, Civil and Management domains.
-                AI-powered quizzes, live code editor, hackathons. Each lesson
-                takes 15–45 minutes.
+                Bluelearnerhub brings lessons, coding exercises, quizzes, and hackathons into one clean workspace for engineering students. Courses and mentors are opening after beta.
               </motion.p>
-
-              {/* CTA Buttons */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.24 }}
-                className="flex flex-col sm:flex-row items-start gap-3"
+                className="mt-9 flex flex-col gap-3 sm:flex-row"
               >
-                <Link
-                  href="/get-started"
-                  id="hero-start-btn"
-                  className="btn btn-primary flex items-center gap-2"
-                >
-                  Browse All Lessons
+                <Link href="/library" id="hero-start-btn" className="btn btn-primary">
+                  Browse lessons
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link
-                  href="/get-started"
-                  id="hero-account-btn"
-                  className="btn btn-outline flex items-center gap-2"
-                >
-                  Create Free Account
+                <Link href="/get-started" id="hero-account-btn" className="btn btn-outline">
+                  Create free account
                 </Link>
-              </motion.div>
-
-              {/* Stats row */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.35 }}
-                className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4"
-              >
-                {stats.map((s) => (
-                  <div key={s.label} className="text-center sm:text-left">
-                    <div
-                      className="text-xl font-bold text-primary"
-                      style={{ fontFamily: 'var(--font-heading)' }}
-                    >
-                      {s.value}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-0.5 font-mono">
-                      {s.label}
-                    </div>
-                  </div>
-                ))}
               </motion.div>
             </div>
 
-            {/* Right — Terminal */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative mx-auto w-full max-w-xl lg:max-w-none"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.18 }}
+              className="rounded-xl border border-border bg-card p-6 shadow-sm"
             >
-              {/* Glow behind terminal */}
-              <div
-                className="absolute -inset-4 rounded-2xl opacity-20 blur-2xl pointer-events-none"
-                style={{ background: 'hsl(var(--primary))' }}
-              />
-              <div className="terminal relative">
-                {/* Title bar */}
-                <div className="terminal-header">
-                  <span className="terminal-dot" style={{ background: '#ff5f57' }} />
-                  <span className="terminal-dot" style={{ background: '#ffbd2e' }} />
-                  <span className="terminal-dot" style={{ background: '#28c840' }} />
-                  <span className="ml-3 text-xs text-gray-400 font-mono">
-                    Bluelearnerhub — AI Learning Session
-                  </span>
+              <div className="mb-8 flex items-center justify-between border-b border-border pb-4">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Today in your academy</p>
+                  <p className="text-sm text-muted-foreground">A focused plan for the next study block.</p>
                 </div>
-                {/* Lines */}
-                <div className="terminal-body" style={{ minHeight: 320 }}>
-                  {terminalLines.map((line, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 + i * 0.06, duration: 0.2 }}
-                      className="leading-7"
-                      style={{ color: line.color || 'transparent', minHeight: '1.75rem' }}
-                    >
-                      {line.text}
-                      {/* Cursor on last active line */}
-                      {i === terminalLines.length - 1 && (
-                        <span
-                          className="inline-block w-2 h-4 bg-green-400 ml-1 animate-blink"
-                          style={{ verticalAlign: 'middle' }}
-                        />
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
+                <BookOpen className="h-5 w-5 text-primary" />
+              </div>
+              <div className="space-y-5">
+                {[
+                  ['Read', 'System design: caching and consistency'],
+                  ['Practice', 'Solve two graph traversal problems'],
+                  ['Review', 'AI quiz feedback from yesterday'],
+                ].map(([label, value]) => (
+                  <div key={label} className="grid grid-cols-[88px_1fr] gap-4">
+                    <span className="text-sm font-semibold uppercase text-primary">{label}</span>
+                    <span className="text-sm leading-6 text-muted-foreground">{value}</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════
-          LESSONS GRID — 2 columns like Hacksplaining
-      ════════════════════════════════════════════════ */}
-      <section
-        id="lessons"
-        className="section"
-        style={{
-          background: 'hsl(var(--background-secondary))',
-          backgroundImage: 'radial-gradient(circle, hsl(var(--primary) / 0.09) 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-        }}
-      >
+      <section id="lessons" className="section bg-background-secondary">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          {/* Section header */}
-          <div className="mb-12">
-            <span className="section-tag">FREE LESSONS</span>
-            <h2 className="mb-4 max-w-xl">
-              Start with the fundamentals
-            </h2>
-            <p
-              className="text-muted-foreground max-w-lg leading-relaxed"
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}
-            >
-              Master core engineering topics — from CS and Web Dev to Mechanical
-              and Electrical. Each lesson takes 15–45 minutes.
+          <div className="mb-12 max-w-2xl">
+            <span className="section-tag">Free lessons</span>
+            <h2 className="mb-4">Start with the fundamentals</h2>
+            <p className="text-muted-foreground">
+              Each chapter is designed to be readable, practical, and compact enough for consistent study.
             </p>
           </div>
 
-          {/* Lesson cards — 2 column grid */}
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {lessons.map((lesson, i) => {
               const Icon = lesson.icon
               return (
-                <motion.div
-                  key={lesson.title}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: '-60px' }}
-                  variants={fadeUp}
-                >
-                  <Link
-                    href={lesson.href}
-                    id={`lesson-card-${i}`}
-                    className="lesson-card group"
-                  >
-                    {/* Icon */}
-                    <div
-                      className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl"
-                      style={{ background: 'hsl(var(--primary) / 0.10)' }}
-                    >
+                <motion.div key={lesson.title} custom={i} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} variants={fadeUp}>
+                  <Link href={lesson.href} id={`lesson-card-${i}`} className="lesson-card group">
+                    <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
-                        {lesson.title}
-                      </h3>
-                      <p
-                        className="text-sm text-muted-foreground leading-snug mb-2"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                      >
-                        {lesson.description}
-                      </p>
-                      <span className="text-xs text-muted-foreground font-mono">
-                        {lesson.time}
-                      </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="mb-1 text-xl transition-colors group-hover:text-primary">{lesson.title}</h3>
+                      <p className="mb-3 text-sm leading-6 text-muted-foreground">{lesson.description}</p>
+                      <span className="text-xs font-semibold text-muted-foreground">{lesson.time}</span>
                     </div>
-
-                    {/* Chevron */}
-                    <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    <ChevronRight className="h-5 w-5 flex-shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
                   </Link>
                 </motion.div>
               )
             })}
           </div>
-
-          {/* View all CTA */}
-          <div className="mt-10 text-center">
-            <Link
-              href="/library"
-              id="view-all-lessons-btn"
-              className="btn btn-outline inline-flex items-center gap-2"
-            >
-              View all 200+ lessons
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
-    
       <section id="why" className="section">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-14">
-            <span className="section-tag">WHY BLUELEARNERHUB</span>
-            <h2 className="max-w-2xl">
-              Engineering lessons that actually stick
-            </h2>
+          <div className="mb-14 max-w-2xl">
+            <span className="section-tag">Why Bluelearnerhub</span>
+            <h2>Engineering lessons that actually stick</h2>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid gap-6 lg:grid-cols-3">
             {whyItems.map((item, i) => (
-              <motion.div
-                key={item.num}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: '-60px' }}
-                variants={fadeUp}
-              >
-                {/* Step card */}
-                <div className="card p-7 h-full flex flex-col gap-4">
-                  <div
-                    className="inline-flex items-center justify-center rounded-lg border border-border w-10 h-10 text-sm font-mono font-bold text-muted-foreground"
-                  >
-                    {item.num}
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground">
-                    {item.headline}
-                  </h3>
-                  <p
-                    className="text-sm text-muted-foreground leading-relaxed"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                  >
-                    {item.body}
-                  </p>
+              <motion.div key={item.num} custom={i} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} variants={fadeUp} className="card h-full p-7">
+                <div className="mb-6 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-secondary/50 text-sm font-semibold text-muted-foreground">
+                  {item.num}
                 </div>
+                <h3 className="mb-3">{item.headline}</h3>
+                <p className="text-sm leading-7 text-muted-foreground">{item.body}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════
-          FEATURES — icon grid
-      ════════════════════════════════════════════════ */}
-      <section
-        id="features"
-        className="section"
-        style={{
-          background: 'hsl(var(--background-secondary))',
-          backgroundImage: 'radial-gradient(circle, hsl(var(--primary) / 0.08) 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-        }}
-      >
+      <section id="tracks" className="section bg-background-secondary">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="section-tag">PLATFORM</span>
-            <h2 className="mb-4">Everything you need to<br />master your engineering domain</h2>
-            <p
-              className="mx-auto max-w-xl text-muted-foreground leading-relaxed"
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.92rem' }}
-            >
-              We built the platform we wished existed when we were studying engineering.
-              No fluff, no paywalls — just practical skills.
-            </p>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                icon: Brain,
-                title: 'AI-Powered Learning',
-                desc: 'BlueLearner inbuilt AI generates personalized quizzes and provides real-time feedback on your code submissions.',
-              },
-              {
-                icon: Code2,
-                title: 'Built-in Code Editor',
-                desc: 'Practice in our browser-based IDE supporting 15+ languages with instant execution and output.',
-              },
-              {
-                icon: Trophy,
-                title: 'Weekly Hackathons',
-                desc: 'Compete in AI-generated challenges, win prizes, and build a portfolio that stands out to recruiters.',
-              },
-              {
-                icon: GraduationCap,
-                title: 'Expert Mentorship',
-                desc: 'Connect with industry mentors for personalized guidance, code reviews, and career advice.',
-              },
-              {
-                icon: BookOpen,
-                title: 'Free Library',
-                desc: 'Comprehensive engineering tutorials for CS, Mechanical, Electrical, Civil, and Management domains.',
-              },
-              {
-                icon: TrendingUp,
-                title: 'Career Growth',
-                desc: 'Track your progress, earn XP, climb leaderboards, and showcase achievements to recruiters.',
-              },
-            ].map((f, i) => {
-              const Icon = f.icon
-              return (
-                <motion.div
-                  key={f.title}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: '-60px' }}
-                  variants={fadeUp}
-                  className="card p-6 flex flex-col gap-4 group hover:border-primary/40 transition-colors"
-                >
-                  <div
-                    className="flex h-11 w-11 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
-                    style={{ background: 'hsl(var(--primary) / 0.10)' }}
-                  >
-                    <Icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold mb-2">{f.title}</h3>
-                    <p
-                      className="text-sm text-muted-foreground leading-relaxed"
-                      style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                      {f.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════
-          DOMAINS BAND
-      ════════════════════════════════════════════════ */}
-      <section id="domains" className="section">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10">
-            <span className="section-tag">LEARNING TRACKS</span>
+          <div className="mb-10 max-w-2xl">
+            <span className="section-tag">Learning tracks</span>
             <h2 className="mb-3">Pick your engineering domain</h2>
-            <p className="text-muted-foreground text-sm font-mono max-w-lg">
-              Comprehensive tutorials for every branch — no login needed to get started.
-            </p>
+            <p className="text-muted-foreground">Move from reading to practice with clear tracks across core engineering areas.</p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                name: 'Computer Science',
-                icon: Code2,
-                color: 'hsl(var(--cs-blue))',
-                topics: ['Python', 'JavaScript', 'DSA', 'Algorithms'],
-                href: '/library/computer-science',
-              },
-              {
-                name: 'Mechanical',
-                icon: Wrench,
-                color: 'hsl(var(--mech-orange))',
-                topics: ['Thermodynamics', 'CAD/CAM', 'Manufacturing'],
-                href: '/library/mechanical',
-              },
-              {
-                name: 'Electrical',
-                icon: Zap,
-                color: 'hsl(var(--elec-yellow))',
-                topics: ['Circuit Analysis', 'Power Systems', 'Electronics'],
-                href: '/library/electrical',
-              },
-              {
-                name: 'Civil',
-                icon: Globe,
-                color: 'hsl(var(--civil-teal))',
-                topics: ['Structural Analysis', 'Geotechnical', 'Hydraulics'],
-                href: '/library/civil',
-              },
-            ].map((d, i) => {
-              const Icon = d.icon
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {tracks.map((track, i) => {
+              const Icon = track.icon
               return (
-                <motion.div
-                  key={d.name}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: '-60px' }}
-                  variants={fadeUp}
-                >
-                  <Link
-                    href={d.href}
-                    id={`domain-card-${i}`}
-                    className="card p-5 flex flex-col gap-3 group hover:border-primary/40 transition-all hover:shadow-md block"
-                  >
-                    <div
-                      className="flex h-10 w-10 items-center justify-center rounded-lg"
-                      style={{ background: `${d.color}18` }}
-                    >
-                      <Icon className="h-5 w-5" style={{ color: d.color }} />
+                <motion.div key={track.name} custom={i} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} variants={fadeUp}>
+                  <Link href={track.href} id={`domain-card-${i}`} className="card block h-full p-5 transition-colors hover:border-primary/40">
+                    <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: `${track.color}18` }}>
+                      <Icon className="h-5 w-5" style={{ color: track.color }} />
                     </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                        {d.name}
-                      </h3>
-                      <div className="flex flex-wrap gap-1.5">
-                        {d.topics.map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full px-2 py-0.5 text-xs font-mono font-medium"
-                            style={{ background: `${d.color}14`, color: d.color }}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
+                    <h3 className="mb-3 text-xl">{track.name}</h3>
+                    <div className="mb-5 flex flex-wrap gap-1.5">
+                      {track.topics.map((topic) => (
+                        <span key={topic} className="rounded-full bg-secondary/70 px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+                          {topic}
+                        </span>
+                      ))}
                     </div>
-                    <div className="flex items-center gap-1 text-xs font-mono text-muted-foreground group-hover:text-primary transition-colors mt-auto">
+                    <div className="flex items-center gap-1 text-xs font-semibold text-primary">
                       View track <ChevronRight className="h-3.5 w-3.5" />
                     </div>
                   </Link>
@@ -603,70 +301,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════
-          CTA SECTION
-      ════════════════════════════════════════════════ */}
-      <section
-        id="cta"
-        className="pb-20"
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="relative overflow-hidden rounded-2xl border border-primary/20 text-center px-8 py-16"
-            style={{ background: 'hsl(var(--primary))' }}
-          >
-            {/* Dot grid overlay */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px)',
-                backgroundSize: '24px 24px',
-              }}
-            />
-            <div className="relative z-10">
-              <h2 className="mb-4 text-white">
-                Ready to start your journey?
-              </h2>
-              <p
-                className="mx-auto mb-8 max-w-lg text-white/80 leading-relaxed"
-                style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}
-              >
-                Be part of our Founding Cohort — master engineering skills across CS, Mechanical,
-                Electrical, Civil and more. AI-powered, free, no credit card needed.
-                <br />
-                Limited Beta Access — join now and shape the platform.
-              </p>
-              <Link
-                href="/get-started"
-                id="cta-join-btn"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 font-bold text-primary shadow-lg transition-all hover:shadow-xl hover:scale-105"
-                style={{ fontFamily: 'var(--font-heading)', fontSize: '0.95rem' }}
-              >
-                Start Learning Free
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </motion.div>
+      <section id="cta" className="px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-xl border border-border bg-card px-6 py-14 text-center shadow-sm sm:px-10">
+          <h2 className="mx-auto mb-4 max-w-3xl">Start learning in a space designed for focus.</h2>
+          <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
+            Join Bluelearnerhub to study, practice, and build proof of skill without a loud dashboard getting in the way.
+          </p>
+          <Link href="/get-started" id="cta-join-btn" className="btn btn-primary">
+            Start learning free
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
-
-      {/* ════════════════════════════════════════════════
-          FOOTER — Powered by Bluecoderhub
-      ════════════════════════════════════════════════ */}
-      <footer className="border-t border-border/40 py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-sm text-muted-foreground font-mono">
-              <span className="font-bold text-foreground">Bluelearnerhub</span> powered by <span className="font-bold text-foreground">Bluecoderhub</span>
-            </p>
-          </div>
-        </div>
-      </footer>
-
     </main>
   )
 }

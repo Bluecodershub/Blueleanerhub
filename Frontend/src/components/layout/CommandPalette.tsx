@@ -12,7 +12,8 @@ import {
   Users, 
   Trophy, 
   Layout, 
-  ArrowRight 
+  ArrowRight,
+  LockKeyhole,
 } from 'lucide-react'
 
 export function CommandPalette() {
@@ -79,9 +80,12 @@ export function CommandPalette() {
                 <Book className="mr-2 h-4 w-4" />
                 <span>All Tutorials</span>
               </Item>
-              <Item onSelect={() => runCommand(() => router.push('/mentor'))}>
+              <Item disabled>
                 <Users className="mr-2 h-4 w-4" />
                 <span>Expert Mentors</span>
+                <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase text-primary">
+                  Soon <LockKeyhole className="h-3 w-3" />
+                </span>
               </Item>
               <Item onSelect={() => runCommand(() => router.push('/hackathons'))}>
                 <Trophy className="mr-2 h-4 w-4" />
@@ -110,14 +114,15 @@ export function CommandPalette() {
   )
 }
 
-function Item({ children, onSelect }: { children: React.ReactNode; onSelect?: () => void }) {
+function Item({ children, onSelect, disabled }: { children: React.ReactNode; onSelect?: () => void; disabled?: boolean }) {
   return (
     <Command.Item
-      onSelect={onSelect}
-      className="flex cursor-pointer select-none items-center rounded-lg px-2 py-2 text-sm outline-none aria-selected:bg-primary aria-selected:text-primary-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 transition-colors"
+      disabled={disabled}
+      onSelect={disabled ? undefined : onSelect}
+      className="flex cursor-pointer select-none items-center rounded-lg px-2 py-2 text-sm outline-none aria-selected:bg-primary aria-selected:text-primary-foreground data-[disabled]:cursor-not-allowed data-[disabled]:opacity-60 transition-colors"
     >
       {children}
-      <ArrowRight className="ml-auto h-3 w-3 opacity-0 group-aria-selected:opacity-100" />
+      {!disabled && <ArrowRight className="ml-auto h-3 w-3 opacity-0 group-aria-selected:opacity-100" />}
     </Command.Item>
   )
 }

@@ -660,13 +660,13 @@ export default function StudentDashboard() {
                     `Welcome, developer! I've custom-designed a software architecture roadmap focusing on OOP & modular algorithms. Let's tackle your first node today!` :
                    user?.domain === 'Robotics Engineering' ?
                     `Greetings, roboticist! I've loaded specialized dynamic loops & PID controls into your pipeline. Complete the first task to unlock kinematics!` :
-                    `Hello! Your customized curriculum is locked and ready. Head over to the mentors pane or open your skill graph to begin practicing!`
+                    `Hello! Your customized curriculum is locked and ready. Mentors are opening after beta; use your skill graph to begin practicing.`
                   }
                 </p>
               </div>
 
-              <Button variant="outline" className="w-full gap-2 hover:bg-slate-850 border-slate-800" onClick={() => router.push('/student/mentors')}>
-                <Users className="h-4 w-4 text-blue-400" /> Chat with AI Mentor
+              <Button variant="outline" className="w-full gap-2" disabled>
+                <Users className="h-4 w-4 text-primary" /> AI Mentors Coming Soon
               </Button>
             </div>
 

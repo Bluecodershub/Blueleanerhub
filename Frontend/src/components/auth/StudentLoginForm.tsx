@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
 import { KeyRound, User } from 'lucide-react'
 import { Github } from '@/components/ui/BrandIcons'
+import { authOAuthUrl } from '@/lib/api'
 
 interface StudentLoginFormProps {
   onSubmit: (credentials: { email: string; password: string }) => Promise<void>
@@ -32,7 +33,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-xs text-red-400"
+          className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive"
         >
           {error}
         </motion.div>
@@ -44,9 +45,9 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
           type="button"
           variant="outline"
           onClick={() => {
-            window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/github`
+            window.location.href = authOAuthUrl('github')
           }}
-          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-foreground transition-all hover:bg-white hover:text-black"
+          className="h-10 gap-2"
         >
           <Github size={14} /> GitHub
         </Button>
@@ -54,9 +55,9 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
           type="button"
           variant="outline"
           onClick={() => {
-            window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/google`
+            window.location.href = authOAuthUrl('google')
           }}
-          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-foreground transition-all hover:bg-white hover:text-black"
+          className="h-10 gap-2"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path
@@ -94,25 +95,31 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
       {/* Standard Form */}
       <form onSubmit={handleSubmit} className="space-y-2">
         <div className="group relative">
+          <label htmlFor="student-login-email" className="sr-only">Email address</label>
           <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
           <Input
+            id="student-login-email"
             type="email"
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-10 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
+            className="h-10 pl-10"
+            autoComplete="email"
             required
           />
         </div>
 
         <div className="group relative">
+          <label htmlFor="student-login-password" className="sr-only">Password</label>
           <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
           <Input
+            id="student-login-password"
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-10 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
+            className="h-10 pl-10"
+            autoComplete="current-password"
             required
           />
         </div>
@@ -129,7 +136,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
         <Button
           type="submit"
           disabled={loading}
-          className="h-10 w-full rounded-xl bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+          className="h-10 w-full text-sm font-bold"
         >
           {loading ? 'Signing in…' : 'Sign In'}
         </Button>

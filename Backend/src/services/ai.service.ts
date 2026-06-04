@@ -9,8 +9,7 @@
  * HOW TO CHANGE THE PROVIDER
  * ---------------------------
  * Set the AI_PROVIDER environment variable:
- *   AI_PROVIDER=gemini   → Google Gemini 1.5 Pro (default, cloud)
- *   AI_PROVIDER=local    → Local AIR LLM via the Python ai-services FastAPI app
+ *   AI_PROVIDER=local    -> BlueLearnerHub inbuilt/local model gateway
  *
  * HOW TO ADD A NEW PROVIDER (e.g. OpenAI)
  * ----------------------------------------
@@ -20,7 +19,7 @@
  *
  * HOW TO SCALE THE LOCAL LLM LAYER
  * ----------------------------------
- * The local provider forwards requests to the Python ai-services microservice
+ * The local provider forwards requests to the Node ai-services gateway
  * (AI_SERVICE_URL). To scale horizontally, run multiple replicas of that
  * service and point AI_SERVICE_URL at a load balancer.
  */
@@ -53,7 +52,7 @@ interface AIProvider {
 }
 
 // ---------------------------------------------------------------------------
-// Gemini provider (cloud)
+// Disabled hosted provider shim
 // ---------------------------------------------------------------------------
 
 class GeminiProvider implements AIProvider {
@@ -86,7 +85,7 @@ class GeminiProvider implements AIProvider {
 
       return { questions };
     } catch (error) {
-      logger.error('GeminiProvider: generateQuiz failed', error);
+      logger.error('DisabledHostedProvider: generateQuiz failed', error);
       return null;
     }
   }
@@ -136,7 +135,7 @@ class GeminiProvider implements AIProvider {
   }
 
   async generate(prompt: string): Promise<string> {
-    // Route through AI_core bridge (in-process Gemini, with HTTP fallback)
+    // Route through AI_core bridge with HTTP fallback.
     return coreGenerate(prompt);
   }
 }
@@ -169,7 +168,7 @@ class SingleChunkIterable implements AsyncIterable<{ text(): string }> {
 class LocalLLMProvider implements AIProvider {
   readonly name = 'local-airllm';
 
-  /** Base URL of the Python ai-services FastAPI app */
+  /** Base URL of the Node ai-services gateway. */
   private serviceUrl: string;
 
   constructor() {
@@ -202,8 +201,7 @@ class LocalLLMProvider implements AIProvider {
   }
 
   async generateQuiz(domain: string, level: number, performance: string) {
-    // Quiz generation still routes through the structured quiz endpoint in the
-    // Python service, which uses Gemini or templates — not the raw LLM.
+    // Quiz generation routes through the structured inbuilt-model quiz endpoint.
     try {
       const difficultyMap: Record<number, string> = { 1: 'easy', 2: 'medium', 3: 'hard', 4: 'expert' };
       const { data } = await axios.post(`${this.serviceUrl}/api/v1/quiz/generate`, {

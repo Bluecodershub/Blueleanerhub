@@ -52,7 +52,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.replace('/login')
+      router.replace('/login/student')
     } else if (user) {
       setFullName(user.fullName || user.name || '')
       setCollegeName(user.collegeName || '')

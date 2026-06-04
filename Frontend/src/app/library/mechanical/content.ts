@@ -1,6 +1,7 @@
 import type { LessonTopic } from '../_shared/types'
 import { thermoLessons } from './thermo-content'
 import { fluidLessons } from './fluid-content'
+import { manufacturingLessons } from './manufacturing-content'
 
 export const mechanicalTopics: LessonTopic[] = [
   {
@@ -16,5 +17,12 @@ export const mechanicalTopics: LessonTopic[] = [
     description: 'Fluid properties, Bernoulli equation, pipe flow, head losses, pumps, and turbines.',
     icon: 'Droplets',
     lessons: fluidLessons,
+  },
+  {
+    id: 'manufacturing',
+    name: 'Manufacturing Processes',
+    description: 'Casting design (Chvorinov\'s Rule, riser design), metal cutting, Taylor\'s tool life equation, and MRR optimization.',
+    icon: 'Factory',
+    lessons: manufacturingLessons,
   },
 ]

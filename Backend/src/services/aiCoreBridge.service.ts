@@ -19,7 +19,7 @@ import logger from '../utils/logger';
 
 // ── Typed shapes for AI_core exports ─────────────────────────────────────────
 
-interface GeminiService {
+interface AIProviderService {
   generate:     (prompt: string, opts?: { temperature?: number; maxTokens?: number }) => Promise<string>;
   generateJSON: (prompt: string, opts?: { temperature?: number; maxTokens?: number }) => Promise<unknown>;
 }
@@ -58,11 +58,11 @@ function loadModule<T>(relativePath: string, label: string): T | null {
   }
 }
 
-const aiProviderMod = loadModule<GeminiService>('../../../Worker/ai-services/services/aiProvider.service', 'aiProvider.service');
+const aiProviderMod = loadModule<AIProviderService>('../../../Worker/ai-services/services/aiProvider.service', 'aiProvider.service');
 const quizMod       = loadModule<QuizService>  ('../../../Worker/ai-services/services/quiz.service',       'quiz.service');
 const agentMod      = loadModule<AgentService> ('../../../Worker/ai-services/services/agent.service',      'agent.service');
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:8001';
+const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:8000';
 const INTERNAL_SECRET = process.env.INTERNAL_SERVICE_SECRET;
 
 function internalHeaders(): Record<string, string> {
@@ -73,7 +73,7 @@ function internalHeaders(): Record<string, string> {
 
 /**
  * Generate a free-text AI response.
- * Tries in-process Gemini first; falls back to HTTP if unavailable.
+ * Tries the in-process provider first; falls back to HTTP if unavailable.
  */
 export async function generate(
   prompt: string,
@@ -127,5 +127,5 @@ export async function runAgentCommand(
   return data;
 }
 
-/** True when at least the Gemini module loaded in-process. */
+/** True when the provider module loaded in-process. */
 export const isInProcess = aiProviderMod !== null;

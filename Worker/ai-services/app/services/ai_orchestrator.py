@@ -137,7 +137,7 @@ class AITutorAgent(BaseAgent):
     """
     Context-aware AI tutor.
     Understands the student's current tutorial, section, and learning history.
-    Uses Gemini Pro for nuanced, Socratic explanations.
+    Uses the configured inbuilt/local model provider for nuanced, Socratic explanations.
     """
 
     @property

@@ -11,22 +11,16 @@ interface StudentLoginLayoutProps {
 export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children }) => {
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4 py-8">
-      {/* Background Decor */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-[-10%] top-[-10%] h-[40%] w-[40%] rounded-full bg-primary/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] h-[40%] w-[40%] rounded-full bg-primary/5 blur-[120px]" />
-      </div>
-
       {/* Top Logo — compact */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 mb-6 flex items-center gap-2"
       >
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
           <GraduationCap size={20} />
         </div>
-        <span className="text-lg font-bold tracking-tight text-white">BlueLearnerHub</span>
+        <span className="font-heading text-lg font-semibold text-foreground">Bluelearnerhub</span>
       </motion.div>
 
       {/* Main Card */}
@@ -34,8 +28,12 @@ export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative z-10 w-full max-w-sm rounded-2xl border border-border/50 bg-card/30 p-6 shadow-2xl backdrop-blur-xl sm:max-w-md sm:rounded-3xl sm:p-8"
+        className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-sm sm:max-w-md sm:p-8"
       >
+        <div className="mb-5 text-center">
+          <h1 className="font-sans text-xl font-bold tracking-normal text-foreground">Student sign in</h1>
+          <p className="mt-1 text-xs text-muted-foreground">Access your dashboard, lessons, quizzes, and projects.</p>
+        </div>
         {children}
       </motion.div>
 

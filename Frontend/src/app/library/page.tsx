@@ -51,8 +51,8 @@ const lessons = [
     title: 'Python Programming',
     description: 'From variables and loops to classes and generators — a complete Python tour for beginners and intermediates.',
     icon: Terminal,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '20–35 min',
     tag: 'Popular',
     href: '/library/computer-science',
@@ -63,8 +63,8 @@ const lessons = [
     title: 'Data Structures & Algorithms',
     description: 'Arrays, linked lists, trees, graphs, sorting, searching, and dynamic programming with real code examples.',
     icon: Binary,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '30–45 min',
     tag: 'New',
     href: '/library/computer-science',
@@ -75,8 +75,8 @@ const lessons = [
     title: 'Web Development',
     description: 'Build full-stack apps with HTML, CSS, JavaScript, React, Node.js, and REST APIs from the ground up.',
     icon: Globe,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '25–40 min',
     tag: null,
     href: '/library/computer-science',
@@ -87,8 +87,8 @@ const lessons = [
     title: 'Machine Learning & AI',
     description: 'Linear regression, neural networks, scikit-learn pipelines, and real-world ML model deployment.',
     icon: Brain,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '30–50 min',
     tag: 'New',
     href: '/library/computer-science',
@@ -99,8 +99,8 @@ const lessons = [
     title: 'SQL & Databases',
     description: 'Write complex queries, understand indexing, transactions, and optimize database performance.',
     icon: Database,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '20–30 min',
     tag: null,
     href: '/library/computer-science',
@@ -111,8 +111,8 @@ const lessons = [
     title: 'System Design',
     description: 'Design scalable distributed systems — load balancing, caching, microservices, and message queues.',
     icon: Network,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '35–55 min',
     tag: null,
     href: '/library/computer-science',
@@ -123,8 +123,8 @@ const lessons = [
     title: 'DevOps & CI/CD',
     description: 'Docker, Kubernetes, GitHub Actions, and cloud deployment pipelines explained step by step.',
     icon: GitBranch,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '25–40 min',
     tag: null,
     href: '/library/computer-science',
@@ -135,8 +135,8 @@ const lessons = [
     title: 'Cybersecurity Fundamentals',
     description: 'Understand SQL injection, XSS, CSRF, and how to write secure, defensive code.',
     icon: ShieldCheck,
-    iconBg: '#e8f0fe',
-    iconColor: '#2d47d8',
+    iconBg: '#EFE6D8',
+    iconColor: '#596F7C',
     duration: '20–35 min',
     tag: 'New',
     href: '/library/computer-science',
@@ -149,8 +149,8 @@ const lessons = [
     title: 'Thermodynamics',
     description: 'Laws of thermodynamics, heat engines, cycles, and entropy — with solved numerical examples.',
     icon: FlaskConical,
-    iconBg: '#fff3e0',
-    iconColor: '#e65100',
+    iconBg: '#F3E8D7',
+    iconColor: '#B45A3C',
     duration: '20–40 min',
     tag: 'Popular',
     href: '/library/mechanical',
@@ -161,8 +161,8 @@ const lessons = [
     title: 'CAD/CAM Design',
     description: 'Computer-aided design and manufacturing concepts, toolpaths, and CNC programming fundamentals.',
     icon: Settings,
-    iconBg: '#fff3e0',
-    iconColor: '#e65100',
+    iconBg: '#F3E8D7',
+    iconColor: '#B45A3C',
     duration: '25–40 min',
     tag: null,
     href: '/library/mechanical',
@@ -173,8 +173,8 @@ const lessons = [
     title: 'Manufacturing Processes',
     description: 'Casting, forging, welding, machining, and quality control explained for aspiring engineers.',
     icon: Factory,
-    iconBg: '#fff3e0',
-    iconColor: '#e65100',
+    iconBg: '#F3E8D7',
+    iconColor: '#B45A3C',
     duration: '20–35 min',
     tag: null,
     href: '/library/mechanical',
@@ -185,8 +185,8 @@ const lessons = [
     title: 'Fluid Mechanics',
     description: 'Bernoulli equation, viscosity, flow regimes, pipe networks and turbomachinery basics.',
     icon: Wrench,
-    iconBg: '#fff3e0',
-    iconColor: '#e65100',
+    iconBg: '#F3E8D7',
+    iconColor: '#B45A3C',
     duration: '25–40 min',
     tag: null,
     href: '/library/mechanical',
@@ -199,8 +199,8 @@ const lessons = [
     title: 'Circuit Analysis',
     description: "Kirchhoff's laws, mesh analysis, Thevenin's theorem, and AC circuit behavior.",
     icon: CircuitBoard,
-    iconBg: '#fffde7',
-    iconColor: '#f57f17',
+    iconBg: '#F5EBCB',
+    iconColor: '#B7791F',
     duration: '20–35 min',
     tag: 'Popular',
     href: '/library/electrical',
@@ -211,8 +211,8 @@ const lessons = [
     title: 'Embedded Systems',
     description: 'Microcontrollers, GPIO, UART, SPI, I2C protocols, and real-time OS concepts.',
     icon: Cpu,
-    iconBg: '#fffde7',
-    iconColor: '#f57f17',
+    iconBg: '#F5EBCB',
+    iconColor: '#B7791F',
     duration: '25–45 min',
     tag: 'New',
     href: '/library/electrical',
@@ -223,8 +223,8 @@ const lessons = [
     title: 'Power Systems',
     description: 'Generation, transmission, distribution, transformers, and protection systems.',
     icon: Zap,
-    iconBg: '#fffde7',
-    iconColor: '#f57f17',
+    iconBg: '#F5EBCB',
+    iconColor: '#B7791F',
     duration: '20–35 min',
     tag: null,
     href: '/library/electrical',
@@ -238,8 +238,8 @@ const lessons = [
     title: 'Structural Analysis',
     description: 'Structural loads, bending moment & shear force diagrams, and IS 456/875 beam design fundamentals.',
     icon: Building,
-    iconBg: '#e8f5e9',
-    iconColor: '#2e7d32',
+    iconBg: '#E5EFE6',
+    iconColor: '#3F7D5C',
     duration: '20–35 min',
     tag: 'Popular',
     href: '/library/civil',
@@ -250,8 +250,8 @@ const lessons = [
     title: 'Geotechnical Engineering',
     description: 'Soil classification, Mohr-Coulomb failure, bearing capacity, and foundation design principles.',
     icon: Layers,
-    iconBg: '#e8f5e9',
-    iconColor: '#2e7d32',
+    iconBg: '#E5EFE6',
+    iconColor: '#3F7D5C',
     duration: '20–35 min',
     tag: 'New',
     href: '/library/civil',
@@ -264,8 +264,8 @@ const lessons = [
     title: 'Financial Management',
     description: 'Time value of money, capital budgeting, ratio analysis, and corporate finance fundamentals.',
     icon: Calculator,
-    iconBg: '#f3e5f5',
-    iconColor: '#6a1b9a',
+    iconBg: '#EEE6ED',
+    iconColor: '#75607B',
     duration: '20–35 min',
     tag: 'Popular',
     href: '/library/management',
@@ -276,8 +276,8 @@ const lessons = [
     title: 'Marketing & Strategy',
     description: 'Market segmentation, 4Ps framework, digital marketing, brand management, and growth strategy.',
     icon: TrendingUp,
-    iconBg: '#f3e5f5',
-    iconColor: '#6a1b9a',
+    iconBg: '#EEE6ED',
+    iconColor: '#75607B',
     duration: '20–30 min',
     tag: null,
     href: '/library/management',
@@ -288,8 +288,8 @@ const lessons = [
     title: 'Operations Management',
     description: 'Supply chain, inventory models, queuing theory, lean manufacturing, and Six Sigma.',
     icon: BarChart3,
-    iconBg: '#f3e5f5',
-    iconColor: '#6a1b9a',
+    iconBg: '#EEE6ED',
+    iconColor: '#75607B',
     duration: '20–35 min',
     tag: null,
     href: '/library/management',
@@ -338,8 +338,7 @@ export default function LibraryPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.08 }}
-            className="text-muted-foreground mb-8 max-w-xl mx-auto"
-            style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}
+            className="mx-auto mb-8 max-w-xl text-muted-foreground"
           >
             Free interactive lessons covering CS, Mechanical, Electrical,
             Civil, and Management — written by engineers, not content mills.
@@ -361,7 +360,7 @@ export default function LibraryPage() {
               placeholder="Search lesson catalog"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-border bg-card py-3.5 pl-12 pr-4 text-sm font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary shadow-sm transition-all"
+              className="w-full rounded-xl border border-border bg-card py-3.5 pl-12 pr-4 text-sm text-foreground shadow-sm transition-all placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </motion.div>
         </div>
@@ -374,16 +373,17 @@ export default function LibraryPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar"
+            className="flex flex-wrap items-center justify-center gap-2 pb-2 sm:justify-start"
           >
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 id={`filter-${cat.id}`}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 rounded-full px-4 py-1.5 text-sm font-mono font-medium transition-all ${
+                aria-pressed={activeCategory === cat.id}
+                className={`flex-shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
                   activeCategory === cat.id
-                    ? 'bg-primary text-white shadow-sm'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40'
                 }`}
               >
@@ -400,7 +400,7 @@ export default function LibraryPage() {
           {filtered.length === 0 ? (
             <div className="py-24 text-center">
               <BookOpen className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
-              <p className="text-muted-foreground font-mono">
+              <p className="text-muted-foreground">
                 No lessons match &quot;{searchQuery}&quot;. Try a different search.
               </p>
             </div>
@@ -419,8 +419,7 @@ export default function LibraryPage() {
                     <Link
                       href={lesson.href}
                       id={`lesson-${lesson.id}`}
-                      className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden transition-all duration-200 hover:border-primary/50 hover:shadow-lg block"
-                      style={{ boxShadow: '0 1px 4px 0 rgb(0 0 0 / 0.06)' }}
+                      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-200 hover:border-primary/50"
                     >
                       {/* ── Illustration area (like Hacksplaining image box) ── */}
                       <div
@@ -433,7 +432,7 @@ export default function LibraryPage() {
                         {/* Tag pill */}
                         {lesson.tag && (
                           <div
-                            className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full px-3.5 py-1 text-xs font-bold text-white z-10"
+                          className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full px-3.5 py-1 text-xs font-bold text-primary-foreground"
                             style={{ background: 'hsl(var(--primary))' }}
                           >
                             {lesson.tag}
@@ -441,7 +440,7 @@ export default function LibraryPage() {
                         )}
                         {/* Big icon (replaces illustration) */}
                         <div
-                          className="flex h-20 w-20 items-center justify-center rounded-2xl shadow-sm transition-transform group-hover:scale-110 duration-300"
+                          className="flex h-20 w-20 items-center justify-center rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105"
                           style={{ background: lesson.iconBg, border: `2px solid ${lesson.iconColor}22` }}
                         >
                           <Icon
@@ -454,33 +453,25 @@ export default function LibraryPage() {
 
                       {/* ── Card body ── */}
                       <div className="flex flex-col flex-1 p-5 text-center">
-                        <h3 className="text-lg font-bold text-foreground mb-2 leading-tight">
+                        <h3 className="mb-2 text-xl leading-tight text-foreground">
                           {lesson.title}
                         </h3>
                         <p
-                          className="text-sm text-muted-foreground leading-snug mb-4 flex-1"
-                          style={{ fontFamily: 'var(--font-mono)' }}
+                          className="mb-4 flex-1 text-sm leading-6 text-muted-foreground"
                         >
                           {lesson.description}
                         </p>
 
                         {/* Duration */}
-                        <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground font-mono mb-4">
+                        <div className="mb-4 flex items-center justify-center gap-1.5 text-xs font-semibold text-muted-foreground">
                           <Clock className="h-3.5 w-3.5" />
                           {lesson.duration}
                         </div>
 
                         {/* Explore link — like Hacksplaining's "Explore Lesson →" */}
                         <div
-                          className="border-t border-border pt-4 text-sm font-bold transition-colors group-hover:text-primary"
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            color: 'hsl(var(--primary))',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '4px',
-                          }}
+                          className="flex items-center justify-center gap-1 border-t border-border pt-4 text-sm font-bold transition-colors group-hover:text-primary"
+                          style={{ color: 'hsl(var(--primary))' }}
                         >
                           Explore Lesson
                           <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />

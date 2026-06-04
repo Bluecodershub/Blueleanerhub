@@ -4,27 +4,27 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-xl text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer active:scale-[0.97]',
+  'inline-flex items-center justify-center rounded-lg text-sm font-semibold ring-offset-background transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer',
   {
     variants: {
       variant: {
         default:
-          'bg-gradient-to-r from-brand to-brand-light text-white shadow-brand hover:shadow-brand-lg hover:-translate-y-0.5',
+          'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 hover:-translate-y-0.5',
+          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
-          'border border-border bg-transparent text-foreground hover:bg-muted/50 hover:border-primary/40 shadow-card hover:shadow-card-md hover:-translate-y-0.5',
+          'border border-border bg-card text-foreground shadow-sm hover:border-primary/50 hover:bg-accent hover:text-accent-foreground',
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/70 shadow-sm hover:-translate-y-0.5',
-        ghost: 'hover:bg-muted/60 hover:text-foreground text-foreground/70',
+          'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/75',
+        ghost: 'text-foreground/70 hover:bg-secondary/70 hover:text-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         premium:
-          'bg-gradient-to-r from-brand to-brand-light text-white shadow-brand-lg hover:shadow-brand-lg hover:-translate-y-0.5',
+          'bg-primary text-primary-foreground shadow-md hover:bg-primary/90',
       },
       size: {
         default: 'h-10 px-5 py-2',
         sm: 'h-8 rounded-lg px-3 text-xs',
-        lg: 'h-12 rounded-2xl px-8 text-base',
+        lg: 'h-12 rounded-xl px-8 text-base',
         icon: 'h-10 w-10',
       },
     },

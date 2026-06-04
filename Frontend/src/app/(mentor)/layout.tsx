@@ -33,21 +33,21 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
 
   return (
     <RoleGuard allowedRoles={['MENTOR', 'ADMIN']}>
-    <div className="flex min-h-screen bg-background text-foreground selection:bg-emerald-500/20">
+    <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
       <div className="bg-noise pointer-events-none absolute inset-0 opacity-50" />
 
       {/* ─── DESKTOP SIDEBAR ─────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:flex">
         <div className="flex h-16 items-center justify-between px-6">
           <Link href="/mentor/dashboard" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 shadow-lg shadow-emerald-600/25">
-              <GraduationCap className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-sm">
+              <GraduationCap className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
               <span className="font-semibold text-lg tracking-tight text-foreground">
                 BlueLearnerHub
               </span>
-              <span className="ml-1 rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+              <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
                 Faculty
               </span>
             </div>
@@ -71,21 +71,21 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
                 className={cn(
                   'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
                   isActive
-                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                 )}
               >
                 <Icon
                   className={cn(
                     'h-5 w-5',
-                    isActive ? 'text-white' : 'text-emerald-600/70'
+                    isActive ? 'text-primary-foreground' : 'text-primary/70'
                   )}
                 />
                 <span className="truncate">{item.title}</span>
                 {isActive && (
                   <motion.div
                     layoutId="active-pill"
-                    className="absolute left-0 h-5 w-1 rounded-full bg-white"
+                    className="absolute left-0 h-5 w-1 rounded-full bg-primary-foreground"
                   />
                 )}
               </Link>
@@ -105,14 +105,14 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
                 className={cn(
                   'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
                   isActive
-                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                 )}
               >
                 <Icon
                   className={cn(
                     'h-5 w-5',
-                    isActive ? 'text-white' : 'text-emerald-600/70'
+                    isActive ? 'text-primary-foreground' : 'text-primary/70'
                   )}
                 />
                 <span className="truncate">{item.title}</span>
@@ -124,12 +124,12 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
         {/* Profile + Logout */}
         <div className="border-t border-border/50 p-4 space-y-2">
           <div className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/40 bg-gradient-to-br from-emerald-600 to-teal-500 font-bold text-white shadow-inner">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
               {user?.fullName?.[0]?.toUpperCase() ?? 'M'}
             </div>
             <div className="min-w-0 flex-1 text-left">
               <p className="truncate text-sm font-semibold text-foreground">{user?.fullName ?? 'Mentor'}</p>
-              <p className="text-xs text-emerald-400">Mentor</p>
+              <p className="text-xs text-primary">Mentor</p>
             </div>
           </div>
           <button
@@ -161,8 +161,8 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
             >
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600">
-                    <GraduationCap className="h-6 w-6 text-white" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
+                    <GraduationCap className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <span className="font-semibold text-lg text-foreground">
                     BlueLearnerHub
@@ -190,7 +190,7 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
                       className={cn(
                         'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
                         isActive
-                          ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                          ? 'bg-primary text-primary-foreground shadow-sm'
                           : 'text-muted-foreground hover:bg-secondary/50'
                       )}
                     >
@@ -208,8 +208,6 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
       {/* ─── MAIN CONTENT ────────────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <main className="relative flex-1 overflow-y-auto pb-24">
-          <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-full bg-gradient-to-b from-emerald-500/5 to-transparent" />
-
           <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
             {children}
           </div>
@@ -246,7 +244,7 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
                   href={item.href}
                   className={cn(
                     'relative flex flex-col items-center justify-center gap-0.5 p-2 transition-all',
-                    isActive ? 'text-emerald-600' : 'text-muted-foreground'
+                    isActive ? 'text-primary' : 'text-muted-foreground'
                   )}
                 >
                   <Icon className="h-6 w-6" />
@@ -256,7 +254,7 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
                   {isActive && (
                     <motion.div
                       layoutId="mobile-pill"
-                      className="absolute -top-px left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-emerald-600"
+                      className="absolute -top-px left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-primary"
                     />
                   )}
                 </Link>

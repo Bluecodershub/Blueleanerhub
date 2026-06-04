@@ -555,25 +555,46 @@ export class AdaptiveLearningService {
             "id": "dynamic_${Date.now()}",
             "type": "MCQ",
             "question": "The question content here?",
-            "options": ["Option A", "Option B", "Option C", "Option D"],
+            "options": ["Concrete answer choice", "Concrete distractor", "Concrete distractor", "Concrete distractor"],
             "correctAnswer": "index_of_correct_option_0_to_3"
           }
+          Do not use placeholder labels such as "Option A" or "Choice 1".
         `;
         const aiResponse = await aiService.generate(dynamicPrompt);
         const parsed = JSON.parse(aiResponse.replace(/```json/g, '').replace(/```/g, '').trim());
+        const options = Array.isArray(parsed.options)
+          ? parsed.options.map((option: unknown) => String(option).trim()).filter(Boolean)
+          : [];
+        const correctAnswer = Number(parsed.correctAnswer);
+        const hasPlaceholderOption = options.some((option: string) => /^option\s+[a-d]$/i.test(option));
+        if (
+          typeof parsed.question !== 'string' ||
+          !parsed.question.trim() ||
+          options.length !== 4 ||
+          hasPlaceholderOption ||
+          !Number.isInteger(correctAnswer) ||
+          correctAnswer < 0 ||
+          correctAnswer > 3
+        ) {
+          throw new Error('AI generated an invalid adaptive question');
+        }
         nextQ = {
           id: parsed.id || `dyn_${Date.now()}`,
           type: parsed.type || 'MCQ',
           difficulty: targetDifficulty,
-          question: parsed.question,
-          options: parsed.options,
-          correctAnswer: parsed.correctAnswer
+          question: parsed.question.trim(),
+          options,
+          correctAnswer: String(correctAnswer)
         };
       } catch (err) {
         logger.error('Dynamic AI question generation failed, falling back to static general question', err);
         // Absolute fallback to a general question
         nextQ = GENERAL_QUESTIONS.find(q => !askedIds.has(q.id)) || GENERAL_QUESTIONS[0];
       }
+    }
+
+    if (!nextQ) {
+      throw new Error('No adaptive assessment question is available');
     }
 
     // Add the next question to the assessment
@@ -999,6 +1020,7 @@ The content must be:
 - Include real-world examples and code/formulas where applicable
 - Structured in clearly defined sections
 - Include mini-quiz questions to reinforce learning
+- Use concrete quiz answer text; never use placeholders like "Option A" or "Choice 1"
 
 Respond STRICTLY in the following JSON format (no extra text):
 {
@@ -1028,7 +1050,7 @@ Respond STRICTLY in the following JSON format (no extra text):
       "quiz": [
         {
           "question": "Quiz question here?",
-          "options": ["Option A", "Option B", "Option C", "Option D"],
+          "options": ["Concrete answer choice", "Concrete distractor", "Concrete distractor", "Concrete distractor"],
           "correctIndex": 1,
           "explanation": "Explanation why this is correct..."
         }
@@ -1063,44 +1085,20 @@ Respond STRICTLY in the following JSON format (no extra text):
       const cleaned = aiResponse.replace(/```json/g, '').replace(/```/g, '').trim();
       contentData = JSON.parse(cleaned);
     } catch (err) {
-      logger.error('AI course content generation failed, using fallback template', err);
-      // Fallback: create a structured template
-      contentData = {
-        estimatedMinutes: 30,
-        sections: [
-          {
-            type: 'intro',
-            title: `Introduction to ${nodeTitle}`,
-            content: `${nodeTitle} is a fundamental concept in ${domain}. This lesson will guide you through the core principles, practical applications, and key techniques you need to master.`
-          },
-          {
-            type: 'concept',
-            title: 'Core Principles',
-            content: `Understanding ${nodeTitle} requires grasping the following foundational ideas:\n\n1. **Definition**: The basic definition and scope of ${nodeTitle}\n2. **Applications**: Where and how this concept is applied in real engineering scenarios\n3. **Mathematical Foundation**: The key equations and formulas involved\n4. **Common Patterns**: Recurring patterns and best practices in the industry`
-          },
-          {
-            type: 'summary',
-            title: 'Summary',
-            content: `You have completed the introduction to ${nodeTitle}. Practice the exercises below to solidify your understanding.`
-          }
-        ],
-        keyTakeaways: [
-          `${nodeTitle} is a critical concept in ${domain}`,
-          'Practice consistently to build mastery',
-          'Apply concepts to real-world problems'
-        ],
-        furtherReading: [
-          { title: `Official ${domain} Engineering Standards`, description: 'Industry standard reference documentation' },
-          { title: `Advanced ${nodeTitle} Textbook`, description: 'In-depth academic coverage with solved problems' }
-        ],
-        practiceExercises: [
-          {
-            title: `Basic ${nodeTitle} Problem`,
-            description: `Solve a foundational problem applying the core concepts of ${nodeTitle}.`,
-            difficulty: 'EASY'
-          }
-        ]
-      };
+      logger.error('AI course content generation failed', err);
+      throw new Error('AI course content generation failed. Please retry when the AI service is available.');
+    }
+
+    const sections = Array.isArray(contentData.sections) ? contentData.sections : [];
+    const hasPlaceholderQuizOption = sections.some((section: any) =>
+      Array.isArray(section.quiz) &&
+      section.quiz.some((quiz: any) =>
+        Array.isArray(quiz.options) &&
+        quiz.options.some((option: unknown) => /^option\s+[a-d]$/i.test(String(option).trim()))
+      )
+    );
+    if (!sections.length || hasPlaceholderQuizOption) {
+      throw new Error('AI course content response failed validation.');
     }
 
     // Save to DB

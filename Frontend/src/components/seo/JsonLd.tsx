@@ -142,21 +142,29 @@ export function HomeJsonLd() {
   return (
     <>
       <script
+        id="organization-json-ld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
+      >
+        {JSON.stringify(organizationSchema)}
+      </script>
       <script
+        id="website-json-ld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
+      >
+        {JSON.stringify(websiteSchema)}
+      </script>
       <script
+        id="faq-json-ld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      >
+        {JSON.stringify(faqSchema)}
+      </script>
       <script
+        id="course-list-json-ld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseListSchema) }}
-      />
+      >
+        {JSON.stringify(courseListSchema)}
+      </script>
     </>
   )
 }

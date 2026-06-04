@@ -12,14 +12,12 @@ import {
   Zap,
   Building2,
   Briefcase,
-  Globe,
   Star,
   PlusCircle,
   ChevronRight,
   Flame,
   GraduationCap,
   Rocket,
-  Clock,
   Filter,
 } from 'lucide-react'
 import { LucideIcon } from 'lucide-react'
@@ -49,16 +47,16 @@ interface HackathonItem {
 }
 
 const DOMAIN_META: Record<string, { icon: LucideIcon; gradient: string }> = {
-  'computer science': { icon: Cpu, gradient: 'from-blue-600 to-indigo-600' },
-  software: { icon: Cpu, gradient: 'from-blue-600 to-violet-600' },
-  automotive: { icon: Settings, gradient: 'from-red-600 to-orange-600' },
-  mechanical: { icon: Settings, gradient: 'from-orange-600 to-amber-600' },
-  finance: { icon: Briefcase, gradient: 'from-emerald-600 to-teal-600' },
-  management: { icon: Briefcase, gradient: 'from-cyan-600 to-blue-600' },
-  civil: { icon: Building2, gradient: 'from-yellow-600 to-orange-600' },
-  electrical: { icon: Zap, gradient: 'from-yellow-500 to-amber-500' },
+  'computer science': { icon: Cpu, gradient: 'from-primary to-primary' },
+  software: { icon: Cpu, gradient: 'from-primary to-primary' },
+  automotive: { icon: Settings, gradient: 'from-primary to-primary' },
+  mechanical: { icon: Settings, gradient: 'from-primary to-primary' },
+  finance: { icon: Briefcase, gradient: 'from-primary to-primary' },
+  management: { icon: Briefcase, gradient: 'from-primary to-primary' },
+  civil: { icon: Building2, gradient: 'from-primary to-primary' },
+  electrical: { icon: Zap, gradient: 'from-primary to-primary' },
 }
-const DEFAULT_META = { icon: Trophy, gradient: 'from-primary to-violet-600' }
+const DEFAULT_META = { icon: Trophy, gradient: 'from-primary to-primary' }
 
 function getMeta(domain: string) {
   return DOMAIN_META[domain?.toLowerCase()] ?? DEFAULT_META
@@ -68,14 +66,14 @@ const ORGANIZER_CONFIG = {
   UNIVERSITY: {
     label: 'University',
     icon: GraduationCap,
-    color: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-    dot: 'bg-purple-400',
+    color: 'bg-primary/10 text-primary border-primary/20',
+    dot: 'bg-primary',
   },
   CORPORATE: {
     label: 'Corporate',
     icon: Briefcase,
-    color: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-    dot: 'bg-blue-400',
+    color: 'bg-success-light text-success border-success/20',
+    dot: 'bg-success',
   },
   PLATFORM: {
     label: 'BlueLearner',
@@ -98,7 +96,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 1240,
     daysLeft: 5,
     icon: Cpu,
-    gradient: 'from-blue-600 to-indigo-600',
+    gradient: 'from-primary to-primary',
     description: 'Build the next generation of AI-powered tools that reshape how humans interact with technology.',
     difficulty: 'Intermediate',
     tags: ['AI', 'Machine Learning', 'Python']
@@ -115,7 +113,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 890,
     daysLeft: 12,
     icon: Settings,
-    gradient: 'from-purple-600 to-indigo-600',
+    gradient: 'from-primary to-primary',
     description: 'Design sustainable engineering solutions for real-world mechanical challenges. Open to all engineering students.',
     difficulty: 'Pro',
     tags: ['Mechanical', 'CAD', 'AutoCAD']
@@ -132,7 +130,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 2100,
     daysLeft: 3,
     icon: Cpu,
-    gradient: 'from-emerald-600 to-teal-600',
+    gradient: 'from-primary to-primary',
     description: 'Build innovative cloud solutions using Azure services. Top performers get direct interview calls.',
     difficulty: 'Intermediate',
     tags: ['Azure', 'Cloud', 'TypeScript']
@@ -149,7 +147,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 0,
     daysLeft: 30,
     icon: Building2,
-    gradient: 'from-lime-600 to-green-600',
+    gradient: 'from-primary to-primary',
     description: 'Design sustainable structural solutions for the cities of the future.',
     difficulty: 'Intermediate',
     tags: ['Civil', 'Sustainability', 'BIM']
@@ -166,7 +164,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 0,
     daysLeft: 21,
     icon: Zap,
-    gradient: 'from-yellow-500 to-amber-500',
+    gradient: 'from-primary to-primary',
     description: 'Engineer next-gen power electronics and smart grid solutions for the future of India.',
     difficulty: 'Pro',
     tags: ['PCB', 'VLSI', 'Embedded']
@@ -183,7 +181,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 3400,
     daysLeft: 0,
     icon: Cpu,
-    gradient: 'from-orange-500 to-amber-600',
+    gradient: 'from-primary to-primary',
     description: 'Past hackathon on serverless architectures and cloud-native development.',
     difficulty: 'Pro',
     tags: ['AWS', 'Serverless', 'Lambda']
@@ -200,7 +198,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     participants: 670,
     daysLeft: 8,
     icon: Cpu,
-    gradient: 'from-violet-600 to-purple-600',
+    gradient: 'from-primary to-primary',
     description: 'Build autonomous robots that can navigate real-world obstacle courses. All experience levels welcome.',
     difficulty: 'Beginner',
     tags: ['Robotics', 'ROS', 'Python']
@@ -214,13 +212,13 @@ const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Pro']
 const statusConfig = {
   OPEN: {
     label: 'Registration Open',
-    color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-    dot: 'bg-emerald-400',
+    color: 'bg-success-light text-success border-success/20',
+    dot: 'bg-success',
   },
   UPCOMING: {
     label: 'Coming Soon',
-    color: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-    dot: 'bg-blue-400',
+    color: 'bg-primary/10 text-primary border-primary/20',
+    dot: 'bg-primary',
   },
   CLOSED: {
     label: 'Completed',
@@ -254,12 +252,12 @@ function DeadlineBar({ daysLeft, status }: { daysLeft: number; status: string })
   if (status !== 'OPEN' || daysLeft <= 0) return null
   const maxDays = 30
   const pct = Math.min(100, ((maxDays - daysLeft) / maxDays) * 100)
-  const urgentColor = daysLeft <= 3 ? 'bg-red-500' : daysLeft <= 7 ? 'bg-orange-500' : 'bg-emerald-500'
+  const urgentColor = daysLeft <= 3 ? 'bg-destructive' : daysLeft <= 7 ? 'bg-warning' : 'bg-success'
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-[10px] text-muted-foreground">
         <span>Registration closes</span>
-        <span className={daysLeft <= 3 ? 'font-bold text-red-400' : ''}>{daysLeft}d left</span>
+        <span className={daysLeft <= 3 ? 'font-bold text-destructive' : ''}>{daysLeft}d left</span>
       </div>
       <div className="h-1 w-full rounded-full bg-muted/50">
         <div className={`h-1 rounded-full ${urgentColor} transition-all`} style={{ width: `${pct}%` }} />
@@ -277,15 +275,15 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.35 }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-300 hover:border-primary/40"
     >
-      <div className={`relative h-1.5 bg-gradient-to-r ${hack.gradient}`} />
+      <div className="relative h-1.5 bg-primary/70" />
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${hack.gradient} flex shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-110`}>
-            <hack.icon className="h-5 w-5 text-white" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-300 group-hover:scale-105">
+            <hack.icon className="h-5 w-5 text-primary" />
           </div>
           <div className="flex flex-col items-end gap-1.5">
             <Badge className={`flex items-center gap-1.5 border text-[10px] font-semibold ${config.color}`}>
@@ -301,7 +299,7 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
 
         {/* Title */}
         <div className="space-y-1">
-          <h3 className="text-sm font-bold leading-snug text-white transition-colors group-hover:text-primary">
+          <h3 className="text-xl leading-tight text-foreground transition-colors group-hover:text-primary">
             {hack.title}
           </h3>
           <p className="text-[11px] text-muted-foreground">{hack.domain} · {hack.difficulty}</p>
@@ -326,13 +324,13 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
         <div className="grid grid-cols-2 gap-2">
           <div className="rounded-xl border border-border bg-background/50 p-2.5 text-center">
             <div className="mb-0.5 text-[9px] font-bold uppercase tracking-wide text-muted-foreground">Prize Pool</div>
-            <div className="text-sm font-black text-white">{hack.prize}</div>
+            <div className="text-sm font-bold text-foreground">{hack.prize}</div>
           </div>
           <div className="rounded-xl border border-border bg-background/50 p-2.5 text-center">
             <div className="mb-0.5 text-[9px] font-bold uppercase tracking-wide text-muted-foreground">
               {hack.status === 'UPCOMING' ? 'Opens In' : 'Participants'}
             </div>
-            <div className="text-sm font-black text-white">
+            <div className="text-sm font-bold text-foreground">
               {hack.status === 'UPCOMING' ? `${hack.daysLeft}d` : hack.participants.toLocaleString()}
             </div>
           </div>
@@ -347,7 +345,7 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Calendar className="h-3.5 w-3.5" />
           {hack.status === 'OPEN' && (
-            <span className={hack.daysLeft <= 5 ? 'font-semibold text-red-400' : ''}>
+            <span className={hack.daysLeft <= 5 ? 'font-semibold text-destructive' : ''}>
               {hack.daysLeft} days left
             </span>
           )}
@@ -359,9 +357,9 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
             size="sm"
             className={`h-8 gap-1.5 rounded-xl px-4 text-xs font-bold transition-all ${
               hack.status === 'OPEN'
-                ? 'bg-primary text-white hover:bg-primary/90'
+                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                 : hack.status === 'UPCOMING'
-                  ? 'border border-blue-500/20 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20'
+                  ? 'border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15'
                   : 'border border-border bg-muted/50 text-muted-foreground hover:bg-muted'
             }`}
           >
@@ -496,22 +494,22 @@ export default function HackathonsPage() {
     }, 0)
 
   return (
-    <div className="space-y-8 pb-20">
+    <div className="space-y-8 pb-20 pt-4 sm:pt-0">
       {/* Header */}
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="space-y-3">
-          <h1 className="font-heading text-3xl font-black tracking-tight text-white">Hackathons</h1>
+          <h1>Hackathons</h1>
           <p className="max-w-xl text-sm text-muted-foreground">
             Compete in university, corporate, and platform hackathons. Build real solutions, win prizes, and get noticed by top companies.
           </p>
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex shrink-0 flex-wrap gap-2">
           <Button variant="outline" className="h-10 gap-2 rounded-xl border-border px-5 text-sm font-bold">
             <Star className="h-4 w-4" />
             My Registrations
           </Button>
           <Link href="/corporate/host-hackathon">
-            <Button className="h-10 gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white hover:bg-primary/90">
+            <Button className="h-10 gap-2 px-5 text-sm font-bold">
               <PlusCircle className="h-4 w-4" />
               Host a Hackathon
             </Button>
@@ -522,14 +520,14 @@ export default function HackathonsPage() {
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: 'Active Hackathons', value: openCount, icon: Flame, color: 'text-orange-400' },
-          { label: 'Total Prize Pool', value: totalPrize > 0 ? `$${Math.round(totalPrize / 1000)}K+` : 'View All', icon: Trophy, color: 'text-amber-400' },
-          { label: 'University Events', value: uniCount, icon: GraduationCap, color: 'text-purple-400' },
-          { label: 'Corporate Events', value: corpCount, icon: Briefcase, color: 'text-blue-400' },
+          { label: 'Active Hackathons', value: openCount, icon: Flame, color: 'text-primary' },
+          { label: 'Total Prize Pool', value: totalPrize > 0 ? `$${Math.round(totalPrize / 1000)}K+` : '$0', icon: Trophy, color: 'text-warning' },
+          { label: 'University Events', value: uniCount, icon: GraduationCap, color: 'text-success' },
+          { label: 'Corporate Events', value: corpCount, icon: Briefcase, color: 'text-primary' },
         ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="rounded-2xl border border-border bg-card/50 p-4 text-center">
+          <div key={label} className="rounded-xl border border-border bg-card p-4 text-center">
             <Icon className={`h-5 w-5 ${color} mx-auto mb-2`} />
-            <div className="text-xl font-black text-white">{value}</div>
+            <div className="text-xl font-bold text-foreground">{value}</div>
             <div className="mt-0.5 text-[11px] text-muted-foreground">{label}</div>
           </div>
         ))}
@@ -537,11 +535,11 @@ export default function HackathonsPage() {
 
       <div className="grid gap-4 md:grid-cols-3">
         {HACKATHON_MODES.map(({ title, href, description, icon: Icon }) => (
-          <Link key={href} href={href} className="group rounded-2xl border border-border bg-card/50 p-5 transition hover:border-primary/40 hover:bg-primary/5">
+          <Link key={href} href={href} className="group rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:bg-primary/5">
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <Icon className="h-5 w-5" />
             </div>
-            <h2 className="text-base font-bold text-white">{title}</h2>
+            <h2 className="text-xl">{title}</h2>
             <p className="mt-2 text-xs leading-5 text-muted-foreground">{description}</p>
             <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
               Open
@@ -567,10 +565,11 @@ export default function HackathonsPage() {
               <button
                 key={tab}
                 onClick={() => setOrganizerTab(tab)}
+                aria-pressed={organizerTab === tab}
                 className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition-all ${
                   organizerTab === tab
                     ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border bg-card/50 text-muted-foreground hover:border-border/80 hover:text-white'
+                    : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
                 }`}
               >
                 {conf && <conf.icon className="h-3.5 w-3.5" />}
@@ -595,36 +594,38 @@ export default function HackathonsPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {STATUS_TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setStatusTab(tab)}
+                aria-pressed={statusTab === tab}
                 className={`rounded-xl border px-4 py-1.5 text-sm font-semibold transition-all ${
                   statusTab === tab
-                    ? 'border-primary bg-primary text-white'
-                    : 'border-border bg-card/50 text-muted-foreground hover:text-white'
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-border bg-card text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {tab}
                 {tab === 'Active' && openCount > 0 && (
-                  <span className="ml-1.5 rounded-full bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400">
+                  <span className="ml-1.5 rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary">
                     {openCount}
                   </span>
                 )}
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-2 border-l border-border pl-3">
+          <div className="flex flex-wrap items-center gap-2 border-border sm:border-l sm:pl-3">
             <Filter className="h-3.5 w-3.5 text-muted-foreground" />
             {DIFFICULTIES.map((diff) => (
               <button
                 key={diff}
                 onClick={() => setActiveDifficulty(diff)}
+                aria-pressed={activeDifficulty === diff}
                 className={`rounded-full border px-3 py-1 text-[11px] font-bold transition-all ${
                   activeDifficulty === diff
                     ? 'border-primary/50 bg-primary/10 text-primary'
-                    : 'border-border bg-card/30 text-muted-foreground hover:text-white'
+                    : 'border-border bg-card text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {diff}
@@ -637,7 +638,7 @@ export default function HackathonsPage() {
       {/* Results count */}
       {!loading && (
         <p className="text-xs text-muted-foreground">
-          Showing <span className="font-bold text-white">{filtered.length}</span> hackathon{filtered.length !== 1 ? 's' : ''}
+          Showing <span className="font-bold text-foreground">{filtered.length}</span> hackathon{filtered.length !== 1 ? 's' : ''}
           {organizerTab !== 'All' && ` · ${organizerTab}`}
           {statusTab !== 'All' && ` · ${statusTab}`}
         </p>
@@ -652,7 +653,7 @@ export default function HackathonsPage() {
         <div className="space-y-3 py-24 text-center">
           <Trophy className="mx-auto h-12 w-12 text-muted-foreground opacity-30" />
           <p className="text-muted-foreground">No hackathons found.</p>
-          <Button variant="ghost" onClick={() => { setSearch(''); setStatusTab('All'); setOrganizerTab('All') }}>
+          <Button variant="ghost" onClick={() => { setSearch(''); setStatusTab('All'); setOrganizerTab('All'); setActiveDifficulty('All') }}>
             Clear filters
           </Button>
         </div>
@@ -667,12 +668,12 @@ export default function HackathonsPage() {
           {/* Host CTA card */}
           <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}>
             <Link href="/corporate/host-hackathon">
-              <div className="group flex h-full min-h-[280px] cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-border p-8 text-center transition-all duration-300 hover:border-primary/30 hover:bg-primary/5">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card transition-all group-hover:border-primary/20 group-hover:bg-primary/10">
+              <div className="group flex h-full min-h-[280px] cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border p-8 text-center transition-colors duration-300 hover:border-primary/30 hover:bg-primary/5">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-card transition-colors group-hover:border-primary/20 group-hover:bg-primary/10">
                   <PlusCircle className="h-7 w-7 text-muted-foreground transition-colors group-hover:text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-foreground/80 transition-colors group-hover:text-white">
+                  <h4 className="text-base font-bold text-foreground transition-colors group-hover:text-primary">
                     Host Your Own Hackathon
                   </h4>
                   <p className="mt-2 max-w-[200px] text-xs leading-relaxed text-muted-foreground">

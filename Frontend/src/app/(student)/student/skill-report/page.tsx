@@ -78,7 +78,7 @@ export default function SkillReportPage() {
           <p className="mt-2 text-sm text-muted-foreground">Domain-wise scores, strengths, gaps, and recommended next actions.</p>
         </div>
         <Button asChild variant="outline">
-          <Link href="/courses">View Recommended Courses</Link>
+          <Link href="/library">View Lesson Library</Link>
         </Button>
       </div>
 

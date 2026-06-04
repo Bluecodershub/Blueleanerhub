@@ -28,16 +28,16 @@ const stats = [
     title: 'Active Applications',
     value: '8',
     icon: Briefcase,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
+    color: 'text-primary',
+    bg: 'bg-primary/10',
     change: '+3 this week',
   },
   {
     title: 'Upcoming Interviews',
     value: '3',
     icon: Video,
-    color: 'text-purple-400',
-    bg: 'bg-purple-500/10',
+    color: 'text-primary',
+    bg: 'bg-primary/10',
     change: 'Next: Tomorrow',
   },
   {
@@ -119,8 +119,8 @@ export default function CandidateDashboardPage() {
     <div className="animate-in fade-in space-y-8 pb-20 duration-700">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div className="space-y-2">
-          <h1 className="text-3xl font-black tracking-tight text-white md:text-4xl">
-            Candidate <span className="text-blue-400">Dashboard</span>
+          <h1 className="text-3xl md:text-4xl">
+            Candidate <span className="text-primary">Dashboard</span>
           </h1>
           <p className="max-w-xl text-muted-foreground">
             Track your applications, prepare for interviews, and manage your professional profile.
@@ -129,12 +129,12 @@ export default function CandidateDashboardPage() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            className="border-border bg-card/50 text-white hover:bg-secondary"
+            className="border-border bg-card hover:bg-secondary"
           >
             <Upload className="mr-2 h-4 w-4" />
             Update Resume
           </Button>
-          <Button className="bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:bg-blue-500">
+          <Button>
             <Briefcase className="mr-2 h-4 w-4" />
             Browse Jobs
           </Button>
@@ -149,7 +149,7 @@ export default function CandidateDashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: index * 0.1 }}
           >
-            <Card className="group border-border bg-slate-900/40 transition-all hover:border-blue-500/30">
+            <Card className="group transition-colors hover:border-primary/40">
               <CardContent className="p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <div className={`rounded-xl p-2.5 ${stat.bg}`}>
@@ -159,7 +159,7 @@ export default function CandidateDashboardPage() {
                     {stat.change}
                   </span>
                 </div>
-                <p className="text-2xl font-black text-white">{stat.value}</p>
+                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{stat.title}</p>
               </CardContent>
             </Card>
@@ -169,8 +169,8 @@ export default function CandidateDashboardPage() {
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Card className="overflow-hidden border-border bg-slate-900/40">
-            <CardHeader className="border-b border-slate-800/50 bg-background/20">
+          <Card className="overflow-hidden">
+            <CardHeader className="border-b border-border bg-secondary/30">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg font-bold">Recent Applications</CardTitle>
@@ -180,18 +180,18 @@ export default function CandidateDashboardPage() {
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="divide-y divide-slate-800/50">
+              <div className="divide-y divide-border">
                 {applications.map((app, i) => (
                   <div
                     key={i}
-                    className="group flex cursor-pointer items-center justify-between p-5 transition-all hover:bg-card/30"
+                    className="group flex cursor-pointer items-center justify-between p-5 transition-colors hover:bg-secondary/40"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-secondary font-bold text-blue-400">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-secondary font-bold text-primary">
                         <Building2 className="h-5 w-5" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-white">{app.role}</h4>
+                        <h4 className="text-sm font-bold text-foreground">{app.role}</h4>
                         <div className="mt-1 flex items-center gap-3">
                           <span className="text-xs text-muted-foreground">{app.company}</span>
                           <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -205,23 +205,23 @@ export default function CandidateDashboardPage() {
                         <Badge
                           className={`border-none text-[10px] font-bold ${
                             app.status === 'Interview'
-                              ? 'bg-purple-500/10 text-purple-400'
+                              ? 'bg-primary/10 text-primary'
                               : app.status === 'Shortlisted'
-                                ? 'bg-primary/10 text-foreground/70'
-                                : 'bg-blue-500/10 text-blue-400'
+                                ? 'bg-success-light text-success'
+                                : 'bg-secondary text-muted-foreground'
                           }`}
                         >
                           {app.status}
                         </Badge>
                         <div className="mt-1 text-[10px] text-muted-foreground">{app.date}</div>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-blue-400" />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-slate-800/50 p-4">
-                <Button variant="link" className="w-full text-sm text-blue-400 hover:text-blue-300">
+              <div className="border-t border-border p-4">
+                <Button variant="link" className="w-full text-sm">
                   View All Applications
                 </Button>
               </div>
@@ -229,7 +229,7 @@ export default function CandidateDashboardPage() {
           </Card>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <Card className="border-border bg-slate-900/40">
+            <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base font-bold">
                   <Star className="h-4 w-4 text-foreground/70" />
@@ -245,11 +245,11 @@ export default function CandidateDashboardPage() {
                   <div key={s.skill} className="space-y-1.5">
                     <div className="flex justify-between text-xs">
                       <span className="text-foreground/80">{s.skill}</span>
-                      <span className="font-bold text-blue-400">{s.level}%</span>
+                      <span className="font-bold text-primary">{s.level}%</span>
                     </div>
                     <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
+                        className="h-full rounded-full bg-primary"
                         style={{ width: `${s.level}%` }}
                       />
                     </div>
@@ -258,7 +258,7 @@ export default function CandidateDashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-border bg-slate-900/40">
+            <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base font-bold">
                   <TrendingUp className="h-4 w-4 text-foreground/70" />
@@ -274,7 +274,7 @@ export default function CandidateDashboardPage() {
                   <div key={i} className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">{item.label}</span>
                     <div className="text-right">
-                      <span className="text-lg font-bold text-white">{item.value}</span>
+                      <span className="text-lg font-bold text-foreground">{item.value}</span>
                       <span className="ml-2 text-[10px] text-muted-foreground">{item.period}</span>
                     </div>
                   </div>
@@ -285,10 +285,10 @@ export default function CandidateDashboardPage() {
         </div>
 
         <div className="space-y-6">
-          <Card className="border-t-2 border-border border-t-purple-500 bg-background/40">
+          <Card className="border-t-2 border-t-primary">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base font-bold">
-                <Calendar className="h-4 w-4 text-purple-400" />
+                <Calendar className="h-4 w-4 text-primary" />
                 Upcoming Interviews
               </CardTitle>
             </CardHeader>
@@ -296,12 +296,12 @@ export default function CandidateDashboardPage() {
               {interviews.map((interview, i) => (
                 <div key={i} className="space-y-2 rounded-xl border border-border bg-card/50 p-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400">
+                    <span className="text-[10px] font-bold uppercase text-primary">
                       {interview.time}
                     </span>
                     <div className="h-2 w-2 animate-pulse rounded-full bg-primary/70" />
                   </div>
-                  <p className="text-sm font-bold text-white">{interview.role}</p>
+                  <p className="text-sm font-bold text-foreground">{interview.role}</p>
                   <p className="text-xs text-muted-foreground">{interview.company}</p>
                   <Badge className="border-none bg-secondary text-[10px] text-foreground/80">
                     {interview.type}
@@ -314,21 +314,20 @@ export default function CandidateDashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden border-border bg-gradient-to-br from-blue-900/20 to-background/40">
+          <Card className="group relative overflow-hidden">
             <div className="relative z-10 p-6">
-              <Zap className="text-primary/80/50 mb-3 h-8 w-8 transition-transform group-hover:scale-110" />
-              <h4 className="text-lg font-black text-white">AI Interview Prep</h4>
+              <Zap className="mb-3 h-8 w-8 text-primary transition-transform group-hover:scale-110" />
+              <h4 className="text-lg font-bold text-foreground">AI Interview Prep</h4>
               <p className="mb-4 mt-2 text-xs leading-relaxed text-muted-foreground">
                 Practice with AI-powered mock interviews tailored to your upcoming sessions.
               </p>
               <Button
                 size="sm"
-                className="h-auto bg-primary px-6 py-4 text-xs font-bold text-white shadow-lg shadow-blue-900/50 hover:bg-blue-500"
+                className="h-auto px-6 py-4 text-xs font-bold"
               >
                 Start Practice
               </Button>
             </div>
-            <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl transition-transform duration-700 group-hover:scale-150" />
           </Card>
         </div>
       </div>
