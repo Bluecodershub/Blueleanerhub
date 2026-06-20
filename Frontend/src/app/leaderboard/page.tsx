@@ -91,7 +91,7 @@ export default function LeaderboardPage() {
               className={cn(
                 'flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all',
                 period === value
-                  ? 'bg-primary text-white shadow-sm'
+                  ? 'bg-primary text-black shadow-sm'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
               )}
             >

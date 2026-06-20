@@ -74,12 +74,12 @@ const SECTION_ICONS: Record<string, any> = {
 }
 
 const SECTION_COLORS: Record<string, string> = {
-  intro: 'border-blue-500/20 bg-blue-500/5',
+  intro: 'border-sky-500/20 bg-sky-500/5',
   concept: 'border-purple-500/20 bg-purple-500/5',
   example: 'border-amber-500/20 bg-amber-500/5',
   code: 'border-emerald-500/20 bg-emerald-500/5',
   quiz: 'border-pink-500/20 bg-pink-500/5',
-  summary: 'border-indigo-500/20 bg-indigo-500/5',
+  summary: 'border-sky-500/20 bg-sky-500/5',
   exercise: 'border-orange-500/20 bg-orange-500/5',
 }
 
@@ -129,7 +129,7 @@ function QuizBlock({ quizItems }: { quizItems: ContentSection['quiz'] }) {
         </div>
       ))}
       {!checked ? (
-        <Button onClick={() => setChecked(true)} disabled={Object.keys(answers).length < quizItems.length} size="sm" className="rounded-xl bg-primary text-white">
+        <Button onClick={() => setChecked(true)} disabled={Object.keys(answers).length < quizItems.length} size="sm" className="rounded-xl bg-primary text-black">
           Check Answers
         </Button>
       ) : (
@@ -372,7 +372,7 @@ export default function LearnPage() {
       {/* Reading progress bar */}
       <div className="fixed left-0 top-0 z-50 h-1 w-full bg-muted/30">
         <div
-          className="h-full bg-gradient-to-r from-primary to-violet-500 transition-all duration-150"
+          className="h-full bg-gradient-to-r from-primary to-sky-500 transition-all duration-150"
           style={{ width: `${readProgress}%` }}
         />
       </div>
@@ -386,7 +386,7 @@ export default function LearnPage() {
           </Button>
         </div>
 
-        <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 via-card to-violet-500/5 p-6">
+        <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 via-card to-sky-500/5 p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-2">
               <div className="flex flex-wrap gap-2">
@@ -485,7 +485,7 @@ export default function LearnPage() {
         {content.furtherReading.length > 0 && (
           <div className="rounded-2xl border border-border bg-card/50 p-5">
             <h3 className="mb-3 flex items-center gap-2 font-bold text-white">
-              <BookOpen className="h-4 w-4 text-blue-400" />
+              <BookOpen className="h-4 w-4 text-sky-400" />
               Further Reading
             </h3>
             <div className="space-y-3">

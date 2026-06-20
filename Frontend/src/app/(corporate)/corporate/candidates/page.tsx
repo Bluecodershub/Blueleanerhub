@@ -138,8 +138,8 @@ export default function CandidatesPage() {
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10">
-              <Zap className="h-5 w-5 text-violet-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10">
+              <Zap className="h-5 w-5 text-sky-500" />
             </div>
             <div>
               <p className="text-xl font-bold font-mono">

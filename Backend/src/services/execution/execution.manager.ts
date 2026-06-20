@@ -1,5 +1,6 @@
 import { ExecutionProvider, ExecutionRequest, ExecutionResult, SandboxType } from './execution.types';
 import { judge0Provider } from './judge0.provider';
+import { goRunnerProvider } from './goRunner.provider';
 import { localPythonProvider } from './localPython.provider';
 import { persistentAdapter } from './persistent.adapter';
 
@@ -20,6 +21,11 @@ export class ExecutionManager {
       return this.sessionProvider.execute(request);
     }
 
+    // Prefer the Go code-runner microservice when configured.
+    if (goRunnerProvider.isConfigured()) {
+      return goRunnerProvider.execute(request);
+    }
+
     const sandboxType = request.sandboxType || 'education';
     if (!judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()) {
       return localPythonProvider.execute(request);
@@ -29,6 +35,9 @@ export class ExecutionManager {
   }
 
   async executeMultiple(code: string, language: string, testCases: any[]): Promise<any[]> {
+    if (goRunnerProvider.isConfigured()) {
+      return goRunnerProvider.executeMultiple(code, language, testCases);
+    }
     if (!judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()) {
       return localPythonProvider.executeMultiple(code, language, testCases);
     }
@@ -36,10 +45,15 @@ export class ExecutionManager {
   }
 
   getLanguageIds(): Record<string, number> {
+    if (goRunnerProvider.isConfigured()) return goRunnerProvider.getLanguageIds();
+    if (!judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()) {
+      return localPythonProvider.getLanguageIds();
+    }
     return judge0Provider.getLanguageIds();
   }
 
   getRuntimeStatus() {
+    if (goRunnerProvider.isConfigured()) return goRunnerProvider.getRuntimeStatus();
     const judge0Status = judge0Provider.getRuntimeStatus();
     if (judge0Status.configured) return judge0Status;
     const localStatus = localPythonProvider.getRuntimeStatus();

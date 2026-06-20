@@ -4,42 +4,47 @@ import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Menu, X, LogOut, User as UserIcon, ShieldAlert, Award, Compass, LayoutDashboard, Bell, LockKeyhole } from 'lucide-react'
+import { Menu, X, LogOut, User as UserIcon, ShieldAlert, Award, Compass, LayoutDashboard, Bell, LockKeyhole, ChevronDown, Code2, CalendarDays, Trophy } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
+import { getHomeByRole } from '@/lib/authRoutes'
 import api from '@/lib/api'
+import { Logo } from '@/components/branding/Logo'
 
 type HeaderNavItem = {
   label: string
   href: string
   icon?: React.ElementType
   disabled?: boolean
+  children?: HeaderNavItem[]
 }
 
-// ─── Role-Based Navigation Maps ─────────────────────────────────────────────
+// ─── Module-Based Navigation Maps ───────────────────────────────────────────
+// "Spaces" groups the competitive/applied modules: Practice · Hackathon · Events.
+const spacesDropdown: HeaderNavItem = {
+  label: 'Spaces',
+  href: '#',
+  icon: ShieldAlert,
+  children: [
+    { label: 'Practice',  href: '/hackathons/practice', icon: Code2 },
+    { label: 'Hackathon', href: '/hackathons',          icon: Trophy },
+    { label: 'Events',    href: '/events',              icon: CalendarDays },
+  ],
+}
+
+// Core platform modules: Home · Lessons · Courses · Spaces
+// (For Colleges / For Corporates / Pricing live in the footer, not the header.)
 const publicNav: HeaderNavItem[] = [
-  { label: 'Lessons',     href: '/library' },
-  { label: 'Courses',     href: '/courses', disabled: true },
-  { label: 'Hackathons',  href: '/hackathons' },
-  { label: 'Mentors',     href: '/mentors', disabled: true },
+  { label: 'Lessons',  href: '/lessons',  icon: Compass },
+  { label: 'Courses',  href: '/courses',  icon: Award },
+  spacesDropdown,
 ]
 
 const studentNav: HeaderNavItem[] = [
-  { label: 'Dashboard',   href: '/student/dashboard', icon: LayoutDashboard },
-  { label: 'Lessons',     href: '/library',           icon: Compass },
-  { label: 'Courses',     href: '/courses',           icon: Award, disabled: true },
-  { label: 'Hackathons',  href: '/student/hackathons',icon: ShieldAlert },
-  { label: 'Practice',    href: '/exercises',          icon: Compass },
-  { label: 'Profile',     href: '/student/profile',   icon: UserIcon },
-]
-
-const mentorNav: HeaderNavItem[] = [
-  { label: 'Dashboard',   href: '/mentor/dashboard' },
-  { label: 'Students',    href: '/mentor/students' },
-  { label: 'Submissions', href: '/mentor/submissions' },
-  { label: 'Hackathons',  href: '/mentor/hackathons' },
-  { label: 'Quizzes',     href: '/mentor/quizzes' },
-  { label: 'Results',     href: '/mentor/results' },
-  { label: 'Profile',     href: '/mentor/profile' },
+  { label: 'Dashboard',  href: '/student/dashboard',    icon: LayoutDashboard },
+  { label: 'Lessons',    href: '/lessons',              icon: Compass },
+  { label: 'Courses',    href: '/courses',              icon: Award },
+  spacesDropdown,
+  { label: 'Profile',    href: '/profile',              icon: UserIcon },
 ]
 
 const corporateNav: HeaderNavItem[] = [
@@ -55,7 +60,7 @@ const corporateNav: HeaderNavItem[] = [
 const adminNav: HeaderNavItem[] = [
   { label: 'Dashboard',   href: '/admin/dashboard' },
   { label: 'Users',       href: '/admin/users' },
-  { label: 'Courses',     href: '/admin/courses', disabled: true },
+  { label: 'Courses',     href: '/admin/courses' },
   { label: 'Lessons',     href: '/admin/lessons' },
   { label: 'Assessments', href: '/admin/assessments' },
   { label: 'Hackathons',  href: '/admin/hackathons' },
@@ -70,6 +75,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [unreadCount, setUnreadCount] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
@@ -107,7 +113,6 @@ export default function Header() {
     if (!isAuthenticated || !user) return publicNav
     const role = (user.role || 'STUDENT').toUpperCase()
     if (role === 'ADMIN') return adminNav
-    if (role === 'MENTOR') return mentorNav
     if (role === 'CORPORATE') return corporateNav
     return studentNav
   }
@@ -119,37 +124,69 @@ export default function Header() {
       {/* ── Sticky Navbar – floats on scroll ── */}
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300',
+          'fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-xl transition-all duration-300',
           scrolled
-            ? 'border-b border-border bg-card/95 shadow-sm'
-            : 'border-b border-border/70 bg-card/90'
+            ? 'border-b border-border bg-background/85 shadow-md'
+            : 'border-b border-border/50 bg-background/60'
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* ── Logo ── */}
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <svg
-                className="h-7 w-7 text-primary"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="M9 12l2 2 4-4" />
-              </svg>
-              <span className="text-lg font-semibold text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
-                <span className="text-primary">Blue</span>learnerhub
-              </span>
+              <Logo />
             </Link>
 
             {/* ── Desktop Nav ── */}
             <nav className="hidden items-center gap-1 lg:flex">
               {navItems.map((item) =>
-                item.disabled ? (
+                item.children ? (
+                  <div
+                    key={item.label}
+                    className="relative"
+                    onMouseEnter={() => setOpenMenu(item.label)}
+                    onMouseLeave={() => setOpenMenu(null)}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenMenu(openMenu === item.label ? null : item.label)}
+                      aria-expanded={openMenu === item.label}
+                      className={cn(
+                        'flex items-center gap-1 rounded-lg px-3.5 py-1.5 text-sm font-semibold transition-colors duration-200',
+                        item.children.some((c) => pathname === c.href || pathname.startsWith(c.href + '/'))
+                          ? 'border border-primary/20 bg-primary/10 text-primary'
+                          : 'text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
+                      )}
+                    >
+                      {item.label}
+                      <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', openMenu === item.label && 'rotate-180')} />
+                    </button>
+                    {openMenu === item.label && (
+                      <div className="absolute left-0 top-full w-48 pt-2">
+                        <div className="rounded-xl border border-border bg-card p-1.5 shadow-lg animate-scale-in">
+                          {item.children.map((child) => {
+                            const ChildIcon = child.icon
+                            const childActive = pathname === child.href || pathname.startsWith(child.href + '/')
+                            return (
+                              <Link
+                                key={child.href}
+                                href={child.href}
+                                onClick={() => setOpenMenu(null)}
+                                className={cn(
+                                  'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                                  childActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                                )}
+                              >
+                                {ChildIcon && <ChildIcon className="h-4 w-4" />}
+                                {child.label}
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : item.disabled ? (
                   <span
                     key={item.href}
                     aria-disabled="true"
@@ -182,7 +219,7 @@ export default function Header() {
                 <Link href="/notifications" className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card hover:bg-secondary transition-colors">
                   <Bell className="h-4 w-4 text-muted-foreground" />
                   {unreadCount > 0 && (
-                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-black">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -211,15 +248,7 @@ export default function Header() {
                         </span>
                       </div>
                       <Link
-                        href={
-                          user.role?.toLowerCase() === 'admin'
-                            ? '/admin/dashboard'
-                            : user.role?.toLowerCase() === 'mentor'
-                            ? '/mentor/dashboard'
-                            : user.role?.toLowerCase() === 'corporate'
-                            ? '/corporate/dashboard'
-                            : '/student/dashboard'
-                        }
+                        href={getHomeByRole(user.role)}
                         onClick={() => setDropdownOpen(false)}
                         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                       >
@@ -276,13 +305,7 @@ export default function Header() {
             {/* Mobile Header */}
             <div className="flex h-14 items-center justify-between px-5 border-b border-border">
               <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileMenuOpen(false)}>
-                <svg className="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <path d="M9 12l2 2 4-4" />
-                </svg>
-                <span className="text-base font-bold" style={{ fontFamily: 'var(--font-heading)' }}>
-                  <span className="text-primary">Blue</span>learnerhub
-                </span>
+                <Logo />
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
@@ -296,7 +319,31 @@ export default function Header() {
             {/* Mobile Navigation Links */}
             <nav className="flex-1 overflow-y-auto p-5 space-y-1">
               {navItems.map((item) =>
-                item.disabled ? (
+                item.children ? (
+                  <div key={item.label} className="pt-1">
+                    <p className="px-4 pb-1 pt-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                      {item.label}
+                    </p>
+                    {item.children.map((child) => {
+                      const ChildIcon = child.icon
+                      const childActive = pathname === child.href || pathname.startsWith(child.href + '/')
+                      return (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            'flex items-center gap-2.5 rounded-lg px-4 py-3 text-sm font-semibold transition-colors',
+                            childActive ? 'text-primary bg-primary/10 border border-primary/20' : 'text-muted-foreground hover:text-foreground hover:bg-secondary/70'
+                          )}
+                        >
+                          {ChildIcon && <ChildIcon className="h-4 w-4" />}
+                          {child.label}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                ) : item.disabled ? (
                   <span
                     key={item.href}
                     aria-disabled="true"

@@ -1,105 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --font-heading: Georgia, 'Charter', 'Iowan Old Style', 'Source Serif Pro', 'Times New Roman', serif;
+  /*
+   * ───────────────────────────────────────────────────────────────────────
+   * BlueLearnerHub design system — "Monochrome Pro"
+   * Professional black & white canvas with a minimal three-accent palette.
+   * Token reference:  bg #0A0A0B · surface #141416 · card #161618 · border #2A2A2E
+   *   primary  sky blue  #0EA5E9   (links, primary CTAs, focus)
+   *   success  green     #22C55E   (positive, completion, rewards)
+   *   highlight orange   #F97316   (streaks, badges, attention)
+   * Errors stay red (functional, not decorative). Dark-only by design;
+   * :root and .dark resolve identically.
+   * ───────────────────────────────────────────────────────────────────────
+   */
+  :root,
+  .dark {
+    --font-heading: 'Lexend', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     --font-mono: 'SFMono-Regular', 'Cascadia Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --background: 39 47% 94%;
-    --background-secondary: 38 42% 90%;
-    --background-tertiary: 36 33% 85%;
-    --foreground: 60 9% 11%;
+    /* Backgrounds — Codecademy black canvas */
+    --background: 0 0% 4%;             /* #0A0A0A black */
+    --background-secondary: 0 0% 8%;   /* #141414 */
+    --background-tertiary: 0 0% 11%;   /* #1C1C1C */
+    --foreground: 0 0% 100%;           /* #FFFFFF */
 
-    --card: 40 100% 98%;
-    --card-foreground: 60 9% 11%;
-    --popover: 40 100% 98%;
-    --popover-foreground: 60 9% 11%;
+    /* Surfaces — minimal elevation above black */
+    --card: 0 0% 7%;                   /* #121212 */
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 9%;                /* #171717 */
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 15 53% 52%;
-    --primary-foreground: 40 100% 98%;
-    --primary-dark: 15 53% 37%;
-    --secondary: 36 39% 88%;
-    --secondary-foreground: 40 11% 19%;
-    --muted: 35 31% 88%;
-    --muted-foreground: 35 8% 42%;
-    --accent: 35 45% 89%;
-    --accent-foreground: 15 53% 31%;
+    /* Primary — Codecademy yellow (CTAs) with black text */
+    --primary: 50 100% 50%;            /* #FFD300 yellow */
+    --primary-foreground: 0 0% 0%;     /* black text on yellow */
+    --primary-dark: 48 100% 45%;       /* #E6BE00 */
+    --secondary: 0 0% 12%;             /* #1F1F1F surface */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 64%;      /* #A3A3A3 */
+    --accent: 205 80% 14%;             /* subtle light-blue surface */
+    --accent-foreground: 205 100% 78%; /* light blue */
 
-    --border: 34 28% 82%;
-    --border-accent: 15 43% 63%;
-    --input: 34 28% 78%;
-    --ring: 15 53% 52%;
-    --destructive: 4 70% 40%;
+    /* Borders & inputs — neutral grays */
+    --border: 0 0% 16%;                /* #292929 hairline */
+    --border-accent: 50 100% 50%;
+    --input: 0 0% 18%;
+    --ring: 205 100% 60%;              /* light-blue focus */
+    --destructive: 3 86% 49%;          /* #E91C11 */
     --destructive-foreground: 0 0% 100%;
 
-    --sidebar: 40 100% 98%;
-    --sidebar-foreground: 60 9% 11%;
-    --sidebar-primary: 15 53% 52%;
-    --sidebar-primary-foreground: 40 100% 98%;
-    --sidebar-accent: 36 39% 88%;
-    --sidebar-accent-foreground: 40 11% 19%;
-    --sidebar-border: 34 28% 82%;
-    --sidebar-ring: 15 53% 52%;
+    /* Sidebar — darkest black */
+    --sidebar: 0 0% 3%;                /* #080808 */
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 50 100% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 205 80% 14%;
+    --sidebar-accent-foreground: 205 100% 78%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 205 100% 60%;
 
-    --success: 145 33% 37%;
-    --success-light: 145 29% 90%;
-    --warning: 36 72% 42%;
-    --warning-light: 38 58% 90%;
-    --error: 4 70% 40%;
-    --error-light: 8 55% 91%;
-    --info: 202 26% 38%;
-    --info-light: 202 28% 90%;
+    /* Semantic — green / orange / red / light-blue */
+    --success: 145 63% 49%;            /* green */
+    --success-light: 145 50% 12%;
+    --warning: 33 100% 50%;            /* #FF8C00 orange */
+    --warning-light: 33 70% 12%;
+    --error: 3 86% 49%;                /* red */
+    --error-light: 3 60% 16%;
+    --info: 205 100% 65%;              /* #66C4FF light blue */
+    --info-light: 205 60% 14%;
 
-    --shadow-sm: 0 1px 2px 0 rgb(74 57 38 / 0.05);
-    --shadow: 0 2px 10px 0 rgb(74 57 38 / 0.07);
-    --shadow-md: 0 8px 24px -18px rgb(74 57 38 / 0.35);
-    --shadow-lg: 0 18px 46px -32px rgb(74 57 38 / 0.45);
-    --shadow-xl: 0 30px 60px -42px rgb(74 57 38 / 0.55);
+    /* Layered depth — black shadows + light-blue glow */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+    --shadow: 0 2px 14px 0 rgb(0 0 0 / 0.6);
+    --shadow-md: 0 12px 34px -16px rgb(0 0 0 / 0.75);
+    --shadow-lg: 0 24px 56px -28px rgb(0 0 0 / 0.85);
+    --shadow-xl: 0 36px 80px -36px rgb(0 0 0 / 0.9);
+    --glow-blue: 0 0 0 1px hsl(205 100% 60% / 0.28), 0 12px 40px -12px hsl(205 100% 60% / 0.4);
 
-    --brand: 15 53% 52%;
-    --brand-light: 18 58% 63%;
-    --brand-dark: 15 53% 37%;
-    --xp-gold: 42 72% 45%;
-    --streak-orange: 24 68% 49%;
-    --level-purple: 286 21% 42%;
-    --achievement-cyan: 188 28% 39%;
-    --reward-green: 145 33% 37%;
+    /* Brand + gamification — Codecademy accent set */
+    --brand: 50 100% 50%;              /* yellow */
+    --brand-light: 50 100% 65%;
+    --brand-dark: 48 100% 45%;
+    --xp-gold: 50 100% 50%;            /* #FFD300 yellow */
+    --streak-orange: 33 100% 50%;      /* #FF8C00 orange */
+    --level-purple: 205 100% 68%;      /* light blue */
+    --achievement-cyan: 205 100% 65%;  /* light blue */
+    --reward-green: 145 63% 49%;       /* green */
 
-    --cs-blue: 202 26% 38%;
-    --mech-orange: 24 68% 49%;
-    --elec-yellow: 42 72% 45%;
-    --civil-teal: 160 27% 38%;
-    --mgmt-purple: 286 21% 42%;
-  }
+    /* Category accents — Codecademy colourful course-tile palette */
+    --cat-purple: 297 100% 70%;        /* #F966FF pink */
+    --cat-blue: 205 100% 66%;          /* #66C4FF light blue */
+    --cat-teal: 85 75% 55%;            /* #AEE938 lime */
+    --cat-coral: 345 75% 64%;          /* #E85D7F carnation */
+    --cat-amber: 50 100% 50%;          /* #FFD300 yellow */
+    --cat-pink: 297 100% 70%;          /* #F966FF pink */
 
-  .dark {
-    --background: 39 34% 12%;
-    --background-secondary: 35 27% 16%;
-    --background-tertiary: 33 23% 20%;
-    --foreground: 39 47% 92%;
-    --card: 35 27% 16%;
-    --card-foreground: 39 47% 92%;
-    --popover: 35 27% 16%;
-    --popover-foreground: 39 47% 92%;
-    --secondary: 33 23% 20%;
-    --secondary-foreground: 39 47% 92%;
-    --muted: 33 23% 20%;
-    --muted-foreground: 35 13% 66%;
-    --accent: 25 27% 23%;
-    --accent-foreground: 24 66% 75%;
-    --border: 32 18% 28%;
-    --input: 32 18% 28%;
-    --sidebar: 35 27% 16%;
-    --sidebar-foreground: 39 47% 92%;
-    --sidebar-accent: 33 23% 20%;
-    --sidebar-accent-foreground: 39 47% 92%;
-    --sidebar-border: 32 18% 28%;
+    --cs-blue: 205 100% 66%;           /* light blue */
+    --mech-orange: 33 100% 50%;        /* orange */
+    --elec-yellow: 50 100% 50%;        /* yellow */
+    --civil-teal: 168 70% 45%;         /* teal */
+    --mgmt-purple: 297 100% 70%;       /* pink */
   }
 
   * {
@@ -137,8 +143,11 @@
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: linear-gradient(180deg, hsl(39 47% 95%) 0%, hsl(var(--background)) 42%, hsl(38 42% 91%) 100%);
-    background-attachment: fixed;
+    /* Codecademy-style flat black canvas with a faint dot grid */
+    background-color: hsl(var(--background));
+    background-image: radial-gradient(hsl(0 0% 100% / 0.045) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -11px -11px;
   }
 
   h1,
@@ -148,21 +157,21 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    @apply font-semibold text-foreground;
+    @apply font-bold text-foreground;
     letter-spacing: 0;
-    line-height: 1.08;
+    line-height: 1.06;
   }
 
   h1 {
-    font-size: clamp(2.5rem, 4.75vw, 4.75rem);
+    font-size: 3.5rem;
   }
 
   h2 {
-    font-size: clamp(1.75rem, 3vw, 3rem);
+    font-size: 2.5rem;
   }
 
   h3 {
-    font-size: clamp(1.25rem, 1.75vw, 1.65rem);
+    font-size: 1.5rem;
   }
 
   h4 {
@@ -207,23 +216,77 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50;
   }
 
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+    @apply bg-primary text-primary-foreground hover:-translate-y-0.5;
     padding: 0.75rem 1.75rem;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 8px 22px -12px hsl(50 100% 50% / 0.55);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 14px 30px -12px hsl(50 100% 50% / 0.65);
   }
 
   .btn-outline {
-    @apply border border-border bg-card text-foreground hover:border-primary/60 hover:bg-accent hover:text-accent-foreground;
+    @apply border border-border bg-card/70 text-foreground hover:border-primary/60 hover:bg-accent hover:text-accent-foreground;
     padding: 0.6875rem 1.75rem;
   }
 
   .btn-ghost {
-    @apply text-muted-foreground hover:bg-secondary/70 hover:text-foreground;
+    @apply rounded-lg text-muted-foreground hover:bg-secondary/70 hover:text-foreground;
     padding: 0.5rem 0.875rem;
+  }
+
+  /* ── Codecademy-style colourful category tiles ───────────────────────── */
+  .cat-tile {
+    @apply relative flex flex-col overflow-hidden rounded-2xl border p-5 transition-all duration-200;
+    background: linear-gradient(145deg, hsl(var(--accent-h, 199) 70% 55% / 0.14), hsl(var(--card)));
+    border-color: hsl(var(--border));
+  }
+
+  .cat-tile:hover {
+    @apply -translate-y-1 border-primary/40;
+    box-shadow: var(--shadow-md);
+  }
+
+  .cat-icon {
+    @apply mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-white;
+  }
+
+  .cat-purple { color: hsl(var(--cat-purple)); }
+  .cat-blue   { color: hsl(var(--cat-blue)); }
+  .cat-teal   { color: hsl(var(--cat-teal)); }
+  .cat-coral  { color: hsl(var(--cat-coral)); }
+  .cat-amber  { color: hsl(var(--cat-amber)); }
+  .cat-pink   { color: hsl(var(--cat-pink)); }
+
+  .bg-cat-purple { background: linear-gradient(135deg, hsl(297 100% 72%), hsl(297 90% 58%)); }
+  .bg-cat-blue   { background: linear-gradient(135deg, hsl(205 100% 66%), hsl(205 100% 52%)); }
+  .bg-cat-teal   { background: linear-gradient(135deg, hsl(85 75% 55%), hsl(85 70% 42%)); }
+  .bg-cat-coral  { background: linear-gradient(135deg, hsl(345 80% 66%), hsl(345 75% 54%)); }
+  .bg-cat-amber  { background: linear-gradient(135deg, hsl(50 100% 55%), hsl(45 100% 48%)); }
+  .bg-cat-pink   { background: linear-gradient(135deg, hsl(297 100% 72%), hsl(297 90% 58%)); }
+  .bg-cat-indigo { background: linear-gradient(135deg, hsl(205 100% 60%), hsl(205 100% 46%)); }
+
+  /* Decorative hero illustration helpers */
+  .hero-grid {
+    background-image: linear-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 75%);
+  }
+
+  .blob {
+    filter: blur(60px);
+    opacity: 0.55;
+    border-radius: 9999px;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-semibold;
   }
 
   .nav-link {
@@ -335,6 +398,58 @@
     @apply bg-transparent p-0 text-sm;
   }
 
+  .app-workspace {
+    background-color: hsl(var(--background));
+    background-image:
+      linear-gradient(180deg, hsl(var(--info) / 0.025), transparent 22rem),
+      radial-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px);
+    background-position: 0 0, -10px -10px;
+    background-size: auto, 20px 20px;
+  }
+
+  .app-page-frame {
+    @apply mx-auto w-full max-w-[88rem] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8;
+  }
+
+  .app-page {
+    @apply min-w-0;
+  }
+
+  .app-page-header {
+    @apply flex flex-col gap-5 border-b border-border/80 pb-6 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .app-workspace h1 {
+    font-size: 1.875rem;
+    line-height: 1.2;
+  }
+
+  .app-workspace h2 {
+    font-size: 1.125rem;
+    line-height: 1.35;
+  }
+
+  .app-workspace h3 {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .app-workspace table {
+    @apply w-full border-separate border-spacing-0 text-sm;
+  }
+
+  .app-workspace thead th {
+    @apply border-b border-border bg-secondary/45 px-4 py-3 text-left text-xs font-semibold text-muted-foreground;
+  }
+
+  .app-workspace tbody td {
+    @apply border-b border-border/70 px-4 py-3 align-middle;
+  }
+
+  .app-workspace tbody tr {
+    @apply transition-colors hover:bg-secondary/30;
+  }
+
   .scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--border)) transparent;
@@ -356,6 +471,20 @@
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .app-workspace h1 {
+    font-size: 1.625rem;
   }
 }
 
@@ -413,7 +542,24 @@
   }
 
   .text-gradient {
-    color: hsl(var(--primary));
+    background: linear-gradient(90deg, hsl(205 100% 72%), hsl(205 100% 62%) 55%, hsl(50 100% 60%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Subtle blue glow for hero / featured cards */
+  .glow-card {
+    box-shadow: var(--glow-blue);
+  }
+
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+
+  .card-hover:hover {
+    @apply border-primary/40;
+    box-shadow: var(--glow-blue);
   }
 
   .bg-noise {

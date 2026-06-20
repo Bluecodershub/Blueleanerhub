@@ -7,11 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Plus,
   UserPlus,
-  Sparkles,
-  ShieldCheck,
   ArrowRight,
-  Send,
-  Info,
   Copy,
   Check,
   Loader2,
@@ -26,7 +22,6 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 import { hackathonsAPI } from '@/lib/api-civilization'
 
 export default function HackathonTeamPage({
@@ -96,23 +91,6 @@ export default function HackathonTeamPage({
     }
   }
 
-  const potentialMatches = [
-    {
-      name: 'Elena Rodriguez',
-      domain: 'Mechanical Engineering',
-      skills: ['CAD', 'Robotics', 'FEA'],
-      matchScore: 94,
-      role: 'Hardware Lead',
-    },
-    {
-      name: 'Karan Singh',
-      domain: 'Finance / MBA',
-      skills: ['Market Analysis', 'Pitching', 'Valuation'],
-      matchScore: 88,
-      role: 'Business Strategist',
-    },
-  ]
-
   return (
     <div className="animate-in fade-in mx-auto max-w-4xl space-y-8 pb-20 duration-700">
       <div className="flex flex-col gap-2">
@@ -177,17 +155,11 @@ export default function HackathonTeamPage({
           </CardHeader>
         </Card>
 
-        <Card
-          onClick={() => setView('selection')}
-          className={`cursor-pointer border-border transition-all ${view === 'selection' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-card hover:bg-card/80'}`}
-        >
-          <CardHeader className="relative">
-            <Sparkles
-              className={`mb-2 h-8 w-8 ${view === 'selection' ? 'text-primary' : 'text-muted-foreground'} animate-pulse`}
-            />
-            <CardTitle className="text-lg font-bold text-foreground">AI_MATCHMAKER</CardTitle>
-            <CardDescription className="text-xs font-bold text-primary">
-              Recommended for you.
+        <Card className="border-border bg-card md:col-span-1">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold text-foreground">TEAM_STATUS</CardTitle>
+            <CardDescription className="text-xs">
+              Invitations and member recommendations will appear here once returned by the backend.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -272,91 +244,6 @@ export default function HackathonTeamPage({
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
-        )}
-
-        {view === 'selection' && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="space-y-6"
-          >
-            <div className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-4">
-              <Sparkles className="h-6 w-6 shrink-0 text-primary" />
-              <div>
-                <h4 className="text-sm font-bold uppercase italic text-foreground">
-                  AI Matchmaker Active
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  Scanning for cross-disciplinary partners based on your{' '}
-                  <span className="font-bold text-primary">Computer Science</span> profile.
-                </p>
-              </div>
-              <div className="absolute bottom-0 right-0 p-2 opacity-5">
-                <ShieldCheck className="h-20 w-20 text-primary" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {potentialMatches.map((match, i) => (
-                <Card
-                  key={i}
-                  className="group relative overflow-hidden border-border bg-card transition-all hover:bg-card/80"
-                >
-                  <div className="absolute right-0 top-0 p-4">
-                    <Badge className="border-none bg-primary/20 text-[10px] font-black italic text-primary">
-                      {match.matchScore}% MATCH
-                    </Badge>
-                  </div>
-                  <CardHeader>
-                    <div className="mb-2 h-12 w-12 rounded-full border border-border bg-secondary" />
-                    <CardTitle className="text-lg font-bold text-foreground">{match.name}</CardTitle>
-                    <CardDescription className="text-xs font-black uppercase text-muted-foreground">
-                      {match.domain}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {match.skills.map((s) => (
-                        <Badge
-                          key={s}
-                          variant="secondary"
-                          className="border-none bg-background text-[9px] font-black uppercase text-muted-foreground"
-                        >
-                          {s}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="rounded-lg border border-border/50 bg-background/50 p-3">
-                      <p className="mb-1 text-[10px] font-black uppercase text-muted-foreground">
-                        Proposed Role
-                      </p>
-                      <p className="text-sm font-bold italic text-foreground">
-                        {match.role}
-                      </p>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="border-t border-border bg-background/20 p-4">
-                    <Button
-                      variant="ghost"
-                      className="w-full text-xs font-black uppercase italic tracking-widest text-muted-foreground hover:text-primary group-hover:bg-primary/5"
-                    >
-                      SEND_INVITATION <Send className="ml-2 h-3.5 w-3.5" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-
-            <div className="flex justify-center pt-6">
-              <Button
-                variant="link"
-                className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
-              >
-                <Info className="mr-2 h-4 w-4" /> How are match scores calculated?
-              </Button>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>

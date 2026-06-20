@@ -1,269 +1,99 @@
 'use client'
 
-import * as React from 'react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import {
-  LayoutDashboard, BookOpen, Users, ClipboardList,
-  Video, BarChart3, Menu, X, GraduationCap, FileText, LogOut,
-  BrainCircuit, Trophy,
-} from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { LayoutDashboard, Users, ClipboardCheck, UserCircle, Menu, X, LogOut } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
+import { BrandMark, Logo } from '@/components/branding/Logo'
 
 const navItems = [
-  { title: 'Dashboard',   href: '/mentor/dashboard',   icon: LayoutDashboard },
-  { title: 'Classes',     href: '/mentor/classes',     icon: BookOpen },
-  { title: 'Students',    href: '/mentor/students',    icon: Users },
-  { title: 'Assignments', href: '/mentor/assignments', icon: ClipboardList },
-  { title: 'Sessions',    href: '/mentor/sessions',    icon: Video },
-  { title: 'Quizzes',     href: '/mentor/quizzes',     icon: BrainCircuit },
-  { title: 'Hackathons',  href: '/mentor/hackathons',  icon: Trophy },
-  { title: 'Grades',      href: '/mentor/grades',      icon: FileText },
-  { title: 'Analytics',   href: '/mentor/analytics',   icon: BarChart3 },
+  { title: 'Dashboard', href: '/mentor/dashboard', icon: LayoutDashboard },
+  { title: 'Classes', href: '/mentor/classes', icon: Users },
+  { title: 'Reviews', href: '/mentor/reviews', icon: ClipboardCheck },
+  { title: 'Profile', href: '/mentor/profile', icon: UserCircle },
 ]
+
+function SidebarLinks({ pathname, onNavigate }: { pathname: string; onNavigate: () => void }) {
+  return (
+    <nav className="space-y-1">
+      {navItems.map((item) => {
+        const Icon = item.icon
+        const active = pathname === item.href || pathname.startsWith(item.href + '/')
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={onNavigate}
+            className={cn(
+              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+              active ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+            )}
+          >
+            <Icon className="h-4.5 w-4.5" />
+            {item.title}
+          </Link>
+        )
+      })}
+    </nav>
+  )
+}
 
 export default function MentorLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
+  const [open, setOpen] = useState(false)
 
   return (
     <RoleGuard allowedRoles={['MENTOR', 'ADMIN']}>
-    <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
-      <div className="bg-noise pointer-events-none absolute inset-0 opacity-50" />
-
-      {/* ─── DESKTOP SIDEBAR ─────────────────────────────────────────── */}
-      <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:flex">
-        <div className="flex h-16 items-center justify-between px-6">
-          <Link href="/mentor/dashboard" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-sm">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <span className="font-semibold text-lg tracking-tight text-foreground">
-                BlueLearnerHub
-              </span>
-              <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
-                Faculty
-              </span>
-            </div>
+      <div className="app-workspace min-h-screen text-foreground">
+        {/* Desktop sidebar */}
+        <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-border bg-sidebar p-4 lg:flex">
+          <Link href="/mentor/dashboard" className="mb-6 flex items-center gap-2 px-2">
+            <Logo markSize={28} />
           </Link>
-
-        </div>
-
-        <div className="flex-1 space-y-1 overflow-y-auto px-3">
-          <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
-            Teaching
-          </p>
-          {navItems.slice(0, 7).map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== '/mentor/dashboard' && pathname.startsWith(item.href))
-            const Icon = item.icon
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
-                  isActive
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
-                )}
-              >
-                <Icon
-                  className={cn(
-                    'h-5 w-5',
-                    isActive ? 'text-primary-foreground' : 'text-primary/70'
-                  )}
-                />
-                <span className="truncate">{item.title}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="active-pill"
-                    className="absolute left-0 h-5 w-1 rounded-full bg-primary-foreground"
-                  />
-                )}
-              </Link>
-            )
-          })}
-
-          <p className="mb-3 mt-6 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
-            Settings
-          </p>
-          {navItems.slice(7).map((item) => {
-            const isActive = pathname === item.href
-            const Icon = item.icon
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
-                  isActive
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
-                )}
-              >
-                <Icon
-                  className={cn(
-                    'h-5 w-5',
-                    isActive ? 'text-primary-foreground' : 'text-primary/70'
-                  )}
-                />
-                <span className="truncate">{item.title}</span>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Profile + Logout */}
-        <div className="border-t border-border/50 p-4 space-y-2">
-          <div className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
-              {user?.fullName?.[0]?.toUpperCase() ?? 'M'}
-            </div>
-            <div className="min-w-0 flex-1 text-left">
-              <p className="truncate text-sm font-semibold text-foreground">{user?.fullName ?? 'Mentor'}</p>
-              <p className="text-xs text-primary">Mentor</p>
-            </div>
-          </div>
+          <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Mentor</p>
+          <SidebarLinks pathname={pathname} onNavigate={() => setOpen(false)} />
           <button
             onClick={logout}
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/70 transition-colors"
+            className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
           >
-            <LogOut className="h-4 w-4" /> Sign Out
+            <LogOut className="h-4.5 w-4.5" /> Sign Out
           </button>
+        </aside>
+
+        {/* Mobile top bar */}
+        <div className="flex items-center justify-between border-b border-border px-4 py-3 lg:hidden">
+          <Link href="/mentor/dashboard" className="flex items-center gap-2">
+            <BrandMark size={26} className="rounded-lg" />
+            <span className="font-heading text-base font-bold">Mentor</span>
+          </Link>
+          <button onClick={() => setOpen(true)} className="rounded-lg border border-border p-2"><Menu className="h-4 w-4" /></button>
         </div>
-      </aside>
 
-      {/* ─── MOBILE DRAWER ─────────────────────────────────────────── */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-background/80 backdrop-blur-lg lg:hidden"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 z-50 w-[280px] overflow-y-auto border-r border-border bg-card p-6 lg:hidden"
-            >
-              <div className="mb-8 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                    <GraduationCap className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  <span className="font-semibold text-lg text-foreground">
-                    BlueLearnerHub
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-
-                  <button
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-lg border border-border p-2 text-muted-foreground"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
+        {open && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+            <div className="absolute inset-y-0 left-0 w-64 border-r border-border bg-sidebar p-4">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="font-heading font-bold">Mentor</span>
+                <button onClick={() => setOpen(false)} className="rounded-lg border border-border p-1.5"><X className="h-4 w-4" /></button>
               </div>
-              <nav className="space-y-1">
-                {navItems.map((item) => {
-                  const isActive = pathname === item.href
-                  const Icon = item.icon
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
-                        isActive
-                          ? 'bg-primary text-primary-foreground shadow-sm'
-                          : 'text-muted-foreground hover:bg-secondary/50'
-                      )}
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span>{item.title}</span>
-                    </Link>
-                  )
-                })}
-              </nav>
-            </motion.div>
-          </>
+              <SidebarLinks pathname={pathname} onNavigate={() => setOpen(false)} />
+              <button onClick={logout} className="mt-4 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-destructive hover:bg-destructive/10">
+                <LogOut className="h-4.5 w-4.5" /> Sign Out
+              </button>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
 
-      {/* ─── MAIN CONTENT ────────────────────────────────────────────── */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <main className="relative flex-1 overflow-y-auto pb-24">
-          <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
-            {children}
-          </div>
+        {/* Content */}
+        <main className="lg:pl-60">
+          <div className="app-page-frame max-w-7xl">{children}</div>
         </main>
-
-        {/* ─── MOBILE BOTTOM NAVBAR ─────────────────────────────────── */}
-        <nav className="safe-bottom fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur-xl lg:hidden">
-          <div className="flex h-16 items-center justify-around px-2">
-            {[
-              { title: 'Home', href: '/mentor/dashboard', icon: LayoutDashboard },
-              { title: 'Classes', href: '/mentor/classes', icon: BookOpen },
-              { title: 'Students', href: '/mentor/students', icon: Users },
-              { title: 'More', href: '#more', icon: Menu },
-            ].map((item) => {
-              const isActive =
-                item.href !== '#more' &&
-                (pathname === item.href ||
-                  (item.href !== '/mentor/dashboard' && pathname.startsWith(item.href)))
-              const Icon = item.icon
-              return item.href === '#more' ? (
-                <button
-                  key="more"
-                  onClick={() => setMobileMenuOpen(true)}
-                  className="flex flex-col items-center justify-center gap-0.5 p-2 text-muted-foreground"
-                >
-                  <Icon className="h-6 w-6" />
-                  <span className="text-[9px] font-bold uppercase tracking-wider">
-                    {item.title}
-                  </span>
-                </button>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'relative flex flex-col items-center justify-center gap-0.5 p-2 transition-all',
-                    isActive ? 'text-primary' : 'text-muted-foreground'
-                  )}
-                >
-                  <Icon className="h-6 w-6" />
-                  <span className="text-[9px] font-bold uppercase tracking-wider">
-                    {item.title}
-                  </span>
-                  {isActive && (
-                    <motion.div
-                      layoutId="mobile-pill"
-                      className="absolute -top-px left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-primary"
-                    />
-                  )}
-                </Link>
-              )
-            })}
-          </div>
-        </nav>
       </div>
-    </div>
     </RoleGuard>
   )
 }

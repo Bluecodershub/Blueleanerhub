@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server'
 
 const PROTECTED_PREFIXES: Array<{ prefix: string; loginPath: string }> = [
   { prefix: '/student',   loginPath: '/login/student' },
-  { prefix: '/mentor',    loginPath: '/login/mentor' },
   { prefix: '/corporate', loginPath: '/login/corporate' },
   { prefix: '/candidate', loginPath: '/login' },
   { prefix: '/admin',     loginPath: '/login' },
@@ -47,7 +46,6 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/student/:path*',
-    '/mentor/:path*',
     '/corporate/:path*',
     '/candidate/:path*',
     '/admin/:path*',

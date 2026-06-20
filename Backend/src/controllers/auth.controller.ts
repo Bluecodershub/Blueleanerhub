@@ -64,7 +64,6 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
 
 const clearAuthCookies = (res: Response) => {
   const isProduction = config.nodeEnv === 'production';
-  const refreshPath = '/api/auth/refresh-token';
   const baseOpts = {
     httpOnly: true,
     secure: isProduction,
@@ -78,9 +77,17 @@ const clearAuthCookies = (res: Response) => {
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, password, fullName, collegeName, company } = req.body;
+      const { email, password, fullName, collegeName, company, consents } = req.body;
 
-      const result = await authService.register({ email, password, fullName, collegeName, company });
+      const result = await authService.register({
+        email,
+        password,
+        fullName,
+        collegeName,
+        company,
+        consents,
+        meta: { ipAddress: req.ip, userAgent: req.get('user-agent') || undefined },
+      });
 
       setAuthCookies(res, result.accessToken, result.refreshToken);
       setCsrfCookie(res);

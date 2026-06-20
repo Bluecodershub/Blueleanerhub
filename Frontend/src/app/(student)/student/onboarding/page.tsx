@@ -203,7 +203,7 @@ export default function OnboardingPage() {
                   className={cn(
                     'flex h-6 w-6 items-center justify-center rounded-full font-mono text-xs font-bold transition-all duration-300',
                     step >= num
-                      ? 'bg-primary text-white border-primary shadow-sm'
+                      ? 'bg-primary text-black border-primary shadow-sm'
                       : 'bg-secondary text-muted-foreground border border-border'
                   )}
                 >

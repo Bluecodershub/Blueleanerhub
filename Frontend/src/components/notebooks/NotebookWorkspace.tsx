@@ -375,20 +375,20 @@ export default function NotebookWorkspace({ notebookId }: Props) {
       }
     }
     return {
-      dot: 'bg-blue-500',
-      border: 'border-blue-200 dark:border-blue-900/40',
-      bg: 'bg-blue-50 dark:bg-blue-950/20',
+      dot: 'bg-sky-500',
+      border: 'border-sky-200 dark:border-sky-900/40',
+      bg: 'bg-sky-50 dark:bg-sky-950/20',
     }
   }
 
   return (
     <div className="relative mx-auto flex h-[calc(100vh-4rem)] max-w-[1600px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-background/35 shadow-[0_30px_90px_rgba(2,6,23,0.45)] backdrop-blur-xl">
       <div className="pointer-events-none absolute inset-0">
-        <div className="bg-blue-500/12 absolute -left-24 top-0 h-72 w-72 rounded-full blur-3xl" />
+        <div className="bg-sky-500/12 absolute -left-24 top-0 h-72 w-72 rounded-full blur-3xl" />
         <div className="bg-primary/12 absolute -right-20 top-16 h-64 w-64 rounded-full blur-3xl" />
       </div>
       {/* Top bar */}
-      <div className="relative shrink-0 border-b border-white/10 bg-white/85 px-4 py-3 backdrop-blur-xl dark:bg-gray-900/75">
+      <div className="relative shrink-0 border-b border-white/10 bg-white/85 px-4 py-3 backdrop-blur-xl dark:bg-background-secondary/75">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push('/notebooks')}
@@ -399,15 +399,15 @@ export default function NotebookWorkspace({ notebookId }: Props) {
           <span className="text-xl">{notebook.emoji}</span>
           <h1 className="truncate font-semibold text-gray-900 dark:text-white">{notebook.title}</h1>
           {notebook.description && (
-            <span className="hidden truncate text-sm text-gray-400 dark:text-gray-500 md:block">
+            <span className="hidden truncate text-sm text-gray-400 dark:text-muted-foreground md:block">
               — {notebook.description}
             </span>
           )}
-          <div className="ml-auto flex items-center gap-2 rounded-lg border border-blue-100/80 bg-white/80 px-2.5 py-1.5 text-xs shadow-sm dark:border-gray-700 dark:bg-gray-800/80">
+          <div className="ml-auto flex items-center gap-2 rounded-lg border border-sky-100/80 bg-white/80 px-2.5 py-1.5 text-xs shadow-sm dark:border-border dark:bg-card/80">
             <span
-              className={`inline-block h-2.5 w-2.5 rounded-full ${healthError ? 'bg-red-500' : (health?.failure_rate || 0) > 0.15 ? 'bg-primary' : 'bg-blue-500'}`}
+              className={`inline-block h-2.5 w-2.5 rounded-full ${healthError ? 'bg-red-500' : (health?.failure_rate || 0) > 0.15 ? 'bg-primary' : 'bg-sky-500'}`}
             />
-            <span className="text-gray-600 dark:text-gray-300">
+            <span className="text-gray-600 dark:text-muted-foreground">
               AI Health:{' '}
               {healthError
                 ? 'Unavailable'
@@ -416,7 +416,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                   : 'Loading'}
             </span>
             {health && (
-              <span className="hidden text-gray-500 dark:text-gray-400 md:inline">
+              <span className="hidden text-gray-500 dark:text-muted-foreground md:inline">
                 Avg{' '}
                 {Object.values(health.metrics).length > 0
                   ? Math.round(
@@ -450,12 +450,12 @@ export default function NotebookWorkspace({ notebookId }: Props) {
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
+        <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500 dark:text-muted-foreground">
           <span>{lastRefreshText}</span>
           <div className="flex items-center gap-3">
             <span className="hidden md:inline">
               Press{' '}
-              <kbd className="rounded border border-gray-300 px-1 py-0.5 text-[10px] dark:border-gray-600">
+              <kbd className="rounded border border-gray-300 px-1 py-0.5 text-[10px] dark:border-border">
                 R
               </kbd>{' '}
               to refresh
@@ -466,7 +466,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
             <button
               type="button"
               onClick={() => setHealthAutoRefreshPaused((value) => !value)}
-              className="rounded border border-gray-200 px-2 py-0.5 text-[10px] font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="rounded border border-gray-200 px-2 py-0.5 text-[10px] font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:border-border dark:text-muted-foreground dark:hover:bg-gray-800"
             >
               {healthAutoRefreshPaused ? 'Resume Auto-Refresh' : 'Pause Auto-Refresh'}
             </button>
@@ -491,13 +491,13 @@ export default function NotebookWorkspace({ notebookId }: Props) {
         )}
 
         {adaptiveGuidance.length > 0 && (
-          <div className="mt-2 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-2 dark:border-blue-900/50 dark:bg-blue-950/25">
-            <p className="mb-1 text-[11px] font-semibold text-blue-700 dark:text-blue-300">
+          <div className="mt-2 rounded-md border border-sky-200 bg-sky-50 px-2.5 py-2 dark:border-sky-900/50 dark:bg-sky-950/25">
+            <p className="mb-1 text-[11px] font-semibold text-sky-700 dark:text-sky-300">
               Adaptive Guidance
             </p>
             <div className="space-y-1.5">
               {adaptiveGuidance.slice(0, 2).map((item, idx) => (
-                <div key={idx} className="text-[11px] text-blue-800 dark:text-blue-200">
+                <div key={idx} className="text-[11px] text-sky-800 dark:text-sky-200">
                   <span className="font-semibold">{item.title}:</span> {item.action}
                 </div>
               ))}
@@ -506,17 +506,17 @@ export default function NotebookWorkspace({ notebookId }: Props) {
         )}
 
         {healthDetailsOpen && (
-          <div className="mt-3 rounded-lg border border-blue-100/70 bg-white/80 p-3 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-800/75">
+          <div className="mt-3 rounded-lg border border-sky-100/70 bg-white/80 p-3 shadow-sm backdrop-blur dark:border-border dark:bg-card/75">
             {healthError || !health ? (
               <p className="text-xs text-red-500">Detailed health data is currently unavailable.</p>
             ) : (
               <>
-                <div className="mb-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div className="mb-2 flex items-center justify-between text-xs text-gray-500 dark:text-muted-foreground">
                   <span>Total API calls: {totalCalls}</span>
                   <span>Failure rate: {(health.failure_rate * 100).toFixed(2)}%</span>
                 </div>
-                <div className="mb-3 rounded-md border border-gray-200 bg-white px-2 py-2 dark:border-gray-700 dark:bg-gray-900">
-                  <div className="mb-1 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
+                <div className="mb-3 rounded-md border border-gray-200 bg-white px-2 py-2 dark:border-border dark:bg-background-secondary">
+                  <div className="mb-1 flex items-center justify-between text-[11px] text-gray-500 dark:text-muted-foreground">
                     <span>Failure trend</span>
                     <span>{healthHistory.length} samples</span>
                   </div>
@@ -524,7 +524,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                     <path
                       d="M0,33 L180,33"
                       stroke="currentColor"
-                      className="text-gray-200 dark:text-gray-700"
+                      className="text-gray-200 dark:text-muted-foreground"
                       strokeWidth="1"
                       fill="none"
                     />
@@ -547,23 +547,23 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                     >
                       <div className="flex items-center gap-1.5">
                         <span className={`h-2 w-2 rounded-full ${metricTone(metric).dot}`} />
-                        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                        <p className="text-xs font-semibold text-gray-700 dark:text-foreground">
                           {endpointLabel[key] || key}
                         </p>
                       </div>
-                      <p className="mt-1 text-[11px] text-gray-500 dark:text-gray-400">
+                      <p className="mt-1 text-[11px] text-gray-500 dark:text-muted-foreground">
                         Calls: {metric.total_calls}
                       </p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      <p className="text-[11px] text-gray-500 dark:text-muted-foreground">
                         Success: {metric.success}
                       </p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      <p className="text-[11px] text-gray-500 dark:text-muted-foreground">
                         Failures: {metric.failure}
                       </p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      <p className="text-[11px] text-gray-500 dark:text-muted-foreground">
                         Avg latency: {metric.avg_latency_ms}ms
                       </p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      <p className="text-[11px] text-gray-500 dark:text-muted-foreground">
                         Last status: {metric.last_status_code || '-'}
                       </p>
                     </div>
@@ -578,16 +578,16 @@ export default function NotebookWorkspace({ notebookId }: Props) {
       {/* Three-pane layout */}
       <div className="relative flex flex-1 overflow-hidden">
         {/* LEFT: Sources panel */}
-        <aside className="w-72 shrink-0 overflow-y-auto border-r border-white/10 bg-white/60 backdrop-blur-xl dark:bg-gray-900/45">
-          <div className="sticky top-0 z-10 flex border-b border-white/10 bg-white/70 px-3 pt-3 backdrop-blur dark:bg-gray-900/55">
+        <aside className="w-72 shrink-0 overflow-y-auto border-r border-white/10 bg-white/60 backdrop-blur-xl dark:bg-background-secondary/45">
+          <div className="sticky top-0 z-10 flex border-b border-white/10 bg-white/70 px-3 pt-3 backdrop-blur dark:bg-background-secondary/55">
             {(['sources', 'highlights'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setLeftTab(tab)}
                 className={`flex-1 border-b-2 px-3 py-2 text-xs font-medium capitalize transition-colors ${
                   leftTab === tab
-                    ? 'border-blue-500 text-primary dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                    ? 'border-sky-500 text-primary dark:text-sky-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-muted-foreground dark:hover:text-gray-200'
                 }`}
               >
                 {tab}
@@ -632,15 +632,15 @@ export default function NotebookWorkspace({ notebookId }: Props) {
         {/* CENTER: Chat / Generate (tabbed) */}
         <main className="flex flex-1 flex-col overflow-hidden bg-background/10">
           {/* Tab bar */}
-          <div className="flex shrink-0 border-b border-white/10 bg-white/75 px-4 backdrop-blur dark:bg-gray-900/65">
+          <div className="flex shrink-0 border-b border-white/10 bg-white/75 px-4 backdrop-blur dark:bg-background-secondary/65">
             {(['chat', 'generate'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`border-b-2 px-4 py-3 text-sm font-medium capitalize transition-colors ${
                   activeTab === tab
-                    ? 'border-blue-500 text-primary dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                    ? 'border-sky-500 text-primary dark:text-sky-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-muted-foreground dark:hover:text-gray-200'
                 }`}
               >
                 {tab === 'chat' ? '💬 Chat' : '✨ Generate'}

@@ -225,19 +225,19 @@ export default function Oscilloscope() {
           <div className="grid grid-cols-4 gap-4 font-mono text-xs">
             <div>
               <span className="text-gray-400">Vpp:</span>{' '}
-              <span className="text-blue-400">{measurements.vpp.toFixed(2)} V</span>
+              <span className="text-sky-400">{measurements.vpp.toFixed(2)} V</span>
             </div>
             <div>
               <span className="text-gray-400">Vrms:</span>{' '}
-              <span className="text-blue-400">{measurements.vrms.toFixed(2)} V</span>
+              <span className="text-sky-400">{measurements.vrms.toFixed(2)} V</span>
             </div>
             <div>
               <span className="text-gray-400">Freq:</span>{' '}
-              <span className="text-blue-400">{measurements.freq.toFixed(2)} Hz</span>
+              <span className="text-sky-400">{measurements.freq.toFixed(2)} Hz</span>
             </div>
             <div>
               <span className="text-gray-400">Period:</span>{' '}
-              <span className="text-blue-400">{measurements.period.toFixed(3)} s</span>
+              <span className="text-sky-400">{measurements.period.toFixed(3)} s</span>
             </div>
           </div>
         </div>

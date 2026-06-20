@@ -28,7 +28,7 @@ interface UserRow {
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  STUDENT:   'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  STUDENT:   'bg-sky-500/10 text-sky-400 border-sky-500/20',
   MENTOR:    'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   CORPORATE: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
   ADMIN:     'bg-rose-500/10 text-rose-400 border-rose-500/20',
@@ -134,7 +134,6 @@ export default function AdminUsersPage() {
         >
           <option value="">All roles</option>
           <option value="STUDENT">Student</option>
-          <option value="MENTOR">Mentor</option>
           <option value="CORPORATE">Corporate</option>
           <option value="ADMIN">Admin</option>
         </select>
@@ -213,7 +212,7 @@ export default function AdminUsersPage() {
                             onChange={e => changeRole(u._id, e.target.value)}
                             className="rounded border border-input bg-card px-2 py-1 text-[10px] font-mono focus:outline-none focus:ring-1 focus:ring-ring"
                           >
-                            {['STUDENT','MENTOR','CORPORATE','ADMIN'].map(r => (
+                            {['STUDENT','CORPORATE','ADMIN'].map(r => (
                               <option key={r} value={r}>{r}</option>
                             ))}
                           </select>

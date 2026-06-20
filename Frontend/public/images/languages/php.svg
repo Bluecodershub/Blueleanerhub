@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">PHP logo</title>
+  <desc id="desc">Indigo PHP language badge.</desc>
+  <rect width="64" height="64" rx="14" fill="#161B33"/>
+  <ellipse cx="32" cy="32" rx="25" ry="15" fill="#777BB4"/>
+  <path fill="#fff" d="M15.3 39.8 18.2 25h7.2c4.2 0 6.1 2 5.4 5.6-.7 3.8-3.6 5.8-7.8 5.8h-2.8l-.7 3.4h-4.2Zm5.6-7h2.6c1.6 0 2.6-.8 2.9-2.3.3-1.4-.4-2-2-2h-2.6l-.9 4.3Zm11.1 7L35 25h4.1l-1.1 5.3h4.3l1.1-5.3h4.1l-2.9 14.8h-4.1l1.2-6.1h-4.3l-1.2 6.1H32Zm14.7 0L49.6 25h7.2c4.2 0 6.1 2 5.4 5.6-.7 3.8-3.6 5.8-7.8 5.8h-2.8l-.7 3.4h-4.2Zm5.6-7h2.6c1.6 0 2.6-.8 2.9-2.3.3-1.4-.4-2-2-2h-2.6l-.9 4.3Z"/>
+</svg>

@@ -14,13 +14,8 @@ import {
   Zap,
 } from 'lucide-react'
 import { codeAPI, getSandboxSessionId, setSandboxSessionId } from '@/lib/api-civilization'
-
-const LANGUAGES = [
-  { id: 'python', name: 'Python 3', version: '3.10.0', icon: '🐍' },
-  { id: 'javascript', name: 'JavaScript', version: '18.15.0', icon: 'JS' },
-  { id: 'java', name: 'Java', version: '15.0.2', icon: '☕' },
-  { id: 'cpp', name: 'C++', version: '10.2.0', icon: 'C++' },
-]
+import { LanguageLogo } from '@/components/ui/LanguageLogo'
+import { getRuntimeLanguage } from '@/lib/languages'
 
 interface CodeEditorProps {
   value?: string;
@@ -67,7 +62,7 @@ export default function CodeEditor({
     }
   }
 
-  const activeLang = LANGUAGES.find(l => l.id === language) || LANGUAGES[0]
+  const activeLang = getRuntimeLanguage(language)
 
   const runCode = async () => {
     setIsRunning(true)
@@ -149,7 +144,7 @@ export default function CodeEditor({
       <div className="flex items-center justify-between border-b border-white/5 bg-[#252526] px-6 py-3">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-medium text-white/80">
-            <span className="text-lg">{activeLang.icon}</span>
+            <LanguageLogo language={activeLang.id} size={22} />
             {activeLang.name}
             <ChevronDown className="h-4 w-4 opacity-50" />
           </div>
@@ -157,7 +152,7 @@ export default function CodeEditor({
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-white/40">
               <Cpu className="h-3.5 w-3.5" />
-              <span>Compiler v{activeLang.version}</span>
+              <span>Runtime {activeLang.version}</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-white/40">
               <Shield className="h-3.5 w-3.5" />
@@ -183,7 +178,7 @@ export default function CodeEditor({
             className={`flex items-center gap-2 rounded-xl px-6 py-2 text-sm font-bold transition-all ${
               isRunning
                 ? 'cursor-not-allowed bg-primary/15 text-foreground/80'
-                : 'bg-primary text-white hover:bg-primary/70 hover:shadow-lg hover:shadow-primary/15 active:scale-95'
+                : 'bg-primary text-black hover:bg-primary/70 hover:shadow-lg hover:shadow-primary/15 active:scale-95'
             }`}
           >
             {isRunning ? (

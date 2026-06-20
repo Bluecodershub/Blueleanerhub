@@ -49,9 +49,9 @@ export default function LearningPathCard({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group flex h-full flex-col overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-blue-500">
+      <Card className="group flex h-full flex-col overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-sky-500">
         {/* Thumbnail */}
-        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-600 to-primary">
+        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-sky-600 to-primary">
           {thumbnail ? (
             <img
               src={thumbnail}
@@ -79,7 +79,7 @@ export default function LearningPathCard({
             <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2">
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-xs font-medium text-white">{progress}% Complete</span>
-                <TrendingUp className="h-4 w-4 text-blue-400" />
+                <TrendingUp className="h-4 w-4 text-sky-400" />
               </div>
               <Progress value={progress} className="h-1" />
             </div>
@@ -90,7 +90,7 @@ export default function LearningPathCard({
         <div className="flex flex-1 flex-col space-y-4 p-6">
           {/* Title & Description */}
           <div className="flex-1">
-            <h3 className="mb-2 line-clamp-2 text-xl font-bold text-white transition-colors group-hover:text-blue-400">
+            <h3 className="mb-2 line-clamp-2 text-xl font-bold text-white transition-colors group-hover:text-sky-400">
               {title}
             </h3>
             <p className="line-clamp-3 text-sm text-gray-400">{description}</p>
@@ -99,11 +99,11 @@ export default function LearningPathCard({
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3 text-sm text-gray-400">
             <div className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-blue-400" />
+              <BookOpen className="h-4 w-4 text-sky-400" />
               <span>{coursesCount} courses</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-400" />
+              <Users className="h-4 w-4 text-sky-400" />
               <span>{enrolledCount.toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-2">

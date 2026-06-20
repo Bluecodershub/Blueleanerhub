@@ -19,7 +19,7 @@ interface UserDetail {
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  STUDENT: 'text-blue-400', MENTOR: 'text-emerald-400',
+  STUDENT: 'text-sky-400', MENTOR: 'text-emerald-400',
   CORPORATE: 'text-amber-400', ADMIN: 'text-rose-400',
 }
 
@@ -128,8 +128,8 @@ export default function AdminUserDetailPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: 'Total XP', value: user.totalPoints?.toLocaleString() ?? 0, icon: Zap, color: 'text-violet-400' },
-          { label: 'Level', value: user.level ?? 1, icon: BarChart3, color: 'text-blue-400' },
+          { label: 'Total XP', value: user.totalPoints?.toLocaleString() ?? 0, icon: Zap, color: 'text-sky-400' },
+          { label: 'Level', value: user.level ?? 1, icon: BarChart3, color: 'text-sky-400' },
           { label: 'Quiz Attempts', value: stats?.quizCount ?? 0, icon: Shield, color: 'text-amber-400' },
           { label: 'Hackathons', value: stats?.hackathonCount ?? 0, icon: Trophy, color: 'text-emerald-400' },
         ].map(({ label, value, icon: Icon, color }) => (
@@ -153,7 +153,7 @@ export default function AdminUserDetailPage() {
               onChange={e => setRole(e.target.value)}
               className="w-full rounded-lg border border-input bg-card px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
             >
-              {['STUDENT','MENTOR','CORPORATE','ADMIN'].map(r => (
+              {['STUDENT','CORPORATE','ADMIN'].map(r => (
                 <option key={r} value={r}>{r}</option>
               ))}
             </select>

@@ -28,7 +28,7 @@ const ORGANIZER_TYPES = [
     id: 'UNIVERSITY',
     label: 'University / College',
     icon: GraduationCap,
-    color: 'from-purple-500 to-violet-600',
+    color: 'from-purple-500 to-sky-600',
     bg: 'bg-purple-500/10 border-purple-500/20',
     description: 'Run an inter-college or department hackathon for your students',
     benefits: [
@@ -43,8 +43,8 @@ const ORGANIZER_TYPES = [
     id: 'CORPORATE',
     label: 'Corporate / Startup',
     icon: Building2,
-    color: 'from-blue-500 to-cyan-600',
-    bg: 'bg-blue-500/10 border-blue-500/20',
+    color: 'from-sky-500 to-cyan-600',
+    bg: 'bg-sky-500/10 border-sky-500/20',
     description: 'Find top engineering talent and source real solutions to your problems',
     benefits: [
       'AI-powered candidate screening',

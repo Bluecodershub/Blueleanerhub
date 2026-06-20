@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">BlueLearnerHub mark</title>
+  <desc id="desc">A premium learning hub mark with open pages, code brackets, and connected progress.</desc>
+  <defs>
+    <linearGradient id="mark-bg" x1="8" y1="6" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202226"/>
+      <stop offset="0.45" stop-color="#111418"/>
+      <stop offset="1" stop-color="#050607"/>
+    </linearGradient>
+    <radialGradient id="mark-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(47 14) rotate(128) scale(47 38)">
+      <stop stop-color="#FFD300" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#66C4FF" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#050607" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="page-left" x1="18" y1="19" x2="33" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF4A8"/>
+      <stop offset="0.42" stop-color="#FFD300"/>
+      <stop offset="1" stop-color="#E0AE00"/>
+    </linearGradient>
+    <linearGradient id="page-right" x1="46" y1="19" x2="30" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE978"/>
+      <stop offset="0.5" stop-color="#FFD300"/>
+      <stop offset="1" stop-color="#B98700"/>
+    </linearGradient>
+    <linearGradient id="code-blue" x1="21" y1="34" x2="43" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8BDBFF"/>
+      <stop offset="1" stop-color="#32A8FF"/>
+    </linearGradient>
+    <linearGradient id="progress-green" x1="28" y1="28" x2="36" y2="37" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7CFFB2"/>
+      <stop offset="1" stop-color="#18B85B"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="10" y="12" width="44" height="44" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="18" fill="url(#mark-bg)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="18" fill="url(#mark-glow)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="18" fill="none" stroke="#2C343D"/>
+  <g filter="url(#soft-shadow)">
+    <path d="M17.5 18.8c5.8-.95 10.68.24 14.5 3.58v25.18c-3.82-3.34-8.7-4.54-14.5-3.58V18.8Z" fill="url(#page-left)"/>
+    <path d="M46.5 18.8c-5.8-.95-10.68.24-14.5 3.58v25.18c3.82-3.34 8.7-4.54 14.5-3.58V18.8Z" fill="url(#page-right)"/>
+    <path d="M32 22.28v25.1" stroke="#392A00" stroke-linecap="round" stroke-opacity="0.45" stroke-width="1.4"/>
+    <path d="M21.2 24.1c3.25-.18 5.82.43 7.72 1.84M21.2 29.1c3.16-.12 5.73.5 7.72 1.86" stroke="#FFF8BD" stroke-linecap="round" stroke-opacity="0.65" stroke-width="1.5"/>
+    <path d="M42.8 24.1c-3.25-.18-5.82.43-7.72 1.84M42.8 29.1c-3.16-.12-5.73.5-7.72 1.86" stroke="#FFF2A0" stroke-linecap="round" stroke-opacity="0.55" stroke-width="1.5"/>
+    <path d="M24.3 34.1 20.6 37l3.7 2.9M39.7 34.1l3.7 2.9-3.7 2.9" fill="none" stroke="url(#code-blue)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3"/>
+    <circle cx="32" cy="36.5" r="4.1" fill="url(#progress-green)" stroke="#0B1510" stroke-width="1.1"/>
+    <path d="m30.15 36.45 1.3 1.3 2.55-2.85" fill="none" stroke="#072112" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"/>
+  </g>
+  <path d="M49.2 12.4 50.35 15l2.65 1.15-2.65 1.15-1.15 2.6-1.15-2.6-2.65-1.15L48.05 15l1.15-2.6Z" fill="#FFD300"/>
+  <circle cx="18.8" cy="49.5" r="2" fill="#66C4FF" opacity="0.85"/>
+</svg>

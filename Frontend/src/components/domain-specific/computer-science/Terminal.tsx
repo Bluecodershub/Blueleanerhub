@@ -155,7 +155,7 @@ export default function Terminal({
       {/* Terminal Output */}
       <div
         ref={terminalRef}
-        className="flex-1 overflow-y-auto bg-black p-4 font-mono text-sm text-blue-400"
+        className="flex-1 overflow-y-auto bg-black p-4 font-mono text-sm text-sky-400"
         onClick={() => inputRef.current?.focus()}
       >
         {output.map((line, i) => (
@@ -166,14 +166,14 @@ export default function Terminal({
 
         {/* Input Line */}
         <form onSubmit={handleSubmit} className="mt-2 flex items-center">
-          <span className="mr-2 text-blue-400">$</span>
+          <span className="mr-2 text-sky-400">$</span>
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent text-blue-400 outline-none"
+            className="flex-1 bg-transparent text-sky-400 outline-none"
             autoFocus
             spellCheck={false}
           />

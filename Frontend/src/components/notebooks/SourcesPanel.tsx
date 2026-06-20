@@ -136,7 +136,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
   return (
     <div className="flex h-full flex-col gap-3 bg-white/40 p-4 dark:bg-transparent">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-300">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700 dark:text-muted-foreground">
           Sources ({sources.length})
         </h2>
       </div>
@@ -148,9 +148,9 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
             onClick={() => setAddMode('text')}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300
                        px-3 py-2 text-xs font-medium text-gray-500
-                       transition-colors hover:border-blue-400 hover:text-primary/80 focus-visible:outline-none
-                       focus-visible:ring-2 focus-visible:ring-blue-500/60 dark:border-gray-600
-                       dark:text-gray-400 dark:hover:border-blue-500 dark:hover:text-blue-400"
+                       transition-colors hover:border-sky-400 hover:text-primary/80 focus-visible:outline-none
+                       focus-visible:ring-2 focus-visible:ring-sky-500/60 dark:border-border
+                       dark:text-muted-foreground dark:hover:border-sky-500 dark:hover:text-sky-400"
           >
             <FileText className="h-3.5 w-3.5" /> Paste text
           </button>
@@ -158,17 +158,17 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
             onClick={() => setAddMode('url')}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300
                        px-3 py-2 text-xs font-medium text-gray-500
-                       transition-colors hover:border-blue-400 hover:text-primary/80 focus-visible:outline-none
-                       focus-visible:ring-2 focus-visible:ring-blue-500/60 dark:border-gray-600
-                       dark:text-gray-400 dark:hover:border-blue-500 dark:hover:text-blue-400"
+                       transition-colors hover:border-sky-400 hover:text-primary/80 focus-visible:outline-none
+                       focus-visible:ring-2 focus-visible:ring-sky-500/60 dark:border-border
+                       dark:text-muted-foreground dark:hover:border-sky-500 dark:hover:text-sky-400"
           >
             <Globe className="h-3.5 w-3.5" /> Add URL
           </button>
           <label
             className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-dashed
                        border-gray-300 px-3 py-2 text-xs font-medium
-                       text-gray-500 transition-colors hover:border-blue-400 hover:text-primary/80
-                       dark:border-gray-600 dark:text-gray-400 dark:hover:border-blue-500 dark:hover:text-blue-400"
+                       text-gray-500 transition-colors hover:border-sky-400 hover:text-primary/80
+                       dark:border-border dark:text-muted-foreground dark:hover:border-sky-500 dark:hover:text-sky-400"
           >
             {uploadingPdf ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -195,7 +195,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             onSubmit={handleAdd}
-            className="flex flex-col gap-2 rounded-xl border border-blue-100/80 bg-white/90 p-3 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-800/90"
+            className="flex flex-col gap-2 rounded-xl border border-sky-100/80 bg-white/90 p-3 shadow-sm backdrop-blur dark:border-border dark:bg-card/90"
           >
             <Input
               placeholder={addMode === 'url' ? 'Source title (optional)' : 'Source title'}
@@ -211,7 +211,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
                 required
                 rows={6}
                 className="w-full resize-none rounded-lg border border-gray-200 bg-transparent px-3
-                           py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:text-white"
+                           py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 dark:border-border dark:text-white"
               />
             ) : (
               <Input
@@ -235,7 +235,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
                   (addMode === 'text' && !content.trim()) ||
                   (addMode === 'url' && !url.trim())
                 }
-                className="h-7 bg-primary px-3 text-xs text-white hover:bg-primary/90"
+                className="h-7 bg-primary px-3 text-xs text-black hover:bg-primary/90"
               >
                 {adding ? (
                   <Loader2 className="mr-1 h-3 w-3 animate-spin" />
@@ -258,12 +258,12 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
-              className="group overflow-hidden rounded-xl border border-blue-100/70 bg-white/90 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-800/90"
+              className="group overflow-hidden rounded-xl border border-sky-100/70 bg-white/90 shadow-sm backdrop-blur dark:border-border dark:bg-card/90"
             >
               <div
                 role="button"
                 tabIndex={0}
-                className="flex cursor-pointer items-center gap-2 px-3 py-2.5 transition-colors hover:bg-blue-50/70 dark:hover:bg-gray-700/50"
+                className="flex cursor-pointer items-center gap-2 px-3 py-2.5 transition-colors hover:bg-sky-50/70 dark:hover:bg-gray-700/50"
                 onClick={() => setExpanded(expanded === src.id ? null : src.id)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
@@ -274,12 +274,12 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
               >
                 <div className="shrink-0">
                   {src.sourceType === 'url' ? (
-                    <Globe className="h-3.5 w-3.5 text-blue-400" />
+                    <Globe className="h-3.5 w-3.5 text-sky-400" />
                   ) : (
                     <FileText className="h-3.5 w-3.5 text-gray-400" />
                   )}
                 </div>
-                <span className="flex-1 truncate text-xs font-medium text-gray-700 dark:text-gray-300">
+                <span className="flex-1 truncate text-xs font-medium text-gray-700 dark:text-muted-foreground">
                   {src.title}
                 </span>
                 {STATUS_ICON[src.status]}
@@ -309,7 +309,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="flex gap-4 border-t border-gray-100 px-3 pb-2.5 pt-2 text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500">
+                    <div className="flex gap-4 border-t border-gray-100 px-3 pb-2.5 pt-2 text-xs text-gray-400 dark:border-border dark:text-muted-foreground">
                       <span>{src.wordCount.toLocaleString()} words</span>
                       <span>{src.chunkCount} chunks</span>
                       <span className="capitalize">{src.status}</span>
@@ -322,7 +322,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
         </AnimatePresence>
 
         {sources.length === 0 && addMode === null && (
-          <p className="px-2 py-8 text-center text-xs text-gray-400 dark:text-gray-500">
+          <p className="px-2 py-8 text-center text-xs text-gray-400 dark:text-muted-foreground">
             Add sources above — paste notes, lecture content, or web URLs.
           </p>
         )}

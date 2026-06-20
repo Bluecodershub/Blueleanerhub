@@ -1,4 +1,5 @@
 import { ExecutionProvider, ExecutionRequest, ExecutionResult } from './execution.types';
+import { goRunnerProvider } from './goRunner.provider';
 import { judge0Provider } from './judge0.provider';
 import { localPythonProvider } from './localPython.provider';
 import { sessionService } from '../session.service';
@@ -25,9 +26,11 @@ export class PersistentStateAdapter implements ExecutionProvider {
 
   async execute(request: ExecutionRequest): Promise<ExecutionResult> {
     const { sessionId, code, language, stdin, cellIndex } = request;
-    const provider = !judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()
-      ? localPythonProvider
-      : judge0Provider;
+    const provider = goRunnerProvider.isConfigured()
+      ? goRunnerProvider
+      : !judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()
+        ? localPythonProvider
+        : judge0Provider;
 
     if (!sessionId) {
       return provider.execute(request);
@@ -53,10 +56,18 @@ export class PersistentStateAdapter implements ExecutionProvider {
   }
 
   async executeMultiple(code: string, language: string, testCases: any[]): Promise<any[]> {
+    if (goRunnerProvider.isConfigured()) return goRunnerProvider.executeMultiple(code, language, testCases);
+    if (!judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()) {
+      return localPythonProvider.executeMultiple(code, language, testCases);
+    }
     return judge0Provider.executeMultiple(code, language, testCases);
   }
 
   getLanguageIds(): Record<string, number> {
+    if (goRunnerProvider.isConfigured()) return goRunnerProvider.getLanguageIds();
+    if (!judge0Provider.getRuntimeStatus().configured && localPythonProvider.isAvailable()) {
+      return localPythonProvider.getLanguageIds();
+    }
     return judge0Provider.getLanguageIds();
   }
 }

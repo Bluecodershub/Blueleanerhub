@@ -49,7 +49,7 @@ export const NotebookCell: React.FC<NotebookCellProps> = ({
       case 'running': return 'border-yellow-400';
       case 'success': return 'border-green-400';
       case 'error': return 'border-red-400';
-      default: return 'border-gray-300 dark:border-gray-600';
+      default: return 'border-gray-300 dark:border-border';
     }
   };
 

@@ -7,12 +7,13 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, Users, Trophy, Award, BarChart3,
-  Shield, Menu, X, LogOut, Settings, BookOpen,
-  GraduationCap, ClipboardCheck, FileCheck2, CreditCard, ListChecks, LockKeyhole,
+  Menu, X, LogOut, Settings, BookOpen,
+  GraduationCap, ClipboardCheck, FileCheck2, CreditCard, ListChecks, LockKeyhole, ShieldAlert,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
+import { BrandMark } from '@/components/branding/Logo'
 
 const navItems = [
   { title: 'Dashboard',    href: '/admin/dashboard',    icon: LayoutDashboard },
@@ -24,6 +25,8 @@ const navItems = [
   { title: 'Hackathons',   href: '/admin/hackathons',   icon: Trophy },
   { title: 'Submissions',  href: '/admin/submissions',  icon: FileCheck2 },
   { title: 'Certificates', href: '/admin/certificates', icon: Award },
+  { title: 'Grievances',   href: '/admin/grievances',   icon: ShieldAlert },
+  { title: 'Consents',     href: '/admin/consents',     icon: FileCheck2 },
   { title: 'Payments',     href: '/admin/payments',     icon: CreditCard },
   { title: 'Results',      href: '/admin/results',      icon: BarChart3 },
   { title: 'Analytics',    href: '/admin/analytics',    icon: BarChart3 },
@@ -37,13 +40,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <RoleGuard allowedRoles={['ADMIN']}>
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="app-workspace flex min-h-screen text-foreground">
       {/* ─── DESKTOP SIDEBAR ─────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card lg:flex">
         <div className="flex h-16 items-center gap-3 px-6 border-b border-border">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-sm">
-            <Shield className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <BrandMark size={36} className="rounded-xl" priority />
           <div>
             <p className="font-bold text-sm text-foreground leading-none">Admin Panel</p>
             <p className="mt-0.5 text-[10px] font-bold uppercase text-primary">Bluelearnerhub</p>
@@ -130,9 +131,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             >
               <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
-                    <Shield className="h-5 w-5 text-primary-foreground" />
-                  </div>
+                  <BrandMark size={36} className="rounded-xl" />
                   <span className="font-bold text-foreground">Admin Panel</span>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="rounded-lg border border-border p-2 text-muted-foreground">
@@ -185,14 +184,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Menu className="h-4 w-4" />
           </button>
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-primary" />
+            <BrandMark size={22} className="rounded-md" />
             <span className="font-bold text-sm text-foreground">Admin Panel</span>
           </div>
           <div className="w-9" />
         </div>
 
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
+          <div className="app-page-frame">
             {children}
           </div>
         </main>

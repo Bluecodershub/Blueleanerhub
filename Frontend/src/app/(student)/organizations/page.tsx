@@ -20,112 +20,63 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { orgsAPI } from '@/lib/api-civilization'
 
-const MOCK_ORGS = [
-  {
-    id: 1,
-    slug: 'infosys-labs',
-    name: 'Infosys Innovation Labs',
-    orgType: 'corporate',
-    description:
-      'Talent development and innovation arm of Infosys — connecting engineers with real-world challenges.',
-    memberCount: 1240,
-    openChallenges: 3,
-    location: 'Bengaluru, India',
-    gradient: 'from-blue-600 to-cyan-600',
-    rating: 4.8,
-    tags: ['AI/ML', 'Cloud', 'DevOps'],
-  },
-  {
-    id: 2,
-    slug: 'iit-bombay',
-    name: 'IIT Bombay Research Hub',
-    orgType: 'university',
-    description:
-      'Collaborative research platform for students and faculty across engineering and sciences.',
-    memberCount: 3800,
-    openChallenges: 5,
-    location: 'Mumbai, India',
-    gradient: 'from-primary/90 to-red-600',
-    rating: 4.9,
-    tags: ['Research', 'Robotics', 'Semiconductor'],
-  },
-  {
-    id: 3,
-    slug: 'flipkart-campus',
-    name: 'Flipkart Campus Program',
-    orgType: 'corporate',
-    description: "Hire, train, and engage top engineering talent from India's best colleges.",
-    memberCount: 620,
-    openChallenges: 2,
-    location: 'Bengaluru, India',
-    gradient: 'from-yellow-500 to-primary',
-    rating: 4.7,
-    tags: ['E-commerce', 'Backend', 'Data Engineering'],
-  },
-  {
-    id: 4,
-    slug: 'iim-ahmedabad',
-    name: 'IIM Ahmedabad Business Lab',
-    orgType: 'university',
-    description:
-      'Finance, strategy, and management learning programs with real-world case studies.',
-    memberCount: 890,
-    openChallenges: 4,
-    location: 'Ahmedabad, India',
-    gradient: 'from-primary/90 to-cyan-600',
-    rating: 4.8,
-    tags: ['Finance', 'Strategy', 'Consulting'],
-  },
-  {
-    id: 5,
-    slug: 'zepto-engineering',
-    name: 'Zepto Engineering Guild',
-    orgType: 'corporate',
-    description: 'High-velocity engineering culture — build, ship, and learn at startup speed.',
-    memberCount: 340,
-    openChallenges: 1,
-    location: 'Mumbai, India',
-    gradient: 'from-purple-600 to-pink-600',
-    rating: 4.6,
-    tags: ['React Native', 'Go', 'Distributed Systems'],
-  },
-  {
-    id: 6,
-    slug: 'isro-space-tech',
-    name: 'ISRO Space Tech Community',
-    orgType: 'research',
-    description:
-      'Aerospace engineering, satellite systems, and space exploration knowledge network.',
-    memberCount: 2100,
-    openChallenges: 6,
-    location: 'Bengaluru, India',
-    gradient: 'from-indigo-600 to-violet-600',
-    rating: 4.9,
-    tags: ['Aerospace', 'Embedded', 'Signal Processing'],
-  },
-]
-
 const ORG_TYPES = ['All', 'corporate', 'university', 'research']
 
 const TYPE_CONFIG = {
-  corporate: { label: 'Corporate', icon: Briefcase, color: 'bg-blue-900/50 text-blue-400' },
+  corporate: { label: 'Corporate', icon: Briefcase, color: 'bg-sky-900/50 text-sky-400' },
   university: { label: 'University', icon: GraduationCap, color: 'bg-muted text-foreground/70' },
   research: { label: 'Research', icon: Zap, color: 'bg-purple-900/50 text-purple-400' },
 }
 
+const GRADIENT_BY_TYPE: Record<string, string> = {
+  corporate: 'from-sky-600 to-cyan-600',
+  university: 'from-primary/90 to-cyan-600',
+  research: 'from-sky-600 to-sky-600',
+}
+
+const TYPE_MAP: Record<string, string> = {
+  COMPANY: 'corporate',
+  UNIVERSITY: 'university',
+  COMMUNITY: 'research',
+}
+
+/** Maps a raw Organization record into the card's view model with safe defaults. */
+function normalizeOrg(raw: any) {
+  const orgType = raw.orgType ?? TYPE_MAP[raw.type] ?? 'corporate'
+  return {
+    id: raw._id ?? raw.id,
+    slug: raw.slug ?? raw._id ?? raw.id,
+    name: raw.name ?? 'Organization',
+    orgType,
+    description: raw.description ?? '',
+    memberCount: raw.memberCount ?? (Array.isArray(raw.talentPool) ? raw.talentPool.length : 0),
+    openChallenges: raw.openChallenges ?? 0,
+    location: raw.location ?? '',
+    gradient: GRADIENT_BY_TYPE[orgType] ?? 'from-primary to-primary/80',
+    tags: Array.isArray(raw.tags) ? raw.tags : [],
+  }
+}
+
 export default function OrganizationsPage() {
-  const [orgs, setOrgs] = useState(MOCK_ORGS as any[])
+  const [orgs, setOrgs] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [type, setType] = useState('All')
 
   useEffect(() => {
+    let active = true
     orgsAPI
       .list()
       .then((d: any) => {
-        const list = d?.data ?? d
-        if (Array.isArray(list) && list.length > 0) setOrgs(list)
+        if (!active) return
+        const list = d?.data?.data ?? d?.data ?? d
+        setOrgs(Array.isArray(list) ? list.map(normalizeOrg) : [])
       })
-      .catch(() => {})
+      .catch(() => active && setOrgs([]))
+      .finally(() => active && setLoading(false))
+    return () => {
+      active = false
+    }
   }, [])
 
   const filtered = orgs.filter((o) => {
@@ -141,23 +92,23 @@ export default function OrganizationsPage() {
         <div className="mx-auto max-w-5xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <div className="mb-2 flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-blue-400" />
-              <span className="text-sm font-medium uppercase tracking-wider text-blue-400">
+              <Building2 className="h-5 w-5 text-sky-400" />
+              <span className="text-sm font-medium uppercase tracking-wider text-sky-400">
                 Ecosystem
               </span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight">Organizations</h1>
             <p className="mt-2 max-w-xl text-gray-400">
-              Partner with top companies, IITs, IIMs, and research labs. Compete in innovation
+              Partner with companies, universities, and research labs. Compete in innovation
               challenges and get discovered by recruiters.
             </p>
           </motion.div>
 
           <div className="mt-6 flex gap-6">
             {[
-              { label: 'Partners', value: '50+', icon: Building2, color: 'text-blue-400' },
-              { label: 'Challenges', value: '120+', icon: Trophy, color: 'text-foreground/70' },
-              { label: 'Members', value: '32K+', icon: Users, color: 'text-foreground/70' },
+              { label: 'Organizations', value: orgs.length, icon: Building2, color: 'text-sky-400' },
+              { label: 'Companies', value: orgs.filter((o) => o.orgType === 'corporate').length, icon: Briefcase, color: 'text-foreground/70' },
+              { label: 'Universities', value: orgs.filter((o) => o.orgType === 'university').length, icon: GraduationCap, color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -188,7 +139,7 @@ export default function OrganizationsPage() {
                 onClick={() => setType(t)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                   type === t
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary text-black'
                     : 'bg-secondary text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -199,6 +150,25 @@ export default function OrganizationsPage() {
         </div>
 
         {/* Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-56 animate-pulse rounded-xl border border-border bg-card" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border py-20 text-center">
+            <Building2 className="mx-auto mb-3 h-12 w-12 opacity-20" />
+            <h2 className="mb-1 text-sm font-semibold text-foreground">
+              {orgs.length === 0 ? 'No organizations yet' : 'No organizations match your filters'}
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              {orgs.length === 0
+                ? 'Organizations will appear here once they join the platform.'
+                : 'Try a different search or type filter.'}
+            </p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((org, i) => {
             const typeInfo = TYPE_CONFIG[org.orgType as keyof typeof TYPE_CONFIG]
@@ -254,10 +224,12 @@ export default function OrganizationsPage() {
                         <Trophy className="h-3.5 w-3.5 text-foreground/70" />
                         {org.openChallenges} challenges
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Globe className="h-3.5 w-3.5" />
-                        {org.location.split(',')[0]}
-                      </span>
+                      {org.location && (
+                        <span className="flex items-center gap-1">
+                          <Globe className="h-3.5 w-3.5" />
+                          {org.location.split(',')[0]}
+                        </span>
+                      )}
                     </div>
 
                     <Link href={`/organizations/${org.slug}`} className="block">
@@ -275,6 +247,7 @@ export default function OrganizationsPage() {
             )
           })}
         </div>
+        )}
       </div>
     </div>
   )

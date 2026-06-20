@@ -305,6 +305,15 @@ const fadeUp = {
   }),
 }
 
+// ─── Codecademy-style vivid category accents ──────────────────────────────────
+const catStyle: Record<string, { grad: string; glow: string }> = {
+  'computer-science': { grad: 'bg-cat-blue',   glow: 'hsl(199 89% 48%)' },
+  'mechanical':       { grad: 'bg-cat-coral',  glow: 'hsl(25 95% 53%)' },
+  'electrical':       { grad: 'bg-cat-amber',  glow: 'hsl(25 95% 53%)' },
+  'civil':            { grad: 'bg-cat-teal',   glow: 'hsl(142 71% 45%)' },
+  'management':       { grad: 'bg-cat-purple', glow: 'hsl(199 89% 58%)' },
+}
+
 export default function LibraryPage() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery]       = useState('')
@@ -408,6 +417,7 @@ export default function LibraryPage() {
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((lesson, i) => {
                 const Icon = lesson.icon
+                const style = catStyle[lesson.category] ?? catStyle['computer-science']
                 return (
                   <motion.div
                     key={lesson.id}
@@ -419,35 +429,26 @@ export default function LibraryPage() {
                     <Link
                       href={lesson.href}
                       id={`lesson-${lesson.id}`}
-                      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-200 hover:border-primary/50"
+                      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-md"
                     >
-                      {/* ── Illustration area (like Hacksplaining image box) ── */}
+                      {/* ── Illustration area — vivid category gradient glow ── */}
                       <div
-                        className="relative flex items-center justify-center border-b border-border"
+                        className="relative flex items-center justify-center overflow-hidden border-b border-border"
                         style={{
-                          background: lesson.iconBg,
-                          minHeight: 180,
+                          background: `radial-gradient(120% 100% at 50% 0%, ${style.glow.replace(')', ' / 0.22)')}, hsl(var(--card)) 70%)`,
+                          minHeight: 168,
                         }}
                       >
+                        <div aria-hidden className="hero-grid absolute inset-0 opacity-40" />
                         {/* Tag pill */}
                         {lesson.tag && (
-                          <div
-                          className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full px-3.5 py-1 text-xs font-bold text-primary-foreground"
-                            style={{ background: 'hsl(var(--primary))' }}
-                          >
+                          <span className="absolute right-4 top-4 z-10 rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-xs font-bold text-primary backdrop-blur">
                             {lesson.tag}
-                          </div>
+                          </span>
                         )}
-                        {/* Big icon (replaces illustration) */}
-                        <div
-                          className="flex h-20 w-20 items-center justify-center rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105"
-                          style={{ background: lesson.iconBg, border: `2px solid ${lesson.iconColor}22` }}
-                        >
-                          <Icon
-                            className="h-10 w-10"
-                            style={{ color: lesson.iconColor }}
-                            strokeWidth={1.5}
-                          />
+                        {/* Big icon tile */}
+                        <div className={`relative flex h-20 w-20 items-center justify-center rounded-2xl text-white shadow-lg transition-transform duration-300 group-hover:scale-105 ${style.grad}`}>
+                          <Icon className="h-10 w-10" strokeWidth={1.75} />
                         </div>
                       </div>
 

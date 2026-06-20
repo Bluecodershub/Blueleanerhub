@@ -90,7 +90,7 @@ export default function ExercisePanel({
       {/* Header (collapsible on mobile) */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800/50 md:cursor-default"
+        className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:text-muted-foreground dark:hover:bg-gray-800/50 md:cursor-default"
       >
         <div className="flex items-center gap-2">
           <Terminal className="h-4 w-4 text-primary/80" />
@@ -106,13 +106,13 @@ export default function ExercisePanel({
 
       <div className={cn('flex flex-col', !isExpanded && 'hidden md:flex')}>
         {/* Prompt */}
-        <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-800 dark:bg-gray-900/50">
-          <p className="text-sm text-gray-700 dark:text-gray-300">{prompt}</p>
+        <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 dark:border-border dark:bg-background-secondary/50">
+          <p className="text-sm text-gray-700 dark:text-muted-foreground">{prompt}</p>
         </div>
 
         {/* Visible test cases */}
         {visibleTests.length > 0 && (
-          <div className="border-t border-gray-200 px-4 py-3 dark:border-gray-800">
+          <div className="border-t border-gray-200 px-4 py-3 dark:border-border">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
               Test Cases
             </p>
@@ -120,10 +120,10 @@ export default function ExercisePanel({
               {visibleTests.map((tc, i) => (
                 <div
                   key={i}
-                  className="rounded-lg bg-gray-100 px-3 py-2 font-mono text-xs dark:bg-gray-800"
+                  className="rounded-lg bg-gray-100 px-3 py-2 font-mono text-xs dark:bg-card"
                 >
                   <span className="text-gray-500">Input: </span>
-                  <span className="text-gray-800 dark:text-gray-200">{tc.input}</span>
+                  <span className="text-gray-800 dark:text-foreground">{tc.input}</span>
                   <br />
                   <span className="text-gray-500">Expected: </span>
                   <span className="text-foreground dark:text-foreground/70">
@@ -136,7 +136,7 @@ export default function ExercisePanel({
         )}
 
         {/* Code + run button */}
-        <div className="border-t border-gray-200 dark:border-gray-800">
+        <div className="border-t border-gray-200 dark:border-border">
           <CodePlayground
             starterCode=""
             language={language}
@@ -147,7 +147,7 @@ export default function ExercisePanel({
 
         {/* Test results */}
         {testResults.length > 0 && (
-          <div className="border-t border-gray-200 px-4 py-3 dark:border-gray-800">
+          <div className="border-t border-gray-200 px-4 py-3 dark:border-border">
             {allPassed ? (
               <div className="flex items-center gap-2 rounded-xl bg-secondary px-4 py-3 dark:bg-background">
                 <CheckCircle2 className="h-5 w-5 text-foreground/90" />

@@ -12,6 +12,9 @@ import { cn } from '@/lib/utils'
 import { OnboardingTour, useOnboarding } from '@/components/onboarding/OnboardingTour'
 import { trackingAPI } from '@/lib/api-civilization'
 import { toast } from 'sonner'
+import { LanguageBadge } from '@/components/ui/LanguageLogo'
+import { RUNTIME_LANGUAGES } from '@/lib/languages'
+import { AppPage, PageHeader } from '@/components/layout/AppPage'
 
 // Lazy load heavy components
 const XPProgressBar = lazy(() => import('@/components/gamification/XPProgressBar').then(m => ({ default: m.XPProgressBar })))
@@ -101,7 +104,7 @@ const onboardingSteps = [
 
 function OnboardingChecklist({ completedSteps, onStepClick }: { completedSteps: string[]; onStepClick: (stepId: string) => void }) {
   return (
-    <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-6">
+    <div className="rounded-[8px] border border-primary/20 bg-primary/[0.04] p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-semibold text-foreground">Get Started</h3>
         <Badge variant="outline" className="text-xs">
@@ -116,7 +119,7 @@ function OnboardingChecklist({ completedSteps, onStepClick }: { completedSteps: 
             <button
               key={step.id}
               onClick={() => onStepClick(step.id)}
-              className="flex w-full items-center gap-3 rounded-xl p-3 transition-colors hover:bg-card"
+              className="flex w-full items-center gap-3 rounded-[7px] p-3 transition-colors hover:bg-card"
             >
               {isComplete ? (
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
@@ -139,9 +142,9 @@ function OnboardingChecklist({ completedSteps, onStepClick }: { completedSteps: 
 // ─── Quick Stats ─────────────────────────────────────────────────────────────────
 function QuickStatCard({ label, value, icon: Icon, color, trend }: { label: string; value: string | number; icon: typeof Flame; color: string; trend?: string }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-lg">
+    <div className="group relative overflow-hidden rounded-[8px] border border-border/80 bg-card/90 p-5 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
       <div className="flex items-start justify-between">
-        <div className={cn('rounded-xl p-2.5', color)}>
+        <div className={cn('rounded-[7px] p-2.5', color)}>
           <Icon className="h-5 w-5" />
         </div>
         {trend && (
@@ -169,8 +172,8 @@ function LearningActivity({ type, title, time, xp }: { type: string; title: stri
   const Icon = icons[type] || BookOpen
 
   return (
-    <div className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-card">
-      <div className="rounded-xl bg-primary/10 p-2">
+    <div className="flex items-center gap-4 rounded-[7px] p-3 transition-colors hover:bg-card">
+      <div className="rounded-[7px] bg-primary/10 p-2">
         <Icon className="h-4 w-4 text-primary" />
       </div>
       <div className="flex-1 min-w-0">
@@ -302,43 +305,47 @@ export default function StudentDashboard() {
   }, [user, router])
 
   if (loading) {
-    return (
-      <div className="min-h-screen p-6 lg:p-8">
-        <DashboardSkeleton />
-      </div>
-    )
+    return <DashboardSkeleton />
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <AppPage>
       <Suspense fallback={<DashboardSkeleton />}>
         <Confetti active={showConfetti} />
       </Suspense>
 
-      <div className="mx-auto max-w-7xl p-6 lg:p-8 space-y-8">
-        {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Welcome back, {firstName}
-            </h1>
-            <p className="mt-1 text-muted-foreground">
-              {isNewUser
-                ? "Let's get you started on your learning journey!"
-                : `You've earned ${xp.toLocaleString()} XP so far. Keep it up!`}
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Suspense fallback={<div className="h-12 w-32 rounded-xl bg-card animate-pulse" />}>
+      <div className="space-y-7">
+        {/* ── Header (premium hero band) ─────────────────────────────────── */}
+        <PageHeader
+          eyebrow="Learner dashboard"
+          icon={BookOpen}
+          title={`Welcome back, ${firstName}`}
+          description={
+            isNewUser
+              ? 'Start with a short assessment, then build momentum with daily practice.'
+              : `You have earned ${xp.toLocaleString()} XP. Continue from your most recent learning activity.`
+          }
+          actions={
+            <>
+              <div className="flex items-center gap-2.5 rounded-[8px] border border-border bg-card/70 px-4 py-2.5">
+                <Award className="h-5 w-5 text-sky-400" />
+                <div>
+                  <p className="text-lg font-bold leading-none text-foreground">Lvl {level}</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{levelXP}/{nextXP} XP</p>
+                </div>
+              </div>
               {streak > 0 && (
-                <div className="flex items-center gap-2 rounded-full bg-amber-500/10 px-4 py-2">
+                <div className="flex items-center gap-2.5 rounded-[8px] border border-amber-500/20 bg-amber-500/10 px-4 py-2.5">
                   <Flame className="h-5 w-5 text-amber-500" />
-                  <span className="font-semibold text-amber-600">{streak} day streak</span>
+                  <div>
+                    <p className="text-lg font-bold leading-none text-amber-500">{streak}</p>
+                    <p className="mt-1 text-[11px] text-amber-600/80">day streak</p>
+                  </div>
                 </div>
               )}
-            </Suspense>
-          </div>
-        </header>
+            </>
+          }
+        />
 
         {/* ── Onboarding for New Users ─────────────────────────────────── */}
         {isNewUser && (
@@ -365,9 +372,9 @@ export default function StudentDashboard() {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <Link
             href="/daily-quiz"
-            className="group flex flex-col items-center gap-3 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-transparent p-6 text-center transition-all hover:border-primary/40 hover:shadow-lg hover:-translate-y-1"
+            className="group flex flex-col items-center gap-3 rounded-[8px] border border-primary/20 bg-primary/[0.06] p-6 text-center transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
           >
-            <div className="rounded-2xl bg-primary/20 p-4 transition-transform group-hover:scale-110">
+            <div className="rounded-[7px] bg-primary/15 p-4 transition-transform group-hover:scale-105">
               <Target className="h-6 w-6 text-primary" />
             </div>
             <span className="font-semibold text-foreground">Daily Quiz</span>
@@ -375,9 +382,9 @@ export default function StudentDashboard() {
           </Link>
           <Link
             href="/exercises"
-            className="group flex flex-col items-center gap-3 rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-transparent p-6 text-center transition-all hover:border-emerald-500/40 hover:shadow-lg hover:-translate-y-1"
+            className="group flex flex-col items-center gap-3 rounded-[8px] border border-emerald-500/20 bg-emerald-500/[0.06] p-6 text-center transition-all hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-md"
           >
-            <div className="rounded-2xl bg-emerald-500/20 p-4 transition-transform group-hover:scale-110">
+            <div className="rounded-[7px] bg-emerald-500/15 p-4 transition-transform group-hover:scale-105">
               <Code2 className="h-6 w-6 text-emerald-500" />
             </div>
             <span className="font-semibold text-foreground">Practice</span>
@@ -385,19 +392,19 @@ export default function StudentDashboard() {
           </Link>
           <Link
             href="/learning-tracks"
-            className="group flex flex-col items-center gap-3 rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-transparent p-6 text-center transition-all hover:border-violet-500/40 hover:shadow-lg hover:-translate-y-1"
+            className="group flex flex-col items-center gap-3 rounded-[8px] border border-sky-500/20 bg-sky-500/[0.06] p-6 text-center transition-all hover:-translate-y-0.5 hover:border-sky-500/40 hover:shadow-md"
           >
-            <div className="rounded-2xl bg-violet-500/20 p-4 transition-transform group-hover:scale-110">
-              <BookOpen className="h-6 w-6 text-violet-500" />
+            <div className="rounded-[7px] bg-sky-500/15 p-4 transition-transform group-hover:scale-105">
+              <BookOpen className="h-6 w-6 text-sky-500" />
             </div>
             <span className="font-semibold text-foreground">Learn Track</span>
             <span className="text-xs text-muted-foreground">+50-100 XP</span>
           </Link>
           <Link
             href="/hackathons"
-            className="group flex flex-col items-center gap-3 rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-transparent p-6 text-center transition-all hover:border-amber-500/40 hover:shadow-lg hover:-translate-y-1"
+            className="group flex flex-col items-center gap-3 rounded-[8px] border border-amber-500/20 bg-amber-500/[0.06] p-6 text-center transition-all hover:-translate-y-0.5 hover:border-amber-500/40 hover:shadow-md"
           >
-            <div className="rounded-2xl bg-amber-500/20 p-4 transition-transform group-hover:scale-110">
+            <div className="rounded-[7px] bg-amber-500/15 p-4 transition-transform group-hover:scale-105">
               <Trophy className="h-6 w-6 text-amber-500" />
             </div>
             <span className="font-semibold text-foreground">Hackathon</span>
@@ -407,11 +414,39 @@ export default function StudentDashboard() {
 
         {/* ── Stats Overview ───────────────────────────────────────────── */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <QuickStatCard label="Total XP" value={xp.toLocaleString()} icon={Zap} color="bg-amber-500/20 text-amber-500" trend="+12%" />
+          <QuickStatCard label="Total XP" value={xp.toLocaleString()} icon={Zap} color="bg-amber-500/20 text-amber-500" />
           <QuickStatCard label="Quizzes" value={quizzesTaken} icon={Target} color="bg-primary/20 text-primary" />
-          <QuickStatCard label="Tracks" value={enrolledPaths} icon={BookOpen} color="bg-violet-500/20 text-violet-500" />
+          <QuickStatCard label="Tracks" value={enrolledPaths} icon={BookOpen} color="bg-sky-500/20 text-sky-500" />
           <QuickStatCard label="Hackathons" value={hackathonCount} icon={Trophy} color="bg-amber-500/20 text-amber-500" />
         </div>
+
+        <section className="overflow-hidden rounded-3xl border border-border bg-card">
+          <div className="grid gap-6 p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                <Code2 className="h-3.5 w-3.5" />
+                Live coding sandbox
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Run real code from your dashboard</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+                The IDE connects to the authenticated backend execution route and reports the active runtime status before every run.
+              </p>
+            </div>
+            <Button asChild className="gap-2 lg:justify-self-end">
+              <Link href="/ide">
+                Open IDE
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <div className="border-t border-border/60 bg-secondary/30 p-4">
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {RUNTIME_LANGUAGES.map((language) => (
+                <LanguageBadge key={language.id} language={language.id} showVersion className="shrink-0" />
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* ── Main Content Grid ────────────────────────────────────────── */}
         <div className="grid gap-8 lg:grid-cols-3">
@@ -506,7 +541,7 @@ export default function StudentDashboard() {
                       </div>
                       <Button 
                         onClick={() => router.push(item.tutorialSlug ? `/tutorials/view/${item.tutorialSlug}/${item.lessonId}` : `/tutorials/cs/${item.tutorialId}/${item.lessonId}`)}
-                        className="gap-2 bg-primary hover:bg-primary-dark font-bold text-white shrink-0"
+                        className="gap-2 bg-primary hover:bg-primary/90 font-bold text-black shrink-0"
                       >
                         <Play className="h-4 w-4 fill-current" /> Resume
                       </Button>
@@ -573,7 +608,7 @@ export default function StudentDashboard() {
                           onClick={() => router.push(item.tutorialSlug ? `/tutorials/view/${item.tutorialSlug}/${item.lessonId}` : `/tutorials/cs/${item.tutorialId}/${item.lessonId}`)}
                           variant="outline"
                           size="sm"
-                          className="w-full gap-1.5 font-bold hover:bg-primary hover:text-white"
+                          className="w-full gap-1.5 font-bold hover:bg-primary hover:text-black"
                         >
                           Read Now <ArrowRight className="h-3 w-3" />
                         </Button>
@@ -594,37 +629,37 @@ export default function StudentDashboard() {
           {/* Right Column */}
           <div className="space-y-6">
             {/* AI Skill Placement Card */}
-            <div className="overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 via-card to-card p-6 shadow-lg">
+            <div className="overflow-hidden rounded-3xl border border-sky-500/20 bg-gradient-to-br from-sky-500/5 via-card to-card p-6 shadow-lg">
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-indigo-400" />
+                  <Brain className="h-5 w-5 text-sky-400" />
                   <h2 className="text-lg font-semibold text-foreground">AI Skill Placement</h2>
                 </div>
-                <span className="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+                <span className="text-xs font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
                   Adaptive
                 </span>
               </div>
 
-              <div className="mb-4 bg-slate-950/40 border border-slate-850 p-4 rounded-2xl flex items-center justify-around">
+              <div className="mb-4 bg-background/40 border border-border p-4 rounded-2xl flex items-center justify-around">
                 <div className="text-center">
                   <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block">Overall Level</span>
-                  <span className="text-3xl font-extrabold text-indigo-300 block mt-1">Level {level}</span>
+                  <span className="text-3xl font-extrabold text-sky-300 block mt-1">Level {level}</span>
                 </div>
-                <div className="h-8 w-px bg-slate-800" />
+                <div className="h-8 w-px bg-border" />
                 <div className="text-center">
                   <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block">Active Domain</span>
-                  <span className="text-xs font-bold text-slate-200 block mt-2.5 truncate max-w-[120px]">{user?.domain || 'Not Onboarded'}</span>
+                  <span className="text-xs font-bold text-foreground block mt-2.5 truncate max-w-[120px]">{user?.domain || 'Not Onboarded'}</span>
                 </div>
               </div>
 
               {user?.skills && user.skills.length > 0 ? (
                 <div className="mb-4 space-y-2">
-                  <span className="text-xs font-bold text-slate-300 block">Sub-skill Breakdown</span>
+                  <span className="text-xs font-bold text-foreground block">Sub-skill Breakdown</span>
                   <div className="space-y-1.5">
                     {user.skills.slice(0, 3).map((sk: any) => (
                       <div key={sk.name} className="flex justify-between items-center text-xs">
                         <span className="text-muted-foreground">{sk.name}</span>
-                        <span className="text-indigo-300 font-semibold">Lvl {sk.level}</span>
+                        <span className="text-sky-300 font-semibold">Lvl {sk.level}</span>
                       </div>
                     ))}
                   </div>
@@ -640,33 +675,35 @@ export default function StudentDashboard() {
                 </div>
               )}
 
-              <Button className="w-full gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold" onClick={() => router.push('/student/roadmap')}>
+              <Button className="w-full gap-2 bg-gradient-to-r from-sky-600 to-sky-600 hover:from-sky-500 hover:to-sky-500 text-white font-bold" onClick={() => router.push('/student/roadmap')}>
                 <Award className="h-4 w-4" /> View Skill Tree Roadmap
               </Button>
             </div>
 
-            {/* AI Mentor Insights Card */}
-            <div className="overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/5 via-card to-card p-6 shadow-lg">
+            {/* AI Study Insights Card */}
+            <div className="overflow-hidden rounded-3xl border border-sky-500/20 bg-gradient-to-br from-sky-500/5 via-card to-card p-6 shadow-lg">
               <div className="mb-4 flex items-center gap-2">
-                <Bot className="h-5 w-5 text-blue-400" />
-                <h2 className="text-lg font-semibold text-foreground">AI Mentor Insights</h2>
+                <Bot className="h-5 w-5 text-sky-400" />
+                <h2 className="text-lg font-semibold text-foreground">AI Study Insights</h2>
               </div>
 
-              <div className="mb-4 relative bg-slate-950/40 border border-slate-850 p-4 rounded-2xl">
+              <div className="mb-4 relative bg-background/40 border border-border p-4 rounded-2xl">
                 {/* Talk bubble spike */}
-                <div className="absolute -left-2 top-6 h-3 w-3 rotate-45 border-l border-b border-slate-850 bg-slate-950/80" />
-                <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                <div className="absolute -left-2 top-6 h-3 w-3 rotate-45 border-l border-b border-border bg-background/80" />
+                <p className="text-xs text-foreground leading-relaxed font-medium">
                   {user?.domain === 'Software Engineering' ? 
                     `Welcome, developer! I've custom-designed a software architecture roadmap focusing on OOP & modular algorithms. Let's tackle your first node today!` :
                    user?.domain === 'Robotics Engineering' ?
                     `Greetings, roboticist! I've loaded specialized dynamic loops & PID controls into your pipeline. Complete the first task to unlock kinematics!` :
-                    `Hello! Your customized curriculum is locked and ready. Mentors are opening after beta; use your skill graph to begin practicing.`
+                    `Hello! Your customized curriculum is ready. Ask the AI tutor for domain-specific guidance whenever you need it.`
                   }
                 </p>
               </div>
 
-              <Button variant="outline" className="w-full gap-2" disabled>
-                <Users className="h-4 w-4 text-primary" /> AI Mentors Coming Soon
+              <Button asChild variant="outline" className="w-full gap-2">
+                <Link href="/ai-companion">
+                  <Bot className="h-4 w-4 text-primary" /> Open AI Tutor
+                </Link>
               </Button>
             </div>
 
@@ -751,36 +788,36 @@ export default function StudentDashboard() {
             )}
 
             {/* AI Custom Recommendations */}
-            <div className="overflow-hidden rounded-3xl border border-indigo-500/25 bg-gradient-to-br from-indigo-500/5 to-transparent">
-              <div className="bg-gradient-to-r from-indigo-500/10 to-transparent p-6 flex items-center justify-between">
+            <div className="overflow-hidden rounded-3xl border border-sky-500/25 bg-gradient-to-br from-sky-500/5 to-transparent">
+              <div className="bg-gradient-to-r from-sky-500/10 to-transparent p-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-indigo-400" />
+                  <Sparkles className="h-5 w-5 text-sky-400" />
                   <h2 className="text-lg font-semibold text-foreground">AI Next-Steps</h2>
                 </div>
-                <Badge className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] uppercase font-bold tracking-widest">
+                <Badge className="bg-sky-500/10 text-sky-400 border border-sky-500/20 text-[10px] uppercase font-bold tracking-widest">
                   Tailored
                 </Badge>
               </div>
               <div className="p-6 space-y-4">
                 {loadingTracking ? (
                   <div className="flex justify-center items-center py-6">
-                    <Loader2 className="h-6 w-6 animate-spin text-indigo-400" />
+                    <Loader2 className="h-6 w-6 animate-spin text-sky-400" />
                   </div>
                 ) : recommendations.length > 0 ? (
                   recommendations.map((rec: any, idx: number) => (
-                    <div key={idx} className="group relative rounded-2xl border border-border bg-card/65 p-4 transition-all hover:border-indigo-500/30 hover:shadow-md">
+                    <div key={idx} className="group relative rounded-2xl border border-border bg-card/65 p-4 transition-all hover:border-sky-500/30 hover:shadow-md">
                       <div className="flex items-center justify-between gap-2 mb-2">
-                        <Badge variant="outline" className="text-[9px] uppercase font-bold tracking-wider text-indigo-400 border-indigo-500/25 bg-indigo-500/5">
+                        <Badge variant="outline" className="text-[9px] uppercase font-bold tracking-wider text-sky-400 border-sky-500/25 bg-sky-500/5">
                           {rec.type || 'lesson'}
                         </Badge>
                         <span className="text-[10px] text-muted-foreground font-semibold">{rec.estimatedMinutes ? `${rec.estimatedMinutes}m` : '12m'} read</span>
                       </div>
-                      <h4 className="text-sm font-semibold text-foreground leading-snug mb-1 group-hover:text-indigo-400 transition-colors">{rec.title || 'Recommended module'}</h4>
+                      <h4 className="text-sm font-semibold text-foreground leading-snug mb-1 group-hover:text-sky-400 transition-colors">{rec.title || 'Recommended module'}</h4>
                       <p className="text-xs text-muted-foreground/80 mb-3">{rec.reason || 'Based on your interest in software development.'}</p>
                       <Button 
                         onClick={() => router.push('/learning-tracks')}
                         size="sm"
-                        className="w-full gap-1 text-[11px] font-bold uppercase tracking-wider bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white border border-indigo-500/20"
+                        className="w-full gap-1 text-[11px] font-bold uppercase tracking-wider bg-sky-600/10 hover:bg-sky-600 text-sky-400 hover:text-white border border-sky-500/20"
                       >
                         Launch Module <ChevronRight className="h-3.5 w-3.5" />
                       </Button>
@@ -854,6 +891,6 @@ export default function StudentDashboard() {
 
       {/* Onboarding Tour for first-time users */}
       <OnboardingTour isFirstTime={isFirstTime && showTour} onComplete={completeTour} />
-    </div>
+    </AppPage>
   )
 }

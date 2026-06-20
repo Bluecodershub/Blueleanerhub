@@ -125,6 +125,80 @@ export const tutorialsAPI = {
 
 // ─── Tracking Telemetry & Wishlist ──────────────────────────────────────────
 
+export const publicSearchAPI = {
+  search: async (query: string): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/public/search', { params: { q: query } }))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+}
+
+export const spacesAPI = {
+  listSpaces: async (): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/spaces/spaces'))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  listChallenges: async (params?: Record<string, string>): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/spaces/challenges', { params }))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  getChallenge: async (id: string | number): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get(`/spaces/challenges/${id}`))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  execute: async (
+    challengeId: string | number,
+    language: string,
+    code: string
+  ): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.post('/spaces/execute', { challengeId, language, code }))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  getSubmissions: async (): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/spaces/submissions'))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  getDaily: async (): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/spaces/daily'))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  getStats: async (): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/spaces/stats'))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+}
+
 export const trackingAPI = {
   saveLesson: async (tutorialId: string, lessonId: string): Promise<ApiResponse<any>> => {
     try {
@@ -374,6 +448,7 @@ export const hackathonsAPI = {
   submitCode: async (id: string | number, data: {
     language: string
     sourceCode: string
+    repoUrl?: string
     demoUrl?: string
     presentationUrl?: string
   }): Promise<ApiResponse<unknown>> => {
@@ -886,6 +961,20 @@ export const aiAPI = {
   reviewCode: async (code: string, language: string): Promise<ApiResponse<unknown>> => {
     try {
       const data = await handleApiResponse(api.post('/ai/review', { code, language }))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  // Structured AI review (scores + strengths/weaknesses/roadmap) via FastAPI.
+  reviewSubmission: async (payload: {
+    submissionType: 'code' | 'assignment' | 'project' | 'capstone' | 'hackathon'
+    content: string
+    language?: string
+    context?: string
+  }): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.post('/ai/review/submission', payload))
       return { data }
     } catch (error) {
       return createErrorResponse(error)

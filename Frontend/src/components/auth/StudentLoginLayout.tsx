@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { GraduationCap } from 'lucide-react'
+import { BrandMark } from '@/components/branding/Logo'
 
 interface StudentLoginLayoutProps {
   children: React.ReactNode
@@ -10,16 +10,14 @@ interface StudentLoginLayoutProps {
 
 export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children }) => {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4 py-8">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-8">
       {/* Top Logo — compact */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 mb-6 flex items-center gap-2"
       >
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-          <GraduationCap size={20} />
-        </div>
+        <BrandMark size={36} className="rounded-xl" priority />
         <span className="font-heading text-lg font-semibold text-foreground">Bluelearnerhub</span>
       </motion.div>
 

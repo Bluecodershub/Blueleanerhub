@@ -19,24 +19,19 @@ export default function EmptyState({
   imageUrl,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
-      {/* Icon or Image */}
+    <div className="flex min-h-56 flex-col items-center justify-center px-6 py-10 text-center">
       {imageUrl ? (
-        <img src={imageUrl} alt={title} className="mb-6 h-64 w-64 opacity-50" />
+        <img src={imageUrl} alt={title} className="mb-5 h-32 w-32 rounded-[8px] object-cover opacity-75" />
       ) : Icon ? (
-        <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-border bg-secondary">
-          <Icon className="h-12 w-12 text-muted-foreground" />
+        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[8px] border border-border bg-secondary/70">
+          <Icon className="h-5 w-5 text-muted-foreground" />
         </div>
       ) : null}
 
-      {/* Title */}
-      <h3 className="mb-2 text-2xl">{title}</h3>
+      <h3 className="text-base font-semibold text-foreground">{title}</h3>
+      <p className="mt-1 max-w-md text-sm leading-6 text-muted-foreground">{description}</p>
 
-      {/* Description */}
-      <p className="mb-6 max-w-md text-muted-foreground">{description}</p>
-
-      {/* Action Button */}
-      {actionLabel && onAction && <Button onClick={onAction}>{actionLabel}</Button>}
+      {actionLabel && onAction && <Button onClick={onAction} size="sm" className="mt-5">{actionLabel}</Button>}
     </div>
   )
 }

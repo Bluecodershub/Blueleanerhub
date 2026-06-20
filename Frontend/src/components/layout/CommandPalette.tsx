@@ -8,12 +8,14 @@ import {
   Book, 
   Code, 
   Cpu, 
-  Zap, 
-  Users, 
-  Trophy, 
-  Layout, 
+  Zap,
+  Users,
+  Trophy,
+  Layout,
   ArrowRight,
   LockKeyhole,
+  Code2,
+  Rocket,
 } from 'lucide-react'
 
 export function CommandPalette() {
@@ -80,12 +82,13 @@ export function CommandPalette() {
                 <Book className="mr-2 h-4 w-4" />
                 <span>All Tutorials</span>
               </Item>
-              <Item disabled>
-                <Users className="mr-2 h-4 w-4" />
-                <span>Expert Mentors</span>
-                <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase text-primary">
-                  Soon <LockKeyhole className="h-3 w-3" />
-                </span>
+              <Item onSelect={() => runCommand(() => router.push('/hackathons/practice'))}>
+                <Code2 className="mr-2 h-4 w-4" />
+                <span>Practice Problems</span>
+              </Item>
+              <Item onSelect={() => runCommand(() => router.push('/hackathons/capstones'))}>
+                <Rocket className="mr-2 h-4 w-4" />
+                <span>Capstone Projects</span>
               </Item>
               <Item onSelect={() => runCommand(() => router.push('/hackathons'))}>
                 <Trophy className="mr-2 h-4 w-4" />

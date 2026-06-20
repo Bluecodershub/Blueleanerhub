@@ -17,8 +17,6 @@ import {
   Search,
   ChevronDown,
   Loader2,
-  ThumbsUp,
-  Users,
   Bot,
   Sparkles,
   Bug,
@@ -33,6 +31,14 @@ import { api } from '@/lib/api'
 import { apiFetch } from '@/lib/apiFetch'
 import { toast } from 'sonner'
 import { CodeExecutionResponse } from '@/types'
+import { LanguageLogo } from '@/components/ui/LanguageLogo'
+import {
+  DEFAULT_RUNTIME_LANGUAGE,
+  RUNTIME_LANGUAGES,
+  getRuntimeLanguage,
+  getStarterCode,
+  getSupportedRuntimeLanguages,
+} from '@/lib/languages'
 
 // Lazy load Monaco to avoid large initial bundle
 const CodeEditor = dynamic(() => import('@/components/ide/CodeEditor'), {
@@ -47,49 +53,12 @@ const CodeEditor = dynamic(() => import('@/components/ide/CodeEditor'), {
   ),
 })
 
-const LANGUAGE_MAP: Record<string, string> = {
-  'Python 3': 'python',
-  JavaScript: 'javascript',
-  TypeScript: 'typescript',
-  Java: 'java',
-  'C++': 'cpp',
-  Go: 'go',
-}
-
-const STARTER_CODE: Record<string, string> = {
-  'Python 3': `def two_sum(nums: list[int], target: int) -> list[int]:
-    seen = {}
-    for i, n in enumerate(nums):
-        complement = target - n
-        if complement in seen:
-            return [seen[complement], i]
-        seen[n] = i
-    return []
-`,
-  JavaScript: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-var twoSum = function(nums, target) {
-    const map = new Map();
-    for (let i = 0; i < nums.length; i++) {
-        const complement = target - nums[i];
-        if (map.has(complement)) return [map.get(complement), i];
-        map.set(nums[i], i);
-    }
-    return [];
-};
-`,
-}
-
-const MOCK_PROBLEM = {
+// Built-in sample problem used as the default playground exercise. This is
+// educational content (not fake analytics) — no fabricated like/submission counts.
+const SAMPLE_PROBLEM = {
   id: 1,
   title: 'Two Sum',
   difficulty: 'Easy',
-  acceptance: '49.1%',
-  likes: 52400,
-  submissions: 98200,
   tags: ['Array', 'Hash Table'],
   description: `Given an array of integers \`nums\` and an integer \`target\`, return indices of the two numbers such that they add up to \`target\`.`,
   note: 'You may assume that each input would have exactly one solution, and you may not use the same element twice.',
@@ -146,8 +115,8 @@ type PanelTab = 'description' | 'hints' | 'discussion'
 type OutputTab = 'testcases' | 'output' | 'ai_help'
 
 export default function CodingPracticePage() {
-  const [language, setLanguage] = useState('Python 3')
-  const [code, setCode] = useState(STARTER_CODE['Python 3'])
+  const [language, setLanguage] = useState(DEFAULT_RUNTIME_LANGUAGE.id)
+  const [code, setCode] = useState(DEFAULT_RUNTIME_LANGUAGE.starterCode)
   const [leftPanel, setLeftPanel] = useState<PanelTab>('description')
   const [outputTab, setOutputTab] = useState<OutputTab>('testcases')
   const [aiOutput, setAiOutput] = useState('')
@@ -170,7 +139,8 @@ export default function CodingPracticePage() {
       setSessionId(existing)
     }
     exercisesAPI.list({ limit: 20 }).then((d: any) => {
-      if (d?.exercises?.length) setProblems(d.exercises)
+      const list = d?.data?.data ?? d?.data ?? []
+      if (Array.isArray(list)) setProblems(list)
     }).catch(() => {})
 
     codeAPI.status().then((res: any) => {
@@ -186,8 +156,9 @@ export default function CodingPracticePage() {
   }, [])
 
   const handleLanguageChange = (lang: string) => {
-    setLanguage(lang)
-    setCode(STARTER_CODE[lang] || `// Write your ${lang} solution here\n`)
+    const runtime = getRuntimeLanguage(lang)
+    setLanguage(runtime.id)
+    setCode(runtime.starterCode)
     setRunResult(null)
   }
 
@@ -207,8 +178,8 @@ export default function CodingPracticePage() {
     try {
       const data = await codeAPI.execute(
         code,
-        LANGUAGE_MAP[language] || 'python',
-        undefined,
+        language,
+        SAMPLE_PROBLEM.testCases[activeCase]?.stdin,
         sessionId || undefined,
         { sandboxType: 'hackathon', persistSession: true }
       )
@@ -263,32 +234,34 @@ export default function CodingPracticePage() {
     try {
       // Run against all test cases sequentially
       const results = await Promise.all(
-        MOCK_PROBLEM.testCases.map((tc) =>
+        SAMPLE_PROBLEM.testCases.map((tc) =>
           codeAPI.execute(
             code,
-            LANGUAGE_MAP[language] || 'python',
+            language,
             tc.stdin,
             undefined,
             { sandboxType: 'hackathon' }
           ).catch(() => null)
         )
       )
-      const allPassed = results.every((r: any) => {
-        if (!r) return false
+      let passedCount = 0
+      results.forEach((r: any, idx) => {
+        if (!r) return
         const d = unwrapExecutionResponse(r)
-        return !d?.stderr && !d?.compile_output && d?.stdout
+        if (d?.stderr || d?.compile_output) return
+        const expected = (SAMPLE_PROBLEM.testCases[idx]?.expected ?? '').replace(/\s+/g, '')
+        const actual = (d?.stdout ?? '').replace(/\s+/g, '')
+        if (expected && actual === expected) passedCount += 1
       })
+      const total = SAMPLE_PROBLEM.testCases.length
+      const allPassed = passedCount === total
 
       setRunResult({
         status: allPassed ? 'pass' : 'fail',
-        output: allPassed
-          ? `${MOCK_PROBLEM.testCases.length}/${MOCK_PROBLEM.testCases.length} test cases passed`
-          : 'Some test cases failed',
-        runtime: '52ms',
-        memory: '17.2 MB',
+        output: `${passedCount}/${total} test cases passed`,
       })
 
-      if (allPassed) toast.success('All tests passed! +50 XP earned')
+      if (allPassed) toast.success('All tests passed')
     } catch {
       setRunResult({ status: 'error', error: 'Submission failed. Please try again.' })
     } finally {
@@ -297,7 +270,7 @@ export default function CodingPracticePage() {
   }
 
   const handleReset = () => {
-    setCode(STARTER_CODE[language] || '')
+    setCode(getStarterCode(language))
     setRunResult(null)
   }
 
@@ -328,7 +301,7 @@ export default function CodingPracticePage() {
         method: 'POST',
         body: JSON.stringify({
           code,
-          language: LANGUAGE_MAP[language] || 'python',
+          language,
           errorMsg: runResult?.error || '',
           action
         })
@@ -377,7 +350,7 @@ export default function CodingPracticePage() {
       try {
         const res = await api.post('/adaptive-learning/sandbox/assist', {
           code,
-          language: LANGUAGE_MAP[language] || 'python',
+          language,
           errorMsg: runResult?.error || '',
           action
         })
@@ -404,7 +377,7 @@ export default function CodingPracticePage() {
         method: 'POST',
         body: JSON.stringify({
           code,
-          language: LANGUAGE_MAP[language] || 'python',
+          language,
           errorMsg: runResult?.error || '',
           action: 'custom',
           customPrompt
@@ -449,7 +422,7 @@ export default function CodingPracticePage() {
       try {
         const res = await api.post('/adaptive-learning/sandbox/assist', {
           code,
-          language: LANGUAGE_MAP[language] || 'python',
+          language,
           errorMsg: runResult?.error || '',
           action: 'custom',
           customPrompt
@@ -465,11 +438,12 @@ export default function CodingPracticePage() {
   }
 
   const runtimeReady = runtimeStatus?.configured !== false
-  const selectedRuntimeLanguage = LANGUAGE_MAP[language] || 'python'
   const runtimeSupportsLanguage = !runtimeStatus?.supportedLanguages?.length ||
-    runtimeStatus.supportedLanguages.includes(selectedRuntimeLanguage)
+    runtimeStatus.supportedLanguages.includes(language)
   const canExecute = runtimeReady && runtimeSupportsLanguage
   const isExecuting = running || submitting
+  const activeRuntime = getRuntimeLanguage(language)
+  const selectableLanguages = getSupportedRuntimeLanguages(runtimeStatus?.supportedLanguages)
 
   return (
     <div className="-mx-4 flex h-[calc(100vh-120px)] flex-col overflow-hidden sm:-mx-6 lg:-mx-8">
@@ -481,15 +455,12 @@ export default function CodingPracticePage() {
             className="flex items-center gap-2 text-sm font-bold text-white transition-colors hover:text-primary"
           >
             <Code2 className="h-4 w-4 text-primary" />
-            {MOCK_PROBLEM.title}
+            {SAMPLE_PROBLEM.title}
             <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${showProblems ? 'rotate-180' : ''}`} />
           </button>
           <div className="hidden items-center gap-2 sm:flex">
-            <Badge className={`border-0 bg-emerald-500/10 text-[10px] font-bold ${diffColors[MOCK_PROBLEM.difficulty]}`}>
-              {MOCK_PROBLEM.difficulty}
-            </Badge>
-            <Badge variant="outline" className="border-border text-[10px] text-muted-foreground">
-              {MOCK_PROBLEM.acceptance} acceptance
+            <Badge className={`border-0 bg-emerald-500/10 text-[10px] font-bold ${diffColors[SAMPLE_PROBLEM.difficulty]}`}>
+              {SAMPLE_PROBLEM.difficulty}
             </Badge>
           </div>
         </div>
@@ -559,7 +530,7 @@ export default function CodingPracticePage() {
               </div>
             </div>
             <div className="max-h-64 overflow-y-auto py-1">
-              {(problems.length > 0 ? problems : [MOCK_PROBLEM]).map((p, i) => (
+              {(problems.length > 0 ? problems : [SAMPLE_PROBLEM]).map((p, i) => (
                 <button
                   key={p.id || i}
                   onClick={() => setShowProblems(false)}
@@ -601,11 +572,11 @@ export default function CodingPracticePage() {
             {leftPanel === 'description' && (
               <>
                 <div className="space-y-3">
-                  <p className="text-sm leading-relaxed text-muted-foreground">{MOCK_PROBLEM.description}</p>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{MOCK_PROBLEM.note}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{SAMPLE_PROBLEM.description}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{SAMPLE_PROBLEM.note}</p>
                 </div>
                 <div className="space-y-3">
-                  {MOCK_PROBLEM.examples.map((ex, i) => (
+                  {SAMPLE_PROBLEM.examples.map((ex, i) => (
                     <div key={i} className="space-y-2 rounded-xl border border-border bg-background/50 p-4">
                       <p className="text-xs font-bold text-white">Example {i + 1}</p>
                       <div className="space-y-1 font-mono text-xs">
@@ -619,7 +590,7 @@ export default function CodingPracticePage() {
                 <div className="space-y-2">
                   <p className="text-xs font-bold uppercase tracking-wider text-white">Constraints</p>
                   <ul className="space-y-1">
-                    {MOCK_PROBLEM.constraints.map((c, i) => (
+                    {SAMPLE_PROBLEM.constraints.map((c, i) => (
                       <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
                         <ChevronRight className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
                         <code className="font-mono">{c}</code>
@@ -627,16 +598,12 @@ export default function CodingPracticePage() {
                     ))}
                   </ul>
                 </div>
-                <div className="flex items-center gap-4 border-t border-border pt-2 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5"><ThumbsUp className="h-3.5 w-3.5" />{(MOCK_PROBLEM.likes / 1000).toFixed(1)}K</span>
-                  <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />{(MOCK_PROBLEM.submissions / 1000).toFixed(1)}K submissions</span>
-                </div>
               </>
             )}
 
             {leftPanel === 'hints' && (
               <div className="space-y-3">
-                {MOCK_PROBLEM.hints.map((hint, i) => (
+                {SAMPLE_PROBLEM.hints.map((hint, i) => (
                   <details key={i} className="group rounded-xl border border-border bg-background/50 p-4">
                     <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-foreground/90">
                       <span className="flex items-center gap-2"><Lightbulb className="h-4 w-4 text-amber-400" />Hint {i + 1}</span>
@@ -660,17 +627,26 @@ export default function CodingPracticePage() {
 
         {/* CENTER — Code Editor */}
         <div className="flex min-w-0 flex-1 flex-col">
-          <div className="flex shrink-0 items-center gap-3 border-b border-border bg-card/20 px-4 py-2">
-            <select
-              value={language}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              className="cursor-pointer border-none bg-transparent text-xs font-semibold text-foreground/80 focus:outline-none"
-            >
-              {Object.keys(LANGUAGE_MAP).map((lang) => (
-                <option key={lang} value={lang}>{lang}</option>
-              ))}
-            </select>
+          <div className="flex shrink-0 flex-wrap items-center gap-3 border-b border-border bg-card/20 px-4 py-2">
+            <div className="flex items-center gap-2 rounded-lg border border-border bg-background/60 px-2.5 py-1.5">
+              <LanguageLogo language={activeRuntime.id} size={20} />
+              <select
+                value={language}
+                onChange={(e) => handleLanguageChange(e.target.value)}
+                className="cursor-pointer border-none bg-transparent text-xs font-semibold text-foreground/90 focus:outline-none"
+                aria-label="Programming language"
+              >
+                {(selectableLanguages.length > 0 ? selectableLanguages : RUNTIME_LANGUAGES).map((runtime) => (
+                  <option key={runtime.id} value={runtime.id}>
+                    {runtime.name} {runtime.extension}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="h-3 w-px bg-border" />
+            <span className="hidden text-xs text-muted-foreground sm:inline">
+              {activeRuntime.version} runtime
+            </span>
             <span className="text-xs text-muted-foreground">
               {sessionId ? `Runtime ${sessionId.slice(0, 8)}` : 'Runtime starts on first run'}
             </span>
@@ -700,7 +676,7 @@ export default function CodingPracticePage() {
           )}
           {runtimeStatus?.configured && !runtimeSupportsLanguage && (
             <div className="border-b border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs text-amber-100">
-              The active runtime supports {runtimeStatus.supportedLanguages?.join(', ')}. Select Python 3 to run code locally.
+              The active runtime supports {runtimeStatus.supportedLanguages?.join(', ')}. Select an available language to execute code locally.
             </div>
           )}
 
@@ -709,7 +685,7 @@ export default function CodingPracticePage() {
               key={language}
               value={code}
               onChange={setCode}
-              language={LANGUAGE_MAP[language] || 'python'}
+              language={activeRuntime.monacoLanguage}
               isStandalone={false}
             />
           </div>
@@ -735,7 +711,7 @@ export default function CodingPracticePage() {
             {outputTab === 'testcases' && (
               <>
                 <div className="flex gap-2">
-                  {MOCK_PROBLEM.testCases.map((_, i) => (
+                  {SAMPLE_PROBLEM.testCases.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setActiveCase(i)}
@@ -751,14 +727,14 @@ export default function CodingPracticePage() {
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Input</label>
                     <textarea
-                      defaultValue={MOCK_PROBLEM.testCases[activeCase].input}
+                      defaultValue={SAMPLE_PROBLEM.testCases[activeCase].input}
                       className="h-20 w-full resize-none rounded-xl border border-border bg-background/60 p-3 font-mono text-xs text-foreground/90 focus:outline-none focus:ring-1 focus:ring-primary/30"
                     />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Expected Output</label>
                     <div className="w-full rounded-xl border border-border bg-background/60 p-3 font-mono text-xs text-foreground/90">
-                      {MOCK_PROBLEM.testCases[activeCase].expected}
+                      {SAMPLE_PROBLEM.testCases[activeCase].expected}
                     </div>
                   </div>
                 </div>
@@ -846,7 +822,7 @@ export default function CodingPracticePage() {
               <div className="space-y-4">
                 {/* AI Assistant Quick controls */}
                 <div className="space-y-2.5">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-400">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400">
                     <Bot className="h-4 w-4 animate-pulse" />
                     <span>AI Copilot Diagnostics</span>
                   </div>
@@ -856,9 +832,9 @@ export default function CodingPracticePage() {
                       size="sm"
                       onClick={() => handleAICopilot('debug')}
                       disabled={aiLoading}
-                      className="bg-indigo-650 hover:bg-indigo-550 text-[10px] font-bold h-8 rounded-xl"
+                      className="bg-sky-650 hover:bg-sky-550 text-[10px] font-bold h-8 rounded-xl"
                     >
-                      <Bug className="mr-1.5 h-3.5 w-3.5 text-indigo-400" /> Debug Code
+                      <Bug className="mr-1.5 h-3.5 w-3.5 text-sky-400" /> Debug Code
                     </Button>
                     <Button
                       size="sm"
@@ -883,10 +859,10 @@ export default function CodingPracticePage() {
                 </div>
 
                 {/* AI output area */}
-                <div className="rounded-xl border border-slate-850 bg-slate-950 p-3.5 font-mono text-[10.5px] leading-relaxed text-slate-350 min-h-[180px] max-h-[280px] overflow-y-auto whitespace-pre-wrap select-text selection:bg-indigo-500/30 custom-scrollbar">
+                <div className="rounded-xl border border-slate-850 bg-slate-950 p-3.5 font-mono text-[10.5px] leading-relaxed text-slate-350 min-h-[180px] max-h-[280px] overflow-y-auto whitespace-pre-wrap select-text selection:bg-sky-500/30 custom-scrollbar">
                   {aiLoading && !aiOutput ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-10">
-                      <Loader2 className="h-5 w-5 animate-spin text-indigo-500" />
+                      <Loader2 className="h-5 w-5 animate-spin text-sky-500" />
                       <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider animate-pulse">Consulting inbuilt AI engine...</span>
                     </div>
                   ) : aiOutput ? (
@@ -908,13 +884,13 @@ export default function CodingPracticePage() {
                       if (e.key === 'Enter') handleAICustomPrompt()
                     }}
                     disabled={aiLoading}
-                    className="bg-slate-950 border-slate-850 focus-visible:ring-indigo-500/40 text-[11px] h-9 rounded-xl placeholder:text-slate-650"
+                    className="bg-slate-950 border-slate-850 focus-visible:ring-sky-500/40 text-[11px] h-9 rounded-xl placeholder:text-slate-650"
                   />
                   <Button
                     size="sm"
                     onClick={handleAICustomPrompt}
                     disabled={aiLoading || !aiInput.trim()}
-                    className="bg-indigo-600 hover:bg-indigo-500 h-9 rounded-xl px-4 font-bold text-xs"
+                    className="bg-sky-600 hover:bg-sky-500 h-9 rounded-xl px-4 font-bold text-xs"
                   >
                     Ask
                   </Button>

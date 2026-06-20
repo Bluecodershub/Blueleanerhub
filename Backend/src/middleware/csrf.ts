@@ -36,6 +36,7 @@ const EXEMPT_PATHS = new Set([
   '/api/v1/auth/forgot-password',
   '/api/v1/auth/reset-password',
   '/api/v1/payments/webhook',
+  '/api/v1/legal/grievance', // public, anonymous grievance form (rate-limited + validated)
   '/health',
 ]);
 

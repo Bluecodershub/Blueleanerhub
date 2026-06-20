@@ -74,8 +74,8 @@ const tutorials: Tutorial[] = [
     icon: Palette,
     lessons: 38,
     level: 'Beginner',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
+    color: 'text-sky-500',
+    bgColor: 'bg-sky-500/10',
     topics: ['Selectors', 'Box Model', 'Flexbox', 'Grid', 'Animations']
   },
   {
@@ -292,7 +292,7 @@ export function TutorialsIndex() {
       </section>
 
       {/* Quick Reference */}
-      <section className="rounded-3xl bg-gradient-to-br from-primary/5 to-violet-600/5 p-8">
+      <section className="rounded-3xl bg-gradient-to-br from-primary/5 to-sky-600/5 p-8">
         <div className="mb-6 flex items-center gap-3">
           <div className="rounded-xl bg-primary/10 p-3">
             <BookOpen className="h-6 w-6 text-primary" />

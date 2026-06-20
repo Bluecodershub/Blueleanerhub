@@ -21,7 +21,7 @@ export default function ProgressChart() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
+      className="rounded-lg border border-gray-200 bg-white p-6 dark:border-border dark:bg-card"
     >
       <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
         This Week's Progress
@@ -34,23 +34,23 @@ export default function ProgressChart() {
             initial={{ height: 0 }}
             animate={{ height: `${(data.xp / maxXP) * 100}%` }}
             transition={{ delay: idx * 0.1 }}
-            className="group relative flex-1 rounded-t-lg bg-gradient-to-t from-blue-600 to-blue-400 transition-opacity hover:opacity-80"
+            className="group relative flex-1 rounded-t-lg bg-gradient-to-t from-sky-600 to-sky-400 transition-opacity hover:opacity-80"
           >
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-gray-700">
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-popover">
               {data.xp} XP
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="mt-6 flex justify-between text-xs text-gray-600 dark:text-gray-400">
+      <div className="mt-6 flex justify-between text-xs text-gray-600 dark:text-muted-foreground">
         {weekData.map((data, idx) => (
           <span key={idx}>{data.day}</span>
         ))}
       </div>
 
-      <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+      <div className="mt-6 border-t border-gray-200 pt-6 dark:border-border">
+        <p className="text-sm text-gray-600 dark:text-muted-foreground">
           <span className="font-semibold text-gray-900 dark:text-white">3,700 XP</span> this week
         </p>
       </div>

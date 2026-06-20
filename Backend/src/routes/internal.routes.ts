@@ -12,8 +12,8 @@
  */
 
 import { Router } from 'express';
-import { internalApiKeyAuth, verifyWebhookSignature } from '../middleware/internalAuth';
-import { User, Hackathon, PaymentTransaction, UserSubscription } from '../db/models';
+import { internalApiKeyAuth } from '../middleware/internalAuth';
+import { User, Hackathon } from '../db/models';
 import { config } from '../config';
 import logger from '../utils/logger';
 import mongoose from 'mongoose';
@@ -28,62 +28,12 @@ router.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'internal-api', timestamp: new Date().toISOString() });
 });
 
-// ─── Payment Verification (Stripe Webhooks) ──────────────────────────────────
-router.post('/payments/webhook', async (req, res) => {
-  try {
-    const signature = req.headers['stripe-signature'] as string;
-    const payload   = JSON.stringify(req.body);
-
-    if (!verifyWebhookSignature(payload, signature, config.stripe.webhookSecret || '')) {
-      return res.status(400).json({ error: 'Invalid signature' });
-    }
-
-    const event = req.body;
-    logger.info(`Stripe webhook: ${event.type}`);
-
-    switch (event.type) {
-      case 'payment_intent.succeeded': {
-        const pi = event.data.object;
-        // $setOnInsert equivalent to ON CONFLICT DO NOTHING
-        await PaymentTransaction.findOneAndUpdate(
-          { transactionId: pi.id },
-          { $setOnInsert: {
-            transactionId: pi.id,
-            amount:        pi.amount / 100,
-            currency:      pi.currency,
-            status:        'succeeded',
-            metadata:      pi.metadata || {},
-            createdAt:     new Date(),
-          }},
-          { upsert: true },
-        );
-        break;
-      }
-
-      case 'payment_intent.payment_failed': {
-        const pi = event.data.object;
-        logger.warn(`Payment failed: ${pi.id}`);
-        break;
-      }
-
-      case 'customer.subscription.created':
-      case 'customer.subscription.updated':
-      case 'customer.subscription.deleted': {
-        const sub = event.data.object;
-        await UserSubscription.findOneAndUpdate(
-          { stripeSubscriptionId: sub.id },
-          { $set: { status: sub.status, updatedAt: new Date() } },
-        );
-        break;
-      }
-    }
-
-    res.json({ received: true });
-  } catch (error) {
-    logger.error('Webhook error:', error);
-    res.status(400).json({ error: 'Webhook error' });
-  }
-});
+// NOTE: Stripe webhooks are handled by the public payments route
+// (POST /api/v1/payments/webhook → PaymentController.handleWebhook), which
+// verifies the signature against the RAW request body using the Stripe SDK
+// (stripe.webhooks.constructEvent). The previous handler here re-serialized
+// req.body and compared signatures with a non-constant-time string compare,
+// which is both insecure and prone to false signature mismatches — removed.
 
 // ─── Token Verification ────────────────────────────────────────────────────────
 router.get('/verify-token', async (req, res) => {

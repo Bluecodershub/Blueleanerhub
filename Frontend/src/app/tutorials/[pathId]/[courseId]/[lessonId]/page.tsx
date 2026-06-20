@@ -455,7 +455,7 @@ export default function LessonPage() {
                   }}
                   className={`group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all ${
                     i === activeLessonIndex
-                      ? 'bg-primary text-white shadow-sm shadow-primary/20'
+                      ? 'bg-primary text-black shadow-sm shadow-primary/20'
                       : 'text-muted-foreground hover:bg-muted/50'
                   }`}
                 >
@@ -514,7 +514,7 @@ export default function LessonPage() {
               size="sm"
               variant={playgroundOpen ? 'default' : 'outline'}
               onClick={() => setPlaygroundOpen(!playgroundOpen)}
-              className={`h-8 gap-1.5 rounded-xl border-border px-3 text-xs font-bold ${playgroundOpen ? 'bg-primary text-white' : ''}`}
+              className={`h-8 gap-1.5 rounded-xl border-border px-3 text-xs font-bold ${playgroundOpen ? 'bg-primary text-black' : ''}`}
             >
               <Play className="h-3.5 w-3.5" />
               {playgroundOpen ? 'Close' : 'Try it'}
@@ -544,7 +544,7 @@ export default function LessonPage() {
               {/* Lesson header */}
               <div className="mb-8 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Badge className="border-blue-500/20 bg-blue-500/10 text-[10px] text-blue-400">
+                  <Badge className="border-sky-500/20 bg-sky-500/10 text-[10px] text-sky-400">
                     {tutorialTitle || 'Python Basics'}
                   </Badge>
                   <Badge
@@ -571,10 +571,10 @@ export default function LessonPage() {
                   <LessonContent content={content} />
 
                   {adaptiveGuidance.length > 0 && (
-                    <div className="bg-blue-500/8 my-8 rounded-2xl border border-blue-500/20 p-5">
+                    <div className="bg-sky-500/8 my-8 rounded-2xl border border-sky-500/20 p-5">
                       <div className="mb-3 flex items-center gap-2">
-                        <Lightbulb className="h-4 w-4 text-blue-400" />
-                        <p className="text-xs font-bold uppercase tracking-wider text-blue-400">
+                        <Lightbulb className="h-4 w-4 text-sky-400" />
+                        <p className="text-xs font-bold uppercase tracking-wider text-sky-400">
                           Adaptive Guidance
                         </p>
                       </div>
@@ -584,7 +584,7 @@ export default function LessonPage() {
                             key={i}
                             className="flex items-start gap-2 text-sm text-muted-foreground"
                           >
-                            <span className="mt-0.5 shrink-0 text-blue-400">•</span>
+                            <span className="mt-0.5 shrink-0 text-sky-400">•</span>
                             {tip}
                           </li>
                         ))}
@@ -629,7 +629,7 @@ export default function LessonPage() {
                   <Button
                     onClick={() => navigateLesson('next')}
                     disabled={activeLessonIndex === lessons.length - 1}
-                    className="h-12 flex-1 gap-2 rounded-2xl bg-primary px-8 font-bold text-white hover:bg-primary/90"
+                    className="h-12 flex-1 gap-2 rounded-2xl bg-primary px-8 font-bold text-black hover:bg-primary/90"
                   >
                     Next Lesson
                     <ChevronRight className="h-4 w-4" />
@@ -712,7 +712,7 @@ export default function LessonPage() {
                   />
                   <Button
                     size="sm"
-                    className="h-8 w-full rounded-xl bg-primary text-xs font-bold text-white hover:bg-primary/90"
+                    className="h-8 w-full rounded-xl bg-primary text-xs font-bold text-black hover:bg-primary/90"
                   >
                     Save Note
                   </Button>

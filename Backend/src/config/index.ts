@@ -305,6 +305,12 @@ export const config = {
     apiUrl: process.env.JUDGE0_API_URL || 'https://judge0-ce.p.rapidapi.com',
   },
 
+  // Go code-runner microservice (preferred when configured)
+  codeRunner: {
+    url: process.env.CODE_RUNNER_URL || '',
+    apiKey: process.env.CODE_RUNNER_API_KEY || '',
+  },
+
   // Security
   security: {
     bcryptRounds:      parseInt(process.env.BCRYPT_ROUNDS      || '12'),
@@ -319,4 +325,11 @@ export const config = {
 
   // ── Internal API (Backend-to-Backend) ──────────────────────────────────────
   internalApiKey: process.env.INTERNAL_API_KEY,
+
+  // ── Moodle LMS integration (all optional — local LMS fallback when unset) ──
+  moodle: {
+    baseUrl:     process.env.MOODLE_BASE_URL,
+    apiToken:    process.env.MOODLE_API_TOKEN,
+    serviceName: process.env.MOODLE_SERVICE_NAME || 'bluelearnerhub',
+  },
 };

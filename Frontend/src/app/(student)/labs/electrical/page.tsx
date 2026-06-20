@@ -20,7 +20,7 @@ export default function ElectricalLabPage() {
 
   const components = [
     { name: 'RESISTOR_10K', icon: Plus, color: 'text-foreground/70' },
-    { name: 'CAPACITOR_100uF', icon: Plus, color: 'text-blue-400' },
+    { name: 'CAPACITOR_100uF', icon: Plus, color: 'text-sky-400' },
     { name: 'NPN_TRANSISTOR', icon: Plus, color: 'text-muted-foreground' },
     { name: 'MCU_BLUE_X1', icon: Cpu, color: 'text-primary' },
   ]
@@ -175,7 +175,7 @@ export default function ElectricalLabPage() {
                   <span className="font-mono text-[9px] text-foreground/80">5.02V</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                  <div className="h-1.5 w-1.5 rounded-full bg-sky-500" />
                   <span className="font-mono text-[9px] text-primary/80">120 Hz</span>
                 </div>
               </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, X, BookOpen, Code, Trophy, Briefcase, GraduationCap, Clock, TrendingUp } from 'lucide-react'
 import { cn, getStorageItem, setStorageItem, removeStorageItem } from '@/lib/utils'
+import { publicSearchAPI } from '@/lib/api-civilization'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from './input'
 import { Badge } from './badge'
@@ -12,10 +13,85 @@ interface SearchResult {
   id: string
   title: string
   description: string
-  type: 'tutorial' | 'course' | 'problem' | 'hackathon' | 'opening' | 'academy' | 'question'
+  type: 'tutorial' | 'course' | 'problem' | 'hackathon' | 'opening' | 'academy' | 'question' | 'candidate'
   url: string
   domain?: string
   tags?: string[]
+}
+
+function asText(value: unknown, fallback = ''): string {
+  return typeof value === 'string' && value.trim() ? value : fallback
+}
+
+function asId(value: unknown): string {
+  if (typeof value === 'string') return value
+  if (value && typeof value === 'object' && 'toString' in value) return String(value)
+  return ''
+}
+
+function normalizeSearchResults(payload: unknown): SearchResult[] {
+  const buckets = (payload as { data?: Record<string, unknown[]> } | undefined)?.data ?? {}
+  const results: SearchResult[] = []
+
+  for (const item of buckets.hackathons ?? []) {
+    const row = item as Record<string, unknown>
+    const id = asId(row._id ?? row.id)
+    if (!id) continue
+    results.push({
+      id: `hackathon-${id}`,
+      title: asText(row.name ?? row.title, 'Hackathon'),
+      description: asText(row.description, 'Hackathon listing'),
+      type: 'hackathon',
+      url: `/hackathons/${id}`,
+      domain: asText(row.theme, 'Hackathon'),
+      tags: [asText(row.status)].filter(Boolean),
+    })
+  }
+
+  for (const item of buckets.jobs ?? []) {
+    const row = item as Record<string, unknown>
+    const id = asId(row._id ?? row.id)
+    results.push({
+      id: `job-${id || asText(row.title)}`,
+      title: asText(row.title, 'Job opening'),
+      description: asText(row.company, asText(row.description, 'Hiring opportunity')),
+      type: 'opening',
+      url: `/student/jobs?search=${encodeURIComponent(asText(row.title))}`,
+      domain: asText(row.location, 'Jobs'),
+      tags: [asText(row.type), asText(row.salary)].filter(Boolean),
+    })
+  }
+
+  for (const item of buckets.tracks ?? []) {
+    const row = item as Record<string, unknown>
+    const slug = asText(row.path ?? row.slug)
+    if (!slug) continue
+    results.push({
+      id: `track-${slug}`,
+      title: asText(row.title, 'Tutorial'),
+      description: asText(row.description, 'Published learning tutorial'),
+      type: 'tutorial',
+      url: `/tutorials/view/${slug}/lesson-1`,
+      domain: asText(row.category, 'Tutorials'),
+      tags: [asText(row.difficulty)].filter(Boolean),
+    })
+  }
+
+  for (const item of buckets.candidates ?? []) {
+    const row = item as Record<string, unknown>
+    const id = asId(row._id ?? row.id)
+    results.push({
+      id: `candidate-${id || asText(row.fullName)}`,
+      title: asText(row.fullName, 'Candidate'),
+      description: asText(row.currentPosition, asText(row.location, 'Candidate profile')),
+      type: 'candidate',
+      url: id ? `/corporate/candidates/${id}` : '/corporate/candidates',
+      domain: 'Talent',
+      tags: [`Level ${String(row.level ?? 0)}`],
+    })
+  }
+
+  return results.slice(0, 12)
 }
 
 export default function UniversalSearch() {
@@ -48,48 +124,11 @@ export default function UniversalSearch() {
 
   const performSearch = async (searchQuery: string) => {
     try {
-      // Mock search - replace with actual API call
-      const mockResults: SearchResult[] = [
-        {
-          id: '1',
-          title: 'Introduction to Python Programming',
-          description: 'Learn Python basics with hands-on examples',
-          type: 'tutorial',
-          url: '/tutorials/computer-science/python-basics',
-          domain: 'Computer Science',
-          tags: ['Python', 'Beginner'],
-        },
-        {
-          id: '3',
-          title: 'Two Sum Problem',
-          description: 'Find two numbers that add up to a target',
-          type: 'problem',
-          url: '/practice/two-sum',
-          domain: 'Computer Science',
-          tags: ['Array', 'Hash Table'],
-        },
-        {
-          id: '4',
-          title: 'Winter Code Challenge 2024',
-          description: '48-hour coding marathon with prizes',
-          type: 'hackathon',
-          url: '/hackathons/winter-2024',
-          domain: 'Computer Science',
-          tags: ['Coding', 'Competition'],
-        },
-      ]
-
-      // Filter based on query
-      const filtered = mockResults.filter(
-        (item) =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
-
-      setResults(filtered)
+      const response = await publicSearchAPI.search(searchQuery)
+      setResults(response.error ? [] : normalizeSearchResults(response.data))
     } catch (error) {
       console.error('Search failed:', error)
+      setResults([])
     } finally {
       setIsLoading(false)
     }
@@ -121,6 +160,7 @@ export default function UniversalSearch() {
       opening: Briefcase,
       academy: GraduationCap,
       question: Search,
+      candidate: GraduationCap,
     }
     const Icon = icons[type]
     return <Icon className="h-4 w-4" />
@@ -128,13 +168,14 @@ export default function UniversalSearch() {
 
   const getTypeColor = (type: SearchResult['type']) => {
     const colors = {
-      tutorial: 'bg-blue-500/10 text-primary/80',
+      tutorial: 'bg-sky-500/10 text-primary/80',
       course: 'bg-purple-500/10 text-purple-500',
-      problem: 'bg-blue-500/10 text-primary/80',
+      problem: 'bg-sky-500/10 text-primary/80',
       hackathon: 'bg-primary/10 text-foreground/80',
       opening: 'bg-primary/10 text-foreground/80',
       academy: 'bg-primary/10 text-foreground/70',
       question: 'bg-yellow-500/10 text-yellow-500',
+      candidate: 'bg-emerald-500/10 text-emerald-600',
     }
     return colors[type]
   }
@@ -152,7 +193,7 @@ export default function UniversalSearch() {
           onFocus={() => setIsOpen(true)}
           className={cn(
             'w-full border-gray-700 bg-gray-800 pl-10 pr-10 text-white placeholder:text-gray-500',
-            isOpen && 'ring-2 ring-blue-500'
+            isOpen && 'ring-2 ring-sky-500'
           )}
         />
         {query && (
@@ -177,7 +218,7 @@ export default function UniversalSearch() {
             {/* Loading */}
             {isLoading && (
               <div className="p-4 text-center text-gray-400">
-                <div className="inline-block h-6 w-6 animate-spin rounded-full border-b-2 border-blue-500"></div>
+                <div className="inline-block h-6 w-6 animate-spin rounded-full border-b-2 border-sky-500"></div>
               </div>
             )}
 

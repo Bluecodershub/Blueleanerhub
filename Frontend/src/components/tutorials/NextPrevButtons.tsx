@@ -15,11 +15,11 @@ export default function NextPrevButtons({ prevLesson, nextLesson }: NextPrevButt
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-8 flex gap-4 border-t border-gray-200 pt-8 dark:border-gray-700"
+      className="mt-8 flex gap-4 border-t border-gray-200 pt-8 dark:border-border"
     >
       {prevLesson ? (
         <Link href={prevLesson}>
-          <button className="flex items-center gap-2 px-4 py-2 font-semibold text-gray-700 transition-colors hover:text-primary dark:text-gray-300 dark:hover:text-blue-400">
+          <button className="flex items-center gap-2 px-4 py-2 font-semibold text-gray-700 transition-colors hover:text-primary dark:text-muted-foreground dark:hover:text-sky-400">
             ← Previous Lesson
           </button>
         </Link>
@@ -36,7 +36,7 @@ export default function NextPrevButtons({ prevLesson, nextLesson }: NextPrevButt
 
       {nextLesson ? (
         <Link href={nextLesson}>
-          <button className="flex items-center gap-2 px-4 py-2 font-semibold text-gray-700 transition-colors hover:text-primary dark:text-gray-300 dark:hover:text-blue-400">
+          <button className="flex items-center gap-2 px-4 py-2 font-semibold text-gray-700 transition-colors hover:text-primary dark:text-muted-foreground dark:hover:text-sky-400">
             Next Lesson →
           </button>
         </Link>

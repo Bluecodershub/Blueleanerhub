@@ -118,7 +118,7 @@ export default function DomainLibraryPage() {
         {/* Subtle Background Elements */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute -top-[10%] left-[10%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]" />
-          <div className="absolute right-[5%] top-[30%] h-[400px] w-[400px] rounded-full bg-violet-600/5 blur-[100px]" />
+          <div className="absolute right-[5%] top-[30%] h-[400px] w-[400px] rounded-full bg-sky-600/5 blur-[100px]" />
         </div>
 
         {/* Header Section */}
@@ -148,7 +148,7 @@ export default function DomainLibraryPage() {
             </div>
 
             <div className="group relative w-full max-w-md">
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/50 to-violet-600/50 opacity-10 blur transition duration-1000 group-focus-within:opacity-20" />
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/50 to-sky-600/50 opacity-10 blur transition duration-1000 group-focus-within:opacity-20" />
               <div className="relative">
                 <Search className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary" />
                 <Input
@@ -204,7 +204,7 @@ export default function DomainLibraryPage() {
                           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
                           <div className="mb-10 flex items-start justify-between">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary transition-all duration-500 group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
+                            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary transition-all duration-500 group-hover:scale-110 group-hover:bg-primary group-hover:text-black">
                               <tutorial.icon size={32} />
                             </div>
                             <Badge
@@ -233,7 +233,7 @@ export default function DomainLibraryPage() {
                             </div>
                           </div>
 
-                          <div className="mt-10 flex translate-y-4 items-center justify-center gap-2 rounded-full border border-border bg-background py-3 text-[11px] font-black uppercase tracking-widest text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:bg-primary group-hover:opacity-100">
+                          <div className="mt-10 flex translate-y-4 items-center justify-center gap-2 rounded-full border border-border bg-background py-3 text-[11px] font-black uppercase tracking-widest text-black opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:bg-primary group-hover:opacity-100">
                             <Play size={14} className="fill-current" /> Continue Learning
                           </div>
                         </motion.div>

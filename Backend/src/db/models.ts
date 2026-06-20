@@ -2071,3 +2071,148 @@ const CorporateProfileSchema = new Schema<ICorporateProfile>({
 });
 
 export const CorporateProfile = mongoose.model<ICorporateProfile>('CorporateProfile', CorporateProfileSchema);
+
+// ─── CONSENT RECORD (DPDP 2023 audit trail) ──────────────────────────────────
+// One row per consent action. We keep an append-only history so consent and any
+// later withdrawal are both provable. policyVersion lets us re-collect consent
+// when a policy materially changes.
+export type ConsentType =
+  | 'TERMS'
+  | 'PRIVACY'
+  | 'DATA_PROCESSING'
+  | 'MARKETING_COMMS'
+  | 'AI_REVIEW'
+  | 'PLAGIARISM_CHECK'
+  | 'LEADERBOARD_DISPLAY'
+  | 'HACKATHON_DATA_SHARING'
+  | 'GUARDIAN_CONSENT'
+  | 'ORG_VERIFICATION';
+
+export interface IConsentRecord extends Document {
+  userId: mongoose.Types.ObjectId;
+  consentType: ConsentType;
+  policyVersion: string;
+  granted: boolean;
+  withdrawnAt?: Date;
+  ipAddress?: string;
+  userAgent?: string;
+  context?: string; // e.g. 'REGISTRATION', 'HACKATHON:<id>', 'SUBMISSION:<id>'
+  createdAt: Date;
+}
+
+const ConsentRecordSchema = new Schema<IConsentRecord>({
+  userId:        { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  consentType:   { type: String, required: true, enum: ['TERMS', 'PRIVACY', 'DATA_PROCESSING', 'MARKETING_COMMS', 'AI_REVIEW', 'PLAGIARISM_CHECK', 'LEADERBOARD_DISPLAY', 'HACKATHON_DATA_SHARING', 'GUARDIAN_CONSENT', 'ORG_VERIFICATION'] },
+  policyVersion: { type: String, required: true, default: '1.0' },
+  granted:       { type: Boolean, required: true, default: true },
+  withdrawnAt:   { type: Date },
+  ipAddress:     { type: String },
+  userAgent:     { type: String },
+  context:       { type: String, default: 'REGISTRATION' },
+  createdAt:     { type: Date, default: Date.now },
+});
+
+ConsentRecordSchema.index({ userId: 1, consentType: 1, createdAt: -1 });
+export const ConsentRecord = mongoose.model<IConsentRecord>('ConsentRecord', ConsentRecordSchema);
+
+// ─── GRIEVANCE TICKET (IT Rules / DPDP grievance redressal) ──────────────────
+export interface IGrievanceTicket extends Document {
+  ticketId: string;
+  userId?: mongoose.Types.ObjectId; // optional: complaints can be filed by guests
+  name: string;
+  email: string;
+  category: 'PRIVACY' | 'PAYMENT' | 'CONTENT' | 'HARASSMENT' | 'ACCOUNT' | 'CERTIFICATE' | 'OTHER';
+  subject: string;
+  message: string;
+  status: 'OPEN' | 'IN_REVIEW' | 'RESOLVED' | 'CLOSED';
+  resolutionNote?: string;
+  ipAddress?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const GrievanceTicketSchema = new Schema<IGrievanceTicket>({
+  ticketId:       { type: String, required: true, unique: true },
+  userId:         { type: Schema.Types.ObjectId, ref: 'User' },
+  name:           { type: String, required: true, trim: true, maxlength: 120 },
+  email:          { type: String, required: true, lowercase: true, trim: true },
+  category:       { type: String, required: true, enum: ['PRIVACY', 'PAYMENT', 'CONTENT', 'HARASSMENT', 'ACCOUNT', 'CERTIFICATE', 'OTHER'], default: 'OTHER' },
+  subject:        { type: String, required: true, trim: true, maxlength: 200 },
+  message:        { type: String, required: true, maxlength: 5000 },
+  status:         { type: String, enum: ['OPEN', 'IN_REVIEW', 'RESOLVED', 'CLOSED'], default: 'OPEN' },
+  resolutionNote: { type: String, maxlength: 5000 },
+  ipAddress:      { type: String },
+  createdAt:      { type: Date, default: Date.now },
+  updatedAt:      { type: Date, default: Date.now },
+});
+
+GrievanceTicketSchema.index({ status: 1, createdAt: -1 });
+GrievanceTicketSchema.index({ email: 1, createdAt: -1 });
+export const GrievanceTicket = mongoose.model<IGrievanceTicket>('GrievanceTicket', GrievanceTicketSchema);
+
+// ─── MOODLE LMS INTEGRATION ───────────────────────────────────────────────────
+// We store only MAPPINGS (Moodle id ↔ local metadata), never a duplicate of the
+// full Moodle dataset. Records are written only when a real Moodle connection
+// returns data — never on a fallback/empty response.
+
+export interface IMoodleCourseMapping extends Document {
+  moodleCourseId: number;
+  shortName?: string;
+  fullName?: string;
+  categoryId?: number;
+  visible?: boolean;
+  localCourseId?: mongoose.Types.ObjectId; // optional link to a local Course
+  lastSyncedAt: Date;
+}
+
+const MoodleCourseMappingSchema = new Schema<IMoodleCourseMapping>({
+  moodleCourseId: { type: Number, required: true, unique: true },
+  shortName:      { type: String, trim: true },
+  fullName:       { type: String, trim: true },
+  categoryId:     { type: Number },
+  visible:        { type: Boolean, default: true },
+  localCourseId:  { type: Schema.Types.ObjectId, ref: 'Course' },
+  lastSyncedAt:   { type: Date, default: Date.now },
+});
+export const MoodleCourseMapping = mongoose.model<IMoodleCourseMapping>('MoodleCourseMapping', MoodleCourseMappingSchema);
+
+export interface IMoodleUserMapping extends Document {
+  moodleUserId: number;
+  username?: string;
+  email?: string;
+  localUserId?: mongoose.Types.ObjectId; // optional link to a local User
+  lastSyncedAt: Date;
+}
+
+const MoodleUserMappingSchema = new Schema<IMoodleUserMapping>({
+  moodleUserId: { type: Number, required: true, unique: true },
+  username:     { type: String, trim: true },
+  email:        { type: String, lowercase: true, trim: true },
+  localUserId:  { type: Schema.Types.ObjectId, ref: 'User' },
+  lastSyncedAt: { type: Date, default: Date.now },
+});
+MoodleUserMappingSchema.index({ email: 1 });
+export const MoodleUserMapping = mongoose.model<IMoodleUserMapping>('MoodleUserMapping', MoodleUserMappingSchema);
+
+export interface IMoodleSyncLog extends Document {
+  type: 'COURSES' | 'USERS' | 'ALL';
+  status: 'SUCCESS' | 'PARTIAL' | 'FAILED' | 'SKIPPED';
+  itemsSynced: number;
+  message: string;
+  triggeredBy?: mongoose.Types.ObjectId;
+  durationMs?: number;
+  createdAt: Date;
+}
+
+const MoodleSyncLogSchema = new Schema<IMoodleSyncLog>({
+  type:        { type: String, enum: ['COURSES', 'USERS', 'ALL'], required: true },
+  status:      { type: String, enum: ['SUCCESS', 'PARTIAL', 'FAILED', 'SKIPPED'], required: true },
+  itemsSynced: { type: Number, default: 0 },
+  message:     { type: String, default: '' },
+  triggeredBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  durationMs:  { type: Number },
+  createdAt:   { type: Date, default: Date.now },
+});
+MoodleSyncLogSchema.index({ createdAt: -1 });
+MoodleSyncLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: 180 * 24 * 60 * 60 }); // 180-day TTL
+export const MoodleSyncLog = mongoose.model<IMoodleSyncLog>('MoodleSyncLog', MoodleSyncLogSchema);

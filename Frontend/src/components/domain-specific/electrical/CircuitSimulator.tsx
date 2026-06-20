@@ -527,7 +527,7 @@ function ComponentButton({
       onClick={onClick}
       className={`rounded-lg border-2 p-3 transition-all ${
         selected
-          ? 'border-blue-500 bg-blue-500/20'
+          ? 'border-sky-500 bg-sky-500/20'
           : 'border-gray-600 bg-gray-900 hover:border-gray-500'
       }`}
     >

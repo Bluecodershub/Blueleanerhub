@@ -93,7 +93,7 @@ export const SkillProficiency = () => {
         })}
       </div>
 
-      <button className="mt-6 w-full rounded-2xl border border-white/10 bg-white/5 py-3 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-primary hover:text-white">
+      <button className="mt-6 w-full rounded-2xl border border-white/10 bg-white/5 py-3 text-xs font-black uppercase tracking-widest text-black transition-all hover:bg-primary hover:text-black">
         VIEW_ALL_DOMAINS
       </button>
     </div>

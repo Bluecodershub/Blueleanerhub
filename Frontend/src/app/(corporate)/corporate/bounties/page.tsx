@@ -75,7 +75,7 @@ function StatusBadge({ status }: { status: string }) {
     open: 'bg-green-500/10 text-green-500 border-green-500/20',
     urgent: 'bg-red-500/10 text-red-500 border-red-500/20',
     closed: 'bg-muted text-muted-foreground border-muted',
-    completed: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+    completed: 'bg-sky-500/10 text-sky-500 border-sky-500/20',
   }
   return (
     <Badge variant="outline" className={styles[status] || styles.open}>
@@ -255,8 +255,8 @@ export default function CorporateBountiesPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-                <Code className="h-6 w-6 text-blue-500" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky-500/10">
+                <Code className="h-6 w-6 text-sky-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalSubmissions}</p>

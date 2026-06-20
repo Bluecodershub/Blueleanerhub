@@ -141,12 +141,12 @@ function VoteWidget({
           onUpvote()
           setVoted('up')
         }}
-        className={`rounded-full p-1.5 transition-colors ${voted === 'up' ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-800 hover:text-blue-400'}`}
+        className={`rounded-full p-1.5 transition-colors ${voted === 'up' ? 'bg-primary text-black' : 'text-gray-500 hover:bg-gray-800 hover:text-sky-400'}`}
       >
         <ChevronUp className="h-5 w-5" />
       </button>
       <span
-        className={`text-base font-bold tabular-nums ${score > 0 ? 'text-blue-400' : score < 0 ? 'text-red-400' : 'text-gray-400'}`}
+        className={`text-base font-bold tabular-nums ${score > 0 ? 'text-sky-400' : score < 0 ? 'text-red-400' : 'text-gray-400'}`}
       >
         {score}
       </span>
@@ -381,7 +381,7 @@ export default function QuestionDetailPage({ params }: { params: Promise<{ id: s
                           </button>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-xs font-bold text-white">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-purple-500 text-xs font-bold text-white">
                             {(q.authorName ?? 'U')[0]}
                           </div>
                           <span>{q.authorName ?? 'Unknown'}</span>
@@ -469,7 +469,7 @@ export default function QuestionDetailPage({ params }: { params: Promise<{ id: s
             <Card className="border-gray-800 bg-gray-900">
               <CardContent className="p-6">
                 <h3 className="mb-4 flex items-center gap-2 text-base font-semibold text-white">
-                  <Sparkles className="h-4 w-4 text-blue-400" /> Your Answer
+                  <Sparkles className="h-4 w-4 text-sky-400" /> Your Answer
                 </h3>
                 <Textarea
                   value={answerBody}

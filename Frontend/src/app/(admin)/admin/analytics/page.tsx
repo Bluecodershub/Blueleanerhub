@@ -58,9 +58,8 @@ export default function AdminAnalyticsPage() {
   )
 
   const roleData = [
-    { label: 'Students',   count: data?.users.students   ?? 0, color: 'bg-blue-500' },
-    { label: 'Mentors',    count: data?.users.mentors    ?? 0, color: 'bg-emerald-500' },
-    { label: 'Corporates', count: data?.users.corporates ?? 0, color: 'bg-amber-500' },
+    { label: 'Students',     count: data?.users.students   ?? 0, color: 'bg-sky-500' },
+    { label: 'Institutions', count: data?.users.corporates ?? 0, color: 'bg-amber-500' },
     { label: 'Admins',     count: data?.users.admins     ?? 0, color: 'bg-rose-500' },
   ]
   const totalUsers = data?.users.total || 1
@@ -88,7 +87,7 @@ export default function AdminAnalyticsPage() {
         <MetricCard label="Total Users"     value={data?.users.total ?? 0}        sub={`+${data?.users.newLast30Days ?? 0} last 30d`}    icon={Users}    color="bg-rose-600" />
         <MetricCard label="Hackathons"      value={data?.hackathons.total ?? 0}    sub={`${data?.hackathons.active ?? 0} active`}          icon={Trophy}   color="bg-amber-600" />
         <MetricCard label="Certificates"    value={data?.certificates.total ?? 0}  sub="Total issued"                                       icon={Award}    color="bg-emerald-600" />
-        <MetricCard label="XP Awarded"      value={(data?.totalXpAwarded ?? 0).toLocaleString()} sub="Cumulative XP"                      icon={Zap}      color="bg-violet-600" />
+        <MetricCard label="XP Awarded"      value={(data?.totalXpAwarded ?? 0).toLocaleString()} sub="Cumulative XP"                      icon={Zap}      color="bg-sky-600" />
       </div>
 
       {/* User Growth */}
@@ -140,9 +139,9 @@ export default function AdminAnalyticsPage() {
           <div className="space-y-3">
             {[
               { label: 'Draft',     count: data?.hackathons.draft     ?? 0, color: 'bg-muted-foreground' },
-              { label: 'Published', count: data?.hackathons.published ?? 0, color: 'bg-blue-500' },
+              { label: 'Published', count: data?.hackathons.published ?? 0, color: 'bg-sky-500' },
               { label: 'Active',    count: data?.hackathons.active    ?? 0, color: 'bg-emerald-500' },
-              { label: 'Completed', count: data?.hackathons.completed ?? 0, color: 'bg-violet-500' },
+              { label: 'Completed', count: data?.hackathons.completed ?? 0, color: 'bg-sky-500' },
             ].map(({ label, count, color }) => (
               <div key={label} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">

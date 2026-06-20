@@ -126,10 +126,10 @@ function SectionBlock({ section }: { section: ContentSection }) {
 
     case 'note':
       return (
-        <div className="my-4 flex gap-3 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-4">
-          <Lightbulb className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+        <div className="my-4 flex gap-3 rounded-xl border border-sky-500/20 bg-sky-500/5 px-4 py-4">
+          <Lightbulb className="h-5 w-5 text-sky-400 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-1">Note</p>
+            <p className="text-xs font-mono font-bold uppercase tracking-wider text-sky-400 mb-1">Note</p>
             <p className="text-sm text-foreground/85 leading-relaxed">{section.content}</p>
           </div>
         </div>
@@ -183,7 +183,7 @@ function SectionBlock({ section }: { section: ContentSection }) {
         <ol className="my-4 space-y-3 pl-1">
           {section.steps.map((step, i) => (
             <li key={i} className="flex gap-3">
-              <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white text-xs font-bold">{i + 1}</span>
+              <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-black text-xs font-bold">{i + 1}</span>
               <span className="text-sm text-foreground/85 leading-relaxed pt-0.5">
                 {formatInlineText(step, 'bg-muted px-1 py-0.5 rounded text-xs font-mono text-primary')}
               </span>
@@ -292,7 +292,7 @@ function TopicView({ topic, topicContent }: { topic: string; topicContent: Topic
                   </div>
                   <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
                     ex.difficulty === 'beginner' ? 'bg-green-500/10 text-green-400' :
-                    ex.difficulty === 'intermediate' ? 'bg-blue-500/10 text-blue-400' :
+                    ex.difficulty === 'intermediate' ? 'bg-sky-500/10 text-sky-400' :
                     'bg-purple-500/10 text-purple-400'
                   }`}>{ex.difficulty}</span>
                 </div>
@@ -359,7 +359,7 @@ function TopicView({ topic, topicContent }: { topic: string; topicContent: Topic
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full ${
                       iq.difficulty === 'junior' ? 'bg-green-500/10 text-green-400' :
-                      iq.difficulty === 'mid' ? 'bg-blue-500/10 text-blue-400' :
+                      iq.difficulty === 'mid' ? 'bg-sky-500/10 text-sky-400' :
                       'bg-purple-500/10 text-purple-400'
                     }`}>{iq.difficulty}</span>
                     <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${openQuiz === i ? 'rotate-180' : ''}`} />
@@ -451,7 +451,7 @@ export default function LessonLayout({
               <div className="mt-2 flex items-center gap-2">
                 <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full ${
                   lesson.difficulty === 'beginner' ? 'bg-green-500/10 text-green-400' :
-                  lesson.difficulty === 'intermediate' ? 'bg-blue-500/10 text-blue-400' :
+                  lesson.difficulty === 'intermediate' ? 'bg-sky-500/10 text-sky-400' :
                   lesson.difficulty === 'advanced' ? 'bg-purple-500/10 text-purple-400' :
                   'bg-primary/10 text-primary'
                 }`}>{lesson.difficulty}</span>

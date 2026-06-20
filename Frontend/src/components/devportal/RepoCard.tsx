@@ -53,7 +53,7 @@ export default function RepoCard({
   const langColor = language ? LANG_COLORS[language.toLowerCase()] : undefined
 
   return (
-    <div className="group rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-blue-200 hover:shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-900">
+    <div className="group rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-sky-200 hover:shadow-sm dark:border-border dark:bg-background-secondary dark:hover:border-sky-900">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
@@ -65,14 +65,14 @@ export default function RepoCard({
             )}
             <Link
               href={`/dev/${ownerSlug}/${slug}`}
-              className="truncate text-base font-semibold text-primary hover:underline dark:text-blue-400"
+              className="truncate text-base font-semibold text-primary hover:underline dark:text-sky-400"
             >
               {name}
             </Link>
           </div>
 
           {description && (
-            <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-muted-foreground">
               {description}
             </p>
           )}
@@ -85,7 +85,7 @@ export default function RepoCard({
           {topics.slice(0, 4).map((t) => (
             <span
               key={t}
-              className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+              className="rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700 dark:bg-sky-950 dark:text-sky-300"
             >
               {t}
             </span>

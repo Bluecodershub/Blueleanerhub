@@ -29,9 +29,9 @@ interface Hackathon {
 
 const STATUS_STYLES: Record<string, string> = {
   DRAFT:     'bg-muted/50 text-muted-foreground border-border',
-  PUBLISHED: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  PUBLISHED: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
   ACTIVE:    'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  COMPLETED: 'bg-violet-500/10 text-violet-400 border-violet-500/20',
+  COMPLETED: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
 }
 
 export default function HackathonsPage() {
@@ -165,7 +165,7 @@ export default function HackathonsPage() {
           {filtered.map((h, i) => (
             <motion.div key={h._id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
               <Card className="hover:shadow-md transition-shadow overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-primary to-violet-500" />
+                <div className="h-2 bg-gradient-to-r from-primary to-sky-500" />
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">

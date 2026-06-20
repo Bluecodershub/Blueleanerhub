@@ -4,12 +4,21 @@
  */
 
 import { Router } from 'express';
-import { authenticate, optionalAuth } from '../middleware/auth';
+import { authenticate, authorize, optionalAuth } from '../middleware/auth';
 import { User, Hackathon, Job, Tutorial } from '../db/models';
 import { db } from '../db';
 import logger from '../utils/logger';
 
 const router = Router();
+
+/**
+ * Escape user input before using it in a RegExp.
+ * Prevents ReDoS (catastrophic backtracking) and accidental regex injection
+ * from raw query strings used in $regex searches.
+ */
+function escapeRegex(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 // ─── Live Search ───────────────────────────────────────────────────────────────
 router.get('/search', optionalAuth, async (req, res) => {
@@ -20,7 +29,7 @@ router.get('/search', optionalAuth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Search query must be at least 2 characters' });
     }
 
-    const searchRegex = new RegExp(q.trim(), 'i');
+    const searchRegex = new RegExp(escapeRegex(q.trim()), 'i');
     const limitNum = Math.min(parseInt(limit as string) || 20, 100);
     const pageNum  = Math.max(parseInt(page as string) || 1, 1);
     const skip = (pageNum - 1) * limitNum;
@@ -55,7 +64,7 @@ router.get('/search', optionalAuth, async (req, res) => {
         isActive: true,
         $or: [{ fullName: searchRegex }, { currentPosition: searchRegex }, { company: searchRegex }],
       })
-        .select('_id fullName email totalPoints level currentPosition company location avatarConfig')
+        .select('_id fullName totalPoints level currentPosition company location avatarConfig')
         .sort({ totalPoints: -1 })
         .skip(skip)
         .limit(limitNum)
@@ -117,7 +126,7 @@ router.get('/profile/:id', optionalAuth, async (req, res) => {
 });
 
 // ─── Candidate Search (For Corporate Users) ────────────────────────────────────
-router.get('/candidates', authenticate, async (req, res) => {
+router.get('/candidates', authenticate, authorize('CORPORATE', 'ADMIN'), async (req, res) => {
   try {
     const {
       search,
@@ -136,7 +145,7 @@ router.get('/candidates', authenticate, async (req, res) => {
     const filter: Record<string, any> = { role: 'STUDENT', isActive: true, isBanned: { $ne: true } };
 
     if (search) {
-      const searchRegex = new RegExp(String(search), 'i');
+      const searchRegex = new RegExp(escapeRegex(String(search)), 'i');
       filter.$or = [{ fullName: searchRegex }, { email: searchRegex }, { currentPosition: searchRegex }];
     }
     if (minXp) filter.totalPoints = { ...(filter.totalPoints || {}), $gte: parseInt(minXp as string) };

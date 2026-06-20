@@ -37,6 +37,15 @@ function hasAuthHintCookie(): boolean {
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Consent captured at signup and persisted as a DPDP audit trail server-side. */
+export interface RegisterConsents {
+  terms?: boolean
+  privacy?: boolean
+  dataProcessing?: boolean
+  marketing?: boolean
+  guardianConsent?: boolean
+}
+
 interface AuthContextValue {
   user: User | null
   loading: boolean
@@ -48,6 +57,7 @@ interface AuthContextValue {
     password: string
     name: string
     fullName?: string
+    consents?: RegisterConsents
   }) => Promise<User>
   refreshUser: (silent?: boolean) => Promise<void>
 }
@@ -155,6 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: string
     password: string
     name: string
+    consents?: RegisterConsents
   }): Promise<User> => {
     const { name, ...rest } = data
     const response = await api.post('/auth/register', { ...rest, fullName: name, role: 'STUDENT' })

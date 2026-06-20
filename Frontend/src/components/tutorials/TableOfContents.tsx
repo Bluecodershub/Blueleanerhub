@@ -22,7 +22,7 @@ export default function TableOfContents({ items, currentId }: TableOfContentsPro
     <motion.nav
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="sticky top-20 rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
+      className="sticky top-20 rounded-lg border border-gray-200 bg-white p-6 dark:border-border dark:bg-card"
     >
       <h3 className="mb-4 text-sm font-semibold text-gray-900 dark:text-white">On This Page</h3>
 
@@ -36,10 +36,10 @@ export default function TableOfContents({ items, currentId }: TableOfContentsPro
           >
             <Link href={item.href}>
               <a
-                className={`text-sm transition-colors hover:text-primary dark:hover:text-blue-400 ${
+                className={`text-sm transition-colors hover:text-primary dark:hover:text-sky-400 ${
                   currentId === item.id
-                    ? 'font-semibold text-primary dark:text-blue-400'
-                    : 'text-gray-600 dark:text-gray-400'
+                    ? 'font-semibold text-primary dark:text-sky-400'
+                    : 'text-gray-600 dark:text-muted-foreground'
                 }`}
               >
                 {item.title}

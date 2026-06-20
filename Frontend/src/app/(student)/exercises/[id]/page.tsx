@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { exercisesAPI, codeAPI, gamificationAPI } from '@/lib/api-civilization'
+import AIReviewPanel from '@/components/ai/AIReviewPanel'
 import { toast } from 'sonner'
 import { CodeExecutionResponse } from '@/types'
 import dynamic from 'next/dynamic'
@@ -117,6 +118,8 @@ export default function ExerciseDetailPage() {
   const [revealed, setRevealed] = useState(false)
   const [answers, setAnswers] = useState<(number | null)[]>([])
   const [xpEarned, setXpEarned] = useState(0)
+  const [lastCode, setLastCode] = useState('')
+  const [lastLang, setLastLang] = useState('')
 
   useEffect(() => {
     exercisesAPI
@@ -148,6 +151,8 @@ export default function ExerciseDetailPage() {
   const score = total > 0 ? Math.round((correctCount / total) * 100) : 0
 
   const handleRunCode = async (code: string, language: string) => {
+    setLastCode(code)
+    setLastLang(language)
     try {
       const d = await codeAPI.execute(code, language) as CodeExecutionResponse
       const result = d?.data ?? d
@@ -259,13 +264,13 @@ export default function ExerciseDetailPage() {
               <div className="flex gap-2 rounded-xl border border-border bg-background/50 p-1">
                 <button
                   onClick={() => setTab('mcq')}
-                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Quiz ({total}Q)
                 </button>
                 <button
                   onClick={() => setTab('code')}
-                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Code Challenge
                 </button>
@@ -357,13 +362,13 @@ export default function ExerciseDetailPage() {
         <div className="flex gap-2 rounded-xl border border-border bg-card p-1">
           <button
             onClick={() => setTab('mcq')}
-            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
           >
             Quiz ({total}Q)
           </button>
           <button
             onClick={() => setTab('code')}
-            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
           >
             Code
           </button>
@@ -387,6 +392,12 @@ export default function ExerciseDetailPage() {
               language={exercise.codeChallenge.language}
               onRun={handleRunCode}
               height="320px"
+            />
+            <AIReviewPanel
+              content={lastCode}
+              language={lastLang || exercise.codeChallenge.language}
+              submissionType="code"
+              context={exercise.codeChallenge.description}
             />
           </div>
         </motion.div>

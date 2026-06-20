@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -7,15 +8,14 @@ import {
   Calendar,
   ArrowRight,
   Search,
+  Code2,
   Cpu,
   Settings,
   Zap,
   Building2,
   Briefcase,
-  Star,
   PlusCircle,
   ChevronRight,
-  Flame,
   GraduationCap,
   Rocket,
   Filter,
@@ -47,16 +47,17 @@ interface HackathonItem {
 }
 
 const DOMAIN_META: Record<string, { icon: LucideIcon; gradient: string }> = {
-  'computer science': { icon: Cpu, gradient: 'from-primary to-primary' },
-  software: { icon: Cpu, gradient: 'from-primary to-primary' },
-  automotive: { icon: Settings, gradient: 'from-primary to-primary' },
-  mechanical: { icon: Settings, gradient: 'from-primary to-primary' },
-  finance: { icon: Briefcase, gradient: 'from-primary to-primary' },
-  management: { icon: Briefcase, gradient: 'from-primary to-primary' },
-  civil: { icon: Building2, gradient: 'from-primary to-primary' },
-  electrical: { icon: Zap, gradient: 'from-primary to-primary' },
+  'computer science': { icon: Cpu, gradient: 'bg-cat-blue' },
+  software: { icon: Cpu, gradient: 'bg-cat-blue' },
+  robotics: { icon: Cpu, gradient: 'bg-cat-indigo' },
+  automotive: { icon: Settings, gradient: 'bg-cat-coral' },
+  mechanical: { icon: Settings, gradient: 'bg-cat-coral' },
+  finance: { icon: Briefcase, gradient: 'bg-cat-purple' },
+  management: { icon: Briefcase, gradient: 'bg-cat-purple' },
+  civil: { icon: Building2, gradient: 'bg-cat-teal' },
+  electrical: { icon: Zap, gradient: 'bg-cat-amber' },
 }
-const DEFAULT_META = { icon: Trophy, gradient: 'from-primary to-primary' }
+const DEFAULT_META = { icon: Trophy, gradient: 'bg-cat-indigo' }
 
 function getMeta(domain: string) {
   return DOMAIN_META[domain?.toLowerCase()] ?? DEFAULT_META
@@ -83,127 +84,6 @@ const ORGANIZER_CONFIG = {
   },
 }
 
-const MOCK_HACKATHONS: HackathonItem[] = [
-  {
-    id: 1,
-    title: 'AI Revolution 2026',
-    domain: 'Computer Science',
-    type: 'Software',
-    organizerType: 'PLATFORM',
-    organizerName: 'BlueLearner',
-    status: 'OPEN',
-    prize: '$10,000',
-    participants: 1240,
-    daysLeft: 5,
-    icon: Cpu,
-    gradient: 'from-primary to-primary',
-    description: 'Build the next generation of AI-powered tools that reshape how humans interact with technology.',
-    difficulty: 'Intermediate',
-    tags: ['AI', 'Machine Learning', 'Python']
-  },
-  {
-    id: 2,
-    title: 'IIT Bombay TechFest Hackathon',
-    domain: 'Mechanical',
-    type: 'Engineering',
-    organizerType: 'UNIVERSITY',
-    organizerName: 'IIT Bombay',
-    status: 'OPEN',
-    prize: '₹5,00,000',
-    participants: 890,
-    daysLeft: 12,
-    icon: Settings,
-    gradient: 'from-primary to-primary',
-    description: 'Design sustainable engineering solutions for real-world mechanical challenges. Open to all engineering students.',
-    difficulty: 'Pro',
-    tags: ['Mechanical', 'CAD', 'AutoCAD']
-  },
-  {
-    id: 3,
-    title: 'Microsoft Build Challenge',
-    domain: 'Computer Science',
-    type: 'Cloud & AI',
-    organizerType: 'CORPORATE',
-    organizerName: 'Microsoft India',
-    status: 'OPEN',
-    prize: '$7,500 + Job PPO',
-    participants: 2100,
-    daysLeft: 3,
-    icon: Cpu,
-    gradient: 'from-primary to-primary',
-    description: 'Build innovative cloud solutions using Azure services. Top performers get direct interview calls.',
-    difficulty: 'Intermediate',
-    tags: ['Azure', 'Cloud', 'TypeScript']
-  },
-  {
-    id: 4,
-    title: 'GreenBuild Challenge',
-    domain: 'Civil',
-    type: 'Sustainability',
-    organizerType: 'PLATFORM',
-    organizerName: 'BlueLearner',
-    status: 'UPCOMING',
-    prize: '$4,000',
-    participants: 0,
-    daysLeft: 30,
-    icon: Building2,
-    gradient: 'from-primary to-primary',
-    description: 'Design sustainable structural solutions for the cities of the future.',
-    difficulty: 'Intermediate',
-    tags: ['Civil', 'Sustainability', 'BIM']
-  },
-  {
-    id: 5,
-    title: 'NIT Circuit Design Sprint',
-    domain: 'Electrical',
-    type: 'Electronics',
-    organizerType: 'UNIVERSITY',
-    organizerName: 'NIT Trichy',
-    status: 'UPCOMING',
-    prize: '₹2,00,000',
-    participants: 0,
-    daysLeft: 21,
-    icon: Zap,
-    gradient: 'from-primary to-primary',
-    description: 'Engineer next-gen power electronics and smart grid solutions for the future of India.',
-    difficulty: 'Pro',
-    tags: ['PCB', 'VLSI', 'Embedded']
-  },
-  {
-    id: 6,
-    title: 'Amazon AWS Builders Cup',
-    domain: 'Computer Science',
-    type: 'Cloud',
-    organizerType: 'CORPORATE',
-    organizerName: 'Amazon Web Services',
-    status: 'CLOSED',
-    prize: '$15,000 + AWS Credits',
-    participants: 3400,
-    daysLeft: 0,
-    icon: Cpu,
-    gradient: 'from-primary to-primary',
-    description: 'Past hackathon on serverless architectures and cloud-native development.',
-    difficulty: 'Pro',
-    tags: ['AWS', 'Serverless', 'Lambda']
-  },
-  {
-    id: 7,
-    title: 'BlueLearner Robotics Cup 2026',
-    domain: 'Robotics',
-    type: 'Autonomous Systems',
-    organizerType: 'PLATFORM',
-    organizerName: 'BlueLearner',
-    status: 'OPEN',
-    prize: '$6,000',
-    participants: 670,
-    daysLeft: 8,
-    icon: Cpu,
-    gradient: 'from-primary to-primary',
-    description: 'Build autonomous robots that can navigate real-world obstacle courses. All experience levels welcome.',
-    difficulty: 'Beginner',
-    tags: ['Robotics', 'ROS', 'Python']
-  },
-]
 
 const STATUS_TABS = ['All', 'Active', 'Upcoming', 'Past']
 const ORGANIZER_TABS = ['All', 'Platform', 'University', 'Corporate']
@@ -227,27 +107,6 @@ const statusConfig = {
   },
 }
 
-const HACKATHON_MODES = [
-  {
-    title: 'Capstone',
-    href: '/hackathons/capstone',
-    description: 'Submit course projects, receive mentor review, and publish final outcomes.',
-    icon: GraduationCap,
-  },
-  {
-    title: 'Practice',
-    href: '/hackathons/practice',
-    description: 'Solve coding problems, run code in the IDE, and build submission history.',
-    icon: Cpu,
-  },
-  {
-    title: 'Live Hackathons',
-    href: '/hackathons/live',
-    description: 'Register for active events, view timelines, problem statements, and leaderboards.',
-    icon: Trophy,
-  },
-]
-
 function DeadlineBar({ daysLeft, status }: { daysLeft: number; status: string }) {
   if (status !== 'OPEN' || daysLeft <= 0) return null
   const maxDays = 30
@@ -270,20 +129,21 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
   const config = statusConfig[hack.status]
   const orgConf = ORGANIZER_CONFIG[hack.organizerType]
   const OrgIcon = orgConf.icon
+  const accent = getMeta(hack.domain).gradient
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.35 }}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-300 hover:border-primary/40"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
     >
-      <div className="relative h-1.5 bg-primary/70" />
+      <div className={`relative h-1.5 ${accent}`} />
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-300 group-hover:scale-105">
-            <hack.icon className="h-5 w-5 text-primary" />
+          <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg transition-transform duration-300 group-hover:scale-105 ${accent}`}>
+            <hack.icon className="h-5 w-5" />
           </div>
           <div className="flex flex-col items-end gap-1.5">
             <Badge className={`flex items-center gap-1.5 border text-[10px] font-semibold ${config.color}`}>
@@ -486,68 +346,49 @@ export default function HackathonsPage() {
   const openCount = hackathons.filter((h) => h.status === 'OPEN').length
   const uniCount = hackathons.filter((h) => h.organizerType === 'UNIVERSITY').length
   const corpCount = hackathons.filter((h) => h.organizerType === 'CORPORATE').length
-  const totalPrize = hackathons
-    .filter((h) => h.status === 'OPEN')
-    .reduce((acc, h) => {
-      const num = parseInt(h.prize.replace(/[^0-9]/g, ''))
-      return acc + (isNaN(num) ? 0 : num)
-    }, 0)
 
   return (
     <div className="space-y-8 pb-20 pt-4 sm:pt-0">
-      {/* Header */}
-      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <div className="space-y-3">
-          <h1>Hackathons</h1>
-          <p className="max-w-xl text-sm text-muted-foreground">
-            Compete in university, corporate, and platform hackathons. Build real solutions, win prizes, and get noticed by top companies.
-          </p>
-        </div>
-        <div className="flex shrink-0 flex-wrap gap-2">
-          <Button variant="outline" className="h-10 gap-2 rounded-xl border-border px-5 text-sm font-bold">
-            <Star className="h-4 w-4" />
-            My Registrations
-          </Button>
-          <Link href="/corporate/host-hackathon">
-            <Button className="h-10 gap-2 px-5 text-sm font-bold">
-              <PlusCircle className="h-4 w-4" />
-              Host a Hackathon
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Stats row */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {[
-          { label: 'Active Hackathons', value: openCount, icon: Flame, color: 'text-primary' },
-          { label: 'Total Prize Pool', value: totalPrize > 0 ? `$${Math.round(totalPrize / 1000)}K+` : '$0', icon: Trophy, color: 'text-warning' },
-          { label: 'University Events', value: uniCount, icon: GraduationCap, color: 'text-success' },
-          { label: 'Corporate Events', value: corpCount, icon: Briefcase, color: 'text-primary' },
-        ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="rounded-xl border border-border bg-card p-4 text-center">
-            <Icon className={`h-5 w-5 ${color} mx-auto mb-2`} />
-            <div className="text-xl font-bold text-foreground">{value}</div>
-            <div className="mt-0.5 text-[11px] text-muted-foreground">{label}</div>
+      <section className="overflow-hidden rounded-3xl border border-border bg-card">
+        <div className="grid gap-0 lg:grid-cols-[1fr_420px]">
+          <div className="p-6 sm:p-8">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+              <Trophy className="h-3.5 w-3.5" />
+              Hackathon arena
+            </div>
+            <h1 className="max-w-3xl text-balance text-4xl font-bold tracking-tight md:text-5xl">
+              Build, submit, and compete with real project workflows
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">
+              Browse university, corporate, and platform challenges. Registration, teams, submissions, and leaderboards are connected to the backend APIs.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild className="gap-2">
+                <Link href="/hackathons/practice">
+                  Practice first
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="gap-2">
+                <Link href="/ide">
+                  Open coding sandbox
+                  <Code2 className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        {HACKATHON_MODES.map(({ title, href, description, icon: Icon }) => (
-          <Link key={href} href={href} className="group rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:bg-primary/5">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <Icon className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl">{title}</h2>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">{description}</p>
-            <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
-              Open
-              <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-            </div>
-          </Link>
-        ))}
-      </div>
+          <div className="relative min-h-[260px] border-t border-border lg:border-l lg:border-t-0">
+            <Image
+              src="/img/hackathon.jpg"
+              alt="Students collaborating during a hackathon"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/65 via-transparent to-transparent" />
+          </div>
+        </div>
+      </section>
 
       {/* Organizer type tabs */}
       <div className="space-y-4">

@@ -25,7 +25,7 @@ export default function StatsCard({ title, value, icon, trend, className }: Stat
       className={`group rounded-3xl border border-border/50 bg-card p-6 transition-all duration-300 hover:border-primary/50 ${className}`}
     >
       <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
+        <p className="text-sm font-medium text-gray-600 dark:text-muted-foreground">{title}</p>
         <span className="text-2xl">{icon}</span>
       </div>
 
@@ -42,7 +42,7 @@ export default function StatsCard({ title, value, icon, trend, className }: Stat
       </div>
 
       {trend && (
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-2 text-xs text-gray-500 dark:text-muted-foreground">
           {trend.isPositive ? 'Increased' : 'Decreased'} from last week
         </p>
       )}

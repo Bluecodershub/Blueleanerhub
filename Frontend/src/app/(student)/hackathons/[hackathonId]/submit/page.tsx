@@ -4,11 +4,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
-import { 
-  Code2, 
-  Upload, 
-  Send, 
-  Loader2, 
+import {
+  Code2,
+  Send,
+  Loader2,
   CheckCircle2,
   AlertCircle
 } from 'lucide-react'
@@ -17,21 +16,13 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { hackathonsAPI } from '@/lib/api-civilization'
+import AIReviewPanel from '@/components/ai/AIReviewPanel'
+import { LanguageLogo } from '@/components/ui/LanguageLogo'
+import { RUNTIME_LANGUAGES } from '@/lib/languages'
 
 interface SubmissionFormProps {
   hackathonId: string
 }
-
-const LANGUAGES = [
-  { id: 'javascript', name: 'JavaScript', extension: '.js' },
-  { id: 'python', name: 'Python', extension: '.py' },
-  { id: 'java', name: 'Java', extension: '.java' },
-  { id: 'cpp', name: 'C++', extension: '.cpp' },
-  { id: 'c', name: 'C', extension: '.c' },
-  { id: 'go', name: 'Go', extension: '.go' },
-  { id: 'rust', name: 'Rust', extension: '.rs' },
-  { id: 'typescript', name: 'TypeScript', extension: '.ts' },
-]
 
 export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
   const router = useRouter()
@@ -39,6 +30,7 @@ export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
   const [sourceCode, setSourceCode] = useState('')
   const [demoUrl, setDemoUrl] = useState('')
   const [presentationUrl, setPresentationUrl] = useState('')
+  const [repoUrl, setRepoUrl] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
@@ -50,19 +42,20 @@ export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
 
     setSubmitting(true)
     try {
-      const result = await (hackathonsAPI as any).submitCode?.(Number(hackathonId), {
+      const result = await hackathonsAPI.submitCode(hackathonId, {
         language,
         sourceCode,
         demoUrl: demoUrl || undefined,
         presentationUrl: presentationUrl || undefined,
+        repoUrl: repoUrl || undefined,
       })
 
       if (result.error) {
-        throw new Error(result.error.message || 'Submission failed')
+        throw new Error(result.error || 'Submission failed')
       }
 
       setSubmitted(true)
-      toast.success('Submission successful! Good luck!')
+      toast.success('Submission received')
       
       setTimeout(() => {
         router.push(`/hackathons/${hackathonId}`)
@@ -84,7 +77,7 @@ export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
         <Card className="border-emerald-500/30 bg-emerald-500/10">
           <CardContent className="p-8 text-center">
             <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-emerald-500" />
-            <h2 className="text-2xl font-bold text-white">Submission Received!</h2>
+            <h2 className="text-2xl font-bold text-white">Submission received</h2>
             <p className="mt-2 text-muted-foreground">
               Your project has been submitted successfully.
             </p>
@@ -127,17 +120,19 @@ export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
               Programming Language
             </label>
             <div className="flex flex-wrap gap-2">
-              {LANGUAGES.map((lang) => (
+              {RUNTIME_LANGUAGES.map((lang) => (
                 <button
                   key={lang.id}
                   onClick={() => setLanguage(lang.id)}
-                  className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+                  className={`inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     language === lang.id
                       ? 'border-primary bg-primary/20 text-primary'
                       : 'border-border text-muted-foreground hover:border-primary/50'
                   }`}
                 >
+                  <LanguageLogo language={lang.id} size={18} />
                   {lang.name}
+                  <span className="text-xs text-muted-foreground">{lang.extension}</span>
                 </button>
               ))}
             </div>
@@ -156,20 +151,19 @@ export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
             />
           </div>
 
-          {/* File Upload (Mock) */}
+          {/* AI Review — optional pre-submission feedback */}
+          <AIReviewPanel content={sourceCode} language={language} submissionType="hackathon" />
+
+          {/* GitHub Repository (optional, real link field) */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-muted-foreground">
-              Additional Files (Optional)
+              GitHub Repository (Optional)
             </label>
-            <div className="rounded-lg border border-dashed border-border p-8 text-center">
-              <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">
-                Drag and drop files here, or click to upload
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                ZIP, PDF, or any project files
-              </p>
-            </div>
+            <Input
+              value={repoUrl}
+              onChange={(e) => setRepoUrl(e.target.value)}
+              placeholder="https://github.com/you/project"
+            />
           </div>
 
           {/* Demo URL */}

@@ -271,8 +271,8 @@ function OnboardingContent() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden select-none">
       {/* Decorative Background Glows */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-sky-600/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-sky-600/10 rounded-full blur-[100px] pointer-events-none" />
 
       <AnimatePresence mode="wait">
         {/* Welcome Screen */}
@@ -284,11 +284,11 @@ function OnboardingContent() {
             exit={{ opacity: 0, y: -20 }}
             className="max-w-2xl text-center space-y-8 z-10"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm font-medium">
               <Sparkles className="h-4 w-4 animate-pulse" />
               AI Adaptive Learning Layer
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-sky-400 via-sky-400 to-purple-400 bg-clip-text text-transparent leading-tight">
               Welcome to BlueLearnerHub
             </h1>
             <p className="text-slate-400 text-lg leading-relaxed max-w-xl mx-auto">
@@ -297,7 +297,7 @@ function OnboardingContent() {
             <div className="flex justify-center pt-4">
               <button
                 onClick={handleStartOnboarding}
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition duration-200 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] focus:outline-none"
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-sky-600 to-sky-600 hover:from-sky-500 hover:to-sky-500 text-white font-semibold rounded-xl transition duration-200 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] focus:outline-none"
               >
                 Start Onboarding
                 <ChevronRight className="h-5 w-5 transform group-hover:translate-x-1 transition duration-200" />
@@ -321,7 +321,7 @@ function OnboardingContent() {
                 <h2 className="text-2xl font-bold tracking-tight">Onboarding Background Quiz</h2>
                 <p className="text-slate-400 text-sm">Tell us about your learning goals and tech domain.</p>
               </div>
-              <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+              <div className="h-10 w-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
                 <Brain className="h-5 w-5" />
               </div>
             </div>
@@ -339,7 +339,7 @@ function OnboardingContent() {
                       onClick={() => handleDomainSelect(d)}
                       className={`text-left px-4 py-3 rounded-xl border text-sm font-medium transition duration-200 ${
                         domain === d
-                          ? 'bg-blue-600/15 border-blue-500 text-blue-300 shadow-[0_0_12px_rgba(59,130,246,0.15)]'
+                          ? 'bg-sky-600/15 border-sky-500 text-sky-300 shadow-[0_0_12px_rgba(59,130,246,0.15)]'
                           : 'bg-slate-950/40 border-slate-800 hover:border-slate-700 text-slate-400'
                       }`}
                     >
@@ -370,7 +370,7 @@ function OnboardingContent() {
                           onClick={() => toggleGoal(goal)}
                           className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition duration-200 ${
                             isSelected
-                              ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300'
+                              ? 'bg-sky-600/20 border-sky-500 text-sky-300'
                               : 'bg-slate-950/40 border-slate-800 hover:border-slate-700 text-slate-400'
                           }`}
                         >
@@ -387,7 +387,7 @@ function OnboardingContent() {
                   <select
                     value={background.educationLevel}
                     onChange={e => setBackground(prev => ({ ...prev, educationLevel: e.target.value }))}
-                    className="w-full bg-slate-950/40 border border-slate-800 hover:border-slate-700 text-slate-300 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition duration-200"
+                    className="w-full bg-slate-950/40 border border-slate-800 hover:border-slate-700 text-slate-300 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-sky-500 transition duration-200"
                   >
                     <option value="Undergraduate Student">Undergraduate Student</option>
                     <option value="Graduate/Master Student">Graduate/Master Student</option>
@@ -429,7 +429,7 @@ function OnboardingContent() {
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="font-semibold text-slate-300">Available study hours per day</span>
-                    <span className="text-blue-400 font-bold">{background.availableHoursPerDay} hrs</span>
+                    <span className="text-sky-400 font-bold">{background.availableHoursPerDay} hrs</span>
                   </div>
                   <input
                     type="range"
@@ -437,7 +437,7 @@ function OnboardingContent() {
                     max="8"
                     value={background.availableHoursPerDay}
                     onChange={e => setBackground(prev => ({ ...prev, availableHoursPerDay: Number(e.target.value) }))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-sky-500"
                   />
                 </div>
 
@@ -445,7 +445,7 @@ function OnboardingContent() {
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="font-semibold text-slate-300">Self-rated domain confidence</span>
-                    <span className="text-indigo-400 font-bold">{background.confidenceLevel} / 10</span>
+                    <span className="text-sky-400 font-bold">{background.confidenceLevel} / 10</span>
                   </div>
                   <input
                     type="range"
@@ -453,7 +453,7 @@ function OnboardingContent() {
                     max="10"
                     value={background.confidenceLevel}
                     onChange={e => setBackground(prev => ({ ...prev, confidenceLevel: Number(e.target.value) }))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-sky-500"
                   />
                 </div>
               </div>
@@ -465,7 +465,7 @@ function OnboardingContent() {
                 type="button"
                 onClick={handleSubmitBackground}
                 disabled={loading}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition duration-200 disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sky-600 to-sky-600 hover:from-sky-500 hover:to-sky-500 text-white font-bold rounded-xl transition duration-200 disabled:opacity-50"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Proceed to Technical Assessment'}
                 <ChevronRight className="h-4 w-4" />
@@ -488,11 +488,11 @@ function OnboardingContent() {
               <div className="flex justify-between items-center text-xs font-semibold text-slate-400">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 bg-slate-950/60 px-2.5 py-1 rounded-md border border-slate-850">
-                    <Gauge className="h-3 w-3 text-indigo-400" />
+                    <Gauge className="h-3 w-3 text-sky-400" />
                     Question {quizStep + 1} / {totalQuizSteps}
                   </span>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider ${
-                    currentQuestion.type === 'MCQ' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                    currentQuestion.type === 'MCQ' ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' :
                     currentQuestion.type === 'DEBUG' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' :
                     currentQuestion.type === 'LOGIC' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
                     'bg-teal-500/10 text-teal-400 border border-teal-500/20'
@@ -521,7 +521,7 @@ function OnboardingContent() {
               </div>
               <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-sky-500 to-sky-500 transition-all duration-300"
                   style={{ width: `${((quizStep + 1) / totalQuizSteps) * 100}%` }}
                 />
               </div>
@@ -540,7 +540,7 @@ function OnboardingContent() {
 
               {/* Coding Starter Block */}
               {currentQuestion.starterCode && (
-                <div className="bg-slate-950/80 border border-slate-850 rounded-xl p-4 font-mono text-xs text-indigo-300 leading-relaxed overflow-x-auto">
+                <div className="bg-slate-950/80 border border-slate-850 rounded-xl p-4 font-mono text-xs text-sky-300 leading-relaxed overflow-x-auto">
                   <pre>{currentQuestion.starterCode}</pre>
                 </div>
               )}
@@ -561,12 +561,12 @@ function OnboardingContent() {
                         onClick={() => setSelectedOption(strIndex)}
                         className={`text-left px-5 py-4 rounded-xl border text-sm font-semibold transition duration-200 flex items-center justify-between ${
                           isSelected
-                            ? 'bg-blue-600/15 border-blue-500 text-blue-300 shadow-[0_0_12px_rgba(59,130,246,0.1)]'
+                            ? 'bg-sky-600/15 border-sky-500 text-sky-300 shadow-[0_0_12px_rgba(59,130,246,0.1)]'
                             : 'bg-slate-950/40 border-slate-850 hover:border-slate-800 text-slate-400'
                         }`}
                       >
                         <span>{opt}</span>
-                        {isSelected && <CheckCircle className="h-5 w-5 text-blue-400 shrink-0" />}
+                        {isSelected && <CheckCircle className="h-5 w-5 text-sky-400 shrink-0" />}
                       </button>
                     )
                   })}
@@ -580,7 +580,7 @@ function OnboardingContent() {
                     value={openAnswer}
                     onChange={e => setOpenAnswer(e.target.value)}
                     placeholder="Provide your explain answer or bug corrections in short here..."
-                    className="w-full bg-slate-950/40 border border-slate-850 hover:border-slate-800 text-slate-200 px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-indigo-500 transition duration-200 placeholder:text-slate-650"
+                    className="w-full bg-slate-950/40 border border-slate-850 hover:border-slate-800 text-slate-200 px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-sky-500 transition duration-200 placeholder:text-slate-650"
                   />
                 </div>
               )}
@@ -590,7 +590,7 @@ function OnboardingContent() {
             <div className="space-y-3 bg-slate-950/20 border border-slate-850 rounded-xl p-4">
               <div className="flex justify-between text-xs font-semibold text-slate-400">
                 <span>Self-assessed confidence level for this topic:</span>
-                <span className="text-indigo-400 font-bold">{confidenceRating} / 10</span>
+                <span className="text-sky-400 font-bold">{confidenceRating} / 10</span>
               </div>
               <input
                 type="range"
@@ -598,7 +598,7 @@ function OnboardingContent() {
                 max="10"
                 value={confidenceRating}
                 onChange={e => setConfidenceRating(Number(e.target.value))}
-                className="w-full h-1 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-1 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-sky-500"
               />
             </div>
 
@@ -608,7 +608,7 @@ function OnboardingContent() {
                 type="button"
                 onClick={handleSubmitAnswer}
                 disabled={loading}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition duration-200 disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sky-600 to-sky-600 hover:from-sky-500 hover:to-sky-500 text-white font-bold rounded-xl transition duration-200 disabled:opacity-50"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : (
                   quizStep + 1 === totalQuizSteps ? 'Submit and Analyze Skills' : 'Next Question'
@@ -630,12 +630,12 @@ function OnboardingContent() {
           >
             {/* Spinning Brain Ring */}
             <div className="relative w-28 h-28 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-4 border-t-blue-500 border-r-indigo-500 border-b-purple-500 border-l-slate-800 animate-spin" />
-              <Brain className="h-12 w-12 text-blue-400 animate-pulse" />
+              <div className="absolute inset-0 rounded-full border-4 border-t-sky-500 border-r-sky-500 border-b-purple-500 border-l-slate-800 animate-spin" />
+              <Brain className="h-12 w-12 text-sky-400 animate-pulse" />
             </div>
 
             <div className="space-y-3">
-              <h2 className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent leading-none">
+              <h2 className="text-3xl font-extrabold bg-gradient-to-r from-sky-400 via-sky-400 to-purple-400 bg-clip-text text-transparent leading-none">
                 AI Architect Skill Analysis...
               </h2>
               <p className="text-slate-400 text-sm max-w-xs mx-auto animate-pulse">
@@ -667,14 +667,14 @@ function OnboardingContent() {
             <div className="bg-slate-950/60 border border-slate-850 rounded-xl p-6 flex items-center justify-around">
               <div className="text-center">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Placement Level</span>
-                <span className="text-5xl font-extrabold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent block mt-1">
+                <span className="text-5xl font-extrabold bg-gradient-to-r from-sky-400 to-sky-400 bg-clip-text text-transparent block mt-1">
                   Level {levelResults.scores?.overallLevel || 1}
                 </span>
               </div>
               <div className="h-12 w-px bg-slate-800" />
               <div className="text-center">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Estimated Rank</span>
-                <span className="text-xl font-bold text-indigo-300 block mt-3">
+                <span className="text-xl font-bold text-sky-300 block mt-3">
                   {levelResults.scores?.estimatedLevel || 'BEGINNER'}
                 </span>
               </div>
@@ -702,7 +702,7 @@ function OnboardingContent() {
                   <ul className="text-slate-300 text-xs space-y-1.5">
                     {levelResults.scores.skillGaps.slice(0, 2).map((gap: string) => (
                       <li key={gap} className="flex items-center gap-1.5">
-                        <BookOpen className="h-3.5 w-3.5 text-indigo-450" />
+                        <BookOpen className="h-3.5 w-3.5 text-sky-450" />
                         {gap}
                       </li>
                     ))}
@@ -711,14 +711,22 @@ function OnboardingContent() {
               )}
             </div>
 
-            {/* Call to action */}
-            <button
-              onClick={() => router.push('/student/dashboard')}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition duration-200"
-            >
-              Enter Student Workspace
-              <ChevronRight className="h-5 w-5" />
-            </button>
+            {/* Call to action — go straight to the personalised roadmap (the recommendation output) */}
+            <div className="space-y-3">
+              <button
+                onClick={() => router.push('/student/roadmap')}
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-sky-600 to-sky-600 hover:from-sky-500 hover:to-sky-500 text-white font-bold rounded-xl transition duration-200"
+              >
+                View My Personalised Roadmap
+                <ChevronRight className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => router.push('/student/dashboard')}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 px-6 py-3 text-sm font-semibold text-slate-300 transition hover:bg-slate-800/60"
+              >
+                Go to dashboard
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -308,3 +308,28 @@ export class AIService {
 
 // Singleton — instantiated once when the backend process starts
 export const aiService = new AIService();
+
+// ---------------------------------------------------------------------------
+// Structured AI submission review (Python FastAPI: POST /api/v1/ai-review)
+// ---------------------------------------------------------------------------
+
+export interface AIReviewPayload {
+  submission_type: 'code' | 'assignment' | 'project' | 'capstone' | 'hackathon';
+  content: string;
+  language?: string;
+  context?: string;
+}
+
+/**
+ * Calls the AI service's structured review endpoint. Throws on transport error
+ * or when the model is unavailable (503) so callers can surface an honest
+ * "AI review unavailable" message — never a fabricated review.
+ */
+export async function reviewSubmissionViaAI(payload: AIReviewPayload): Promise<any> {
+  const serviceUrl = process.env.AI_SERVICE_URL || config.aiServiceUrl || 'http://localhost:8000';
+  const { data } = await axios.post(`${serviceUrl}/api/v1/ai-review`, payload, {
+    headers: internalHeaders(),
+    timeout: 60_000,
+  });
+  return data;
+}

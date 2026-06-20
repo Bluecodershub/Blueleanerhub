@@ -178,7 +178,7 @@ export default function QuizPage() {
       <div className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl" />
         </div>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -234,7 +234,7 @@ export default function QuizPage() {
     return (
       <div className="relative mx-auto max-w-3xl space-y-6 pb-20">
         {/* Ambient */}
-        <div className="bg-blue-500/8 pointer-events-none absolute -left-20 top-16 h-64 w-64 rounded-full blur-3xl" />
+        <div className="bg-sky-500/8 pointer-events-none absolute -left-20 top-16 h-64 w-64 rounded-full blur-3xl" />
         <div className="bg-primary/8 pointer-events-none absolute -right-16 top-40 h-56 w-56 rounded-full blur-3xl" />
 
         {/* Progress bar header */}
@@ -278,7 +278,7 @@ export default function QuizPage() {
               <div className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-primary" />
               <div className="from-primary/8 pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent" />
               <div className="flex items-center gap-2">
-                <Badge className="border-blue-500/20 bg-blue-500/10 text-[10px] font-bold uppercase text-blue-400">
+                <Badge className="border-sky-500/20 bg-sky-500/10 text-[10px] font-bold uppercase text-sky-400">
                   {q.topic}
                 </Badge>
                 <Badge
@@ -414,7 +414,7 @@ export default function QuizPage() {
                 <Button
                   onClick={handleConfirm}
                   disabled={!selectedAnswer}
-                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-white hover:bg-primary/90"
+                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-black hover:bg-primary/90"
                 >
                   Confirm Answer
                   <ChevronRight className="h-4 w-4" />
@@ -422,7 +422,7 @@ export default function QuizPage() {
               ) : (
                 <Button
                   onClick={handleNext}
-                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-white hover:bg-primary/90"
+                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-black hover:bg-primary/90"
                 >
                   {currentIndex === questions.length - 1 ? 'See Results' : 'Next Question'}
                   <ChevronRight className="h-4 w-4" />
@@ -443,7 +443,7 @@ export default function QuizPage() {
     return (
       <div className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-blue-500/15 blur-3xl" />
+          <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-sky-500/15 blur-3xl" />
         </div>
 
         <motion.div
@@ -515,7 +515,7 @@ export default function QuizPage() {
                 setAnswers(Array(questions.length).fill(null))
                 setTimeLeft(120)
               }}
-              className="h-12 gap-2 rounded-2xl bg-primary font-bold text-white hover:bg-primary/90"
+              className="h-12 gap-2 rounded-2xl bg-primary font-bold text-black hover:bg-primary/90"
             >
               <RotateCcw className="h-4 w-4" />
               Retry Quiz
@@ -596,7 +596,7 @@ export default function QuizPage() {
               <Badge className={`border text-[10px] ${difficultyColors[rq.difficulty]}`}>
                 {rq.difficulty}
               </Badge>
-              <Badge className="border-blue-500/20 bg-blue-500/10 text-[10px] text-blue-400">
+              <Badge className="border-sky-500/20 bg-sky-500/10 text-[10px] text-sky-400">
                 {rq.topic}
               </Badge>
             </div>
@@ -655,8 +655,8 @@ export default function QuizPage() {
             })}
           </div>
 
-          <div className="bg-blue-500/8 space-y-2 rounded-2xl border border-blue-500/20 p-5">
-            <p className="text-xs font-bold uppercase tracking-wider text-blue-400">Explanation</p>
+          <div className="bg-sky-500/8 space-y-2 rounded-2xl border border-sky-500/20 p-5">
+            <p className="text-xs font-bold uppercase tracking-wider text-sky-400">Explanation</p>
             <p className="text-sm leading-relaxed text-muted-foreground">{rq.explanation}</p>
           </div>
 
@@ -675,7 +675,7 @@ export default function QuizPage() {
                   ? setReviewIndex(reviewIndex + 1)
                   : setStep('result')
               }
-              className="flex-1 gap-2 rounded-xl bg-primary text-white hover:bg-primary/90"
+              className="flex-1 gap-2 rounded-xl bg-primary text-black hover:bg-primary/90"
             >
               {reviewIndex < questions.length - 1 ? 'Next' : 'Done'}
               <ChevronRight className="h-4 w-4" />

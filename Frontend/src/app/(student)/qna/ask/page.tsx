@@ -88,11 +88,11 @@ export default function AskQuestionPage() {
         </div>
 
         {/* Tips card */}
-        <Card className="mb-6 border-blue-800 bg-blue-950/30">
+        <Card className="mb-6 border-sky-800 bg-sky-950/30">
           <CardContent className="p-4">
             <div className="flex items-start gap-3">
-              <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" />
-              <div className="text-sm text-blue-300">
+              <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-sky-400" />
+              <div className="text-sm text-sky-300">
                 <strong className="font-semibold">Writing a great question:</strong> Include
                 relevant code, error messages, and what you've already attempted. Specific questions
                 get faster, better answers.
@@ -144,7 +144,7 @@ export default function AskQuestionPage() {
                     <Link
                       key={q}
                       href="#"
-                      className="block py-0.5 text-xs text-blue-400 hover:underline"
+                      className="block py-0.5 text-xs text-sky-400 hover:underline"
                     >
                       → {q}
                     </Link>

@@ -17,8 +17,8 @@ interface QuickActionsProps {
 }
 
 const colorClasses = {
-  blue: 'bg-blue-50/10 border-blue-500/20 hover:bg-blue-50/20 text-blue-400',
-  green: 'bg-blue-50/10 border-blue-500/20 hover:bg-blue-50/20 text-blue-400',
+  blue: 'bg-sky-50/10 border-sky-500/20 hover:bg-sky-50/20 text-sky-400',
+  green: 'bg-sky-50/10 border-sky-500/20 hover:bg-sky-50/20 text-sky-400',
   purple: 'bg-purple-50/10 border-purple-500/20 hover:bg-purple-50/20 text-purple-400',
   yellow: 'bg-yellow-50/10 border-yellow-500/20 hover:bg-yellow-50/20 text-yellow-400',
   primary: 'bg-primary/10 border-primary/20 hover:bg-primary/20 text-primary',

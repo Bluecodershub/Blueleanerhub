@@ -15,8 +15,8 @@ export default function SoftwareLabPage() {
   ])
 
   const files = [
-    { name: 'main.py', icon: FileCode, color: 'text-blue-400' },
-    { name: 'utils.py', icon: FileCode, color: 'text-blue-400' },
+    { name: 'main.py', icon: FileCode, color: 'text-sky-400' },
+    { name: 'utils.py', icon: FileCode, color: 'text-sky-400' },
     { name: 'requirements.txt', icon: Files, color: 'text-muted-foreground' },
   ]
 
@@ -49,7 +49,7 @@ export default function SoftwareLabPage() {
           <div className="mx-1 h-4 w-px bg-secondary" />
           <Button
             size="sm"
-            className="h-8 rounded-lg bg-primary/90 px-4 font-bold text-white hover:bg-primary"
+            className="h-8 rounded-lg bg-primary/90 px-4 font-bold text-black hover:bg-primary"
           >
             <Play className="mr-2 h-3.5 w-3.5 fill-current" /> RUN_PROJECT
           </Button>
@@ -102,7 +102,7 @@ export default function SoftwareLabPage() {
           <div className="group relative flex-1 overflow-hidden rounded-xl border border-border bg-background/80">
             <div className="absolute left-0 top-0 flex h-8 w-full items-center justify-between border-b border-border bg-card/60 px-4">
               <div className="flex items-center gap-2">
-                <FileCode className="h-3.5 w-3.5 text-blue-400" />
+                <FileCode className="h-3.5 w-3.5 text-sky-400" />
                 <span className="text-xs font-bold uppercase text-foreground/80">{activeFile}</span>
               </div>
               <div className="flex items-center gap-3">
@@ -122,37 +122,37 @@ export default function SoftwareLabPage() {
                   ))}
                 </div>
                 <div className="flex-1">
-                  <pre className="text-blue-200">
+                  <pre className="text-sky-200">
                     <span className="text-purple-400">import</span> tensorflow{' '}
                     <span className="text-purple-400">as</span> tf
                   </pre>
-                  <pre className="text-blue-200">
+                  <pre className="text-sky-200">
                     <span className="text-purple-400">import</span> numpy{' '}
                     <span className="text-purple-400">as</span> np
                   </pre>
                   <pre className="mt-2 italic text-muted-foreground">
                     # Bluelearner-AI specialized agent initialization
                   </pre>
-                  <pre className="text-blue-200">model = tf.keras.Sequential([</pre>
-                  <pre className="text-blue-200">
+                  <pre className="text-sky-200">model = tf.keras.Sequential([</pre>
+                  <pre className="text-sky-200">
                     {' '}
                     tf.keras.layers.Dense(<span className="text-yellow-400">128</span>, activation=
                     <span className="text-foreground/70">'relu'</span>),
                   </pre>
-                  <pre className="text-blue-200">
+                  <pre className="text-sky-200">
                     {' '}
                     tf.keras.layers.Dropout(<span className="text-yellow-400">0.2</span>),
                   </pre>
-                  <pre className="text-blue-200">
+                  <pre className="text-sky-200">
                     {' '}
                     tf.keras.layers.Dense(<span className="text-yellow-400">10</span>)
                   </pre>
-                  <pre className="text-blue-200">])</pre>
-                  <pre className="mt-4 text-blue-200">
+                  <pre className="text-sky-200">])</pre>
+                  <pre className="mt-4 text-sky-200">
                     <span className="text-purple-400">def</span>{' '}
                     <span className="text-yellow-400">train_cycle</span>(data):
                   </pre>
-                  <pre className="text-blue-200">
+                  <pre className="text-sky-200">
                     {' '}
                     <span className="text-muted-foreground">...</span>
                   </pre>

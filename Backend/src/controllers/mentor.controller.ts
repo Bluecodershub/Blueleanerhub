@@ -9,9 +9,14 @@ export class MentorController {
     try {
       const userId = req.user!.id;
 
+      // Pending capstone reviews (queue is platform-wide, not batch-scoped).
+      const pendingSubmissions = await CapstoneSubmission.countDocuments({
+        status: { $in: ['SUBMITTED', 'UNDER_REVIEW'] },
+      });
+
       const profile = await MentorProfile.findOne({ userId: new mongoose.Types.ObjectId(userId) }).lean();
       if (!profile) {
-        return res.json({ success: true, data: { totalClasses: 0, totalStudents: 0, upcomingSessions: 0, pendingSubmissions: 0 } });
+        return res.json({ success: true, data: { totalClasses: 0, totalStudents: 0, upcomingSessions: 0, pendingSubmissions } });
       }
 
       const batches = await MentorBatch.find({ mentorId: new mongoose.Types.ObjectId(userId) }).lean();
@@ -23,7 +28,7 @@ export class MentorController {
           totalClasses:       batches.length,
           totalStudents,
           upcomingSessions:   0,
-          pendingSubmissions: 0,
+          pendingSubmissions,
         },
       });
     } catch (error) {

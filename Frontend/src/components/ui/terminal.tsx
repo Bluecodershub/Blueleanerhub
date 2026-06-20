@@ -26,22 +26,22 @@ const Terminal: React.FC<TerminalProps> = ({
         <div className="flex gap-2">
           <div className="h-3 w-3 rounded-full bg-red-500" />
           <div className="h-3 w-3 rounded-full bg-yellow-500" />
-          <div className="h-3 w-3 rounded-full bg-blue-500" />
+          <div className="h-3 w-3 rounded-full bg-sky-500" />
         </div>
         <span className="ml-2 text-xs text-gray-400">terminal</span>
       </div>
       <div
-        className="space-y-2 overflow-auto p-4 text-blue-400"
+        className="space-y-2 overflow-auto p-4 text-sky-400"
         style={{ maxHeight: height ? `calc(${height} - 40px)` : undefined }}
       >
         {lines.map((cmd, idx) => (
           <div key={idx}>
-            <span className="text-blue-400">$</span> {cmd}
+            <span className="text-sky-400">$</span> {cmd}
           </div>
         ))}
         {lines.length === 0 && (
           <div>
-            <span className="text-blue-400">$</span> <span className="animate-pulse">_</span>
+            <span className="text-sky-400">$</span> <span className="animate-pulse">_</span>
           </div>
         )}
       </div>

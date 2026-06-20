@@ -47,7 +47,7 @@ export function DailyChallenge({
   }, [timeRemaining])
 
   const difficultyColors = {
-    Easy: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
+    Easy: 'text-sky-400 bg-sky-400/10 border-sky-400/20',
     Medium: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
     Hard: 'text-red-400 bg-red-400/10 border-red-400/20',
   }
@@ -130,7 +130,7 @@ export function DailyChallenge({
             ) : (
               <Button
                 onClick={onStart}
-                className="group/btn h-16 rounded-2xl bg-primary px-10 text-xl font-black italic tracking-tighter text-white shadow-2xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95"
+                className="group/btn h-16 rounded-2xl bg-primary px-10 text-xl font-black italic tracking-tighter text-black shadow-2xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95"
               >
                 SOLVE_NOW
                 <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover/btn:translate-x-2" />

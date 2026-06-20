@@ -133,8 +133,8 @@ export default function CorporateAIScreeningPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-                <BarChart3 className="h-6 w-6 text-blue-500" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky-500/10">
+                <BarChart3 className="h-6 w-6 text-sky-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{avgScore}%</p>
@@ -215,7 +215,7 @@ export default function CorporateAIScreeningPage() {
                             screening.status === 'completed'
                               ? 'bg-green-500/10 text-green-500 border-green-500/20'
                               : screening.status === 'in_progress'
-                              ? 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                              ? 'bg-sky-500/10 text-sky-500 border-sky-500/20'
                               : 'bg-red-500/10 text-red-500 border-red-500/20'
                           }
                         >
@@ -260,7 +260,7 @@ export default function CorporateAIScreeningPage() {
                         </div>
                       ) : screening.status === 'in_progress' ? (
                         <div className="text-center">
-                          <div className="flex items-center gap-2 text-blue-500">
+                          <div className="flex items-center gap-2 text-sky-500">
                             <Brain className="h-5 w-5 animate-pulse" />
                             <span className="text-sm font-medium">Analyzing...</span>
                           </div>

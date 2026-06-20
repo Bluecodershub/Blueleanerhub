@@ -5,6 +5,7 @@ import {
   UserProgress, QuizAttempt, HackathonTeam, XpTracking,
   Course, Assessment, SkillScores, PaymentTransaction,
   HackathonSubmission, CapstoneSubmission, CourseEnrollment,
+  GrievanceTicket, ConsentRecord,
 } from '../db/models';
 import logger from '../utils/logger';
 import { hashPassword } from '../utils/encryption';
@@ -489,4 +490,92 @@ export async function getRoleAccessControl(_req: Request, res: Response) {
       ],
     },
   });
+}
+
+// ─── Grievance Redressal (DPDP / IT Rules) ───────────────────────────────────
+
+const GRIEVANCE_STATUSES = ['OPEN', 'IN_REVIEW', 'RESOLVED', 'CLOSED'] as const;
+const GRIEVANCE_CATEGORIES = ['PRIVACY', 'PAYMENT', 'CONTENT', 'HARASSMENT', 'ACCOUNT', 'CERTIFICATE', 'OTHER'] as const;
+
+export async function listGrievances(req: Request, res: Response, next: NextFunction) {
+  try {
+    const page  = Math.max(1, parseInt(req.query.page  as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 20);
+    const skip  = (page - 1) * limit;
+
+    const filter: Record<string, any> = {};
+    const status = String(req.query.status || '').toUpperCase();
+    if ((GRIEVANCE_STATUSES as readonly string[]).includes(status)) filter.status = status;
+    const category = String(req.query.category || '').toUpperCase();
+    if ((GRIEVANCE_CATEGORIES as readonly string[]).includes(category)) filter.category = category;
+
+    const [tickets, total, openCount] = await Promise.all([
+      GrievanceTicket.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      GrievanceTicket.countDocuments(filter),
+      GrievanceTicket.countDocuments({ status: { $in: ['OPEN', 'IN_REVIEW'] } }),
+    ]);
+
+    res.json({
+      success: true,
+      data: { tickets, total, openCount, page, limit, totalPages: Math.ceil(total / limit) },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateGrievance(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { status, resolutionNote } = req.body as { status?: string; resolutionNote?: string };
+    const update: Record<string, any> = { updatedAt: new Date() };
+
+    if (status !== undefined) {
+      const next = String(status).toUpperCase();
+      if (!(GRIEVANCE_STATUSES as readonly string[]).includes(next)) {
+        return res.status(400).json({ success: false, message: 'Invalid status' });
+      }
+      update.status = next;
+    }
+    if (resolutionNote !== undefined) {
+      update.resolutionNote = String(resolutionNote).slice(0, 5000);
+    }
+
+    const ticket = await GrievanceTicket.findByIdAndUpdate(req.params.id, { $set: update }, { new: true }).lean();
+    if (!ticket) return res.status(404).json({ success: false, message: 'Grievance not found' });
+
+    logger.info(`Admin ${req.user!.id} updated grievance ${req.params.id} → ${update.status ?? 'note'}`);
+    res.json({ success: true, data: ticket });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ─── Consent Records (DPDP audit trail, read-only) ───────────────────────────
+
+export async function listConsents(req: Request, res: Response, next: NextFunction) {
+  try {
+    const page  = Math.max(1, parseInt(req.query.page  as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+    const skip  = (page - 1) * limit;
+
+    const filter: Record<string, any> = {};
+    if (req.query.consentType) filter.consentType = String(req.query.consentType).toUpperCase();
+
+    const [records, total] = await Promise.all([
+      ConsentRecord.find(filter)
+        .populate('userId', 'fullName email')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      ConsentRecord.countDocuments(filter),
+    ]);
+
+    res.json({
+      success: true,
+      data: { records, total, page, limit, totalPages: Math.ceil(total / limit) },
+    });
+  } catch (err) {
+    next(err);
+  }
 }

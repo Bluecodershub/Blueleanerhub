@@ -53,15 +53,15 @@ export default function CorporateReportsPage() {
 
   const funnelSteps = stats ? [
     { label: 'Jobs Posted',              count: stats.jobsPosted,             color: 'bg-amber-500',   pct: 100 },
-    { label: 'Total Candidates',         count: stats.totalCandidates,        color: 'bg-blue-500',    pct: stats.jobsPosted > 0 ? Math.min(Math.round((stats.totalCandidates / stats.jobsPosted) * 10), 100) : 0 },
+    { label: 'Total Candidates',         count: stats.totalCandidates,        color: 'bg-sky-500',    pct: stats.jobsPosted > 0 ? Math.min(Math.round((stats.totalCandidates / stats.jobsPosted) * 10), 100) : 0 },
     { label: 'Hackathon Participants',   count: stats.hackathonParticipants,  color: 'bg-emerald-500', pct: stats.totalCandidates > 0 ? Math.round((stats.hackathonParticipants / Math.max(stats.totalCandidates, 1)) * 100) : 0 },
   ] : []
 
   const statusColor: Record<string, string> = {
     DRAFT:     'bg-muted/50 text-muted-foreground',
-    PUBLISHED: 'bg-blue-500/10 text-blue-400',
+    PUBLISHED: 'bg-sky-500/10 text-sky-400',
     ACTIVE:    'bg-emerald-500/10 text-emerald-400',
-    COMPLETED: 'bg-violet-500/10 text-violet-400',
+    COMPLETED: 'bg-sky-500/10 text-sky-400',
   }
 
   return (
@@ -90,8 +90,8 @@ export default function CorporateReportsPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats && [
               { label: 'Jobs Posted',         value: stats.jobsPosted,           icon: Briefcase, color: 'text-amber-500',   bg: 'bg-amber-500/10' },
-              { label: 'Hackathons Hosted',   value: stats.hackathonsHosted,     icon: Trophy,    color: 'text-violet-500',  bg: 'bg-violet-500/10' },
-              { label: 'Total Candidates',    value: stats.totalCandidates,      icon: Users,     color: 'text-blue-500',    bg: 'bg-blue-500/10' },
+              { label: 'Hackathons Hosted',   value: stats.hackathonsHosted,     icon: Trophy,    color: 'text-sky-500',  bg: 'bg-sky-500/10' },
+              { label: 'Total Candidates',    value: stats.totalCandidates,      icon: Users,     color: 'text-sky-500',    bg: 'bg-sky-500/10' },
               { label: 'Participants',        value: stats.hackathonParticipants, icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
             ].map(({ label, value, icon: Icon, color, bg }, i) => (
               <motion.div key={label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>

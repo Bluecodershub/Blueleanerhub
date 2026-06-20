@@ -69,6 +69,11 @@ import {
   Notification,
   CapstoneSubmission,
   CorporateProfile,
+  ConsentRecord,
+  GrievanceTicket,
+  MoodleCourseMapping,
+  MoodleUserMapping,
+  MoodleSyncLog,
 } from './models';
 
 // Re-export models for external use
@@ -89,6 +94,10 @@ export {
   CourseContent, RoadmapNodeProgress,
   // New modules
   CourseEnrollment, Notification, CapstoneSubmission, CorporateProfile,
+  // Legal & compliance
+  ConsentRecord, GrievanceTicket,
+  // Moodle LMS integration
+  MoodleCourseMapping, MoodleUserMapping, MoodleSyncLog,
 } from './models';
 
 // ─── Transaction session propagation ─────────────────────────────────────────
@@ -580,6 +589,41 @@ export const db = {
       findFirst: async (filter: any) => injectSession(RepositoryStar.findOne(filter)).lean(),
       create: async (data: any) => sessionCreate(RepositoryStar, data),
       delete: async (filter: any) => injectSession(RepositoryStar.findOneAndDelete(filter)).exec(),
+    },
+    // Legal & compliance
+    consentRecords: {
+      findMany: async (filter: any = {}) => injectSession(ConsentRecord.find(filter).sort({ createdAt: -1 })).lean(),
+      findFirst: async (filter: any) => injectSession(ConsentRecord.findOne(filter)).lean(),
+      create: async (data: any) => sessionCreate(ConsentRecord, data),
+      update: async (filter: any, data: any) => injectSession(ConsentRecord.findOneAndUpdate(filter, toSetUpdate(data), { new: true })).lean(),
+    },
+    grievanceTickets: {
+      findMany: async (filter: any = {}) => injectSession(GrievanceTicket.find(filter).sort({ createdAt: -1 })).lean(),
+      findFirst: async (filter: any) => injectSession(GrievanceTicket.findOne(filter)).lean(),
+      create: async (data: any) => sessionCreate(GrievanceTicket, data),
+      update: async (filter: any, data: any) => injectSession(GrievanceTicket.findOneAndUpdate(filter, toSetUpdate(data), { new: true })).lean(),
+    },
+    // Moodle LMS integration
+    moodleCourseMappings: {
+      findMany: async (filter: any = {}) => injectSession(MoodleCourseMapping.find(filter).sort({ lastSyncedAt: -1 })).lean(),
+      upsert: async (moodleCourseId: number, data: any) =>
+        injectSession(MoodleCourseMapping.findOneAndUpdate({ moodleCourseId }, toSetUpdate(data), { new: true, upsert: true })).lean(),
+      count: async (filter: any = {}) => MoodleCourseMapping.countDocuments(filter),
+    },
+    moodleUserMappings: {
+      findMany: async (filter: any = {}) => injectSession(MoodleUserMapping.find(filter).sort({ lastSyncedAt: -1 })).lean(),
+      upsert: async (moodleUserId: number, data: any) =>
+        injectSession(MoodleUserMapping.findOneAndUpdate({ moodleUserId }, toSetUpdate(data), { new: true, upsert: true })).lean(),
+      count: async (filter: any = {}) => MoodleUserMapping.countDocuments(filter),
+    },
+    moodleSyncLogs: {
+      findMany: async (filter: any = {}, opts?: { limit?: number }) => {
+        let q = injectSession(MoodleSyncLog.find(filter).sort({ createdAt: -1 }));
+        if (opts?.limit) q = q.limit(opts.limit) as any;
+        return q.lean();
+      },
+      findFirst: async (filter: any = {}) => injectSession(MoodleSyncLog.findOne(filter).sort({ createdAt: -1 })).lean(),
+      create: async (data: any) => sessionCreate(MoodleSyncLog, data),
     },
   }, // end db.query
 

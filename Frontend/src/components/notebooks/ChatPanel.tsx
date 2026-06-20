@@ -121,12 +121,12 @@ export default function ChatPanel({
 
   return (
     <div className="relative flex h-full flex-col bg-white/35 dark:bg-transparent">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-500/10 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-sky-500/10 to-transparent" />
       {/* Chat header */}
-      <div className="relative flex shrink-0 items-center justify-between border-b border-white/10 bg-white/65 px-4 py-2 backdrop-blur dark:bg-gray-900/55">
+      <div className="relative flex shrink-0 items-center justify-between border-b border-white/10 bg-white/65 px-4 py-2 backdrop-blur dark:bg-background-secondary/55">
         <div className="flex items-center gap-2">
           <BookOpen className="h-4 w-4 text-primary/80" />
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-gray-500 dark:text-muted-foreground">
             {readySources.length === 0
               ? 'Add sources to start chatting'
               : `Grounded in ${readySources.length} source${readySources.length === 1 ? '' : 's'}`}
@@ -149,13 +149,13 @@ export default function ChatPanel({
       <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center py-16 text-center">
-            <div className="mb-3 rounded-full bg-blue-50 p-3 dark:bg-blue-900/20">
+            <div className="mb-3 rounded-full bg-sky-50 p-3 dark:bg-sky-900/20">
               <Bot className="h-8 w-8 text-primary/80" />
             </div>
-            <h3 className="mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <h3 className="mb-1 text-sm font-semibold text-gray-700 dark:text-muted-foreground">
               Ask anything about your sources
             </h3>
-            <p className="max-w-xs text-xs text-gray-400 dark:text-gray-500">
+            <p className="max-w-xs text-xs text-gray-400 dark:text-muted-foreground">
               {readySources.length === 0
                 ? 'Add some sources in the Sources panel, then come back to chat.'
                 : "I'll answer based only on what's in your notebook, with citations."}
@@ -172,10 +172,10 @@ export default function ChatPanel({
                     type="button"
                     key={s}
                     onClick={() => setInput(s)}
-                    className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5
-                               text-xs text-primary transition-colors hover:bg-blue-100
-                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 dark:border-blue-800
-                               dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40"
+                    className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5
+                               text-xs text-primary transition-colors hover:bg-sky-100
+                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/60 dark:border-sky-800
+                               dark:bg-sky-900/20 dark:text-sky-400 dark:hover:bg-sky-900/40"
                   >
                     {s}
                   </button>
@@ -195,8 +195,8 @@ export default function ChatPanel({
               className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {msg.role === 'assistant' && (
-                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/40">
-                  <Bot className="h-4 w-4 text-primary dark:text-blue-400" />
+                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/40">
+                  <Bot className="h-4 w-4 text-primary dark:text-sky-400" />
                 </div>
               )}
 
@@ -206,8 +206,8 @@ export default function ChatPanel({
                 <div
                   className={`whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'rounded-tr-sm bg-primary text-white'
-                      : 'rounded-tl-sm border border-blue-100/70 bg-white/90 text-gray-900 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-800/90 dark:text-gray-100'
+                      ? 'rounded-tr-sm bg-primary text-black'
+                      : 'rounded-tl-sm border border-sky-100/70 bg-white/90 text-gray-900 shadow-sm backdrop-blur dark:border-border dark:bg-card/90 dark:text-foreground'
                   }`}
                 >
                   {msg.content}
@@ -221,11 +221,11 @@ export default function ChatPanel({
                         key={si}
                         type="button"
                         onClick={() => onOpenCitation(src.source_id, src.snippet, src.chunk_index)}
-                        className="rounded-lg border border-blue-200 bg-blue-50 px-2
-                                   py-1.5 text-left text-xs text-blue-700
-                                   transition-colors hover:border-blue-400 focus-visible:outline-none focus-visible:ring-2
-                                   focus-visible:ring-blue-500/60 dark:border-blue-800
-                                   dark:bg-blue-900/20 dark:text-blue-300 dark:hover:border-blue-600"
+                        className="rounded-lg border border-sky-200 bg-sky-50 px-2
+                                   py-1.5 text-left text-xs text-sky-700
+                                   transition-colors hover:border-sky-400 focus-visible:outline-none focus-visible:ring-2
+                                   focus-visible:ring-sky-500/60 dark:border-sky-800
+                                   dark:bg-sky-900/20 dark:text-sky-300 dark:hover:border-sky-600"
                       >
                         <div className="font-medium">📎 {src.title}</div>
                         {src.snippet ? (
@@ -243,8 +243,8 @@ export default function ChatPanel({
               </div>
 
               {msg.role === 'user' && (
-                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-                  <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-200 dark:bg-popover">
+                  <User className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />
                 </div>
               )}
             </motion.div>
@@ -253,10 +253,10 @@ export default function ChatPanel({
 
         {sending && (
           <div className="flex justify-start gap-3">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/40">
-              <Bot className="h-4 w-4 text-primary dark:text-blue-400" />
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/40">
+              <Bot className="h-4 w-4 text-primary dark:text-sky-400" />
             </div>
-            <div className="rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3 dark:bg-gray-800">
+            <div className="rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3 dark:bg-card">
               <div className="flex items-center gap-1">
                 <span
                   className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
@@ -281,7 +281,7 @@ export default function ChatPanel({
       {/* Input bar */}
       <form
         onSubmit={handleSend}
-        className="flex shrink-0 gap-2 border-t border-white/10 bg-white/70 px-4 py-3 backdrop-blur dark:bg-gray-900/60"
+        className="flex shrink-0 gap-2 border-t border-white/10 bg-white/70 px-4 py-3 backdrop-blur dark:bg-background-secondary/60"
       >
         <Input
           value={input}
@@ -301,7 +301,7 @@ export default function ChatPanel({
         <Button
           type="submit"
           disabled={!input.trim() || sending || readySources.length === 0}
-          className="bg-primary px-4 text-white hover:bg-primary/90"
+          className="bg-primary px-4 text-black hover:bg-primary/90"
         >
           {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </Button>

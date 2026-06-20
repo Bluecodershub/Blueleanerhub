@@ -53,7 +53,7 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden bg-background px-4 py-12">
+    <div className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden px-4 py-12">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-[-10%] top-[-10%] h-[40%] w-[40%] animate-pulse rounded-full bg-primary/10 blur-[120px]" />
         <div

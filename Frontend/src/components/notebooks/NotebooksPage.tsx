@@ -90,25 +90,25 @@ export default function NotebooksPage() {
   return (
     <div className="relative mx-auto max-w-6xl overflow-hidden px-4 py-8">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" />
         <div className="absolute -right-20 top-32 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
       </div>
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
           <div className="mb-1 flex items-center gap-3">
-            <div className="rounded-xl bg-blue-100 p-2 dark:bg-blue-900/30">
-              <Sparkles className="h-6 w-6 text-primary dark:text-blue-400" />
+            <div className="rounded-xl bg-sky-100 p-2 dark:bg-sky-900/30">
+              <Sparkles className="h-6 w-6 text-primary dark:text-sky-400" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Study Notebooks</h1>
           </div>
-          <p className="ml-14 text-sm text-gray-500 dark:text-gray-400">
+          <p className="ml-14 text-sm text-gray-500 dark:text-muted-foreground">
             Upload your materials and chat with an AI tutor grounded in your content
           </p>
         </div>
         <Button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 bg-primary text-white hover:bg-primary/90"
+          className="flex items-center gap-2 bg-primary text-black hover:bg-primary/90"
         >
           <Plus className="h-4 w-4" />
           New Notebook
@@ -123,7 +123,7 @@ export default function NotebooksPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-8 rounded-2xl border border-blue-100/70 bg-white/90 p-6 shadow-[0_18px_55px_rgba(15,23,42,0.12)] backdrop-blur dark:border-gray-700 dark:bg-gray-800/90"
+            className="mb-8 rounded-2xl border border-sky-100/70 bg-white/90 p-6 shadow-[0_18px_55px_rgba(15,23,42,0.12)] backdrop-blur dark:border-border dark:bg-card/90"
           >
             <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
               New Notebook
@@ -131,7 +131,7 @@ export default function NotebooksPage() {
             <form onSubmit={handleCreate} className="space-y-4">
               {/* Emoji picker */}
               <div>
-                <label className="mb-2 block text-sm text-gray-600 dark:text-gray-400">Icon</label>
+                <label className="mb-2 block text-sm text-gray-600 dark:text-muted-foreground">Icon</label>
                 <div className="flex flex-wrap gap-2">
                   {EMOJIS.map((e) => (
                     <button
@@ -140,7 +140,7 @@ export default function NotebooksPage() {
                       onClick={() => setForm((f) => ({ ...f, emoji: e }))}
                       className={`rounded-lg border-2 p-2 text-xl transition-colors ${
                         form.emoji === e
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                          ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/30'
                           : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
                       }`}
                     >
@@ -168,7 +168,7 @@ export default function NotebooksPage() {
                 <Button
                   type="submit"
                   disabled={creating || !form.title.trim()}
-                  className="bg-primary text-white hover:bg-primary/90"
+                  className="bg-primary text-black hover:bg-primary/90"
                 >
                   {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Create Notebook
@@ -182,18 +182,18 @@ export default function NotebooksPage() {
       {/* Notebook grid */}
       {notebooks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="mb-4 rounded-full bg-gray-100 p-4 dark:bg-gray-800">
+          <div className="mb-4 rounded-full bg-gray-100 p-4 dark:bg-card">
             <BookMarked className="h-10 w-10 text-gray-400" />
           </div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+          <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-muted-foreground">
             No notebooks yet
           </h3>
-          <p className="mb-6 max-w-xs text-sm text-gray-400 dark:text-gray-500">
+          <p className="mb-6 max-w-xs text-sm text-gray-400 dark:text-muted-foreground">
             Create a notebook, add your study materials, and start asking questions with AI support.
           </p>
           <Button
             onClick={() => setShowForm(true)}
-            className="bg-primary text-white hover:bg-primary/90"
+            className="bg-primary text-black hover:bg-primary/90"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create your first notebook
@@ -218,9 +218,9 @@ export default function NotebooksPage() {
                     router.push(`/notebooks/${nb.id}`)
                   }
                 }}
-                className="group relative cursor-pointer rounded-2xl border border-blue-100/80 bg-white/95 p-5
-                           shadow-[0_10px_35px_rgba(15,23,42,0.08)] transition-all hover:border-blue-300
-                           hover:shadow-[0_20px_55px_rgba(14,116,144,0.16)] focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800/90 dark:hover:border-blue-600"
+                className="group relative cursor-pointer rounded-2xl border border-sky-100/80 bg-white/95 p-5
+                           shadow-[0_10px_35px_rgba(15,23,42,0.08)] transition-all hover:border-sky-300
+                           hover:shadow-[0_20px_55px_rgba(14,116,144,0.16)] focus:outline-none focus:ring-2 focus:ring-sky-500 dark:border-border dark:bg-card/90 dark:hover:border-sky-600"
               >
                 {/* Delete button */}
                 <button
@@ -242,7 +242,7 @@ export default function NotebooksPage() {
                       {nb.title}
                     </h3>
                     {nb.description && (
-                      <p className="mt-0.5 line-clamp-2 text-xs text-gray-500 dark:text-gray-400">
+                      <p className="mt-0.5 line-clamp-2 text-xs text-gray-500 dark:text-muted-foreground">
                         {nb.description}
                       </p>
                     )}
@@ -251,7 +251,7 @@ export default function NotebooksPage() {
 
                 {/* Stats row */}
                 <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-muted-foreground">
                     <FileText className="h-3.5 w-3.5" />
                     <span>
                       {nb.sourceCount} {nb.sourceCount === 1 ? 'source' : 'sources'}

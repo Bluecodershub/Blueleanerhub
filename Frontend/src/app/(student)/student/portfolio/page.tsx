@@ -106,7 +106,7 @@ export default function PortfolioPage() {
     <div className="space-y-8 pb-20">
       {/* Header */}
       <div className="flex items-center gap-6">
-        <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-violet-600 text-3xl font-bold text-white">
+        <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-sky-600 text-3xl font-bold text-white">
           {user?.fullName?.charAt(0).toUpperCase() || 'U'}
         </div>
         <div>
@@ -180,7 +180,7 @@ export default function PortfolioPage() {
         >
           <Card className="border-border bg-card">
             <CardContent className="p-4 text-center">
-              <Trophy className="mx-auto mb-2 h-6 w-6 text-blue-400" />
+              <Trophy className="mx-auto mb-2 h-6 w-6 text-sky-400" />
               <p className="text-2xl font-bold text-white">#{stats.rank || '-'}</p>
               <p className="text-xs text-muted-foreground">Global Rank</p>
             </CardContent>
@@ -230,7 +230,7 @@ export default function PortfolioPage() {
       {/* Hackathons */}
       <div>
         <h2 className="mb-4 text-xl font-bold text-white flex items-center gap-2">
-          <Trophy className="h-6 w-6 text-blue-400" />
+          <Trophy className="h-6 w-6 text-sky-400" />
           Hackathons
         </h2>
         {hackathons.length > 0 ? (
@@ -257,7 +257,7 @@ export default function PortfolioPage() {
                                 hackathon.status === 'OPEN'
                                   ? 'bg-emerald-500/20 text-emerald-400'
                                   : hackathon.status === 'UPCOMING'
-                                  ? 'bg-blue-500/20 text-blue-400'
+                                  ? 'bg-sky-500/20 text-sky-400'
                                   : 'bg-gray-500/20 text-gray-400'
                               }`}
                             >
@@ -293,7 +293,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* CTA */}
-      <div className="rounded-2xl bg-gradient-to-r from-primary/20 to-violet-600/20 p-8 text-center">
+      <div className="rounded-2xl bg-gradient-to-r from-primary/20 to-sky-600/20 p-8 text-center">
         <h3 className="text-xl font-bold text-white">Ready to add more achievements?</h3>
         <p className="mt-2 text-muted-foreground">
           Join upcoming hackathons and showcase your skills

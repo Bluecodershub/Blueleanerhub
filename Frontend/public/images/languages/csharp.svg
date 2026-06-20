@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">C Sharp logo</title>
+  <desc id="desc">Purple C Sharp language badge.</desc>
+  <rect width="64" height="64" rx="14" fill="#4B1D7A"/>
+  <path fill="#68217A" d="M32 7 54 19.5v25L32 57 10 44.5v-25L32 7Z"/>
+  <path fill="#fff" d="M29.2 45.8c-8.1 0-13.9-5.8-13.9-13.8s5.8-13.8 13.9-13.8c4.9 0 8.5 1.8 11.1 5l-4.7 4c-1.5-1.8-3.3-2.8-6-2.8-4.4 0-7.4 3.1-7.4 7.6s3 7.6 7.4 7.6c2.7 0 4.6-1 6.2-3l4.7 3.9c-2.6 3.4-6.5 5.3-11.3 5.3Z"/>
+  <path fill="#fff" d="M44.8 25h2.4l.4-3.2h2.5l-.4 3.2h2.6l.4-3.2h2.5l-.4 3.2h2.4v2.4h-2.7l-.4 3h2.3v2.4h-2.6l-.4 3.4h-2.5l.4-3.4h-2.6l-.4 3.4h-2.5l.4-3.4h-2.4v-2.4h2.7l.4-3h-2.1V25Zm4.2 5.4h2.6l.4-3h-2.6l-.4 3Z"/>
+</svg>

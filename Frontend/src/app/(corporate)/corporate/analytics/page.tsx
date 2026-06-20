@@ -20,8 +20,8 @@ const overviewStats = [
     change: '+12%',
     trend: 'up',
     icon: Users,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
+    color: 'text-sky-500',
+    bgColor: 'bg-sky-500/10',
   },
   {
     title: 'Active Hackathons',
@@ -278,7 +278,7 @@ export default function AnalyticsPage() {
           <CardContent>
             <div className="space-y-4">
               {[
-                { stage: 'Registered', count: 2847, percentage: 100, color: 'bg-blue-500' },
+                { stage: 'Registered', count: 2847, percentage: 100, color: 'bg-sky-500' },
                 { stage: 'Profile Viewed', count: 1923, percentage: 68, color: 'bg-primary' },
                 { stage: 'Contacted', count: 856, percentage: 30, color: 'bg-amber-500' },
                 { stage: 'Interviewed', count: 234, percentage: 8, color: 'bg-green-500' },

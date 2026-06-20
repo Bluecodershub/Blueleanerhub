@@ -21,80 +21,6 @@ import QuestionCard from '@/components/qna/QuestionCard'
 import QuestionCardSkeleton from '@/components/skeletons/QuestionCardSkeleton'
 import { qnaAPI } from '@/lib/api-civilization'
 
-const MOCK_QUESTIONS = [
-  {
-    id: 1,
-    title: 'How does gradient descent converge in non-convex loss landscapes?',
-    domain: 'machine-learning',
-    voteScore: 47,
-    answerCount: 8,
-    viewCount: 1240,
-    isAnswered: true,
-    tags: ['deep-learning', 'optimization', 'python'],
-    authorName: 'Arjun S.',
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-  },
-  {
-    id: 2,
-    title: 'What is the difference between stress and strain in structural analysis?',
-    domain: 'civil',
-    voteScore: 23,
-    answerCount: 5,
-    viewCount: 830,
-    isAnswered: true,
-    tags: ['structural-analysis', 'mechanics', 'civil'],
-    authorName: 'Priya M.',
-    createdAt: new Date(Date.now() - 3600000 * 8).toISOString(),
-  },
-  {
-    id: 3,
-    title: 'How to implement a binary search tree with AVL rebalancing in Python?',
-    domain: 'computer-science',
-    voteScore: 38,
-    answerCount: 6,
-    viewCount: 2100,
-    isAnswered: true,
-    tags: ['data-structures', 'python', 'algorithms'],
-    authorName: 'Rahul K.',
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-  },
-  {
-    id: 4,
-    title: 'Best practices for DCF valuation in volatile market conditions?',
-    domain: 'finance',
-    voteScore: 15,
-    answerCount: 2,
-    viewCount: 460,
-    isAnswered: false,
-    tags: ['valuation', 'financial-modeling', 'dcf'],
-    authorName: 'Sneha P.',
-    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-  },
-  {
-    id: 5,
-    title: "Why does Bernoulli's equation fail for real fluids at high velocities?",
-    domain: 'mechanical',
-    voteScore: 29,
-    answerCount: 4,
-    viewCount: 670,
-    isAnswered: true,
-    tags: ['fluid-mechanics', 'thermodynamics'],
-    authorName: 'Vikram T.',
-    createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-  },
-  {
-    id: 6,
-    title: 'How to design a PID controller for a temperature regulation system?',
-    domain: 'electrical',
-    voteScore: 52,
-    answerCount: 11,
-    viewCount: 3400,
-    isAnswered: true,
-    tags: ['control-systems', 'pid', 'circuit-analysis'],
-    authorName: 'Divya R.',
-    createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-  },
-]
 
 const POPULAR_TAGS = [
   'python',
@@ -154,8 +80,8 @@ export default function QnAPage() {
           >
             <div>
               <div className="mb-2 flex items-center gap-2">
-                <MessageSquare className="h-5 w-5 text-blue-400" />
-                <span className="text-sm font-medium uppercase tracking-wider text-blue-400">
+                <MessageSquare className="h-5 w-5 text-sky-400" />
+                <span className="text-sm font-medium uppercase tracking-wider text-sky-400">
                   Knowledge Network
                 </span>
               </div>
@@ -175,7 +101,7 @@ export default function QnAPage() {
           {/* Stats */}
           <div className="mt-8 flex gap-6">
             {[
-              { label: 'Questions', value: '12,847', icon: MessageSquare, color: 'text-blue-400' },
+              { label: 'Questions', value: '12,847', icon: MessageSquare, color: 'text-sky-400' },
               {
                 label: 'Answered',
                 value: '10,204',
@@ -216,7 +142,7 @@ export default function QnAPage() {
                     onClick={() => setSort(value)}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                       sort === value
-                        ? 'bg-primary text-white'
+                        ? 'bg-primary text-black'
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -261,7 +187,7 @@ export default function QnAPage() {
             <Card className="border-gray-800 bg-gray-900">
               <CardContent className="p-4">
                 <div className="mb-3 flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-blue-400" />
+                  <Tag className="h-4 w-4 text-sky-400" />
                   <span className="text-sm font-semibold text-white">Popular Tags</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -271,7 +197,7 @@ export default function QnAPage() {
                       onClick={() => setActiveTag(activeTag === tag ? null : tag)}
                       className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                         activeTag === tag
-                          ? 'bg-primary text-white'
+                          ? 'bg-primary text-black'
                           : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                     >
@@ -296,7 +222,7 @@ export default function QnAPage() {
                   { name: 'Meera Iyer', rep: 3760, domain: 'Electrical' },
                 ].map((u) => (
                   <div key={u.name} className="flex items-center gap-2 py-1.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-xs font-bold text-white">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-purple-500 text-xs font-bold text-white">
                       {u.name[0]}
                     </div>
                     <div className="min-w-0 flex-1">

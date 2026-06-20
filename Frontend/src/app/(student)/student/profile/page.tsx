@@ -149,7 +149,7 @@ export default function ProfilePage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-2xl bg-card p-6 sm:p-8"
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-violet-500/5" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-sky-500/5" />
 
         <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end">
           {/* Avatar */}
@@ -207,7 +207,7 @@ export default function ProfilePage() {
           <div className="grid shrink-0 grid-cols-3 gap-3">
             {[
               { label: 'XP', value: totalXP.toLocaleString(), icon: Zap, color: 'text-amber-400' },
-              { label: 'Quizzes', value: quizzesTaken.toString(), icon: Code2, color: 'text-blue-400' },
+              { label: 'Quizzes', value: quizzesTaken.toString(), icon: Code2, color: 'text-sky-400' },
               { label: 'Level', value: `#${level}`, icon: Trophy, color: 'text-orange-400' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="rounded-xl border border-border bg-background/50 p-3 text-center">
@@ -285,7 +285,7 @@ export default function ProfilePage() {
                   { label: 'Total XP', value: totalXP.toLocaleString(), icon: Zap, color: 'text-amber-400' },
                   { label: 'Current Streak', value: `${streak}d`, icon: Flame, color: 'text-orange-400' },
                   { label: 'Longest Streak', value: `${longestStreak}d`, icon: Star, color: 'text-pink-400' },
-                  { label: 'Learning Paths', value: enrolledPaths.toString(), icon: BookOpen, color: 'text-blue-400' },
+                  { label: 'Learning Paths', value: enrolledPaths.toString(), icon: BookOpen, color: 'text-sky-400' },
                 ].map(({ label, value, icon: Icon, color }) => (
                   <div key={label} className="rounded-xl border border-border bg-card/50 p-4 text-center">
                     <Icon className={`mx-auto mb-2 h-5 w-5 ${color}`} />
@@ -367,8 +367,8 @@ export default function ProfilePage() {
                 <div className="space-y-3">
                   {[
                     { label: 'Hackathons Joined', value: hackathonsJoined.toString(), icon: Trophy, color: 'text-amber-400' },
-                    { label: 'Quizzes Taken', value: quizzesTaken.toString(), icon: Zap, color: 'text-violet-400' },
-                    { label: 'Learning Paths', value: enrolledPaths.toString(), icon: BookOpen, color: 'text-blue-400' },
+                    { label: 'Quizzes Taken', value: quizzesTaken.toString(), icon: Zap, color: 'text-sky-400' },
+                    { label: 'Learning Paths', value: enrolledPaths.toString(), icon: BookOpen, color: 'text-sky-400' },
                     { label: 'Current Streak', value: `${streak} days`, icon: Flame, color: 'text-orange-400' },
                   ].map(({ label, value, icon: Icon, color }) => (
                     <div key={label} className="flex items-center gap-3">

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { aiService } from '../services/ai.service';
+import { aiService, reviewSubmissionViaAI, type AIReviewPayload } from '../services/ai.service';
 import { quizService } from '../services/quiz';
 import { consumeCredit } from '../middleware/credits';
 import { runAgentCommand, generateQuizQuestions, isInProcess } from '../services/aiCoreBridge.service';
@@ -128,6 +128,48 @@ const user = req.user as {
         } else {
             res.end();
         }
+    }
+};
+
+/**
+ * Structured AI review of a submission (code/assignment/project/capstone/hackathon).
+ * Proxies to the FastAPI /api/v1/ai-review endpoint and returns structured scores +
+ * feedback. Never fabricates a review — if the model is unavailable, returns 503.
+ */
+export const reviewSubmission = async (req: Request, res: Response) => {
+    try {
+        const { submissionType = 'code', content, language, context } = req.body as {
+            submissionType?: string; content?: string; language?: string; context?: string;
+        };
+
+        if (!content || typeof content !== 'string' || !content.trim()) {
+            return res.status(400).json({ success: false, message: 'content is required', error: 'INVALID_INPUT' });
+        }
+        const allowed = ['code', 'assignment', 'project', 'capstone', 'hackathon'];
+        const type = allowed.includes(submissionType) ? submissionType : 'code';
+
+        const payload: AIReviewPayload = { submission_type: type as AIReviewPayload['submission_type'], content };
+        if (language) payload.language = language;
+        if (context) payload.context = context;
+
+        const review = await reviewSubmissionViaAI(payload);
+
+        const userId = (req.user as any)?.id;
+        if (userId) await consumeCredit(String(userId)).catch(err => logger.error('Credit consumption failed:', err));
+
+        return res.json({ success: true, data: review });
+    } catch (error: any) {
+        const status = error?.response?.status;
+        if (status === 503) {
+            return res.status(503).json({
+                success: false,
+                message: 'AI review is not configured yet — a mentor review is still available.',
+                error: 'AI_REVIEW_UNAVAILABLE',
+            });
+        }
+        // Concise log — never dump the full axios error (noisy + leaks request config).
+        logger.error(`Structured AI review error: ${error?.code || error?.message || 'unknown'}`);
+        return res.status(502).json({ success: false, message: 'AI review service is unavailable. Please try again later.', error: 'AI_REVIEW_ERROR' });
     }
 };
 

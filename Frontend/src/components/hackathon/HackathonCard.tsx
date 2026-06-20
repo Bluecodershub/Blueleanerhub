@@ -19,13 +19,13 @@ interface HackathonCardProps {
 }
 
 const statusColors = {
-  upcoming: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  upcoming: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
   active: 'bg-primary/10 text-primary border-primary/20',
   completed: 'bg-muted/30 text-muted-foreground border-border/50',
 }
 
 const difficultyColors = {
-  beginner: 'text-blue-400',
+  beginner: 'text-sky-400',
   intermediate: 'text-yellow-400',
   advanced: 'text-red-400',
 }
@@ -119,7 +119,7 @@ export default function HackathonCard({
 
         {/* Enhanced CTA */}
         <Link href={`/hackathons/${id}`} className="block">
-          <Button className="group/btn h-14 w-full gap-2 rounded-2xl bg-primary text-base font-black text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <Button className="group/btn h-14 w-full gap-2 rounded-2xl bg-primary text-base font-black text-black shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
             {status === 'completed' ? 'View Final Leaderboard' : 'Enter Arena'}
             <ChevronRight className="h-5 w-5 transition-transform group-hover/btn:translate-x-1" />
           </Button>

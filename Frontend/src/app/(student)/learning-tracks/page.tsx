@@ -37,7 +37,7 @@ const TRACKS_FALLBACK = [
     rating: 4.9,
     courseCount: 8,
     icon: Code2,
-    gradient: 'from-blue-600 to-purple-600',
+    gradient: 'from-sky-600 to-purple-600',
     skills: ['React', 'Node.js', 'PostgreSQL', 'Docker', 'TypeScript'],
     description:
       'Master the complete web development stack — from pixel-perfect UIs to scalable backend APIs.',
@@ -55,7 +55,7 @@ const TRACKS_FALLBACK = [
     rating: 4.8,
     courseCount: 10,
     icon: Zap,
-    gradient: 'from-violet-600 to-pink-600',
+    gradient: 'from-sky-600 to-pink-600',
     skills: ['Python', 'PyTorch', 'scikit-learn', 'MLflow', 'FastAPI'],
     description: 'From linear regression to transformers — build production-grade ML systems.',
     hasCertificate: true,
@@ -106,7 +106,7 @@ const TRACKS_FALLBACK = [
     rating: 4.8,
     courseCount: 6,
     icon: BookOpen,
-    gradient: 'from-cyan-600 to-blue-600',
+    gradient: 'from-cyan-600 to-sky-600',
     skills: ['SQL', 'Python', 'Tableau', 'Statistics', 'Excel'],
     description: 'Transform raw data into actionable business insights.',
     hasCertificate: true,
@@ -133,7 +133,7 @@ const TRACKS_FALLBACK = [
 const DOMAINS = ['All', 'Software', 'AI/ML', 'Mechanical', 'Electrical', 'Finance', 'Data']
 const DIFFICULTY_COLORS = {
   beginner: 'bg-muted text-foreground/70',
-  intermediate: 'bg-blue-900 text-blue-400',
+  intermediate: 'bg-sky-900 text-sky-400',
   advanced: 'bg-purple-900 text-purple-400',
 }
 
@@ -191,7 +191,7 @@ export default function LearningTracksPage() {
           <div className="mt-6 flex gap-6">
             {[
               { label: 'Tracks', value: tracks.length, icon: Map, color: 'text-purple-400' },
-              { label: 'Enrolled', value: '32K+', icon: Users, color: 'text-blue-400' },
+              { label: 'Enrolled', value: '32K+', icon: Users, color: 'text-sky-400' },
               { label: 'Completed', value: '8.4K', icon: Award, color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">

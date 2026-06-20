@@ -101,7 +101,7 @@ export default function CodePlayground({
 
           <TabsContent
             value="output"
-            className="m-0 flex-1 overflow-auto bg-black p-4 font-mono text-sm text-blue-400"
+            className="m-0 flex-1 overflow-auto bg-black p-4 font-mono text-sm text-sky-400"
           >
             {output.length > 0 ? (
               <div className="space-y-2">

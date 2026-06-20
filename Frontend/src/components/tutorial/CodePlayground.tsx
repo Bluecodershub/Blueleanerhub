@@ -86,7 +86,7 @@ export default function CodePlayground({
   return (
     <div className="flex h-full flex-col">
       {/* Toolbar */}
-      <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900">
+      <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-border dark:bg-background-secondary">
         <span className="font-mono text-xs font-medium uppercase tracking-wide text-gray-500">
           {language}
         </span>
@@ -115,8 +115,8 @@ export default function CodePlayground({
             className={cn(
               'flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-all',
               isRunning
-                ? 'cursor-wait bg-blue-400 text-white'
-                : 'bg-primary text-white hover:bg-primary/90 active:scale-95'
+                ? 'cursor-wait bg-sky-400 text-white'
+                : 'bg-primary text-black hover:bg-primary/90 active:scale-95'
             )}
           >
             <Play className={cn('h-3 w-3', isRunning && 'animate-pulse')} />
@@ -154,7 +154,7 @@ export default function CodePlayground({
       {output && (
         <div
           className={cn(
-            'border-t border-gray-200 dark:border-gray-800',
+            'border-t border-gray-200 dark:border-border',
             'max-h-48 overflow-y-auto bg-gray-950 px-4 py-3 font-mono text-xs'
           )}
         >

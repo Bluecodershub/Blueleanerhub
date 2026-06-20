@@ -8,10 +8,9 @@ import {
   Search,
   Globe,
   Lock,
-  TrendingUp,
-  Users,
   Code2,
   Folder,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,76 +20,53 @@ import RepoCard from '@/components/devportal/RepoCard'
 import { reposAPI } from '@/lib/api-civilization'
 import { useAuth } from '@/hooks/useAuth'
 
-const MOCK_REPOS = [
-  {
-    id: 1,
-    ownerSlug: 'arjun-sharma',
-    slug: 'neural-network-from-scratch',
-    name: 'neural-network-from-scratch',
-    description:
-      'Building a deep neural network using only NumPy. Educational implementation with detailed comments.',
-    language: 'Python',
-    visibility: 'public' as const,
-    starCount: 128,
-    forkCount: 34,
-    topics: ['machine-learning', 'deep-learning', 'numpy', 'education'],
-    updatedAt: new Date(Date.now() - 3600000 * 4).toISOString(),
-  },
-  {
-    id: 2,
-    ownerSlug: 'priya-mechanical',
-    slug: 'fem-analysis-tool',
-    name: 'fem-analysis-tool',
-    description:
-      'Finite Element Method solver for 2D structural problems. Supports truss, beam, and frame elements.',
-    language: 'Python',
-    visibility: 'public' as const,
-    starCount: 67,
-    forkCount: 18,
-    topics: ['civil-engineering', 'fem', 'structural-analysis'],
-    updatedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-  },
-  {
-    id: 3,
-    ownerSlug: 'rahul-finance',
-    slug: 'dcf-valuation-model',
-    name: 'dcf-valuation-model',
-    description:
-      'Discounted Cash Flow valuation model with Monte Carlo simulation for uncertainty analysis.',
-    language: 'Python',
-    visibility: 'public' as const,
-    starCount: 89,
-    forkCount: 22,
-    topics: ['finance', 'valuation', 'monte-carlo'],
-    updatedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-  },
-]
-
-const TRENDING = [
-  { name: 'circuit-simulator', stars: 342, lang: 'JavaScript' },
-  { name: 'thermal-analysis', stars: 201, lang: 'Python' },
-  { name: 'algo-visualizer', stars: 567, lang: 'TypeScript' },
-]
+/** Maps a raw Repository record into RepoCard props. */
+function normalizeRepo(raw: any, ownerSlug: string) {
+  return {
+    id: raw._id ?? raw.id,
+    ownerSlug,
+    slug: raw.slug,
+    name: raw.name,
+    description: raw.description,
+    language: raw.language,
+    visibility: (raw.visibility ?? 'public') as 'public' | 'private',
+    starCount: raw.starCount ?? 0,
+    forkCount: raw.forkCount ?? 0,
+    topics: raw.topics ?? [],
+    updatedAt: raw.updatedAt ?? raw.createdAt ?? new Date().toISOString(),
+  }
+}
 
 export default function DevPortalPage() {
   const { user } = useAuth()
-  const [repos, setRepos] = useState(MOCK_REPOS as any[])
+  const [repos, setRepos] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'public' | 'private'>('all')
 
   useEffect(() => {
-    if (!user?.fullName) {
+    const fullName = user?.fullName
+    if (!fullName) {
+      setLoading(false)
       return
     }
-    const username = user.fullName.toLowerCase().replace(/\s+/g, '-')
+    let active = true
+    // The backend resolves repositories by the owner's fullName.
     reposAPI
-      .getUserRepos(username)
+      .getUserRepos(encodeURIComponent(fullName))
       .then((d: any) => {
-        const list = d?.data ?? d
-        if (Array.isArray(list) && list.length > 0) setRepos(list)
+        if (!active) return
+        const list = d?.data?.data ?? d?.data ?? d
+        setRepos(Array.isArray(list) ? list.map((r: any) => normalizeRepo(r, fullName)) : [])
       })
-      .catch(() => {})
+      .catch(() => active && setRepos([]))
+      .finally(() => active && setLoading(false))
+    return () => {
+      active = false
+    }
   }, [user?.fullName])
+
+  const totalStars = repos.reduce((sum, r) => sum + (r.starCount ?? 0), 0)
 
   const filtered = repos.filter((r) => {
     const matchSearch = !search || r.name.includes(search) || r.description?.includes(search)
@@ -119,9 +95,9 @@ export default function DevPortalPage() {
 
           <div className="mt-6 flex flex-wrap gap-6">
             {[
-              { label: 'Repositories', value: '48,200', icon: Folder, color: 'text-purple-400' },
-              { label: 'Developers', value: '12,800', icon: Users, color: 'text-blue-400' },
-              { label: 'Stars Given', value: '220K', icon: Star, color: 'text-foreground/70' },
+              { label: 'Your Repositories', value: repos.length, icon: Folder, color: 'text-purple-400' },
+              { label: 'Public', value: repos.filter((r) => r.visibility === 'public').length, icon: Globe, color: 'text-sky-400' },
+              { label: 'Total Stars', value: totalStars, icon: Star, color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -155,7 +131,7 @@ export default function DevPortalPage() {
                     onClick={() => setFilter(f)}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                       filter === f
-                        ? 'bg-primary text-white'
+                        ? 'bg-primary text-black'
                         : 'bg-secondary text-muted-foreground hover:text-foreground'
                     }`}
                   >
@@ -173,47 +149,48 @@ export default function DevPortalPage() {
             </div>
 
             {/* Repo list */}
-            <div className="flex flex-col gap-3">
-              {filtered.map((repo, i) => (
-                <motion.div
-                  key={repo.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <RepoCard {...repo} />
-                </motion.div>
-              ))}
-            </div>
+            {loading ? (
+              <div className="flex flex-col items-center gap-3 py-20 text-muted-foreground">
+                <Loader2 className="h-6 w-6 animate-spin" />
+                <p className="text-sm">Loading repositories…</p>
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border py-16 text-center">
+                <Folder className="mx-auto mb-3 h-12 w-12 opacity-20" />
+                <h2 className="mb-1 text-sm font-semibold text-foreground">
+                  {repos.length === 0 ? 'No repositories yet' : 'No repositories match your search'}
+                </h2>
+                <p className="mb-5 text-xs text-muted-foreground">
+                  {repos.length === 0
+                    ? 'Create your first repository to start building your engineering portfolio.'
+                    : 'Try a different search or filter.'}
+                </p>
+                {repos.length === 0 && (
+                  <Link href="/dev/new">
+                    <Button size="sm" className="gap-1.5 bg-primary/90 hover:bg-primary">
+                      <Plus className="h-3.5 w-3.5" /> New repository
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {filtered.map((repo, i) => (
+                  <motion.div
+                    key={repo.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <RepoCard {...repo} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
           <aside className="w-full shrink-0 space-y-4 md:w-60">
-            <Card className="border-border bg-card">
-              <CardContent className="p-4">
-                <div className="mb-3 flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-blue-400" />
-                  <span className="text-sm font-semibold text-foreground">Trending Today</span>
-                </div>
-                {TRENDING.map((r, i) => (
-                  <div
-                    key={r.name}
-                    className="flex items-center gap-2 border-b border-border py-2 last:border-0"
-                  >
-                    <span className="w-4 text-xs font-bold text-muted-foreground/50">{i + 1}</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs font-medium text-blue-400">{r.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{r.lang}</p>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-foreground/70">
-                      <Star className="h-3 w-3" />
-                      {r.stars}
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
             <Card className="border-border bg-card">
               <CardContent className="p-4">
                 <p className="mb-2 text-sm font-semibold text-foreground">Your Profile</p>

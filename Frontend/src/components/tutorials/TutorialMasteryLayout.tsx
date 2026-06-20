@@ -74,7 +74,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                     key={lesson.id}
                     className={`group flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all ${
                       lesson.active
-                        ? 'bg-primary text-white shadow-lg shadow-primary/15'
+                        ? 'bg-primary text-black shadow-lg shadow-primary/15'
                         : 'text-muted-foreground hover:bg-slate-50 dark:text-muted-foreground dark:hover:bg-secondary'
                     }`}
                   >
@@ -125,7 +125,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
               className={`h-9 gap-2 rounded-xl px-4 text-[10px] font-black uppercase tracking-widest transition-all ${
                 isPlaygroundOpen
                   ? 'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-secondary dark:text-white'
-                  : 'bg-primary text-white hover:bg-primary/90'
+                  : 'bg-primary text-black hover:bg-primary/90'
               }`}
             >
               <Play size={14} className={isPlaygroundOpen ? '' : 'fill-current'} />
@@ -155,7 +155,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                 <Button variant="outline" className="h-12 gap-2 rounded-2xl px-6 font-bold">
                   <ChevronLeft size={18} /> Previous
                 </Button>
-                <Button className="h-12 gap-2 rounded-2xl bg-primary px-10 font-black italic tracking-tighter text-white shadow-lg shadow-primary/15 hover:bg-primary/90">
+                <Button className="h-12 gap-2 rounded-2xl bg-primary px-10 font-black italic tracking-tighter text-black shadow-lg shadow-primary/15 hover:bg-primary/90">
                   Next Chapter <ChevronRight size={18} />
                 </Button>
               </div>

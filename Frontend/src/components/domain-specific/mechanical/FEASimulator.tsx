@@ -245,7 +245,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
         {/* Legend */}
         <div className="border-t border-gray-700 bg-gray-800 px-4 py-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-blue-400">Low Stress</span>
+            <span className="text-sky-400">Low Stress</span>
             <div
               className="mx-4 h-4 flex-1 rounded"
               style={{
@@ -324,7 +324,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
               <span
                 className={`font-mono ${
                   results.safetyFactor > 2
-                    ? 'text-blue-400'
+                    ? 'text-sky-400'
                     : results.safetyFactor > 1
                       ? 'text-yellow-400'
                       : 'text-red-400'
@@ -339,7 +339,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
           <div
             className={`rounded p-3 text-center text-sm font-semibold ${
               results.safetyFactor > 2
-                ? 'bg-blue-900/30 text-blue-400'
+                ? 'bg-sky-900/30 text-sky-400'
                 : results.safetyFactor > 1
                   ? 'bg-yellow-900/30 text-yellow-400'
                   : 'bg-red-900/30 text-red-400'

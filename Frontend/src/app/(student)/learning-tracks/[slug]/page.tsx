@@ -25,65 +25,6 @@ import Link from 'next/link'
 import { tracksAPI } from '@/lib/api-civilization'
 import type { LearningTrack, LearningTrackPhase } from '@/types'
 
-const MOCK_TRACK = {
-  id: 1,
-  title: 'Full-Stack Software Engineer',
-  slug: 'full-stack-engineer',
-  description:
-    'Master the complete web development stack — from pixel-perfect UIs to scalable backend APIs and cloud deployment. This track is designed to take you from foundational concepts to building production-grade applications.',
-  careerOutcome: 'Full-Stack Software Engineer',
-  estimatedWeeks: 24,
-  difficulty: 'intermediate',
-  enrollmentCount: 8420,
-  rating: 4.9,
-  reviewCount: 1240,
-  hasCertificate: true,
-  gradient: 'from-blue-600 to-purple-600',
-  phases: [
-    {
-      phase: 1,
-      title: 'Frontend Foundations',
-      weeks: 4,
-      courses: [
-        { id: 1, title: 'Modern JavaScript & TypeScript', lessons: 28, hours: 12, locked: false },
-        { id: 2, title: 'React 18: From Zero to Hero', lessons: 35, hours: 15, locked: false },
-      ],
-    },
-    {
-      phase: 2,
-      title: 'Backend Engineering',
-      weeks: 6,
-      courses: [
-        { id: 3, title: 'Node.js & Express Mastery', lessons: 30, hours: 14, locked: false },
-        { id: 4, title: 'PostgreSQL & Database Design', lessons: 22, hours: 10, locked: false },
-        { id: 5, title: 'REST APIs & GraphQL', lessons: 18, hours: 8, locked: true },
-      ],
-    },
-    {
-      phase: 3,
-      title: 'Full-Stack Projects',
-      weeks: 8,
-      courses: [
-        { id: 6, title: 'Build a SaaS Product End-to-End', lessons: 42, hours: 22, locked: true },
-        { id: 7, title: 'Authentication & Security', lessons: 20, hours: 9, locked: true },
-      ],
-    },
-    {
-      phase: 4,
-      title: 'Production & DevOps',
-      weeks: 6,
-      courses: [
-        { id: 8, title: 'Docker & Kubernetes Fundamentals', lessons: 25, hours: 12, locked: true },
-      ],
-    },
-  ],
-  skills: ['React', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Docker', 'AWS', 'GraphQL'],
-  instructors: [
-    { name: 'Dr. Vijay Kumar', role: 'Principal Engineer @ Google', avatar: 'V' },
-    { name: 'Kavitha Reddy', role: 'Senior Engineer @ Stripe', avatar: 'K' },
-  ],
-}
-
 // Normalize the API response into the shape the page expects
 function normalizeTrack(data: unknown): LearningTrack | null {
   if (!data) return null
@@ -98,20 +39,20 @@ function normalizeTrack(data: unknown): LearningTrack | null {
   }
 
   return {
-    id: (track.id ?? 1) as number,
-    title: (track.title ?? MOCK_TRACK.title) as string,
-    slug: (track.slug ?? MOCK_TRACK.slug) as string,
-    description: (track.description ?? MOCK_TRACK.description) as string,
+    id: (track.id ?? track._id ?? 0) as number,
+    title: (track.title ?? 'Untitled Track') as string,
+    slug: (track.slug ?? '') as string,
+    description: (track.description ?? '') as string,
     difficulty: (track.difficulty ?? 'intermediate') as string,
-    estimatedWeeks: (track.estimatedWeeks ?? track.estimated_weeks ?? MOCK_TRACK.estimatedWeeks) as number,
-    enrollmentCount: (track.enrollmentCount ?? track.enrollment_count ?? MOCK_TRACK.enrollmentCount) as number,
-    rating: (track.rating ?? MOCK_TRACK.rating) as number,
-    reviewCount: (track.reviewCount ?? track.review_count ?? MOCK_TRACK.reviewCount) as number,
-    hasCertificate: (track.hasCertificate ?? track.has_certificate ?? true) as boolean,
-    gradient: (track.gradient ?? MOCK_TRACK.gradient) as string,
-    phases: phases.length ? phases : MOCK_TRACK.phases,
-    skills: (track.skills ?? track.skillsGained ?? MOCK_TRACK.skills) as string[],
-    instructors: (track.instructors ?? MOCK_TRACK.instructors) as LearningTrack['instructors'],
+    estimatedWeeks: (track.estimatedWeeks ?? track.estimated_weeks ?? 0) as number,
+    enrollmentCount: (track.enrollmentCount ?? track.enrollment_count ?? 0) as number,
+    rating: (track.rating ?? 0) as number,
+    reviewCount: (track.reviewCount ?? track.review_count ?? 0) as number,
+    hasCertificate: (track.hasCertificate ?? track.has_certificate ?? false) as boolean,
+    gradient: (track.gradient ?? 'from-primary to-primary/80') as string,
+    phases,
+    skills: (track.skills ?? track.skillsGained ?? []) as string[],
+    instructors: (track.instructors ?? []) as LearningTrack['instructors'],
     isEnrolled: !!enrollment,
     progressPercent: (enrollment?.progressPercentage ?? 0) as number,
   }
@@ -149,7 +90,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
       .then((response) => {
         if (response.error) {
           toast.error(response.error)
-          setTrack(normalizeTrack(MOCK_TRACK)!)
+          setTrack(null)
           return
         }
         const normalized = normalizeTrack(response.data)
@@ -158,12 +99,12 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
           setIsEnrolled(!!normalized.isEnrolled)
           setProgressPercent(normalized.progressPercent ?? 0)
         } else {
-          setTrack(normalizeTrack(MOCK_TRACK)!)
+          setTrack(null)
         }
       })
       .catch(() => {
         toast.error('Failed to load track. Using fallback data.')
-        setTrack(normalizeTrack(MOCK_TRACK)!)
+        setTrack(null)
       })
       .finally(() => setLoading(false))
   }, [slug])
@@ -182,7 +123,27 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
     }
   }
 
-  const t = track ?? normalizeTrack(MOCK_TRACK)!
+  // Neutral, non-fabricated placeholder used only when a track fails to load —
+  // shows an empty/unavailable state rather than any sample content.
+  const EMPTY_TRACK = {
+    id: 0,
+    title: 'Track unavailable',
+    slug: '',
+    description: 'This learning track could not be loaded.',
+    difficulty: 'intermediate',
+    estimatedWeeks: 0,
+    enrollmentCount: 0,
+    rating: 0,
+    reviewCount: 0,
+    hasCertificate: false,
+    gradient: 'from-primary to-primary/80',
+    phases: [],
+    skills: [],
+    instructors: [],
+    isEnrolled: false,
+    progressPercent: 0,
+  } as unknown as LearningTrack
+  const t = track ?? EMPTY_TRACK
   const totalCourses =
     t?.phases?.reduce((s: number, p: any) => s + (p.courses?.length ?? 0), 0) ?? 0
   const totalHours =
@@ -240,7 +201,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
                 </div>
 
                 <div className="mb-6 flex flex-wrap gap-2">
-                  <Badge className="bg-blue-900/50 text-xs text-blue-400">{t.difficulty}</Badge>
+                  <Badge className="bg-sky-900/50 text-xs text-sky-400">{t.difficulty}</Badge>
                   {t.hasCertificate && (
                     <Badge className="gap-1 bg-muted text-xs text-foreground/70">
                       <Award className="h-3 w-3" /> Certificate included
@@ -252,7 +213,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
                 <div className="flex flex-wrap gap-4">
                   {(t.instructors ?? []).map((inst: any) => (
                     <div key={inst.name} className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-sm font-bold">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-purple-500 text-sm font-bold">
                         {inst.avatar ?? inst.name?.[0] ?? '?'}
                       </div>
                       <div>
@@ -356,7 +317,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
                         {course.locked ? (
                           <Lock className="h-4 w-4 shrink-0 text-gray-600" />
                         ) : (
-                          <Play className="h-4 w-4 shrink-0 text-blue-400" />
+                          <Play className="h-4 w-4 shrink-0 text-sky-400" />
                         )}
                         <div className="min-w-0 flex-1">
                           <p

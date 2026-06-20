@@ -5,7 +5,7 @@ import { Trophy, Star, Zap, Award, TrendingUp } from 'lucide-react'
 
 const ACHIEVEMENTS = [
   { id: '1', user: 'Rahul S.', action: 'earned 500 XP in Data Structures', icon: Trophy, color: 'text-yellow-500' },
-  { id: '2', user: 'Priya K.', action: 'completed Python Mastery path', icon: Award, color: 'text-blue-500' },
+  { id: '2', user: 'Priya K.', action: 'completed Python Mastery path', icon: Award, color: 'text-sky-500' },
   { id: '3', user: 'Amit M.', action: 'won the IoT Hackathon Challenge', icon: Zap, color: 'text-emerald-500' },
   { id: '4', user: 'Sneha R.', action: 'solved 50 consecutive problems', icon: Star, color: 'text-purple-500' },
   { id: '5', user: 'Vikram A.', action: 'ranked #1 in Electrical Quiz', icon: TrendingUp, color: 'text-orange-500' },
@@ -15,7 +15,7 @@ const ACHIEVEMENTS = [
 export function LeaderboardTicker() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 h-10 border-t border-border bg-background/80 flex items-center overflow-hidden backdrop-blur-md">
-      <div className="flex h-full items-center bg-primary px-4 text-[10px] font-extrabold uppercase tracking-widest text-white shadow-xl">
+      <div className="flex h-full items-center bg-primary px-4 text-[10px] font-extrabold uppercase tracking-widest text-black shadow-xl">
         Live Feed
       </div>
       

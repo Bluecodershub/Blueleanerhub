@@ -140,7 +140,7 @@ export default function CorporateParticipantsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
-                        <TrendingUp className="h-3.5 w-3.5 text-blue-400" />
+                        <TrendingUp className="h-3.5 w-3.5 text-sky-400" />
                         <span className="font-mono font-bold text-foreground">Lv.{c.level}</span>
                       </div>
                     </td>

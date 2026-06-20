@@ -4,16 +4,16 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg text-sm font-semibold ring-offset-background transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer',
+  'inline-flex items-center justify-center rounded-[8px] text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-px active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90',
+          'bg-primary text-primary-foreground shadow-[0_8px_22px_-12px_hsl(50_100%_50%/0.65)] hover:-translate-y-0.5 hover:bg-primary/92 hover:shadow-[0_14px_30px_-12px_hsl(50_100%_50%/0.72)]',
         destructive:
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
-          'border border-border bg-card text-foreground shadow-sm hover:border-primary/50 hover:bg-accent hover:text-accent-foreground',
+          'border border-border bg-card/85 text-foreground shadow-sm hover:border-primary/45 hover:bg-secondary',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/75',
         ghost: 'text-foreground/70 hover:bg-secondary/70 hover:text-foreground',
@@ -23,8 +23,8 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-10 px-5 py-2',
-        sm: 'h-8 rounded-lg px-3 text-xs',
-        lg: 'h-12 rounded-xl px-8 text-base',
+        sm: 'h-8 px-3 text-xs',
+        lg: 'h-12 px-7 text-base',
         icon: 'h-10 w-10',
       },
     },

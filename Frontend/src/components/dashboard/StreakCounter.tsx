@@ -17,7 +17,7 @@ export default function StreakCounter({ currentStreak }: StreakCounterProps) {
     >
       <span className="animate-pulse text-4xl">🔥</span>
       <div>
-        <p className="text-sm text-gray-600 dark:text-gray-400">Current Streak</p>
+        <p className="text-sm text-gray-600 dark:text-muted-foreground">Current Streak</p>
         <p className="text-2xl font-bold text-foreground/80 dark:text-foreground/70">
           {currentStreak} days
         </p>

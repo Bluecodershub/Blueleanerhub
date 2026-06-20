@@ -6,7 +6,7 @@ import {
   errorReportValidation
 } from '../controllers/errors';
 import { validate } from '../middleware/validate';
-import { authenticate } from '../middleware/auth';
+import { authenticate, authorize } from '../middleware/auth';
 import { apiLimiter, strictLimiter } from '../middleware/rateLimit.middleware';
 
 const router = Router();
@@ -26,23 +26,25 @@ router.post(
 
 /**
  * @route   GET /api/errors/stats
- * @desc    Get error statistics (authenticated users)
- * @access  Authenticated
+ * @desc    Get error statistics
+ * @access  Admin only (operational data must not be exposed to all users)
  */
 router.get(
   '/stats',
   authenticate,
+  authorize('ADMIN'),
   getErrorStats
 );
 
 /**
  * @route   DELETE /api/errors/cleanup
  * @desc    Clean up old error logs
- * @access  Authenticated
+ * @access  Admin only (purging logs is an audit-sensitive operation)
  */
 router.delete(
   '/cleanup',
   authenticate,
+  authorize('ADMIN'),
   strictLimiter,
   cleanupOldErrors
 );

@@ -148,7 +148,7 @@ export default function CitationInspector({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="h-[85vh] w-[95vw] max-w-4xl overflow-hidden border border-white/10 bg-background/70 p-0 backdrop-blur-2xl">
         <div className="flex h-full flex-col">
-          <DialogHeader className="border-b border-white/10 bg-white/70 px-6 py-4 backdrop-blur dark:bg-gray-900/60">
+          <DialogHeader className="border-b border-white/10 bg-white/70 px-6 py-4 backdrop-blur dark:bg-background-secondary/60">
             <DialogTitle className="flex items-center gap-2 text-left">
               <ScrollText className="h-5 w-5 text-primary/80" />
               {source?.title || 'Citation Inspector'}
@@ -166,13 +166,13 @@ export default function CitationInspector({
             ) : (
               <>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 capitalize text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+                  <span className="rounded-full border border-sky-200 bg-sky-50 px-2 py-1 capitalize text-sky-700 dark:border-sky-800 dark:bg-sky-900/20 dark:text-sky-300">
                     {source.sourceType}
                   </span>
-                  <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-600 dark:border-border dark:bg-card dark:text-muted-foreground">
                     {source.wordCount.toLocaleString()} words
                   </span>
-                  <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-600 dark:border-border dark:bg-card dark:text-muted-foreground">
                     {source.chunkCount} chunks
                   </span>
                   {safeSourceUrl ? (
@@ -180,13 +180,13 @@ export default function CitationInspector({
                       href={safeSourceUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
+                      className="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-sky-700 dark:border-sky-800 dark:bg-sky-900/20 dark:text-sky-300"
                     >
                       Open original
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   ) : source.url ? (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-500 dark:border-border dark:bg-card dark:text-muted-foreground">
                       Invalid source URL
                     </span>
                   ) : null}
@@ -222,8 +222,8 @@ export default function CitationInspector({
                   </div>
                 ) : null}
 
-                <div className="space-y-3 rounded-xl border border-blue-200/80 bg-blue-50/85 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-900/20">
-                  <div className="flex items-center gap-2 text-sm font-medium text-blue-900 dark:text-blue-100">
+                <div className="space-y-3 rounded-xl border border-sky-200/80 bg-sky-50/85 p-4 shadow-sm dark:border-sky-800 dark:bg-sky-900/20">
+                  <div className="flex items-center gap-2 text-sm font-medium text-sky-900 dark:text-sky-100">
                     <BookmarkPlus className="h-4 w-4" />
                     Save highlight
                   </div>
@@ -252,13 +252,13 @@ export default function CitationInspector({
                 </div>
 
                 <div className="space-y-3">
-                  <div className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                  <div className="text-sm font-medium text-gray-800 dark:text-foreground">
                     Saved highlights
                   </div>
                   {annotationLoading ? (
                     <div className="text-sm text-gray-500">Loading highlights…</div>
                   ) : annotations.length === 0 ? (
-                    <div className="rounded-xl border border-gray-200 p-3 text-sm text-gray-500 dark:border-gray-700">
+                    <div className="rounded-xl border border-gray-200 p-3 text-sm text-gray-500 dark:border-border">
                       No saved highlights yet.
                     </div>
                   ) : (
@@ -266,13 +266,13 @@ export default function CitationInspector({
                       {annotations.map((item) => (
                         <div
                           key={item.id}
-                          className="rounded-xl border border-blue-100/80 bg-white/90 p-3 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-900/80"
+                          className="rounded-xl border border-sky-100/80 bg-white/90 p-3 shadow-sm backdrop-blur dark:border-border dark:bg-background-secondary/80"
                         >
-                          <div className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-100">
+                          <div className="whitespace-pre-wrap text-sm text-gray-800 dark:text-foreground">
                             {item.quote}
                           </div>
                           {item.note ? (
-                            <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            <div className="mt-2 text-sm text-gray-600 dark:text-muted-foreground">
                               {item.note}
                             </div>
                           ) : null}
@@ -298,7 +298,7 @@ export default function CitationInspector({
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-100">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-foreground">
                     <Layers3 className="h-4 w-4 text-primary/80" />
                     Extracted chunks
                   </div>
@@ -317,7 +317,7 @@ export default function CitationInspector({
                             className={`rounded-xl border p-3 ${
                               matchesFocus
                                 ? 'border-border bg-secondary dark:border-border dark:bg-muted/20'
-                                : 'border-blue-100/70 bg-white/90 backdrop-blur dark:border-gray-700 dark:bg-gray-900/80'
+                                : 'border-sky-100/70 bg-white/90 backdrop-blur dark:border-border dark:bg-background-secondary/80'
                             }`}
                           >
                             <div className="mb-2 flex items-center justify-between gap-3">
@@ -330,12 +330,12 @@ export default function CitationInspector({
                                   setSelectedQuote(chunk.content)
                                   setSelectedChunkIndex(chunk.chunkIndex)
                                 }}
-                                className="rounded text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 dark:text-blue-400"
+                                className="rounded text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/60 dark:text-sky-400"
                               >
                                 Use as highlight
                               </button>
                             </div>
-                            <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-200">
+                            <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-foreground">
                               {chunk.content}
                             </div>
                           </div>
@@ -343,7 +343,7 @@ export default function CitationInspector({
                       })}
                     </div>
                   ) : (
-                    <div className="rounded-xl border border-gray-200 p-3 text-sm text-gray-500 dark:border-gray-700">
+                    <div className="rounded-xl border border-gray-200 p-3 text-sm text-gray-500 dark:border-border">
                       {source.previewText}
                     </div>
                   )}

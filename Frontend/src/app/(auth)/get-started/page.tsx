@@ -26,6 +26,13 @@ function GetStartedContent() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Consent states (DPDP 2023). Terms+Privacy and data processing are required.
+  const [agreeTerms, setAgreeTerms] = useState(false)
+  const [agreeData, setAgreeData] = useState(false)
+  const [agreeMarketing, setAgreeMarketing] = useState(false)
+  const [isMinor, setIsMinor] = useState(false)
+  const canSubmit = agreeTerms && agreeData
+
   React.useEffect(() => {
     if (isAuthenticated) {
       const from = searchParams.get('from')
@@ -40,9 +47,24 @@ function GetStartedContent() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    if (!canSubmit) {
+      setError('Please accept the required terms to create your account.')
+      return
+    }
     setLoading(true)
     try {
-      await register({ name, email, password })
+      await register({
+        name,
+        email,
+        password,
+        consents: {
+          terms: agreeTerms,
+          privacy: agreeTerms,
+          dataProcessing: agreeData,
+          marketing: agreeMarketing,
+          guardianConsent: isMinor,
+        },
+      })
       router.replace('/student/onboarding')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to create account')
@@ -66,7 +88,7 @@ function GetStartedContent() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 py-12">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -186,16 +208,53 @@ function GetStartedContent() {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <div className="space-y-2.5 rounded-lg border border-border bg-secondary/30 p-3">
+                <label className="flex cursor-pointer items-start gap-2.5 text-xs text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={agreeTerms}
+                    onChange={(e) => setAgreeTerms(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                  />
+                  <span>
+                    I agree to the{' '}
+                    <Link href="/terms" target="_blank" className="text-primary hover:underline">Terms &amp; Conditions</Link>
+                    {' '}and have read the{' '}
+                    <Link href="/privacy" target="_blank" className="text-primary hover:underline">Privacy Policy</Link>.
+                  </span>
+                </label>
+                <label className="flex cursor-pointer items-start gap-2.5 text-xs text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={agreeData}
+                    onChange={(e) => setAgreeData(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                  />
+                  <span>I consent to the processing of my personal data to provide platform services.</span>
+                </label>
+                <label className="flex cursor-pointer items-start gap-2.5 text-xs text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={agreeMarketing}
+                    onChange={(e) => setAgreeMarketing(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                  />
+                  <span>Send me account and learning-related updates. <span className="opacity-70">(optional)</span></span>
+                </label>
+                <label className="flex cursor-pointer items-start gap-2.5 text-xs text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={isMinor}
+                    onChange={(e) => setIsMinor(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                  />
+                  <span>I am under 18 and confirm I have parent/guardian consent. <span className="opacity-70">(if applicable)</span></span>
+                </label>
+              </div>
+
+              <Button type="submit" className="w-full" disabled={loading || !canSubmit}>
                 {loading ? 'Creating account...' : 'Create Account'}
               </Button>
-
-              <p className="text-center text-xs text-muted-foreground">
-                By signing up, you agree to our{' '}
-                <Link href="/terms" className="text-primary hover:underline">Terms</Link>
-                {' '}and{' '}
-                <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
-              </p>
             </form>
           ) : (
             <form onSubmit={handleLogin} className="space-y-4">

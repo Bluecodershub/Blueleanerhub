@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { HackathonsChrome } from '@/components/layout/HackathonsChrome'
 
 export const metadata: Metadata = {
   title: 'AI Hackathons — Compete Globally & Win Prizes',
@@ -22,5 +23,5 @@ export const metadata: Metadata = {
 }
 
 export default function HackathonsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <HackathonsChrome>{children}</HackathonsChrome>
 }

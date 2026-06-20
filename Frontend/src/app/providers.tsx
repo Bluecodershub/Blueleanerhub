@@ -1,7 +1,11 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from 'next-themes'
+import {
+  ThemeProvider as NextThemesProvider,
+  useTheme,
+  type ThemeProviderProps,
+} from 'next-themes'
 import { Toaster } from 'sonner'
 import { useState, type ComponentType, type ReactNode } from 'react'
 import ErrorBoundary from '@/components/ui/ErrorBoundary'
@@ -10,6 +14,13 @@ import { AuthProvider } from '@/context/AuthContext'
 const ThemeProvider = NextThemesProvider as ComponentType<
   ThemeProviderProps & { children: ReactNode }
 >
+
+function ThemedToaster() {
+  const { resolvedTheme } = useTheme()
+  const theme = resolvedTheme === 'dark' ? 'dark' : 'light'
+
+  return <Toaster position="top-right" theme={theme} richColors />
+}
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -45,8 +56,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <ErrorBoundary name="Query Client Provider" level="section">
           <ThemeProvider
             attribute="class"
-            defaultTheme="light"
-            forcedTheme="light"
+            defaultTheme="dark"
             enableSystem={false}
             disableTransitionOnChange
           >
@@ -54,7 +64,7 @@ export function Providers({ children }: { children: ReactNode }) {
               <AuthProvider>
                 {children}
               </AuthProvider>
-              <Toaster position="top-right" theme="light" richColors />
+              <ThemedToaster />
             </ErrorBoundary>
           </ThemeProvider>
         </ErrorBoundary>

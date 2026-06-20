@@ -44,7 +44,7 @@ export default function LessonViewer({
     <div className="flex h-[calc(100vh-4rem)]">
       {/* Left Panel - Content */}
       <div
-        className={`${showCodeEditor ? 'w-1/2' : 'w-full'} overflow-y-auto bg-white transition-all dark:bg-gray-900`}
+        className={`${showCodeEditor ? 'w-1/2' : 'w-full'} overflow-y-auto bg-white transition-all dark:bg-background-secondary`}
       >
         <div className="p-8">
           {/* Header */}
@@ -108,7 +108,7 @@ export default function LessonViewer({
 
                 {lesson.codeExamples.map((example, index) => (
                   <TabsContent key={index} value={index.toString()}>
-                    <div className="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+                    <div className="rounded-lg bg-gray-100 p-4 dark:bg-card">
                       <pre className="overflow-x-auto text-sm">
                         <code className={`language-${example.language}`}>{example.code}</code>
                       </pre>
@@ -127,7 +127,7 @@ export default function LessonViewer({
           )}
 
           {/* Navigation Buttons */}
-          <div className="mt-12 flex items-center justify-between border-t border-gray-200 pt-8 dark:border-gray-800">
+          <div className="mt-12 flex items-center justify-between border-t border-gray-200 pt-8 dark:border-border">
             {previousLesson ? (
               <Button variant="outline" asChild>
                 <a href={`/tutorials/lesson/${previousLesson.id}`}>
@@ -157,7 +157,7 @@ export default function LessonViewer({
 
       {/* Right Panel - Code Playground */}
       {showCodeEditor && (
-        <div className="w-1/2 border-l border-gray-200 dark:border-gray-800">
+        <div className="w-1/2 border-l border-gray-200 dark:border-border">
           <CodePlayground
             initialCode={lesson.codeExamples?.[activeCodeExample]?.code || ''}
             language={lesson.codeExamples?.[activeCodeExample]?.language || 'javascript'}

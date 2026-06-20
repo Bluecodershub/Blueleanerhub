@@ -2,10 +2,24 @@ import { comparePassword, hashPassword } from '../utils/encryption';
 import { signAccessToken, signRefreshToken } from '../utils/jwt';
 import { AppError } from '../middleware/error';
 import { db, RefreshToken } from '../db';
+import { CURRENT_POLICY_VERSION } from '../config/legal';
 import logger from '../utils/logger';
 
+export interface RegisterConsents {
+  terms?: boolean;
+  privacy?: boolean;
+  dataProcessing?: boolean;
+  marketing?: boolean;
+  guardianConsent?: boolean;
+}
+
+export interface RegisterMeta {
+  ipAddress?: string;
+  userAgent?: string;
+}
+
 export class AuthService {
-  async register(data: { email: string; password: string; fullName: string; collegeName?: string; company?: string; role?: string }) {
+  async register(data: { email: string; password: string; fullName: string; collegeName?: string; company?: string; role?: string; consents?: RegisterConsents; meta?: RegisterMeta }) {
     // Check if user exists
     const existingUser = await db.query.users.findFirst({ email: data.email.toLowerCase() });
     if (existingUser) {
@@ -47,6 +61,14 @@ export class AuthService {
       { upsert: true, new: true }
     );
 
+    // Record consent as an append-only audit trail (DPDP 2023). Best-effort —
+    // a consent-logging failure must not block account creation.
+    try {
+      await this.recordRegistrationConsents(user._id.toString(), data.consents, data.meta);
+    } catch (err: any) {
+      logger.error('Failed to record registration consent', { userId: user._id.toString(), error: err?.message });
+    }
+
     logger.info(`New user registered: ${user.email}`);
 
     return {
@@ -59,6 +81,32 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  /**
+   * Writes one ConsentRecord row per consent the user gave at signup. Terms,
+   * Privacy, and DataProcessing are mandatory for account creation; Marketing
+   * and Guardian consent are optional and only recorded when granted.
+   */
+  private async recordRegistrationConsents(userId: string, consents?: RegisterConsents, meta?: RegisterMeta) {
+    if (!consents) return;
+    const base = {
+      userId,
+      policyVersion: CURRENT_POLICY_VERSION,
+      context: 'REGISTRATION',
+      ipAddress: meta?.ipAddress,
+      userAgent: meta?.userAgent,
+      createdAt: new Date(),
+    };
+    const rows: Array<{ consentType: string; granted: boolean }> = [
+      { consentType: 'TERMS', granted: !!consents.terms },
+      { consentType: 'PRIVACY', granted: !!consents.privacy },
+      { consentType: 'DATA_PROCESSING', granted: !!consents.dataProcessing },
+    ];
+    if (consents.marketing) rows.push({ consentType: 'MARKETING_COMMS', granted: true });
+    if (consents.guardianConsent) rows.push({ consentType: 'GUARDIAN_CONSENT', granted: true });
+
+    await Promise.all(rows.map((r) => db.query.consentRecords.create({ ...base, ...r })));
   }
 
   async login(email: string, password: string) {

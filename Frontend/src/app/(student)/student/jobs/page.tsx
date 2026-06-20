@@ -64,109 +64,21 @@ function relativeTime(dateStr: string): string {
   return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`
 }
 
-const MOCK_JOBS: Job[] = [
-  {
-    id: '1',
-    title: 'Full Stack Developer',
-    company: 'TechVision Labs',
-    location: 'Bangalore, Karnataka',
-    salary: '₹18-25 LPA',
-    type: 'full-time',
-    experience: 'mid',
-    posted: '2 days ago',
-    applicants: 127,
-    description: 'Build scalable web applications using React, Node.js, and PostgreSQL. Work with cross-functional teams to deliver high-quality products.',
-    requirements: ['3+ years experience', 'React, Node.js', 'PostgreSQL', 'AWS'],
-    skills: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'AWS', 'Docker'],
-    remote: true,
-    urgent: true,
-    aiScreening: true,
-  },
-  {
-    id: '2',
-    title: 'Frontend Engineer',
-    company: 'DesignFirst',
-    location: 'Mumbai, Maharashtra',
-    salary: '₹12-18 LPA',
-    type: 'full-time',
-    experience: 'entry',
-    posted: '5 days ago',
-    applicants: 89,
-    description: 'Create beautiful, responsive user interfaces using modern frontend technologies. Focus on performance and accessibility.',
-    requirements: ['1+ years experience', 'React or Vue', 'CSS/Tailwind', 'Figma'],
-    skills: ['React', 'Next.js', 'TailwindCSS', 'TypeScript', 'Figma'],
-    remote: true,
-    urgent: false,
-    aiScreening: true,
-  },
-  {
-    id: '3',
-    title: 'Backend Developer',
-    company: 'DataFlow Systems',
-    location: 'Hyderabad, Telangana',
-    salary: '₹20-30 LPA',
-    type: 'full-time',
-    experience: 'senior',
-    posted: '1 week ago',
-    applicants: 64,
-    description: 'Design and implement microservices architecture. Lead technical discussions and mentor junior developers.',
-    requirements: ['5+ years experience', 'Java/Spring', 'Microservices', 'Kubernetes'],
-    skills: ['Java', 'Spring Boot', 'Kubernetes', 'Kafka', 'PostgreSQL', 'Redis'],
-    remote: false,
-    urgent: false,
-    aiScreening: true,
-  },
-  {
-    id: '4',
-    title: 'Data Science Intern',
-    company: 'AI Innovations',
-    location: 'Remote',
-    salary: '₹25,000/month',
-    type: 'internship',
-    experience: 'entry',
-    posted: '3 days ago',
-    applicants: 234,
-    description: 'Work on real-world ML projects, analyze datasets, and build predictive models. Great opportunity for freshers.',
-    requirements: ['Python knowledge', 'Statistics', 'ML basics', 'Currently studying'],
-    skills: ['Python', 'Pandas', 'Scikit-learn', 'SQL', 'Tableau'],
-    remote: true,
-    urgent: true,
-    aiScreening: true,
-  },
-  {
-    id: '5',
-    title: 'DevOps Engineer',
-    company: 'CloudScale',
-    location: 'Pune, Maharashtra',
-    salary: '₹22-28 LPA',
-    type: 'full-time',
-    experience: 'mid',
-    posted: '4 days ago',
-    applicants: 45,
-    description: 'Manage CI/CD pipelines, infrastructure as code, and cloud deployments. Ensure high availability and performance.',
-    requirements: ['3+ years experience', 'AWS/Azure', 'Terraform', 'Docker'],
-    skills: ['AWS', 'Terraform', 'Docker', 'Kubernetes', 'Jenkins', 'Python'],
-    remote: true,
-    urgent: false,
-    aiScreening: true,
-  },
-]
-
 const jobTypeConfig: Record<JobType, { label: string; color: string }> = {
   'full-time': { label: 'Full-time', color: 'text-emerald-600' },
-  'part-time': { label: 'Part-time', color: 'text-blue-600' },
+  'part-time': { label: 'Part-time', color: 'text-sky-600' },
   'contract': { label: 'Contract', color: 'text-amber-600' },
-  'internship': { label: 'Internship', color: 'text-violet-600' },
+  'internship': { label: 'Internship', color: 'text-sky-600' },
 }
 
 const experienceConfig: Record<Experience, { label: string; color: string }> = {
   entry: { label: 'Entry Level', color: 'text-emerald-600' },
-  mid: { label: 'Mid Level', color: 'text-blue-600' },
+  mid: { label: 'Mid Level', color: 'text-sky-600' },
   senior: { label: 'Senior', color: 'text-amber-600' },
 }
 
 export default function JobsPage() {
-  const [jobs, setJobs] = useState<Job[]>(MOCK_JOBS)
+  const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [appStats, setAppStats] = useState({ applied: 0, reviewing: 0, offers: 0 })
   const [search, setSearch] = useState('')
@@ -181,27 +93,26 @@ export default function JobsPage() {
       api.get('/jobs?limit=20').catch(() => null),
       api.get('/jobs/applications/me?limit=50').catch(() => null),
     ]).then(([jobsRes, appsRes]) => {
-      if (jobsRes?.data?.data?.data?.length) {
-        const mapped: Job[] = jobsRes.data.data.data.map((j: any) => ({
-          id: String(j._id),
-          title: j.title,
-          company: j.company || 'Company',
-          location: j.location || 'Remote',
-          salary: j.salary || 'Competitive',
-          type: TYPE_MAP[j.type] ?? 'full-time',
-          experience: 'mid' as Experience,
-          posted: j.createdAt ? relativeTime(j.createdAt) : 'Recently',
-          applicants: 0,
-          description: j.description || '',
-          requirements: j.requirements || [],
-          skills: [],
-          remote: !j.location || j.location.toLowerCase().includes('remote'),
-          urgent: false,
-          aiScreening: true,
-          applyUrl: j.applyUrl,
-        }))
-        setJobs(mapped)
-      }
+      const rows: any[] = jobsRes?.data?.data?.data ?? jobsRes?.data?.data ?? []
+      const mapped: Job[] = (Array.isArray(rows) ? rows : []).map((j: any) => ({
+        id: String(j._id),
+        title: j.title,
+        company: j.company || 'Company',
+        location: j.location || 'Remote',
+        salary: j.salary || 'Competitive',
+        type: TYPE_MAP[j.type] ?? 'full-time',
+        experience: 'mid' as Experience,
+        posted: j.createdAt ? relativeTime(j.createdAt) : 'Recently',
+        applicants: 0,
+        description: j.description || '',
+        requirements: j.requirements || [],
+        skills: [],
+        remote: !j.location || j.location.toLowerCase().includes('remote'),
+        urgent: false,
+        aiScreening: true,
+        applyUrl: j.applyUrl,
+      }))
+      setJobs(mapped)
       if (appsRes?.data?.data?.data) {
         const apps: any[] = appsRes.data.data.data
         const appliedIds: Record<string, 'applied'> = {}

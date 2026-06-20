@@ -10,7 +10,7 @@ export default function TutorialsPage() {
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-            <span className="bg-gradient-to-r from-primary to-violet-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
               Interactive Tutorials
             </span>
           </h1>

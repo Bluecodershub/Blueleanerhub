@@ -4,6 +4,7 @@ import { body, validationResult } from 'express-validator';
 import { Exercise, ExerciseSubmission, DailyChallenge, Space } from '../db/models';
 import { authenticate } from '../middleware/auth';
 import logger from '../utils/logger';
+import { executionManager } from '../services/execution/execution.manager';
 
 const router = Router();
 
@@ -80,7 +81,7 @@ router.post('/execute', authenticate, [
   body('code').isString(),
 ], validate, async (req: Request, res: Response) => {
   try {
-    const { challengeId } = req.body;
+    const { challengeId, language, code } = req.body;
     if (!mongoose.Types.ObjectId.isValid(challengeId)) {
       return res.status(400).json({ message: 'Invalid challengeId' });
     }
@@ -88,11 +89,36 @@ router.post('/execute', authenticate, [
     if (!challenge) {
       return res.status(404).json({ message: 'Challenge not found' });
     }
+    const testCases = Array.isArray(challenge.testCases) ? challenge.testCases : [];
+    const results = testCases.length > 0
+      ? await executionManager.executeMultiple(code, language, testCases)
+      : [];
+    const singleRun = testCases.length === 0
+      ? await executionManager.execute({ code, language, sandboxType: 'education' })
+      : null;
+    const passed = testCases.length > 0
+      ? results.length > 0 && results.every((result) => Boolean(result.passed))
+      : Boolean(singleRun?.success);
+
+    const submission = await ExerciseSubmission.create({
+      exerciseId: new mongoose.Types.ObjectId(challengeId),
+      userId:     new mongoose.Types.ObjectId(req.user!.id),
+      code,
+      language,
+      status:     passed ? 'ACCEPTED' : 'REJECTED',
+      output:     JSON.stringify(testCases.length > 0 ? results : singleRun),
+    });
+
     res.json({
-      submission: { status: 'PENDING' },
-      results:    [],
-      passed:     false,
-      xpEarned:   0,
+      submission: {
+        id:          String(submission._id),
+        status:      submission.status,
+        submittedAt: submission.submittedAt,
+      },
+      execution: singleRun,
+      results,
+      passed,
+      xpEarned: 0,
     });
   } catch (error) {
     logger.error('Error executing code:', error);

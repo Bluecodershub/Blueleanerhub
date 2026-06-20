@@ -13,7 +13,7 @@ export default function EngineeringCalculator() {
     <div className="mx-auto max-w-4xl p-4">
       <Card className="border-gray-700 bg-gray-800 p-6">
         <div className="mb-6 flex items-center gap-2">
-          <Calculator className="h-6 w-6 text-blue-400" />
+          <Calculator className="h-6 w-6 text-sky-400" />
           <h2 className="text-2xl font-bold text-white">Engineering Calculator</h2>
         </div>
 

@@ -43,8 +43,8 @@ const tiers = [
       'Basic Performance Analytics',
     ],
     icon: Rocket,
-    color: 'text-blue-400',
-    border: 'border-blue-500/20',
+    color: 'text-sky-400',
+    border: 'border-sky-500/20',
     buttonColor: 'bg-primary hover:bg-primary/90',
   },
   {
@@ -148,10 +148,10 @@ export default function PremiumHubPage() {
             <p className="text-[10px] font-black uppercase italic tracking-widest text-muted-foreground">
               Proof_Score_Boost
             </p>
-            <p className="text-3xl font-black text-blue-400">1.0x</p>
+            <p className="text-3xl font-black text-sky-400">1.0x</p>
           </div>
-          <div className="rounded-2xl bg-blue-500/10 p-3 transition-transform group-hover:scale-110">
-            <Zap className="h-6 w-6 text-blue-400" />
+          <div className="rounded-2xl bg-sky-500/10 p-3 transition-transform group-hover:scale-110">
+            <Zap className="h-6 w-6 text-sky-400" />
           </div>
         </Card>
       </div>

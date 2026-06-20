@@ -36,7 +36,7 @@ export default function ActivityFeed() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
+      className="rounded-lg border border-gray-200 bg-white p-6 dark:border-border dark:bg-card"
     >
       <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">Your Activity</h3>
 
@@ -47,18 +47,18 @@ export default function ActivityFeed() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="flex gap-4 border-b border-gray-200 pb-4 last:border-0 last:pb-0 dark:border-gray-700"
+            className="flex gap-4 border-b border-gray-200 pb-4 last:border-0 last:pb-0 dark:border-border"
           >
             <div className="flex-shrink-0 text-2xl">{activity.icon}</div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-gray-900 dark:text-white">{activity.title}</p>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{activity.time}</p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">{activity.time}</p>
             </div>
           </motion.div>
         ))}
       </div>
 
-      <button className="mt-6 text-sm font-semibold text-primary hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+      <button className="mt-6 text-sm font-semibold text-primary hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300">
         View all activity →
       </button>
     </motion.div>

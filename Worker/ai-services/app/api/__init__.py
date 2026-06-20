@@ -5,7 +5,7 @@ Contains all endpoint versions and routers.
 
 from fastapi import APIRouter
 from app.api import v1
-from app.api.v1 import quiz, hackathon, interview, chat, ai_tutor, notebooks, adaptive, bluelearner
+from app.api.v1 import quiz, hackathon, interview, chat, ai_tutor, notebooks, adaptive, bluelearner, ai_review
 
 api_router = APIRouter()
 
@@ -14,6 +14,9 @@ api_router.include_router(quiz.router,      prefix="/v1")
 api_router.include_router(hackathon.router, prefix="/v1")
 api_router.include_router(interview.router, prefix="/v1")
 api_router.include_router(chat.router,      prefix="/v1")
+
+# AI-assisted submission review (code / assignment / project / capstone / hackathon)
+api_router.include_router(ai_review.router, prefix="/v1")
 
 # AI Orchestrator endpoints — all agents accessible via /api/v1/ai/*
 api_router.include_router(ai_tutor.router,        prefix="/v1")

@@ -39,7 +39,7 @@ export default function QuestionCard({
   createdAt,
 }: QuestionCardProps) {
   return (
-    <div className="group flex gap-4 rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-blue-200 hover:shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-900">
+    <div className="group flex gap-4 rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-sky-200 hover:shadow-sm dark:border-border dark:bg-background-secondary dark:hover:border-sky-900">
       {/* Stats column */}
       <div className="flex w-20 flex-shrink-0 flex-col items-end gap-2 text-right">
         <Stat value={voteScore} label="votes" highlight={voteScore > 10} />
@@ -57,7 +57,7 @@ export default function QuestionCard({
       <div className="min-w-0 flex-1">
         <Link
           href={`/qna/questions/${id}`}
-          className="line-clamp-2 block text-base font-semibold text-gray-900 transition-colors group-hover:text-primary dark:text-white dark:group-hover:text-blue-400"
+          className="line-clamp-2 block text-base font-semibold text-gray-900 transition-colors group-hover:text-primary dark:text-white dark:group-hover:text-sky-400"
         >
           {title}
         </Link>
@@ -68,7 +68,7 @@ export default function QuestionCard({
             {tags.slice(0, 5).map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                className="inline-flex items-center rounded-md bg-sky-50 px-2 py-0.5 text-xs font-medium text-sky-700 dark:bg-sky-950 dark:text-sky-300"
               >
                 {tag}
               </span>
@@ -80,7 +80,7 @@ export default function QuestionCard({
         <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
           {domain && (
             <>
-              <span className="rounded bg-gray-100 px-1.5 py-0.5 font-medium dark:bg-gray-800">
+              <span className="rounded bg-gray-100 px-1.5 py-0.5 font-medium dark:bg-card">
                 {domain}
               </span>
               <span>·</span>
@@ -127,7 +127,7 @@ function Stat({
     <div
       className={cn(
         'flex flex-col items-end rounded-lg px-2 py-1 text-right',
-        highlight && highlightColor === 'blue' && 'bg-blue-50 dark:bg-blue-950',
+        highlight && highlightColor === 'blue' && 'bg-sky-50 dark:bg-sky-950',
         highlight && highlightColor === 'emerald' && 'bg-secondary dark:bg-background'
       )}
     >
@@ -136,9 +136,9 @@ function Stat({
         <span
           className={cn(
             'text-base font-bold tabular-nums',
-            highlight && highlightColor === 'blue' && 'text-blue-700 dark:text-blue-300',
+            highlight && highlightColor === 'blue' && 'text-sky-700 dark:text-sky-300',
             highlight && highlightColor === 'emerald' && 'text-foreground dark:text-foreground/60',
-            !highlight && 'text-gray-700 dark:text-gray-300'
+            !highlight && 'text-gray-700 dark:text-muted-foreground'
           )}
         >
           {value >= 1000 ? `${(value / 1000).toFixed(1)}k` : value}

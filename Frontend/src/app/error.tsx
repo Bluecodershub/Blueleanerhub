@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -28,7 +29,7 @@ export default function RouteError({
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-3xl font-black uppercase italic tracking-tighter text-white">
+          <h1 className="text-3xl font-black uppercase italic tracking-tighter text-foreground">
             PAGE_ERROR
           </h1>
           <p className="text-sm font-medium leading-relaxed text-muted-foreground">
@@ -50,12 +51,14 @@ export default function RouteError({
             Try_Again
           </Button>
           <Button
+            asChild
             variant="outline"
-            onClick={() => (window.location.href = '/')}
             className="h-11 border-border px-6 text-[11px] font-black uppercase italic tracking-widest"
           >
-            <Home className="mr-2 h-4 w-4" />
-            Go_Home
+            <Link href="/">
+              <Home className="mr-2 h-4 w-4" />
+              Go_Home
+            </Link>
           </Button>
         </div>
       </motion.div>

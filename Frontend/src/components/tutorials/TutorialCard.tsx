@@ -37,7 +37,7 @@ export default function TutorialCard({
   tags = [],
 }: TutorialCardProps) {
   const difficultyColors = {
-    easy: 'bg-blue-500/10 text-primary/80 border-blue-500/20',
+    easy: 'bg-sky-500/10 text-primary/80 border-sky-500/20',
     medium: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
     hard: 'bg-primary/10 text-foreground/80 border-border',
     expert: 'bg-red-500/10 text-red-500 border-red-500/20',
@@ -47,9 +47,9 @@ export default function TutorialCard({
     'computer-science': 'bg-primary',
     mechanical: 'bg-primary',
     electrical: 'bg-yellow-500',
-    civil: 'bg-blue-500',
+    civil: 'bg-sky-500',
     chemical: 'bg-purple-500',
-    management: 'bg-violet-500',
+    management: 'bg-sky-500',
   }
 
   return (
@@ -60,7 +60,7 @@ export default function TutorialCard({
       whileHover={{ y: -4 }}
     >
       <Link href={`/tutorials/${id}`}>
-        <Card className="group h-full cursor-pointer overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-blue-500">
+        <Card className="group h-full cursor-pointer overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-sky-500">
           {/* Thumbnail */}
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800">
             {thumbnail ? (
@@ -103,7 +103,7 @@ export default function TutorialCard({
           {/* Content */}
           <div className="space-y-3 p-5">
             {/* Title */}
-            <h3 className="line-clamp-2 text-lg font-semibold text-white transition-colors group-hover:text-blue-400">
+            <h3 className="line-clamp-2 text-lg font-semibold text-white transition-colors group-hover:text-sky-400">
               {title}
             </h3>
 
@@ -154,7 +154,7 @@ export default function TutorialCard({
               <div className="space-y-1 pt-2">
                 <div className="flex items-center justify-between text-xs text-gray-400">
                   <span>Progress</span>
-                  <span className="font-semibold text-blue-400">{progress}%</span>
+                  <span className="font-semibold text-sky-400">{progress}%</span>
                 </div>
                 <Progress value={progress} className="h-2" />
               </div>

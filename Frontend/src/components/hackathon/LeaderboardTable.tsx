@@ -97,13 +97,13 @@ export default function LeaderboardTable({ hackathonId }: LeaderboardTableProps)
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+      className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-border dark:bg-card"
     >
       {/* Table Header */}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-700/50">
+            <tr className="border-b border-gray-200 bg-gray-50 dark:border-border dark:bg-popover/50">
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
                 Rank
               </th>
@@ -128,7 +128,7 @@ export default function LeaderboardTable({ hackathonId }: LeaderboardTableProps)
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="border-b border-gray-200 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700/30"
+                className="border-b border-gray-200 transition-colors hover:bg-gray-50 dark:border-border dark:hover:bg-gray-700/30"
               >
                 <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
                   <div className="flex items-center gap-2">
@@ -154,14 +154,14 @@ export default function LeaderboardTable({ hackathonId }: LeaderboardTableProps)
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                  <span className="inline-block rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700 dark:bg-sky-900/30 dark:text-sky-400">
                     {entry.final_score || 0}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-muted-foreground">
                   {entry.final_score ? Math.floor(entry.final_score / 100) : 0} problems
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-muted-foreground">
                   {entry.submitted_at ? new Date(entry.submitted_at).toLocaleDateString() : '-'}
                 </td>
               </motion.tr>

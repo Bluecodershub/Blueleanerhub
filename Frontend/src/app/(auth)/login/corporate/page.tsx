@@ -105,7 +105,7 @@ function CorporateLoginContent() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 py-12">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-amber-500/5 blur-[150px]" />
       </div>

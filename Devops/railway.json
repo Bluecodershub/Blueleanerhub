@@ -1,7 +1,6 @@
 {
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "npm run build:all"
+    "builder": "NIXPACKS"
   },
   "deploy": {
     "numReplicas": 1,
@@ -13,12 +12,16 @@
       "variables": {
         "NODE_ENV": "production",
         "PORT": "$PORT",
-        "DATABASE_URL": "$DATABASE_URL",
-        "REDIS_URL": "$REDIS_URL",
+        "MONGODB_URL": "${{MongoDB.MONGO_URL}}",
+        "REDIS_URL": "${{Redis.REDIS_URL}}",
         "JWT_SECRET": "$JWT_SECRET",
         "JWT_REFRESH_SECRET": "$JWT_REFRESH_SECRET",
+        "SESSION_SECRET": "$SESSION_SECRET",
+        "COOKIE_SECRET": "$COOKIE_SECRET",
         "FRONTEND_URL": "$RAILWAY_STATIC_URL",
-        "AI_SERVICE_URL": "$AI_SERVICE_URL"
+        "AI_PROVIDER": "local",
+        "AI_SERVICE_URL": "${{ai-services.RAILWAY_PRIVATE_DOMAIN}}",
+        "TRUST_PROXY": "true"
       }
     }
   },
@@ -27,27 +30,27 @@
       "name": "frontend",
       "source": {
         "repo": "bluelearnerhub/edtech-platform",
-        "rootDirectory": "/frontend"
+        "rootDirectory": "/Frontend"
       },
       "build": {
         "buildCommand": "npm ci && npm run build"
       },
       "variables": {
-        "NEXT_PUBLIC_API_URL": "${{backend.RAILWAY_STATIC_URL}}/api",
-        "NEXT_PUBLIC_WS_URL": "${{backend.RAILWAY_STATIC_URL}}"
+        "NEXT_PUBLIC_API_URL": "${{backend.RAILWAY_PUBLIC_DOMAIN}}",
+        "NEXT_PUBLIC_WS_URL": "${{backend.RAILWAY_PUBLIC_DOMAIN}}"
       }
     },
     {
       "name": "backend",
       "source": {
-        "repo": "bluelearnerhub/edtech-platform", 
-        "rootDirectory": "/backend"
+        "repo": "bluelearnerhub/edtech-platform",
+        "rootDirectory": "/Backend"
       },
       "build": {
         "buildCommand": "npm ci && npm run build"
       },
       "variables": {
-        "DATABASE_URL": "${{Postgres.DATABASE_URL}}",
+        "MONGODB_URL": "${{MongoDB.MONGO_URL}}",
         "REDIS_URL": "${{Redis.REDIS_URL}}"
       }
     },
@@ -55,14 +58,14 @@
       "name": "ai-services",
       "source": {
         "repo": "bluelearnerhub/edtech-platform",
-        "rootDirectory": "worker/ai-services"
+        "rootDirectory": "/Worker/ai-services"
       },
       "build": {
         "buildCommand": "pip install -r requirements.txt"
       },
       "variables": {
-        "DATABASE_URL": "${{Postgres.DATABASE_URL}}",
-        "REDIS_URL": "${{Redis.REDIS_URL}}"
+        "REDIS_URL": "${{Redis.REDIS_URL}}",
+        "LOCAL_LLM_PROVIDER": "stub"
       }
     }
   ]

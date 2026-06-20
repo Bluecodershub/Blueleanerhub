@@ -133,8 +133,8 @@ export default function CorporateJobsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-                <Users className="h-6 w-6 text-blue-500" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky-500/10">
+                <Users className="h-6 w-6 text-sky-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalApplicants}</p>

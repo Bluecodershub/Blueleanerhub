@@ -62,6 +62,8 @@ export default function Pagination({
         size="icon"
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
+        aria-label="First page"
+        title="First page"
       >
         <ChevronsLeft className="h-4 w-4" />
       </Button>
@@ -72,6 +74,8 @@ export default function Pagination({
         size="icon"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        aria-label="Previous page"
+        title="Previous page"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -89,6 +93,7 @@ export default function Pagination({
               page === '...' && 'cursor-default',
               page === currentPage && 'bg-primary hover:bg-primary/90'
             )}
+            aria-label={typeof page === 'number' ? `Page ${page}` : undefined}
           >
             {page}
           </Button>
@@ -101,6 +106,8 @@ export default function Pagination({
         size="icon"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        aria-label="Next page"
+        title="Next page"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>
@@ -111,6 +118,8 @@ export default function Pagination({
         size="icon"
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage === totalPages}
+        aria-label="Last page"
+        title="Last page"
       >
         <ChevronsRight className="h-4 w-4" />
       </Button>

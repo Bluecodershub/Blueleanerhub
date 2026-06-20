@@ -38,4 +38,9 @@ router.delete('/hackathons/:id',         apiLimiter, ctrl.deleteHackathon);
 router.get('/certificates',              apiLimiter, ctrl.listAllCertificates);
 router.delete('/certificates/:id',       apiLimiter, ctrl.revokeCertificate);
 
+// ── Legal & Compliance (Grievances + Consent audit) ─────────────────────────
+router.get('/grievances',                apiLimiter, ctrl.listGrievances);
+router.patch('/grievances/:id',          apiLimiter, ctrl.updateGrievance);
+router.get('/consents',                  apiLimiter, ctrl.listConsents);
+
 export default router;

@@ -35,7 +35,7 @@ export const TryItYourself: React.FC<TryItYourselfProps> = ({
         <div className="flex items-center gap-1.5 opacity-40 transition-opacity hover:opacity-100">
           <div className="h-3 w-3 rounded-full bg-red-500/50" />
           <div className="h-3 w-3 rounded-full bg-primary/50" />
-          <div className="h-3 w-3 rounded-full bg-blue-500/50" />
+          <div className="h-3 w-3 rounded-full bg-sky-500/50" />
         </div>
       </div>
 

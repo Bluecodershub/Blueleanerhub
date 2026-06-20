@@ -40,7 +40,7 @@ const GEN_TYPES = [
     icon: Sparkles,
     desc: 'NotebookLM-style structured research brief',
     color:
-      'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-primary dark:text-blue-400',
+      'bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800 text-primary dark:text-sky-400',
   },
   {
     id: 'summary',
@@ -56,7 +56,7 @@ const GEN_TYPES = [
     icon: Layers,
     desc: 'Key concepts, principles & review questions',
     color:
-      'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-primary dark:text-blue-400',
+      'bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800 text-primary dark:text-sky-400',
   },
   {
     id: 'faq',
@@ -64,7 +64,7 @@ const GEN_TYPES = [
     icon: HelpCircle,
     desc: '10+ Q&A pairs from your materials',
     color:
-      'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-primary dark:text-blue-400',
+      'bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800 text-primary dark:text-sky-400',
   },
   {
     id: 'flashcards',
@@ -117,10 +117,10 @@ function FlashcardViewer({ content }: { content: string }) {
         <button
           key={i}
           onClick={() => setFlip(flip === i ? null : i)}
-          className="min-h-[80px] rounded-xl border border-gray-200 p-4 text-left transition-colors hover:border-blue-300 dark:border-gray-700 dark:hover:border-blue-600"
+          className="min-h-[80px] rounded-xl border border-gray-200 p-4 text-left transition-colors hover:border-sky-300 dark:border-border dark:hover:border-sky-600"
         >
           {flip === i ? (
-            <span className="text-sm text-blue-700 dark:text-blue-400">{card.back}</span>
+            <span className="text-sm text-sky-700 dark:text-sky-400">{card.back}</span>
           ) : (
             <span className="text-sm font-medium text-gray-900 dark:text-white">{card.front}</span>
           )}
@@ -165,14 +165,14 @@ function QuizViewer({ content }: { content: string }) {
                 let cls = 'px-3 py-2 rounded-lg text-sm border text-left transition-colors '
                 if (isRevealed) {
                   cls += isCorrect
-                    ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 '
+                    ? 'border-sky-400 bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 '
                     : isSelected
                       ? 'border-red-400 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 '
-                      : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 '
+                      : 'border-gray-200 dark:border-border text-gray-500 dark:text-muted-foreground '
                 } else {
                   cls += isSelected
-                    ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 '
-                    : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 '
+                    ? 'border-sky-400 bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 '
+                    : 'border-gray-200 dark:border-border hover:border-sky-300 '
                 }
                 return (
                   <button
@@ -226,7 +226,7 @@ function CompareSourcesViewer({ content }: { content: string }) {
             <h4 className="mb-2 text-sm font-semibold text-cyan-900 dark:text-cyan-200">
               {titleLine.replace(/^#+\s*/, '')}
             </h4>
-            <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-200">
+            <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-foreground">
               {body}
             </div>
           </div>
@@ -298,8 +298,8 @@ export default function GeneratePanel({ notebookId, generations, onGenerationsCh
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-white/35 dark:bg-transparent">
       {/* Generation type buttons */}
-      <div className="shrink-0 border-b border-white/10 bg-white/65 p-4 backdrop-blur dark:bg-gray-900/55">
-        <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+      <div className="shrink-0 border-b border-white/10 bg-white/65 p-4 backdrop-blur dark:bg-background-secondary/55">
+        <p className="mb-3 text-xs text-gray-500 dark:text-muted-foreground">
           Generate study materials from all your notebook sources:
         </p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -312,7 +312,7 @@ export default function GeneratePanel({ notebookId, generations, onGenerationsCh
                 onClick={() => handleGenerate(gt.id)}
                 disabled={!!generating}
                 className={`flex flex-col items-start gap-1 rounded-xl border p-3 text-left
-                            transition-all hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 disabled:opacity-50 ${gt.color}`}
+                            transition-all hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/60 disabled:opacity-50 ${gt.color}`}
               >
                 <div className="flex w-full items-center gap-1.5">
                   {generating === gt.id ? (
@@ -336,8 +336,8 @@ export default function GeneratePanel({ notebookId, generations, onGenerationsCh
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
         {generations.length === 0 ? (
           <div className="py-12 text-center">
-            <Sparkles className="mx-auto mb-3 h-8 w-8 text-gray-300 dark:text-gray-600" />
-            <p className="text-sm text-gray-400 dark:text-gray-500">
+            <Sparkles className="mx-auto mb-3 h-8 w-8 text-gray-300 dark:text-muted-foreground" />
+            <p className="text-sm text-gray-400 dark:text-muted-foreground">
               Generated study materials will appear here.
             </p>
           </div>
@@ -349,12 +349,12 @@ export default function GeneratePanel({ notebookId, generations, onGenerationsCh
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                className="overflow-hidden rounded-xl border border-blue-100/70 bg-white/90 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-800/90"
+                className="overflow-hidden rounded-xl border border-sky-100/70 bg-white/90 shadow-sm backdrop-blur dark:border-border dark:bg-card/90"
               >
                 <button
                   type="button"
                   onClick={() => setExpanded(expanded === gen.id ? null : gen.id)}
-                  className="flex w-full items-center justify-between px-4 py-3 transition-colors hover:bg-blue-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 dark:hover:bg-gray-700/50"
+                  className="flex w-full items-center justify-between px-4 py-3 transition-colors hover:bg-sky-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/60 dark:hover:bg-gray-700/50"
                 >
                   <div className="flex items-center gap-2 text-left">
                     <Sparkles className="h-3.5 w-3.5 shrink-0 text-yellow-500" />
@@ -378,7 +378,7 @@ export default function GeneratePanel({ notebookId, generations, onGenerationsCh
                       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="border-t border-gray-100 px-4 pb-4 pt-3 dark:border-gray-700">
+                      <div className="border-t border-gray-100 px-4 pb-4 pt-3 dark:border-border">
                         {gen.type === 'flashcards' ? (
                           <FlashcardViewer content={gen.content} />
                         ) : gen.type === 'quiz' ? (
@@ -409,12 +409,12 @@ export default function GeneratePanel({ notebookId, generations, onGenerationsCh
                                 Stop
                               </Button>
                             </div>
-                            <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                            <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-muted-foreground">
                               {gen.content}
                             </div>
                           </div>
                         ) : (
-                          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-muted-foreground">
                             {gen.content}
                           </div>
                         )}

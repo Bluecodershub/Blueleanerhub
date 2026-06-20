@@ -17,9 +17,9 @@ interface HackathonRow {
 
 const STATUS_COLORS: Record<string, string> = {
   DRAFT:     'bg-muted/50 text-muted-foreground border-border',
-  PUBLISHED: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  PUBLISHED: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
   ACTIVE:    'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  COMPLETED: 'bg-violet-500/10 text-violet-400 border-violet-500/20',
+  COMPLETED: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
 }
 
 const NEXT_STATUSES: Record<string, string> = {

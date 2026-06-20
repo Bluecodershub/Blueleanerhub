@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Ruby logo</title>
+  <desc id="desc">Red Ruby language badge.</desc>
+  <rect width="64" height="64" rx="14" fill="#210B0B"/>
+  <path fill="#CC342D" d="M50 18.5 39.8 50 14 23.8 27.2 10 43 10l7 8.5Z"/>
+  <path fill="#E9573F" d="M27.2 10 24 27.8 39.8 50 50 18.5 43 10H27.2Z"/>
+  <path fill="#FF7B5F" d="M14 23.8 24 27.8 27.2 10 14 23.8Z"/>
+  <path fill="#9B1C17" d="M24 27.8 14 23.8 39.8 50 24 27.8Z"/>
+</svg>

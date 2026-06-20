@@ -441,7 +441,7 @@ export default function LessonPage() {
                   className={cn(
                     'group flex w-full items-center gap-4 rounded-2xl px-4 py-4 text-left transition-all hover:scale-[1.02]',
                     i === activeLessonIndex
-                      ? 'bg-primary text-white shadow-xl shadow-primary/20'
+                      ? 'bg-primary text-black shadow-xl shadow-primary/20'
                       : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                   )}
                 >
@@ -524,7 +524,7 @@ export default function LessonPage() {
               onClick={() => setPlaygroundOpen(!playgroundOpen)}
               className={cn(
                 'h-10 gap-2 rounded-full border-border px-6 text-[11px] font-black uppercase tracking-widest',
-                playgroundOpen && 'bg-primary text-white shadow-lg shadow-primary/20'
+                playgroundOpen && 'bg-primary text-black shadow-lg shadow-primary/20'
               )}
             >
               <Play className={cn('h-3.5 w-3.5', playgroundOpen && 'fill-current')} />
@@ -545,7 +545,7 @@ export default function LessonPage() {
                 onClick={() => setRightPanelOpen(!rightPanelOpen)}
                 className={cn(
                   'flex h-10 w-10 items-center justify-center rounded-full border border-border transition-all hover:bg-secondary',
-                  rightPanelOpen && 'border-primary bg-primary text-white'
+                  rightPanelOpen && 'border-primary bg-primary text-black'
                 )}
               >
                 <BookOpen className="h-4 w-4" />
@@ -593,14 +593,14 @@ export default function LessonPage() {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="relative overflow-hidden rounded-[2rem] border border-blue-500/20 bg-blue-500/5 p-8"
+                      className="relative overflow-hidden rounded-[2rem] border border-sky-500/20 bg-sky-500/5 p-8"
                     >
                       <div className="absolute right-0 top-0 p-4">
-                        <Lightbulb size={40} className="text-blue-500/10" />
+                        <Lightbulb size={40} className="text-sky-500/10" />
                       </div>
                       <div className="mb-4 flex items-center gap-2">
-                        <Lightbulb className="h-5 w-5 text-blue-400" />
-                        <span className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">
+                        <Lightbulb className="h-5 w-5 text-sky-400" />
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-sky-400">
                           Contextual Insight
                         </span>
                       </div>
@@ -732,7 +732,7 @@ export default function LessonPage() {
                     placeholder="Capture your insights..."
                     className="h-64 w-full resize-none rounded-2xl border border-border bg-background/50 p-6 font-serif text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/30 focus:border-primary/50 focus:outline-none"
                   />
-                  <Button className="h-12 w-full rounded-xl bg-primary text-[11px] font-black uppercase tracking-widest text-white">
+                  <Button className="h-12 w-full rounded-xl bg-primary text-[11px] font-black uppercase tracking-widest text-black">
                     Persist Note
                   </Button>
                 </div>
@@ -746,7 +746,7 @@ export default function LessonPage() {
                       key={i}
                       className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-border bg-background/40 p-5 transition-all hover:bg-secondary"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-white">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-black">
                         <FileText size={18} />
                       </div>
                       <div className="min-w-0 flex-1">

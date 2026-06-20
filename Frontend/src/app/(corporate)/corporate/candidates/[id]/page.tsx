@@ -123,7 +123,7 @@ const submissionHistory = [
 function DifficultyBadge({ difficulty }: { difficulty: string }) {
   const styles: Record<string, string> = {
     Easy: 'bg-green-500/10 text-green-500',
-    Medium: 'bg-blue-500/10 text-blue-500',
+    Medium: 'bg-sky-500/10 text-sky-500',
     Hard: 'bg-red-500/10 text-red-500',
   }
   return <Badge className={styles[difficulty]}>{difficulty}</Badge>
@@ -152,7 +152,7 @@ export default function CandidateProfilePage() {
                   <AvatarFallback className="text-2xl">{candidate.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="mt-2 flex items-center gap-1">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-black">
                     {candidate.rank}
                   </div>
                   <span className="text-sm font-medium">Global Rank</span>

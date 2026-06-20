@@ -153,7 +153,7 @@ export default function ChallengeHub() {
               onClick={() => setActiveDomain(domain)}
               className={`whitespace-nowrap rounded-lg px-4 py-2 text-xs font-medium transition-colors ${
                 activeDomain === domain
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-black'
                   : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
             >

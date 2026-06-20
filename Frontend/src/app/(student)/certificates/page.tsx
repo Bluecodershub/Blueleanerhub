@@ -21,49 +21,62 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { certificatesAPI } from '@/lib/api-civilization'
 
-const MOCK_CERTS = [
-  {
-    id: 1,
-    credentialId: 'BLH-2026-CE-001A2B3C',
-    title: 'Full-Stack Software Engineering',
-    issuedFor: 'Software Engineering Track',
-    type: 'track',
-    issuedAt: '2026-02-15',
-    issuerName: 'BlueLearnerHub',
-    skills: ['React', 'Node.js', 'PostgreSQL', 'Docker', 'TypeScript'],
-    verificationUrl: '/certificates/verify/BLH-2026-CE-001A2B3C',
-    gradient: 'from-blue-600 to-purple-600',
-  },
-  {
-    id: 2,
-    credentialId: 'BLH-2026-HK-002D4E5F',
-    title: 'Hackathon Winner — AI_REVOLUTION_2026',
-    issuedFor: 'AI_REVOLUTION_2026 Hackathon',
-    type: 'hackathon',
-    issuedAt: '2026-01-28',
-    issuerName: 'BlueLearnerHub',
-    skills: ['Machine Learning', 'FastAPI', 'System Design'],
-    verificationUrl: '/certificates/verify/BLH-2026-HK-002D4E5F',
-    gradient: 'from-primary to-primary/90',
-  },
-  {
-    id: 3,
-    credentialId: 'BLH-2026-CR-003F6G7H',
-    title: 'Machine Learning Fundamentals',
-    issuedFor: 'ML Fundamentals Course',
-    type: 'course',
-    issuedAt: '2026-01-10',
-    issuerName: 'BlueLearnerHub',
-    skills: ['Python', 'scikit-learn', 'Neural Networks', 'Data Analysis'],
-    verificationUrl: '/certificates/verify/BLH-2026-CR-003F6G7H',
-    gradient: 'from-primary to-cyan-600',
-  },
-]
+interface Certificate {
+  id?: string
+  credentialId: string
+  title: string
+  issuedFor?: string
+  type: string
+  issuedAt: string | null
+  issuerName: string
+  skills?: string[]
+  verificationUrl: string
+  gradient: string
+}
 
-const CERT_TYPE_ICONS = { track: Trophy, hackathon: Award, course: Sparkles }
-const CERT_TYPE_LABELS = { track: 'Career Track', hackathon: 'Hackathon', course: 'Course' }
+const CERT_TYPE_ICONS: Record<string, typeof Award> = {
+  track: Trophy,
+  hackathon: Award,
+  course: Sparkles,
+  mentorship: Trophy,
+  achievement: Trophy,
+}
+const CERT_TYPE_LABELS: Record<string, string> = {
+  track: 'Career Track',
+  hackathon: 'Hackathon',
+  course: 'Course',
+  mentorship: 'Mentorship',
+  achievement: 'Achievement',
+}
+const CERT_TYPE_GRADIENTS: Record<string, string> = {
+  course: 'from-primary to-cyan-600',
+  hackathon: 'from-primary to-primary/90',
+  mentorship: 'from-sky-600 to-purple-600',
+  achievement: 'from-amber-500 to-orange-600',
+  track: 'from-sky-600 to-purple-600',
+}
 
-function CertificateCard({ cert }: { cert: (typeof MOCK_CERTS)[0] }) {
+/** Maps a raw Certificate record from the API into the card's view model. */
+function normalizeCert(raw: any): Certificate {
+  const type = String(raw.type ?? 'course').toLowerCase()
+  const credentialId = raw.verificationCode ?? raw.credentialId ?? raw._id ?? ''
+  return {
+    id: raw._id ?? raw.id,
+    credentialId,
+    title: raw.title ?? 'Certificate',
+    issuedFor: raw.issuedFor ?? raw.title,
+    type,
+    issuedAt: raw.issuedAt ?? null,
+    issuerName: raw.issuerName ?? 'Bluelearnerhub',
+    skills: Array.isArray(raw.skills)
+      ? raw.skills.map((s: any) => (typeof s === 'string' ? s : s?.name)).filter(Boolean)
+      : undefined,
+    verificationUrl: raw.verificationUrl ?? `/certificates/verify/${credentialId}`,
+    gradient: CERT_TYPE_GRADIENTS[type] ?? 'from-primary to-primary/80',
+  }
+}
+
+function CertificateCard({ cert }: { cert: Certificate }) {
   const [copied, setCopied] = useState(false)
   const TypeIcon = CERT_TYPE_ICONS[cert.type as keyof typeof CERT_TYPE_ICONS] ?? Award
 
@@ -167,16 +180,23 @@ function CertificateCard({ cert }: { cert: (typeof MOCK_CERTS)[0] }) {
 }
 
 export default function CertificatesPage() {
-  const [certs, setCerts] = useState<any[]>([])
+  const [certs, setCerts] = useState<Certificate[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let active = true
     certificatesAPI
       .mine()
-      .then((d: any) => {
-        const certs = d?.data ?? d ?? []
-        if (certs?.length) setCerts(certs)
+      .then((res: any) => {
+        if (!active) return
+        const rows = res?.data?.data ?? res?.data ?? []
+        setCerts(Array.isArray(rows) ? rows.map(normalizeCert) : [])
       })
-      .catch(() => setCerts([]))
+      .catch(() => active && setCerts([]))
+      .finally(() => active && setLoading(false))
+    return () => {
+      active = false
+    }
   }, [])
 
   return (
@@ -203,11 +223,11 @@ export default function CertificatesPage() {
                 label: 'Course Certs',
                 value: certs.filter((c) => c.type === 'course').length,
                 icon: Sparkles,
-                color: 'text-blue-400',
+                color: 'text-sky-400',
               },
               {
-                label: 'Track Certs',
-                value: certs.filter((c) => c.type === 'track').length,
+                label: 'Hackathon Certs',
+                value: certs.filter((c) => c.type === 'hackathon').length,
                 icon: Trophy,
                 color: 'text-purple-400',
               },
@@ -223,7 +243,13 @@ export default function CertificatesPage() {
       </div>
 
       <div className="mx-auto max-w-5xl px-6 py-8">
-        {certs.length === 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-72 animate-pulse rounded-xl border border-gray-800 bg-gray-900" />
+            ))}
+          </div>
+        ) : certs.length === 0 ? (
           <div className="py-20 text-center">
             <Award className="mx-auto mb-4 h-16 w-16 opacity-20" />
             <h2 className="mb-2 text-lg font-semibold text-gray-400">No certificates yet</h2>
@@ -238,7 +264,7 @@ export default function CertificatesPage() {
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {certs.map((cert, i: number) => (
               <motion.div
-                key={cert.id ?? cert._id ?? cert.credentialId}
+                key={cert.id ?? cert.credentialId}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}

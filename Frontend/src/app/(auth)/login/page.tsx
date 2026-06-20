@@ -51,7 +51,7 @@ function LoginContent() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 py-12">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

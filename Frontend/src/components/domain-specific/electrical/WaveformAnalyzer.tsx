@@ -120,7 +120,7 @@ export default function WaveformAnalyzer() {
       <Card className="border-gray-700 bg-gray-800 p-6">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-blue-400" />
+            <Zap className="h-6 w-6 text-sky-400" />
             <h2 className="text-2xl font-bold text-white">Waveform Analyzer</h2>
           </div>
 
@@ -245,7 +245,7 @@ function QualityIndicator({
   status: 'good' | 'warning' | 'bad'
 }) {
   const colors = {
-    good: 'text-blue-400',
+    good: 'text-sky-400',
     warning: 'text-yellow-400',
     bad: 'text-red-400',
   }

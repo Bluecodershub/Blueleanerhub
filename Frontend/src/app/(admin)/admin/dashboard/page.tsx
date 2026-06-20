@@ -1,11 +1,19 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Users, Trophy, Award, BarChart3, TrendingUp, TrendingDown, Shield, Zap, GraduationCap, Building2, Loader2 } from 'lucide-react'
+import { Users, Trophy, Award, BarChart3, Shield, Zap, Building2, AlertTriangle } from 'lucide-react'
 import api from '@/lib/api'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { MoodleStatusCard } from '@/components/admin/MoodleStatusCard'
+import {
+  AppPage,
+  DashboardLoading,
+  MetricCard,
+  MetricGrid,
+  PageHeader,
+  SectionPanel,
+} from '@/components/layout/AppPage'
 
 interface PlatformSummary {
   users: {
@@ -18,96 +26,68 @@ interface PlatformSummary {
   totalXpAwarded: number
 }
 
-function StatCard({
-  title, value, subtitle, icon: Icon, color, href,
-}: {
-  title: string; value: string | number; subtitle: string
-  icon: React.ElementType; color: string; href?: string
-}) {
-  const inner = (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-    className="rounded-xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/40"
-    >
-      <div className="flex items-start justify-between mb-3">
-        <div className={cn('flex h-10 w-10 items-center justify-center rounded-xl', color)}>
-          <Icon className="h-5 w-5 text-primary" />
-        </div>
-        {href && <TrendingUp className="h-4 w-4 text-muted-foreground" />}
-      </div>
-      <p className="text-2xl font-bold text-foreground">{typeof value === 'number' ? value.toLocaleString() : value}</p>
-      <p className="text-xs font-semibold text-foreground mt-0.5">{title}</p>
-      <p className="text-[11px] text-muted-foreground mt-1">{subtitle}</p>
-    </motion.div>
-  )
-  return href ? <Link href={href}>{inner}</Link> : inner
-}
-
 export default function AdminDashboardPage() {
   const [data, setData] = useState<PlatformSummary | null>(null)
   const [loading, setLoading] = useState(true)
+  const [openGrievances, setOpenGrievances] = useState(0)
 
   useEffect(() => {
     api.get('/admin/analytics')
       .then(r => setData(r.data.data))
       .catch(() => {})
       .finally(() => setLoading(false))
+    // Surface unresolved grievances (DPDP/IT-Rules duty) — non-blocking.
+    api.get('/admin/grievances?limit=1')
+      .then(r => setOpenGrievances(r.data?.data?.openCount ?? 0))
+      .catch(() => {})
   }, [])
 
   if (loading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    )
+    return <DashboardLoading />
   }
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Shield className="h-5 w-5 text-primary" />
-          <span className="text-xs font-bold uppercase text-primary">Admin Control Panel</span>
-        </div>
-        <h1>Platform Overview</h1>
-        <p className="text-sm text-muted-foreground mt-1">Real-time snapshot of Bluelearnerhub activity.</p>
-      </div>
+    <AppPage>
+      <PageHeader
+        eyebrow="Admin control panel"
+        icon={Shield}
+        title="Platform overview"
+        description="Monitor users, learning activity, competitions, credentials, and compliance operations."
+      />
 
-      {/* Primary Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Total Users"     value={data?.users.total ?? 0}            subtitle={`+${data?.users.newLast7Days ?? 0} this week`}  icon={Users}       color="bg-primary/10"   href="/admin/users" />
-        <StatCard title="Hackathons"      value={data?.hackathons.total ?? 0}        subtitle={`${data?.hackathons.active ?? 0} active now`}   icon={Trophy}      color="bg-primary/10"  href="/admin/hackathons" />
-        <StatCard title="Certificates"    value={data?.certificates.total ?? 0}      subtitle="Total issued"                                   icon={Award}       color="bg-success-light" href="/admin/certificates" />
-        <StatCard title="XP Awarded"      value={data?.totalXpAwarded?.toLocaleString() ?? 0} subtitle="Across all users"                    icon={Zap}         color="bg-warning-light" />
-      </div>
-
-      {/* Role Breakdown */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          { label: 'Students',   count: data?.users.students   ?? 0, icon: Zap,           color: 'text-primary', bg: 'bg-primary/10' },
-          { label: 'Mentors',    count: data?.users.mentors    ?? 0, icon: GraduationCap,  color: 'text-success', bg: 'bg-success-light' },
-          { label: 'Corporates', count: data?.users.corporates ?? 0, icon: Building2,      color: 'text-warning', bg: 'bg-warning-light' },
-          { label: 'Admins',     count: data?.users.admins     ?? 0, icon: Shield,         color: 'text-primary', bg: 'bg-primary/10' },
-        ].map(({ label, count, icon: Icon, color, bg }) => (
-          <motion.div key={label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border border-border bg-card p-4 flex items-center gap-4"
-          >
-            <div className={cn('flex h-10 w-10 items-center justify-center rounded-lg', bg)}>
-              <Icon className={cn('h-5 w-5', color)} />
+      {/* Open grievances alert — DPDP/IT-Rules duty to resolve */}
+      {openGrievances > 0 && (
+        <Link href="/admin/grievances" className="block">
+          <div className="flex items-center justify-between gap-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 transition-colors hover:bg-amber-500/15">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 shrink-0 text-amber-400" />
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {openGrievances} open grievance{openGrievances === 1 ? '' : 's'} awaiting review
+                </p>
+                <p className="text-xs text-muted-foreground">Resolve within the 30-day window. Click to manage.</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xl font-bold text-foreground">{count.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground">{label}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+            <span className="shrink-0 text-xs font-semibold text-amber-400">Review →</span>
+          </div>
+        </Link>
+      )}
 
-      {/* Hackathon Breakdown + Quiz Stats */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="mb-4 font-sans text-sm font-bold uppercase text-muted-foreground">Hackathon Status</h2>
+      <MetricGrid>
+        <MetricCard label="Total users" value={(data?.users.total ?? 0).toLocaleString()} description={`+${data?.users.newLast7Days ?? 0} this week`} icon={Users} tone="primary" href="/admin/users" />
+        <MetricCard label="Hackathons" value={(data?.hackathons.total ?? 0).toLocaleString()} description={`${data?.hackathons.active ?? 0} active now`} icon={Trophy} tone="warning" href="/admin/hackathons" />
+        <MetricCard label="Certificates" value={(data?.certificates.total ?? 0).toLocaleString()} description="Total credentials issued" icon={Award} tone="success" href="/admin/certificates" />
+        <MetricCard label="XP awarded" value={(data?.totalXpAwarded ?? 0).toLocaleString()} description="Across all learner activity" icon={Zap} tone="info" />
+      </MetricGrid>
+
+      <MetricGrid className="xl:grid-cols-3">
+        <MetricCard label="Students" value={(data?.users.students ?? 0).toLocaleString()} description="Active learner accounts" icon={Zap} tone="primary" />
+        <MetricCard label="Institutions" value={(data?.users.corporates ?? 0).toLocaleString()} description="Approved college and corporate accounts" icon={Building2} tone="warning" />
+        <MetricCard label="Administrators" value={(data?.users.admins ?? 0).toLocaleString()} description="Privileged platform operators" icon={Shield} tone="neutral" />
+      </MetricGrid>
+
+      <div className="grid gap-5 lg:grid-cols-2">
+        <SectionPanel title="Hackathon status" description="Distribution across the event lifecycle.">
           <div className="space-y-3">
             {[
               { label: 'Draft',     count: data?.hackathons.draft     ?? 0, color: 'bg-muted' },
@@ -130,10 +110,9 @@ export default function AdminDashboardPage() {
               )
             })}
           </div>
-        </div>
+        </SectionPanel>
 
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="mb-4 font-sans text-sm font-bold uppercase text-muted-foreground">Quick Actions</h2>
+        <SectionPanel title="Quick actions" description="Common administrative workflows.">
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: 'Manage Users',     href: '/admin/users',        icon: Users,    color: 'border-border hover:bg-secondary/60 text-primary' },
@@ -142,36 +121,35 @@ export default function AdminDashboardPage() {
               { label: 'Platform Stats',   href: '/admin/analytics',    icon: BarChart3, color: 'border-border hover:bg-secondary/60 text-primary' },
             ].map(({ label, href, icon: Icon, color }) => (
               <Link key={href} href={href}
-                className={cn('flex flex-col items-center gap-2 rounded-xl border p-4 text-center text-xs font-bold uppercase transition-colors', color)}
+                className={cn('flex flex-col items-center gap-2 rounded-[8px] border p-4 text-center text-xs font-semibold transition-colors', color)}
               >
                 <Icon className="h-5 w-5" />
                 {label}
               </Link>
             ))}
           </div>
-        </div>
+        </SectionPanel>
       </div>
 
-      {/* New Users Trend */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-        <h2 className="mb-4 font-sans text-sm font-bold uppercase text-muted-foreground">User Growth</h2>
-        <div className="flex items-center gap-8">
+      {/* Moodle LMS Integration Status */}
+      <MoodleStatusCard />
+
+      <SectionPanel title="User growth" description="Recent registration and assessment activity.">
+        <div className="grid gap-5 sm:grid-cols-3">
           <div>
-            <p className="text-3xl font-bold text-foreground">{data?.users.newLast30Days?.toLocaleString() ?? 0}</p>
-            <p className="text-xs text-muted-foreground mt-1">New users last 30 days</p>
+            <p className="font-mono text-2xl font-semibold tabular-nums text-foreground">{data?.users.newLast30Days?.toLocaleString() ?? 0}</p>
+            <p className="mt-1 text-xs text-muted-foreground">New users last 30 days</p>
           </div>
-          <div className="h-12 w-px bg-border" />
-          <div>
-            <p className="text-3xl font-bold text-foreground">{data?.users.newLast7Days?.toLocaleString() ?? 0}</p>
-            <p className="text-xs text-muted-foreground mt-1">New users last 7 days</p>
+          <div className="border-t border-border pt-5 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+            <p className="font-mono text-2xl font-semibold tabular-nums text-foreground">{data?.users.newLast7Days?.toLocaleString() ?? 0}</p>
+            <p className="mt-1 text-xs text-muted-foreground">New users last 7 days</p>
           </div>
-          <div className="h-12 w-px bg-border" />
-          <div>
-            <p className="text-3xl font-bold text-foreground">{data?.quizzes.totalAttempts?.toLocaleString() ?? 0}</p>
-            <p className="text-xs text-muted-foreground mt-1">Total quiz attempts</p>
+          <div className="border-t border-border pt-5 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+            <p className="font-mono text-2xl font-semibold tabular-nums text-foreground">{data?.quizzes.totalAttempts?.toLocaleString() ?? 0}</p>
+            <p className="mt-1 text-xs text-muted-foreground">Total quiz attempts</p>
           </div>
         </div>
-      </div>
-    </div>
+      </SectionPanel>
+    </AppPage>
   )
 }

@@ -124,10 +124,20 @@ router.put('/jobs/:id', apiLimiter, async (req, res, next) => {
     const userId = req.user!.id;
     const { id }  = req.params;
 
+    // Whitelist updatable content fields only — never trust the raw body, which
+    // could otherwise reassign ownership (postedBy) or set privileged flags.
+    const ALLOWED_FIELDS = ['title', 'company', 'location', 'type', 'description', 'requirements', 'applyUrl', 'salary', 'isActive'] as const;
+    const update: Record<string, any> = {};
+    for (const key of ALLOWED_FIELDS) {
+      if (Object.prototype.hasOwnProperty.call(req.body, key)) update[key] = req.body[key];
+    }
+    // Accept the frontend's `jobType` alias for the schema's `type` field.
+    if (typeof req.body.jobType === 'string') update.type = req.body.jobType;
+
     const job = await Job.findOneAndUpdate(
       { _id: id, postedBy: new mongoose.Types.ObjectId(userId) },
-      { ...req.body, updatedAt: new Date() },
-      { new: true },
+      { $set: update },
+      { new: true, runValidators: true },
     );
 
     if (!job) return res.status(404).json({ success: false, message: 'Job not found' });

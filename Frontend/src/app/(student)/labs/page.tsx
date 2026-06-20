@@ -31,8 +31,8 @@ const labCategories = [
     domain: 'CS / IT',
     status: 'ACTIVE',
     href: '/labs/software',
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
+    color: 'text-sky-400',
+    bg: 'bg-sky-500/10',
   },
   {
     title: 'MECHANICAL_SIMULATOR',

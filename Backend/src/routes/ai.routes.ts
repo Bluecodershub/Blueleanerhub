@@ -12,6 +12,7 @@ router.get('/quiz',            authenticate, checkCredits, aiController.getDaily
 router.post('/quiz',           authenticate, checkCredits, aiController.generateQuiz);
 router.post('/quiz/submit',    authenticate,               aiController.submitQuiz);
 router.post('/review',         authenticate, checkCredits, aiController.reviewProject);
+router.post('/review/submission', authenticate, checkCredits, apiLimiter, aiController.reviewSubmission);
 router.get('/recommend',       authenticate, checkCredits, aiController.getRecommendations);
 router.post('/hackathon-help', authenticate, checkCredits, aiController.getHackathonHelp);
 

@@ -69,8 +69,8 @@ export default function NewRepositoryPage() {
 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-900/50">
-              <GitBranch className="h-5 w-5 text-blue-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-900/50">
+              <GitBranch className="h-5 w-5 text-sky-400" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Create a new repository</h1>
@@ -98,7 +98,7 @@ export default function NewRepositoryPage() {
                 />
                 {slugified && name !== slugified && (
                   <p className="mt-1 text-xs text-gray-500">
-                    Will be saved as: <span className="text-blue-400">{slugified}</span>
+                    Will be saved as: <span className="text-sky-400">{slugified}</span>
                   </p>
                 )}
                 {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
@@ -127,7 +127,7 @@ export default function NewRepositoryPage() {
                       onClick={() => setVisibility(v)}
                       className={`flex items-start gap-3 rounded-xl border p-4 text-left transition-all ${
                         visibility === v
-                          ? 'border-blue-500 bg-blue-900/20'
+                          ? 'border-sky-500 bg-sky-900/20'
                           : 'border-gray-700 bg-gray-800/50 hover:border-gray-600'
                       }`}
                     >
@@ -157,7 +157,7 @@ export default function NewRepositoryPage() {
                     type="checkbox"
                     checked={initReadme}
                     onChange={(e) => setInitReadme(e.target.checked)}
-                    className="h-4 w-4 accent-blue-500"
+                    className="h-4 w-4 accent-sky-500"
                   />
                   <span className="flex items-center gap-2 text-sm text-gray-300">
                     <FileText className="h-4 w-4 text-gray-500" />
@@ -173,7 +173,7 @@ export default function NewRepositoryPage() {
                     <select
                       value={gitignore}
                       onChange={(e) => setGitignore(e.target.value)}
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none"
                     >
                       {GITIGNORE_TEMPLATES.map((t) => (
                         <option key={t}>{t}</option>
@@ -185,7 +185,7 @@ export default function NewRepositoryPage() {
                     <select
                       value={license}
                       onChange={(e) => setLicense(e.target.value)}
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none"
                     >
                       {LICENSE_OPTIONS.map((l) => (
                         <option key={l}>{l}</option>
@@ -198,7 +198,7 @@ export default function NewRepositoryPage() {
               <Button
                 onClick={handleCreate}
                 disabled={creating || !name.trim()}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"
+                className="w-full bg-gradient-to-r from-sky-600 to-purple-600 font-semibold hover:opacity-90"
               >
                 {creating ? 'Creating repository…' : 'Create repository'}
               </Button>

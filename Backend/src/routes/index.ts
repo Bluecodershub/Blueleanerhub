@@ -32,6 +32,8 @@ import trackingRoutes from './tracking.routes';
 import adminRoutes from './admin.routes';
 import notificationRoutes from './notifications.routes';
 import coursesRoutes from './courses.routes';
+import moodleRoutes from './moodle.routes';
+import legalRoutes from './legal.routes';
 // ── API LAYERS ─────────────────────────────────────────────────────────────
 import internalRoutes     from './internal.routes';
 import serviceRoutes      from './service.routes';
@@ -104,6 +106,8 @@ v1Router.use('/tracking',          trackingRoutes);          // Telemetry and Wi
 v1Router.use('/admin',             adminRoutes);             // Admin management panel
 v1Router.use('/notifications',     notificationRoutes);      // User notifications
 v1Router.use('/courses',           coursesRoutes);           // Course enrollment & capstone
+v1Router.use('/moodle',            moodleRoutes);            // Moodle LMS integration (admin)
+v1Router.use('/legal',             legalRoutes);             // Consent records + grievance redressal
 
 // ── PUBLIC API v1 (Search & Profile) ─────────────────────────────────────────
 v1Router.use('/public', publicRoutes);               // Live search, profile, candidate search

@@ -18,7 +18,6 @@ import {
   Menu,
   X,
   Settings,
-  ShieldCheck,
   Loader2,
   Globe,
   Users,
@@ -26,10 +25,12 @@ import {
   Trophy,
   BarChart3,
   LockKeyhole,
+  Rocket,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
+import { Logo } from '@/components/branding/Logo'
 
 const AIAssistant = lazy(() => import('@/components/ai/AIAssistant').then(mod => ({ default: mod.AIAssistant })))
 
@@ -43,7 +44,14 @@ function AIAssistantFallback() {
   )
 }
 
-const navItems = [
+type NavItem = {
+  title: string
+  href: string
+  icon: typeof LayoutDashboard
+  disabled?: boolean
+}
+
+const navItems: NavItem[] = [
   { title: 'Dashboard', href: '/student/dashboard', icon: LayoutDashboard },
   { title: 'AI Roadmap', href: '/student/roadmap', icon: Compass },
   { title: 'Skill Report', href: '/student/skill-report', icon: BarChart3 },
@@ -55,7 +63,7 @@ const navItems = [
   { title: 'AI Tutor', href: '/ai-companion', icon: Bot },
   { title: 'Hackathons', href: '/hackathons', icon: Flag },
   { title: 'Leaderboard', href: '/student/leaderboard', icon: Trophy },
-  { title: 'Mentors', href: '/mentors', icon: Users, disabled: true },
+  { title: 'Capstones', href: '/hackathons/capstones', icon: Rocket },
   { title: 'Spaces', href: '/spaces', icon: Globe },
   { title: 'Premium', href: '/premium', icon: Crown },
 ]
@@ -86,19 +94,14 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     /^\/hackathons\/[^/]+\/(submit|team)$/.test(pathname)
 
   const content = (
-    <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
+    <div className="app-workspace flex min-h-screen text-foreground selection:bg-primary/20">
       <div className="bg-noise pointer-events-none opacity-50" />
 
       {/* ─── DESKTOP SIDEBAR ──────────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:w-72 md:flex">
         <div className="flex h-16 items-center justify-between px-6">
           <Link href="/student/dashboard" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-sm">
-              <ShieldCheck className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <span className="font-semibold text-xl tracking-tight text-foreground">
-              BlueLearnerHub
-            </span>
+            <Logo />
           </Link>
 
         </div>
@@ -209,12 +212,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             >
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                    <ShieldCheck className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  <span className="font-semibold text-lg text-foreground">
-                    BlueLearnerHub
-                  </span>
+                  <Logo />
                 </div>
                 <div className="flex items-center gap-2">
 
@@ -272,7 +270,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       {/* ─── MAIN CONTENT ─────────────────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <main className="relative flex-1 overflow-y-auto pb-24">
-          <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
+          <div className="app-page-frame">
             {children}
           </div>
           

@@ -59,7 +59,7 @@ export default function CommunityPage() {
         </div>
 
         <div className="pt-8">
-          <Button className="group h-14 rounded-2xl bg-primary px-10 text-lg font-black text-white shadow-xl shadow-primary/15 transition-all hover:bg-primary/90 active:scale-95">
+          <Button className="group h-14 rounded-2xl bg-primary px-10 text-lg font-black text-black shadow-xl shadow-primary/15 transition-all hover:bg-primary/90 active:scale-95">
             Notify Me When Ready
             <Sparkles className="ml-2 h-5 w-5 transition-transform group-hover:rotate-12" />
           </Button>

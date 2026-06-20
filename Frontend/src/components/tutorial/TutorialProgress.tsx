@@ -26,11 +26,11 @@ export default function TutorialProgress({
 
       {/* Progress */}
       <div className="flex items-center gap-2">
-        <div className="h-2 w-32 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800">
+        <div className="h-2 w-32 overflow-hidden rounded-full bg-gray-200 dark:bg-card">
           <div
             className={cn(
               'h-full rounded-full transition-all duration-500',
-              percent === 100 ? 'bg-primary' : 'bg-blue-500'
+              percent === 100 ? 'bg-primary' : 'bg-sky-500'
             )}
             style={{ width: `${percent}%` }}
           />

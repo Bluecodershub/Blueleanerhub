@@ -54,122 +54,45 @@ const DIFF_MAP: Record<string, Hackathon['difficulty']> = {
   Pro: 'advanced',
 }
 
-const MOCK_HACKATHONS: Hackathon[] = [
-  {
-    id: '1',
-    title: 'AI Innovation Challenge 2026',
-    description: 'Build innovative AI-powered applications using machine learning, natural language processing, or computer vision.',
-    status: 'active',
-    startDate: '2026-04-01',
-    endDate: '2026-04-03',
-    participants: 847,
-    maxParticipants: 1000,
-    prize: '$5,000 + Mentorship',
-    difficulty: 'advanced',
-    tags: ['AI/ML', 'Python', 'TensorFlow', 'API'],
-    organization: 'TechGiant Corp',
-    mode: 'online',
-  },
-  {
-    id: '2',
-    title: 'Frontend Masters Hack',
-    description: 'Create stunning user interfaces using modern frontend technologies. Focus on user experience and accessibility.',
-    status: 'upcoming',
-    startDate: '2026-04-10',
-    endDate: '2026-04-12',
-    participants: 234,
-    maxParticipants: 500,
-    prize: 'MacBook Air + Certificates',
-    difficulty: 'intermediate',
-    tags: ['React', 'Next.js', 'CSS', 'UI/UX'],
-    organization: 'DesignStudio',
-    mode: 'online',
-  },
-  {
-    id: '3',
-    title: 'Green Tech Sustainability',
-    description: 'Develop solutions that address environmental challenges through technology. Climate tech, renewable energy, waste management.',
-    status: 'upcoming',
-    startDate: '2026-04-15',
-    endDate: '2026-04-17',
-    participants: 156,
-    maxParticipants: 300,
-    prize: '$3,000 + Grants',
-    difficulty: 'intermediate',
-    tags: ['Sustainability', 'IoT', 'Data Analytics', 'Cloud'],
-    organization: 'EcoTech Foundation',
-    mode: 'hybrid',
-  },
-  {
-    id: '4',
-    title: 'Blockchain Builder Challenge',
-    description: 'Create decentralized applications, smart contracts, or blockchain-based solutions for real-world problems.',
-    status: 'active',
-    startDate: '2026-03-28',
-    endDate: '2026-03-30',
-    participants: 623,
-    maxParticipants: 800,
-    prize: '$4,000 + Web3 Course',
-    difficulty: 'advanced',
-    tags: ['Web3', 'Solidity', 'Blockchain', 'DeFi'],
-    organization: 'CryptoLabs',
-    mode: 'online',
-  },
-  {
-    id: '5',
-    title: 'Campus Coders Cup',
-    description: 'College students compete in algorithmic challenges and build innovative projects within 48 hours.',
-    status: 'ended',
-    startDate: '2026-03-15',
-    endDate: '2026-03-17',
-    participants: 1200,
-    maxParticipants: 1500,
-    prize: 'Internship Offers',
-    difficulty: 'beginner',
-    tags: ['DSA', 'Python', 'Java', 'Algorithms'],
-    organization: 'BlueLearnerHub',
-    mode: 'offline',
-  },
-]
-
 const statusConfig: Record<HackathonStatus, { label: string; color: string; bgColor: string }> = {
-  upcoming: { label: 'Upcoming', color: 'text-blue-600', bgColor: 'bg-blue-500/10 border-blue-500/20' },
+  upcoming: { label: 'Upcoming', color: 'text-sky-600', bgColor: 'bg-sky-500/10 border-sky-500/20' },
   active: { label: 'Active', color: 'text-emerald-600', bgColor: 'bg-emerald-500/10 border-emerald-500/20' },
   ended: { label: 'Ended', color: 'text-muted-foreground', bgColor: 'bg-secondary border-border' },
 }
 
 
 export default function HackathonsPage() {
-  const [hackathons, setHackathons] = useState<Hackathon[]>(MOCK_HACKATHONS)
+  const [hackathons, setHackathons] = useState<Hackathon[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<HackathonStatus | 'all'>('all')
   const [difficultyFilter] = useState<string>('all')
 
   useEffect(() => {
+    let active = true
     api.get('/hackathons?limit=30').then((res) => {
+      if (!active) return
       const rows: any[] = res.data?.data?.data ?? res.data?.data ?? []
-      if (rows.length) {
-        const mapped: Hackathon[] = rows
-          .filter((h: any) => h.status !== 'DRAFT')
-          .map((h: any) => ({
-            id: String(h._id),
-            title: h.name,
-            description: h.description || '',
-            status: STATUS_MAP[h.status] ?? 'upcoming',
-            startDate: h.startDate ? new Date(h.startDate).toISOString().slice(0, 10) : '',
-            endDate: h.endDate ? new Date(h.endDate).toISOString().slice(0, 10) : '',
-            participants: 0,
-            maxParticipants: h.maxParticipants || 0,
-            prize: h.prizePool || (h.prizes?.[0]?.reward ?? 'Prizes'),
-            difficulty: DIFF_MAP[h.difficulty] ?? 'intermediate',
-            tags: h.tags || [],
-            organization: h.organizerName || h.organizerType || 'BlueLearnerHub',
-            mode: 'online' as const,
-          }))
-        setHackathons(mapped)
-      }
-    }).catch(() => {}).finally(() => setLoading(false))
+      const mapped: Hackathon[] = rows
+        .filter((h: any) => h.status !== 'DRAFT')
+        .map((h: any) => ({
+          id: String(h._id),
+          title: h.name,
+          description: h.description || '',
+          status: STATUS_MAP[h.status] ?? 'upcoming',
+          startDate: h.startDate ? new Date(h.startDate).toISOString().slice(0, 10) : '',
+          endDate: h.endDate ? new Date(h.endDate).toISOString().slice(0, 10) : '',
+          participants: 0,
+          maxParticipants: h.maxParticipants || 0,
+          prize: h.prizePool || (h.prizes?.[0]?.reward ?? 'Prizes'),
+          difficulty: DIFF_MAP[h.difficulty] ?? 'intermediate',
+          tags: h.tags || [],
+          organization: h.organizerName || h.organizerType || 'BlueLearnerHub',
+          mode: 'online' as const,
+        }))
+      setHackathons(mapped)
+    }).catch(() => active && setHackathons([])).finally(() => active && setLoading(false))
+    return () => { active = false }
   }, [])
 
   const filteredHackathons = hackathons.filter((h) => {
@@ -214,8 +137,8 @@ export default function HackathonsPage() {
         <div className="grid grid-cols-3 gap-4">
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-violet-500/10 p-2">
-                <Trophy className="h-5 w-5 text-violet-500" />
+              <div className="rounded-lg bg-sky-500/10 p-2">
+                <Trophy className="h-5 w-5 text-sky-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalHackathons}</p>
@@ -236,8 +159,8 @@ export default function HackathonsPage() {
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-blue-500/10 p-2">
-                <TrendingUp className="h-5 w-5 text-blue-500" />
+              <div className="rounded-lg bg-sky-500/10 p-2">
+                <TrendingUp className="h-5 w-5 text-sky-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.upcoming}</p>

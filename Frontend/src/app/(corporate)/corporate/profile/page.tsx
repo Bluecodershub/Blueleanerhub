@@ -112,7 +112,7 @@ export default function CorporateProfilePage() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <Card>
           <CardContent className="p-6 flex items-center gap-5">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-border bg-gradient-to-br from-violet-600 to-primary text-3xl font-bold text-white shadow-lg">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-border bg-gradient-to-br from-sky-600 to-primary text-3xl font-bold text-white shadow-lg">
               {form.companyName?.[0]?.toUpperCase() || <Building2 className="h-8 w-8" />}
             </div>
             <div className="min-w-0">

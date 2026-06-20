@@ -16,7 +16,6 @@ import {
   TrendingUp,
   BarChart3,
   Search,
-  ShieldCheck,
   BookmarkCheck,
   LogOut,
   Building2,
@@ -24,6 +23,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
+import { BrandMark } from '@/components/branding/Logo'
 
 const navItems = [
   { title: 'Dashboard',    href: '/corporate/dashboard',   icon: LayoutDashboard },
@@ -51,21 +51,19 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
 
   return (
     <RoleGuard allowedRoles={['CORPORATE', 'ADMIN']}>
-    <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
+    <div className="app-workspace flex min-h-screen text-foreground selection:bg-primary/20">
       <div className="bg-noise pointer-events-none absolute inset-0 opacity-50" />
 
       {/* ─── DESKTOP SIDEBAR ──────────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:flex">
         <div className="flex h-16 items-center justify-between px-6">
           <Link href="/corporate/dashboard" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-sm">
-              <ShieldCheck className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <span className="font-semibold text-lg tracking-tight text-foreground">
+            <BrandMark size={40} className="rounded-xl" priority />
+            <div className="min-w-0">
+              <span className="block truncate font-semibold text-sm tracking-tight text-foreground">
                 BlueLearnerHub
               </span>
-              <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
+              <span className="mt-1 inline-flex rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
                 for Teams
               </span>
             </div>
@@ -191,9 +189,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
             >
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                    <ShieldCheck className="h-6 w-6 text-primary-foreground" />
-                  </div>
+                  <BrandMark size={38} className="rounded-xl" />
                   <span className="font-semibold text-lg text-foreground">
                     BlueLearnerHub
                   </span>
@@ -238,7 +234,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
       {/* ─── MAIN CONTENT ─────────────────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <main className="relative flex-1 overflow-y-auto pb-24">
-          <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
+          <div className="app-page-frame">
             {children}
           </div>
         </main>

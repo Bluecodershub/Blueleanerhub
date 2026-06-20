@@ -82,14 +82,14 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
             className={cn(
               'flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all',
               completing
-                ? 'cursor-wait bg-blue-400 text-white'
-                : 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]'
+                ? 'cursor-wait bg-sky-400 text-white'
+                : 'bg-primary text-black hover:bg-primary/90 active:scale-[0.98]'
             )}
           >
             <Sparkles className="h-4 w-4" />
             {completing ? 'Saving...' : 'Mark as complete'}
             {!completing && (
-              <span className="ml-1 rounded-full bg-blue-500 px-2 py-0.5 text-xs">
+              <span className="ml-1 rounded-full bg-sky-500 px-2 py-0.5 text-xs">
                 +{section.exerciseXpReward} XP
               </span>
             )}

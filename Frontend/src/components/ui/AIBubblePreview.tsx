@@ -68,7 +68,7 @@ export function AIBubblePreview() {
             className="mb-4 flex h-[420px] w-[320px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl shadow-primary/10 backdrop-blur-xl transition-all"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3 text-white">
+            <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3 text-black">
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20">
                   <Bot className="h-4 w-4" />
@@ -102,8 +102,8 @@ export function AIBubblePreview() {
                 >
                   <div className={cn(
                     "rounded-2xl px-3 py-2 text-sm",
-                    msg.role === 'user' 
-                      ? "rounded-tr-none bg-primary text-white" 
+                    msg.role === 'user'
+                      ? "rounded-tr-none bg-primary text-black"
                       : "rounded-tl-none bg-muted text-muted-foreground border border-border/50"
                   )}>
                     {msg.content}
@@ -151,7 +151,7 @@ export function AIBubblePreview() {
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all duration-300",
-          isOpen ? "bg-card border border-border text-primary" : "bg-primary text-white"
+          isOpen ? "bg-card border border-border text-primary" : "bg-primary text-black"
         )}
       >
         {isOpen ? <X className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}

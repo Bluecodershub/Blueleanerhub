@@ -29,7 +29,7 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
 
 const TYPE_COLORS: Record<string, string> = {
   CERT_EARNED:        'bg-amber-500/10 text-amber-400',
-  FEEDBACK_RECEIVED:  'bg-blue-500/10 text-blue-400',
+  FEEDBACK_RECEIVED:  'bg-sky-500/10 text-sky-400',
   HACKATHON_DEADLINE: 'bg-rose-500/10 text-rose-400',
   GRADED:             'bg-emerald-500/10 text-emerald-400',
   SYSTEM:             'bg-muted text-muted-foreground',

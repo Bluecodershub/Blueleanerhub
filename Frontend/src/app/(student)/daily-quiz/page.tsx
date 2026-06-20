@@ -21,7 +21,7 @@ const DOMAINS_FALLBACK = [
 
 const DIFFICULTY_COLORS: Record<MCQPublic['difficulty'], string> = {
   easy:   'bg-muted text-foreground/70',
-  medium: 'bg-blue-900/50 text-blue-400',
+  medium: 'bg-sky-900/50 text-sky-400',
   hard:   'bg-purple-900/50 text-purple-400',
 }
 
@@ -329,7 +329,7 @@ export default function DailyQuizPage() {
         {state === 'completed' && result && quiz && (
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
             <div className="mb-8 text-center">
-              <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary shadow-lg shadow-primary/20">
+              <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full bg-cat-indigo shadow-lg shadow-primary/30">
                 <Trophy className="h-10 w-10 text-white" />
               </div>
               <h2 className="mb-1 text-2xl font-bold">Quiz Complete!</h2>

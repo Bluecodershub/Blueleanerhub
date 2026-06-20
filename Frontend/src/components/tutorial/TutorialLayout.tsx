@@ -87,8 +87,8 @@ function SectionNav({
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-all duration-150',
             s.id === activeId
-              ? 'bg-blue-50 font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300'
-              : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+              ? 'bg-sky-50 font-medium text-sky-700 dark:bg-sky-950 dark:text-sky-300'
+              : 'text-gray-600 hover:bg-gray-100 dark:text-muted-foreground dark:hover:bg-gray-800'
           )}
         >
           <span className="flex-shrink-0">
@@ -99,7 +99,7 @@ function SectionNav({
                 className={cn(
                   'flex h-4 w-4 items-center justify-center rounded-full border-2 text-[10px] font-bold',
                   s.id === activeId
-                    ? 'border-blue-600 text-primary'
+                    ? 'border-sky-600 text-primary'
                     : 'border-gray-300 text-gray-400'
                 )}
               >
@@ -144,9 +144,9 @@ export default function TutorialLayout({
   if (!activeSection) return null
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-white dark:bg-gray-950">
+    <div className="flex h-screen flex-col overflow-hidden bg-white dark:bg-background">
       {/* Top bar */}
-      <header className="flex items-center justify-between border-b border-gray-200 px-6 py-3 dark:border-gray-800">
+      <header className="flex items-center justify-between border-b border-gray-200 px-6 py-3 dark:border-border">
         <div className="flex items-center gap-3">
           <span className="text-xs font-medium uppercase tracking-wider text-gray-500">
             {tutorial.domain}
@@ -168,7 +168,7 @@ export default function TutorialLayout({
       {/* Body: three panels */}
       <div className="flex flex-1 overflow-hidden">
         {/* LEFT: Section navigator */}
-        <aside className="hidden w-64 flex-shrink-0 overflow-y-auto border-r border-gray-200 dark:border-gray-800 md:block">
+        <aside className="hidden w-64 flex-shrink-0 overflow-y-auto border-r border-gray-200 dark:border-border md:block">
           <SectionNav
             sections={tutorial.sections}
             activeId={activeSectionId!}
@@ -179,7 +179,7 @@ export default function TutorialLayout({
         {/* CENTER: Content */}
         <main className="flex flex-1 flex-col overflow-hidden">
           {/* Mobile tab switcher */}
-          <div className="flex border-b border-gray-200 dark:border-gray-800 md:hidden">
+          <div className="flex border-b border-gray-200 dark:border-border md:hidden">
             {[
               { key: 'content', icon: BookOpen, label: 'Read' },
               { key: 'code', icon: Code2, label: 'Code' },
@@ -191,7 +191,7 @@ export default function TutorialLayout({
                 className={cn(
                   'flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm font-medium transition-colors',
                   activeTab === key
-                    ? 'border-b-2 border-blue-600 text-primary'
+                    ? 'border-b-2 border-sky-600 text-primary'
                     : 'text-gray-500 hover:text-gray-700'
                 )}
               >
@@ -213,7 +213,7 @@ export default function TutorialLayout({
             {/* Code + Exercise panel (desktop right split) */}
             <div
               className={cn(
-                'flex w-[45%] flex-col border-l border-gray-200 dark:border-gray-800',
+                'flex w-[45%] flex-col border-l border-gray-200 dark:border-border',
                 activeTab === 'content' && 'hidden md:flex'
               )}
             >
@@ -235,7 +235,7 @@ export default function TutorialLayout({
               {activeSection.hasExercise && (
                 <div
                   className={cn(
-                    'border-t border-gray-200 dark:border-gray-800',
+                    'border-t border-gray-200 dark:border-border',
                     activeTab === 'code' && 'hidden md:block'
                   )}
                 >

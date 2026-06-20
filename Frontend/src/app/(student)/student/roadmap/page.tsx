@@ -122,8 +122,8 @@ export default function StudentRoadmapPage() {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
         <div className="relative w-20 h-20 flex items-center justify-center mb-4">
-          <div className="absolute inset-0 rounded-full border-4 border-t-indigo-500 border-r-blue-500 border-b-purple-500 border-l-slate-800 animate-spin" />
-          <Brain className="h-8 w-8 text-indigo-400 animate-pulse" />
+          <div className="absolute inset-0 rounded-full border-4 border-t-sky-500 border-r-sky-500 border-b-purple-500 border-l-slate-800 animate-spin" />
+          <Brain className="h-8 w-8 text-sky-400 animate-pulse" />
         </div>
         <p className="text-sm text-slate-400 font-semibold animate-pulse">Assembling customized roadmap...</p>
       </div>
@@ -134,16 +134,16 @@ export default function StudentRoadmapPage() {
     const domain = user?.domain || 'Software Engineering'
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 p-6 lg:p-12 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-600/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="max-w-3xl mx-auto min-h-[70vh] flex flex-col justify-center">
           <button
             onClick={() => router.push('/student/dashboard')}
-            className="mb-6 flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition"
+            className="mb-6 flex items-center gap-1.5 text-xs text-sky-400 hover:text-sky-300 font-semibold transition"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to Dashboard
           </button>
           <div className="rounded-3xl border border-slate-850 bg-slate-900/60 p-8 backdrop-blur-md">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-300">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky-300">
               <Brain className="h-7 w-7" />
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight">No roadmap generated yet</h1>
@@ -168,23 +168,23 @@ export default function StudentRoadmapPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-6 lg:p-12 relative overflow-hidden select-none">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-600/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-sky-600/5 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 z-10 relative">
         <div className="space-y-2">
           <button
             onClick={() => router.push('/student/dashboard')}
-            className="flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition"
+            className="flex items-center gap-1.5 text-xs text-sky-400 hover:text-sky-300 font-semibold transition"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to Dashboard
           </button>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-sky-400 via-sky-400 to-purple-400 bg-clip-text text-transparent">
               Adaptive Node Roadmap
             </h1>
-            <Badge className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs">
+            <Badge className="bg-sky-500/10 text-sky-400 border border-sky-500/20 text-xs">
               AI Personalized
             </Badge>
           </div>
@@ -205,7 +205,7 @@ export default function StudentRoadmapPage() {
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
               <path
-                className="text-indigo-500 transition-all duration-500"
+                className="text-sky-500 transition-all duration-500"
                 strokeWidth="3.2"
                 strokeDasharray={`${percentCompleted}, 100`}
                 strokeLinecap="round"
@@ -279,14 +279,14 @@ export default function StudentRoadmapPage() {
                     isLocked ? 'cursor-not-allowed bg-slate-900/30 border-slate-850 opacity-45' : 'cursor-pointer bg-slate-950/80 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)]'
                   } ${
                     isCompleted ? 'border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.05)]' :
-                    isInProgress ? 'border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)] animate-pulse' :
+                    isInProgress ? 'border-sky-500 shadow-[0_0_15px_rgba(99,102,241,0.2)] animate-pulse' :
                     'border-slate-800'
                   }`}
                 >
                   {/* Status Indicator circle */}
                   <div className={`h-11 w-11 rounded-xl flex items-center justify-center shrink-0 border ${
                     isCompleted ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
-                    isInProgress ? 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400' :
+                    isInProgress ? 'bg-sky-500/15 border-sky-500/30 text-sky-400' :
                     'bg-slate-950/40 border-slate-800 text-slate-550'
                   }`}>
                     {isCompleted ? <CheckCircle className="h-5 w-5" /> :
@@ -296,7 +296,7 @@ export default function StudentRoadmapPage() {
 
                   {/* Text details */}
                   <div className="space-y-0.5 min-w-0">
-                    <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block">Node {index + 1}</span>
+                    <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest block">Node {index + 1}</span>
                     <h3 className="font-bold text-sm truncate text-slate-100">{node.title}</h3>
                     <p className="text-xs text-slate-400 line-clamp-1">{node.description}</p>
                   </div>
@@ -324,11 +324,11 @@ export default function StudentRoadmapPage() {
               >
                 {/* Node info header */}
                 <div className="space-y-2 border-b border-slate-850 pb-5">
-                  <div className="flex justify-between items-center text-xs font-semibold text-indigo-400">
+                  <div className="flex justify-between items-center text-xs font-semibold text-sky-400">
                     <span>CONCEPT BREAKDOWN</span>
                     <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold ${
                       selectedNode.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                      selectedNode.status === 'IN_PROGRESS' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' :
+                      selectedNode.status === 'IN_PROGRESS' ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' :
                       'bg-slate-850 text-slate-400'
                     }`}>
                       {selectedNode.status}
@@ -353,7 +353,7 @@ export default function StudentRoadmapPage() {
                 {/* Recommended Project */}
                 {selectedNode.recommendedProjects?.length > 0 && (
                   <div className="space-y-3 bg-slate-950/40 border border-slate-850/80 p-4 rounded-2xl">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-300">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-sky-300">
                       <Sparkles className="h-3.5 w-3.5" />
                       <span>AI Recommended Project</span>
                     </div>
@@ -367,7 +367,7 @@ export default function StudentRoadmapPage() {
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" /> ~{selectedNode.estimatedMinutes} mins
                       </span>
-                      <span className="text-indigo-400 font-bold bg-indigo-500/10 px-2 py-0.5 rounded">
+                      <span className="text-sky-400 font-bold bg-sky-500/10 px-2 py-0.5 rounded">
                         {selectedNode.recommendedProjects[0].complexity}
                       </span>
                     </div>
@@ -398,7 +398,7 @@ export default function StudentRoadmapPage() {
                       {/* Read AI-generated lesson */}
                       <Button
                         onClick={() => handleStartNode(selectedNode)}
-                        className="w-full bg-indigo-600 hover:bg-indigo-500 font-bold"
+                        className="w-full bg-sky-600 hover:bg-sky-500 font-bold"
                       >
                         <BookOpen className="mr-2 h-4 w-4" />
                         {selectedNode.status === 'COMPLETED' ? 'Re-read Lesson' : selectedNode.status === 'IN_PROGRESS' ? 'Continue Lesson' : 'Start AI Lesson'}
@@ -406,7 +406,7 @@ export default function StudentRoadmapPage() {
 
                       <Button
                         onClick={() => handleStartPracticeInSandbox(selectedNode)}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-bold"
+                        className="w-full bg-gradient-to-r from-sky-600 to-sky-600 hover:from-sky-500 hover:to-sky-500 font-bold"
                       >
                         <Code2 className="mr-2 h-4 w-4" /> Practice in IDE Sandbox
                       </Button>
@@ -416,7 +416,7 @@ export default function StudentRoadmapPage() {
                         onClick={() => handleChatWithMentorAboutNode(selectedNode)}
                         className="w-full border-slate-800 hover:bg-slate-850"
                       >
-                        <Bot className="mr-2 h-4 w-4 text-indigo-400" /> Ask AI Mentor
+                        <Bot className="mr-2 h-4 w-4 text-sky-400" /> Ask AI Mentor
                       </Button>
                     </>
                   )}
@@ -429,7 +429,7 @@ export default function StudentRoadmapPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="bg-slate-900/40 border border-slate-850 p-8 rounded-3xl backdrop-blur-md text-center space-y-4"
               >
-                <div className="h-12 w-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto animate-pulse">
+                <div className="h-12 w-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center mx-auto animate-pulse">
                   <Brain className="h-6 w-6" />
                 </div>
                 <h3 className="font-bold text-slate-200">Select a Roadmap Node</h3>
@@ -442,7 +442,7 @@ export default function StudentRoadmapPage() {
 
           {/* Quick AI Advisor */}
           <div className="bg-slate-900/60 border border-slate-850 p-6 rounded-3xl backdrop-blur-md space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold text-indigo-400">
+            <div className="flex items-center gap-2 text-xs font-bold text-sky-400">
               <Bot className="h-4 w-4 animate-bounce" />
               <span>AI Advisor Note</span>
             </div>
