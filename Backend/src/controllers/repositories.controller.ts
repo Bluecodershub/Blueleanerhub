@@ -113,7 +113,7 @@ export const getFileContent = async (req: Request, res: Response) => {
     const requesterId = req.user?.id;
 
     if (!mongoose.isValidObjectId(repoId)) {
-      return res.status(400).json({ success: false, message: 'Invalid repository id' });
+      return res.status(404).json({ success: false, message: 'Repository not found' });
     }
 
     const repo = await Repository.findById(repoId).select('ownerId visibility').lean();

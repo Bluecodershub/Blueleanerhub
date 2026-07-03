@@ -30,7 +30,6 @@ import {
   TrendingUp,
 } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 
 // ─── Domain categories (tabs) ────────────────────────────────────────────────
 const categories = [
@@ -487,7 +486,6 @@ export default function LibraryPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   )
 }

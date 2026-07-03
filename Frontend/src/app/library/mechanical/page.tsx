@@ -9,7 +9,7 @@ export default function MechanicalPage() {
     <LessonPage
       domainLabel="Mechanical Engineering"
       domainIcon={Wrench}
-      domainColor="#e65100"
+      domainColor="#0f6fdc"
       topics={mechanicalTopics}
     />
   )

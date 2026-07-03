@@ -23,6 +23,8 @@ import { GamificationService } from '../services/gamification.service';
 import { config } from '../config';
 import logger from '../utils/logger';
 
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 // ─── LIST QUESTIONS ──────────────────────────────────────────────────────────
 
 export const listQuestions = async (req: Request, res: Response) => {
@@ -79,7 +81,7 @@ export const searchQuestions = async (req: Request, res: Response) => {
     } catch {
       // Fallback: basic regex search
       const results = await QnA.find({
-        question: { $regex: q, $options: 'i' },
+        question: { $regex: escapeRegex(q), $options: 'i' },
       }).limit(10).lean();
       return res.json({ success: true, data: results, fallback: true });
     }
@@ -150,6 +152,9 @@ export const askQuestion = async (req: Request, res: Response) => {
 
     if (!rawTitle || typeof rawTitle !== 'string' || rawTitle.trim().length < 15 || rawTitle.length > 300) {
       return res.status(400).json({ success: false, message: 'Title must be 15-300 characters' });
+    }
+    if (!rawBody || typeof rawBody !== 'string' || rawBody.trim().length < 30 || rawBody.length > 20_000) {
+      return res.status(400).json({ success: false, message: 'Body must be 30-20,000 characters' });
     }
     if (!rawDomain || typeof rawDomain !== 'string') {
       return res.status(400).json({ success: false, message: 'Domain is required' });
@@ -257,6 +262,18 @@ export const castVote = async (req: Request, res: Response) => {
     }
 
     const qnaId = String(targetId).split('_')[0];  // strip '_answer' suffix if present
+    const userId = String(req.user!.id);
+    const qna = await QnA.findById(qnaId).select('authorId answeredBy').lean();
+    if (!qna) return res.status(404).json({ success: false, message: 'Content not found' });
+    if (targetType === 'answer' && !qna.answeredBy) {
+      return res.status(404).json({ success: false, message: 'Answer not found' });
+    }
+
+    const authorId = String(targetType === 'answer' ? qna.answeredBy : qna.authorId);
+    if (authorId === userId) {
+      return res.status(400).json({ success: false, message: 'Cannot vote on your own content' });
+    }
+
     const delta  = vote === 'up' ? 1 : -1;
 
     await QnA.findByIdAndUpdate(qnaId, { $inc: { upvotes: delta } });
@@ -271,6 +288,16 @@ export const castVote = async (req: Request, res: Response) => {
 // ─── ACCEPT ANSWER ───────────────────────────────────────────────────────────
 
 export const acceptAnswer = async (req: Request, res: Response) => {
+  const id = String(req.params.id || '');
+  const answerId = String(req.params.answerId || '');
+  const answerBaseId = answerId.split('_')[0];
+  if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(answerBaseId)) {
+    return res.status(400).json({ success: false, message: 'Invalid answer id' });
+  }
+  if (answerBaseId !== id) {
+    return res.status(400).json({ success: false, message: 'Answer does not belong to question' });
+  }
+
   // In the single-document QnA model, the answer is always the accepted one.
   res.json({ success: true });
 };

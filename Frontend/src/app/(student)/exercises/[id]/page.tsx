@@ -264,13 +264,13 @@ export default function ExerciseDetailPage() {
               <div className="flex gap-2 rounded-xl border border-border bg-background/50 p-1">
                 <button
                   onClick={() => setTab('mcq')}
-                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
+                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Quiz ({total}Q)
                 </button>
                 <button
                   onClick={() => setTab('code')}
-                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
+                  className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Code Challenge
                 </button>
@@ -362,13 +362,13 @@ export default function ExerciseDetailPage() {
         <div className="flex gap-2 rounded-xl border border-border bg-card p-1">
           <button
             onClick={() => setTab('mcq')}
-            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'mcq' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
             Quiz ({total}Q)
           </button>
           <button
             onClick={() => setTab('code')}
-            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex-1 rounded-lg py-2 text-xs font-black uppercase tracking-widest transition-all ${tab === 'code' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
             Code
           </button>

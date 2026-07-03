@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Bell, Loader2, CheckCheck, Award, MessageSquare, Trophy, AlertCircle, Info } from 'lucide-react'
+import { Bell, Loader2, CheckCheck, Award, MessageSquare, Trophy, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import api from '@/lib/api'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'

@@ -91,7 +91,7 @@ describe('Loading Components', () => {
       )
 
       expect(screen.getByTestId('loading-overlay')).toBeInTheDocument()
-      expect(screen.getByTestId('content')).toHaveClass('opacity-50')
+      expect(screen.getByTestId('content').parentElement).toHaveClass('opacity-50')
       expect(screen.getByTestId('loading-spinner')).toBeInTheDocument()
     })
   })

@@ -28,6 +28,12 @@ const AI_REQUEST_TIMEOUT_MS = Number.parseInt(process.env.NOTEBOOK_AI_TIMEOUT_MS
 
 const reqId      = (req: Request) => String((req as any).requestId || 'unknown');
 const userIdLog  = (req: Request) => req.user?.id || null;
+const aiHeaders = (requestId?: string): Record<string, string> => {
+  const headers: Record<string, string> = {};
+  if (requestId) headers['x-request-id'] = requestId;
+  if (process.env.INTERNAL_SERVICE_SECRET) headers['X-Internal-Service'] = process.env.INTERNAL_SERVICE_SECRET;
+  return headers;
+};
 
 const notebookError = (req: Request, action: string, err: unknown, extra: Record<string, unknown> = {}) => {
   logger.error(`[notebooks] ${action} failed`, {
@@ -140,7 +146,7 @@ export const getNotebooksHealth = async (req: Request, res: Response) => {
     const requestId = reqId(req);
     const { data, headers } = await axios.get(`${AI_SERVICE()}/api/v1/notebooks/health`, {
       timeout: AI_REQUEST_TIMEOUT_MS,
-      headers: { 'x-request-id': requestId },
+      headers: aiHeaders(requestId),
     });
 
     const upstreamRequestId = String(headers['x-request-id'] || '');
@@ -218,7 +224,7 @@ export const getAdaptiveGuidance = async (req: Request, res: Response) => {
         events:       [],
       }, {
         timeout: AI_REQUEST_TIMEOUT_MS,
-        headers: { 'x-request-id': reqId(req) },
+        headers: aiHeaders(reqId(req)),
       });
 
       return res.json({
@@ -337,7 +343,7 @@ const runNotebookIngestion = async (
     try {
       await axios.post(`${AI_SERVICE()}/api/v1/notebooks/ingest`, payload, {
         timeout: AI_REQUEST_TIMEOUT_MS,
-        headers: requestId ? { 'x-request-id': requestId } : undefined,
+        headers: aiHeaders(requestId),
       });
       return;
     } catch (err: any) {
@@ -476,7 +482,7 @@ export const deleteSource = async (req: Request, res: Response) => {
 
     // Tell AI service to delete the chunks (best-effort)
     axios
-      .delete(`${AI_SERVICE()}/api/v1/notebooks/sources/${sid}`, { timeout: 2000 })
+      .delete(`${AI_SERVICE()}/api/v1/notebooks/sources/${sid}`, { timeout: 2000, headers: aiHeaders(reqId(req)) })
       .catch(() => {});
 
     res.json({ success: true, message: 'Source removed' });
@@ -525,7 +531,7 @@ export const chat = async (req: Request, res: Response) => {
       history:     [],
     }, {
       timeout: AI_REQUEST_TIMEOUT_MS,
-      headers: { 'x-request-id': reqId(req) },
+      headers: aiHeaders(reqId(req)),
     });
 
     res.json({ success: true, answer: data.answer, sources: data.sources ?? [] });
@@ -568,7 +574,7 @@ export const generate = async (req: Request, res: Response) => {
       type,
     }, {
       timeout: AI_REQUEST_TIMEOUT_MS,
-      headers: { 'x-request-id': reqId(req) },
+      headers: aiHeaders(reqId(req)),
     });
 
     const generation = {

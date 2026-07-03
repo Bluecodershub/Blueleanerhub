@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   AlertCircle,
 } from 'lucide-react'
-import { BrandMark } from '@/components/branding/Logo'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -34,10 +33,6 @@ function RoleSelectionContent() {
             <ArrowLeft className="h-4 w-4" />
             Back to home
           </Link>
-
-          <div className="mb-6 flex justify-center">
-            <BrandMark size={64} className="rounded-2xl shadow-lg shadow-primary/25" priority />
-          </div>
 
           <h1 className="mb-2 text-3xl font-bold">Start Your Journey</h1>
           <p className="text-muted-foreground max-w-md mx-auto">
@@ -105,8 +100,8 @@ function RoleSelectionContent() {
             <Card className="group relative overflow-hidden border-2 border-transparent hover:border-sky-500/50 transition-all h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <CardContent className="relative p-6">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center">
-                  <BrandMark size={56} className="rounded-2xl shadow-lg shadow-primary/20" />
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-sky-500 text-primary-foreground shadow-lg shadow-primary/20">
+                  <BookOpen className="h-7 w-7" />
                 </div>
 
                 <div className="mb-2 flex items-center gap-2">
@@ -156,16 +151,16 @@ function RoleSelectionContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Card className="group relative overflow-hidden border-2 border-transparent hover:border-amber-500/50 transition-all h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Card className="group relative h-full overflow-hidden border-2 border-transparent transition-all hover:border-primary/50">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
               <CardContent className="relative p-6">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-lg">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-sky-500 text-primary-foreground shadow-lg shadow-primary/20">
                   <Building2 className="h-7 w-7" />
                 </div>
 
                 <div className="mb-2 flex items-center gap-2">
                   <h2 className="text-xl font-bold">Organization</h2>
-                  <span className="flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-600">
+                  <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                     <Shield className="h-3 w-3" />
                     Verified
                   </span>
@@ -190,15 +185,15 @@ function RoleSelectionContent() {
                 </ul>
 
                 <Link href="/login/corporate" className="block">
-                  <Button variant="outline" className="w-full gap-2 border-amber-500/50 text-amber-600 hover:bg-amber-500/10">
+                  <Button variant="outline" className="w-full gap-2 border-primary/50 text-primary hover:bg-primary/10">
                     Organization Login
                     <Building2 className="h-4 w-4" />
                   </Button>
                 </Link>
 
-                <div className="mt-3 flex items-start gap-2 rounded-lg bg-amber-500/10 p-2">
-                  <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                  <p className="text-xs text-amber-600">
+                <div className="mt-3 flex items-start gap-2 rounded-lg bg-primary/10 p-2">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <p className="text-xs text-primary">
                     Corporate email required.
                   </p>
                 </div>

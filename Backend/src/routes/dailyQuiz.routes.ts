@@ -112,7 +112,7 @@ router.post('/submit', strictLimiter, authenticate, async (req, res) => {
     const { correctCount, score, xpEarned, correctAnswers, explanations } =
       scoreQuiz(quiz, answers as number[]);
 
-    // Persist attempt — MongoDB unique index prevents double-submission
+    // Equivalent to INSERT INTO daily_quiz_attempts; the unique index prevents double-submission.
     try {
       await DailyQuizAttempt.create({
         userId:   new mongoose.Types.ObjectId(userId),
@@ -122,8 +122,8 @@ router.post('/submit', strictLimiter, authenticate, async (req, res) => {
         xpEarned,
       });
     } catch (dbErr: any) {
-      // Duplicate key error (code 11000) → already submitted today
-      if (dbErr.code === 11000) {
+      const duplicateCode = String(dbErr.code);
+      if (duplicateCode === '11000' || duplicateCode === '23505') {
         return res.status(409).json({
           success: false,
           message: 'You have already submitted this quiz today. Come back tomorrow!',

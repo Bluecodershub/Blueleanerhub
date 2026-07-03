@@ -11,7 +11,6 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import api from '@/lib/api'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
 
 interface Candidate {
   _id: string

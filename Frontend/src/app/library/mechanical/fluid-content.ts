@@ -53,15 +53,15 @@ V_water = 2.0   # m/s flow velocity
 
 Re = reynolds_number(rho_water, V_water, D_pipe, mu_water)
 print(f"\nPipe flow: V={V_water} m/s, D={D_pipe*1000:.0f}mm")
-print(f"Re = {Re:.0f} → {flow_regime(Re)}")
+print(f"Re = {Re:,.0f} -> {flow_regime(Re)}")
 
 # Threshold velocities for transition
 V_lam = 2300 * nu_water / D_pipe
 V_turb = 4000 * nu_water / D_pipe
 print(f"Laminar below: {V_lam:.3f} m/s")
 print(f"Turbulent above: {V_turb:.3f} m/s")`,
-        output: `=== Fluid Properties at 20°C ===\nWater: ρ = 998.2 kg/m³,  ν = 1.004×10⁻⁶ m²/s\nAir:   ρ = 1.205 kg/m³, ν = 15.019×10⁻⁶ m²/s\n\nPipe flow: V=2.0 m/s, D=50mm\nRe = 99,641 → Turbulent\nLaminar below: 0.046 m/s\nTurbulent above: 0.080 m/s`,
-        explanation: 'Water flowing at 2 m/s in a 50mm pipe has Re ≈ 100,000 — firmly turbulent. The flow becomes turbulent at very low velocities in pipes of this size. Note that air has kinematic viscosity 15× higher than water, despite being 830× less dense.',
+        output: `=== Fluid Properties at 20C ===\nWater: rho = 998.2 kg/m3,  nu = 1.004e-6 m2/s\nAir:   rho = 1.204 kg/m3, nu = 15.029e-6 m2/s\n\nPipe flow: V=2.0 m/s, D=50mm\nRe = 99,621 -> Turbulent\nLaminar below: 0.046 m/s\nTurbulent above: 0.080 m/s`,
+        explanation: 'Water flowing at 2 m/s in a 50mm pipe has Re about 100,000, firmly turbulent. The flow becomes turbulent at very low velocities in pipes of this size. Note that air has kinematic viscosity about 15 times higher than water, despite being far less dense.',
       },
     ],
     commonMistakes: [
@@ -156,8 +156,8 @@ P_total  = 101325 + 1200
 rho_air  = 1.225
 V_aircraft = math.sqrt(2 * (P_total - P_static) / rho_air)
 print(f"\nPitot tube airspeed: {V_aircraft:.1f} m/s ({V_aircraft*3.6:.1f} km/h)")`,
-        output: `Venturi Meter:\n  Flow rate Q = 16.08 L/s\n  V1 = 2.05 m/s,  V2 = 8.19 m/s\n\nPitot tube airspeed: 44.2 m/s (159.1 km/h)`,
-        explanation: 'Venturi: the narrow section (D2=50mm) has 4× the velocity of the wide section (D1=100mm), per continuity (A1V1=A2V2). The 15 kPa pressure drop drives 16 L/s of flow. Pitot tube: total pressure = static + dynamic (½ρV²). The 1.2 kPa overpressure gives 44.2 m/s ≈ 159 km/h.',
+        output: `Venturi Meter:\n  Flow rate Q = 10.89 L/s\n  V1 = 1.39 m/s,  V2 = 5.54 m/s\n\nPitot tube airspeed: 44.3 m/s (159.3 km/h)`,
+        explanation: 'Venturi: the narrow section (D2=50mm) has 4 times the velocity of the wide section (D1=100mm), per continuity (A1V1=A2V2). With a 15 kPa pressure drop and Cd=0.98, the flow is 10.89 L/s. Pitot tube: total pressure = static + dynamic. The 1.2 kPa overpressure gives 44.3 m/s, about 159 km/h.',
       },
     ],
     commonMistakes: [
@@ -256,14 +256,14 @@ K_elbow = 0.9; K_valve = 0.2
 hm = minor_head_loss(2*K_elbow + K_valve, V)
 
 print(f"Flow velocity:  {V:.2f} m/s")
-print(f"Reynolds No.:   {Re:.0f} — {('Laminar' if Re<2300 else 'Turbulent')}")
+print(f"Reynolds No.:   {Re:.0f} -> {('Laminar' if Re<2300 else 'Turbulent')}")
 print(f"Friction factor: f = {f:.4f}")
 print(f"Major loss:      hf = {hf:.2f} m")
 print(f"Minor loss:      hm = {hm:.2f} m")
 print(f"Total head loss: {hf+hm:.2f} m")
 print(f"Pump power needed: {rho*g*Q*(hf+hm)/1000:.3f} kW")`,
-        output: `Flow velocity:  1.53 m/s\nReynolds No.:   76,195 — Turbulent\nFriction factor: f = 0.0194\nMajor loss:      hf = 18.52 m\nMinor loss:      hm = 0.32 m\nTotal head loss: 18.84 m\nPump power needed: 0.554 kW`,
-        explanation: 'For 100m of 50mm commercial steel pipe at 3 L/s: major friction loss dominates at 18.52m vs 0.32m minor losses. Minor losses are only 1.7% of total — acceptable to neglect. A pump must provide at least 18.84m head at 3 L/s flow, requiring ~554W of hydraulic power.',
+        output: `Flow velocity:  1.53 m/s\nReynolds No.:   76090 -> Turbulent\nFriction factor: f = 0.0227\nMajor loss:      hf = 5.40 m\nMinor loss:      hm = 0.24 m\nTotal head loss: 5.64 m\nPump power needed: 0.166 kW`,
+        explanation: 'For 100m of 50mm commercial steel pipe at 3 L/s: major friction loss dominates at 5.40m vs 0.24m minor losses. Minor losses are about 4.2% of total. A pump must provide at least 5.64m head at 3 L/s flow, requiring about 166W of hydraulic power before pump efficiency is considered.',
       },
     ],
     commonMistakes: [
@@ -354,8 +354,8 @@ print(f"\nAt {N2} RPM (affinity laws):")
 print(f"  Q2 = {Q2*1000:.1f} L/s")
 print(f"  H2 = {H2:.1f} m")
 print(f"  P2 = {P2:.2f} kW  ({P2/P1*100:.0f}% of original power)")`,
-        output: `Required pump head:   40.6 m\nShaft power required: 25.60 kW\nHydraulic power:      19.97 kW\n\nAt 1160 RPM (affinity laws):\n  Q2 = 40.0 L/s\n  H2 = 26.0 m\n  P2 = 13.06 kW  (51% of original power)`,
-        explanation: 'Reducing pump speed from 1450 to 1160 RPM (80% speed) reduces flow by 20%, head by 36%, but power by 49% — because power scales with the cube of speed. Variable-speed drives are highly effective for energy savings when full flow is not always needed.',
+        output: `Required pump head:   40.6 m\nShaft power required: 25.53 kW\nHydraulic power:      19.91 kW\n\nAt 1160 RPM (affinity laws):\n  Q2 = 40.0 L/s\n  H2 = 26.0 m\n  P2 = 13.07 kW  (51% of original power)`,
+        explanation: 'Reducing pump speed from 1450 to 1160 RPM (80% speed) reduces flow by 20%, head by 36%, but power by about 49%, because power scales with the cube of speed. Variable-speed drives are highly effective for energy savings when full flow is not always needed.',
       },
     ],
     commonMistakes: [

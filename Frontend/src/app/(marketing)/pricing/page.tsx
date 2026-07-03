@@ -85,7 +85,7 @@ export default function PricingPage() {
             }`}
           >
             {plan.highlight && (
-              <span className="mb-4 inline-block w-fit rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wide text-black">
+              <span className="mb-4 inline-block w-fit rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wide text-primary-foreground">
                 Most popular
               </span>
             )}
@@ -106,7 +106,7 @@ export default function PricingPage() {
             <Link
               href={plan.cta.href}
               className={`mt-8 w-full rounded-xl py-3 text-center text-sm font-bold transition-all ${
-                plan.highlight ? 'bg-primary text-black hover:scale-[1.01]' : 'border border-border text-foreground hover:bg-secondary'
+                plan.highlight ? 'bg-primary text-primary-foreground hover:scale-[1.01]' : 'border border-border text-foreground hover:bg-secondary'
               }`}
             >
               {plan.cta.label}

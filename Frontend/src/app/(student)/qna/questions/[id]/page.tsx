@@ -141,7 +141,7 @@ function VoteWidget({
           onUpvote()
           setVoted('up')
         }}
-        className={`rounded-full p-1.5 transition-colors ${voted === 'up' ? 'bg-primary text-black' : 'text-gray-500 hover:bg-gray-800 hover:text-sky-400'}`}
+        className={`rounded-full p-1.5 transition-colors ${voted === 'up' ? 'bg-primary text-primary-foreground' : 'text-gray-500 hover:bg-gray-800 hover:text-sky-400'}`}
       >
         <ChevronUp className="h-5 w-5" />
       </button>

@@ -61,19 +61,19 @@ describe('Auth Middleware', () => {
         });
 
         it('should return 403 if user role is not authorized', () => {
-            mockReq.user = { id: 1, email: 'test@test.com', fullName: 'Test', role: 'STUDENT' };
+            mockReq.user = { id: '1', email: 'test@test.com', fullName: 'Test', role: 'STUDENT' };
             
             authorize('ADMIN', 'MENTOR')(mockReq as Request, mockRes as Response, mockNext);
             
             expect(mockRes.status).toHaveBeenCalledWith(403);
             expect(mockRes.json).toHaveBeenCalledWith({
                 success: false,
-                message: 'Access denied. Insufficient permissions.',
+                message: 'Insufficient permissions',
             });
         });
 
         it('should call next if user is authorized with ADMIN role', () => {
-            mockReq.user = { id: 1, email: 'test@test.com', fullName: 'Test', role: 'ADMIN' };
+            mockReq.user = { id: '1', email: 'test@test.com', fullName: 'Test', role: 'ADMIN' };
             
             authorize('ADMIN')(mockReq as Request, mockRes as Response, mockNext);
             
@@ -81,7 +81,7 @@ describe('Auth Middleware', () => {
         });
 
         it('should call next if user role matches allowed role', () => {
-            mockReq.user = { id: 1, email: 'test@test.com', fullName: 'Test', role: 'MENTOR' };
+            mockReq.user = { id: '1', email: 'test@test.com', fullName: 'Test', role: 'MENTOR' };
             
             authorize('MENTOR')(mockReq as Request, mockRes as Response, mockNext);
             

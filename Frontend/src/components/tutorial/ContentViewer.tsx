@@ -83,7 +83,7 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
               'flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all',
               completing
                 ? 'cursor-wait bg-sky-400 text-white'
-                : 'bg-primary text-black hover:bg-primary/90 active:scale-[0.98]'
+                : 'bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.98]'
             )}
           >
             <Sparkles className="h-4 w-4" />

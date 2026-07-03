@@ -10,6 +10,11 @@ interface HackathonFilters {
   search?: string;
 }
 
+const isDuplicateMembershipError = (error: unknown) =>
+  typeof error === 'object' &&
+  error !== null &&
+  (error as { code?: number }).code === 11000;
+
 export class HackathonService {
   private static readonly MAX_SOURCE_CODE_SIZE = 50 * 1024; // 50KB
 
@@ -79,13 +84,21 @@ export class HackathonService {
     if (existingTeam) throw new AppError('Already registered for this hackathon', 400);
 
     // If no teamId, create a solo team
-    const team = await HackathonTeam.create({
-      hackathonId: new mongoose.Types.ObjectId(hackathonId),
-      name:        `Solo-${userId.slice(-6)}`,
-      leaderId:    new mongoose.Types.ObjectId(userId),
-      memberIds:   [new mongoose.Types.ObjectId(userId)],
-      createdAt:   new Date(),
-    });
+    let team;
+    try {
+      team = await HackathonTeam.create({
+        hackathonId: new mongoose.Types.ObjectId(hackathonId),
+        name:        `Solo-${userId.slice(-6)}`,
+        leaderId:    new mongoose.Types.ObjectId(userId),
+        memberIds:   [new mongoose.Types.ObjectId(userId)],
+        createdAt:   new Date(),
+      });
+    } catch (error) {
+      if (isDuplicateMembershipError(error)) {
+        throw new AppError('Already registered for this hackathon', 400);
+      }
+      throw error;
+    }
 
     logger.info(`User ${userId} registered for hackathon ${hackathonId}`);
     return { message: 'Successfully registered for hackathon', team };
@@ -102,13 +115,21 @@ export class HackathonService {
     });
     if (existing) throw new AppError('Already in a team for this hackathon', 400);
 
-    const team = await HackathonTeam.create({
-      hackathonId: new mongoose.Types.ObjectId(hackathonId),
-      name:        teamName,
-      leaderId:    new mongoose.Types.ObjectId(userId),
-      memberIds:   [new mongoose.Types.ObjectId(userId)],
-      createdAt:   new Date(),
-    });
+    let team;
+    try {
+      team = await HackathonTeam.create({
+        hackathonId: new mongoose.Types.ObjectId(hackathonId),
+        name:        teamName,
+        leaderId:    new mongoose.Types.ObjectId(userId),
+        memberIds:   [new mongoose.Types.ObjectId(userId)],
+        createdAt:   new Date(),
+      });
+    } catch (error) {
+      if (isDuplicateMembershipError(error)) {
+        throw new AppError('Already in a team for this hackathon', 400);
+      }
+      throw error;
+    }
 
     logger.info(`Team created: ${team._id} for hackathon ${hackathonId}`);
     return team;
@@ -133,7 +154,14 @@ export class HackathonService {
     if (existingTeam) throw new AppError('Already in a team for this hackathon', 400);
 
     team.memberIds.push(new mongoose.Types.ObjectId(userId));
-    await team.save();
+    try {
+      await team.save();
+    } catch (error) {
+      if (isDuplicateMembershipError(error)) {
+        throw new AppError('Already in a team for this hackathon', 400);
+      }
+      throw error;
+    }
 
     logger.info(`User ${userId} joined team ${team._id}`);
     return { message: 'Successfully joined team', team };

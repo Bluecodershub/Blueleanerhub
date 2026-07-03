@@ -11,19 +11,24 @@ import mongoose from 'mongoose';
 import { db } from '../../src/db';
 import { User, Hackathon, Quiz, Tutorial } from '../../src/db/models';
 
-// Test database connection
-const MONGODB_TEST_URL = process.env.MONGODB_TEST_URL || 'mongodb://localhost:27017/bluelearnerhub_test';
+// Test database connection. This suite is intentionally opt-in because it
+// requires a real MongoDB test database outside Jest's unit-test sandbox.
+const MONGODB_TEST_URL = process.env.MONGODB_TEST_URL;
+const describeDbIntegration = MONGODB_TEST_URL ? describe : describe.skip;
 
 beforeAll(async () => {
+  if (!MONGODB_TEST_URL) return;
   await mongoose.connect(MONGODB_TEST_URL);
 });
 
 afterAll(async () => {
+  if (!MONGODB_TEST_URL || mongoose.connection.readyState === 0) return;
   await mongoose.connection.dropDatabase();
   await mongoose.disconnect();
 });
 
 beforeEach(async () => {
+  if (!MONGODB_TEST_URL || mongoose.connection.readyState === 0) return;
   // Clear all collections before each test
   const collections = mongoose.connection.collections;
   for (const key in collections) {
@@ -31,7 +36,7 @@ beforeEach(async () => {
   }
 });
 
-describe('db.query Integration Tests', () => {
+describeDbIntegration('db.query Integration Tests', () => {
   describe('Users', () => {
     it('should create a user', async () => {
       const userData = {
@@ -89,7 +94,7 @@ describe('db.query Integration Tests', () => {
       const firstPage = await db.query.users.findMany({}).limit(10);
       expect(firstPage).toHaveLength(10);
 
-      const secondPage = await db.query.users.findMany({}).limit(10).offset(10);
+      const secondPage = await db.query.users.findMany({}).limit(10).skip(10);
       expect(secondPage).toHaveLength(10);
     });
   });

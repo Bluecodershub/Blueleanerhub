@@ -131,7 +131,7 @@ export default function DevPortalPage() {
                     onClick={() => setFilter(f)}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                       filter === f
-                        ? 'bg-primary text-black'
+                        ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary text-muted-foreground hover:text-foreground'
                     }`}
                   >

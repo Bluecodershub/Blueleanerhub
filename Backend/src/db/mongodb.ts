@@ -30,6 +30,15 @@ export async function connectDB(): Promise<typeof mongoose> {
       logger.error('MongoDB connection error:', err);
     });
 
+    mongoose.connection.on('connected', () => {
+      isConnected = true;
+    });
+
+    mongoose.connection.on('reconnected', () => {
+      isConnected = true;
+      logger.info('MongoDB reconnected');
+    });
+
     mongoose.connection.on('disconnected', () => {
       logger.warn('MongoDB disconnected');
       isConnected = false;
@@ -53,9 +62,10 @@ export async function closeDB(): Promise<void> {
 }
 
 export function getDBStatus() {
+  const readyState = mongoose.connection.readyState;
   return {
-    isConnected,
-    readyState: mongoose.connection.readyState,
+    isConnected: isConnected || readyState === 1,
+    readyState,
     host: mongoose.connection.host,
     name: mongoose.connection.name,
   };

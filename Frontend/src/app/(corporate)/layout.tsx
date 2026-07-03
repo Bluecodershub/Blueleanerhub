@@ -23,7 +23,6 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
-import { BrandMark } from '@/components/branding/Logo'
 
 const navItems = [
   { title: 'Dashboard',    href: '/corporate/dashboard',   icon: LayoutDashboard },
@@ -57,8 +56,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
       {/* ─── DESKTOP SIDEBAR ──────────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:flex">
         <div className="flex h-16 items-center justify-between px-6">
-          <Link href="/corporate/dashboard" className="group flex items-center gap-3">
-            <BrandMark size={40} className="rounded-xl" priority />
+          <Link href="/corporate/dashboard" className="group flex items-center">
             <div className="min-w-0">
               <span className="block truncate font-semibold text-sm tracking-tight text-foreground">
                 BlueLearnerHub
@@ -188,8 +186,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
               className="fixed inset-y-0 left-0 z-50 w-[280px] overflow-y-auto border-r border-border bg-card p-6 lg:hidden"
             >
               <div className="mb-8 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <BrandMark size={38} className="rounded-xl" />
+                <div className="flex items-center">
                   <span className="font-semibold text-lg text-foreground">
                     BlueLearnerHub
                   </span>

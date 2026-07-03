@@ -1,5 +1,9 @@
 import { cn, formatDate, formatDuration, slugify, getStorageItem, setStorageItem, removeStorageItem } from '../lib/utils'
 
+afterEach(() => {
+  jest.restoreAllMocks()
+})
+
 describe('cn', () => {
   it('merges class names correctly', () => {
     expect(cn('foo', 'bar')).toBe('foo bar')

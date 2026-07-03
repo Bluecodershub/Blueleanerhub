@@ -4,8 +4,6 @@ import React from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
-import { BrandMark } from '@/components/branding/Logo'
-
 interface LoginLayoutProps {
   children: React.ReactNode
   title: string
@@ -28,8 +26,7 @@ export const LoginLayout: React.FC<LoginLayoutProps> = ({ children, title, subti
         </Link>
 
         <div className="mb-7">
-          <div className="mb-5 flex items-center gap-3">
-            <BrandMark size={42} className="rounded-[8px]" priority />
+          <div className="mb-5 flex items-center">
             <div>
               <p className="text-sm font-semibold text-foreground">Bluelearnerhub</p>
               <p className="text-xs text-muted-foreground">Secure account access</p>

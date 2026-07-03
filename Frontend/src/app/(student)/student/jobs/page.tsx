@@ -14,6 +14,7 @@ import {
   Zap,
   Send,
   CheckCircle,
+  AlertCircle,
   Bookmark,
   Share2,
   Loader2,
@@ -87,6 +88,10 @@ export default function JobsPage() {
   const [remoteOnly, setRemoteOnly] = useState(false)
   const [savedJobs, setSavedJobs] = useState<string[]>([])
   const [applicationStatus, setApplicationStatus] = useState<Record<string, 'applied' | 'reviewing' | 'rejected'>>({})
+  const [resumeUrl, setResumeUrl] = useState('')
+  const [applyingJobs, setApplyingJobs] = useState<Record<string, boolean>>({})
+  const [applicationError, setApplicationError] = useState<string | null>(null)
+  const [applicationMessage, setApplicationMessage] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -116,7 +121,10 @@ export default function JobsPage() {
       if (appsRes?.data?.data?.data) {
         const apps: any[] = appsRes.data.data.data
         const appliedIds: Record<string, 'applied'> = {}
-        apps.forEach((a: any) => { if (a.jobId) appliedIds[String(a.jobId)] = 'applied' })
+        apps.forEach((a: any) => {
+          const jobId = typeof a.jobId === 'object' ? a.jobId?._id : a.jobId
+          if (jobId) appliedIds[String(jobId)] = 'applied'
+        })
         setApplicationStatus(appliedIds)
         setAppStats({ applied: apps.length, reviewing: 0, offers: 0 })
       }
@@ -138,12 +146,26 @@ export default function JobsPage() {
   }
 
   const handleApply = async (jobId: string) => {
+    const trimmedResumeUrl = resumeUrl.trim()
+    if (!/^https:\/\/\S+\.\S+/i.test(trimmedResumeUrl)) {
+      setApplicationMessage(null)
+      setApplicationError('Add a valid HTTPS resume link before applying.')
+      return
+    }
+
+    setApplicationError(null)
+    setApplicationMessage(null)
+    setApplyingJobs(prev => ({ ...prev, [jobId]: true }))
     try {
-      await api.post(`/jobs/${jobId}/apply`, {})
+      await api.post(`/jobs/${jobId}/apply`, { resumeUrl: trimmedResumeUrl })
       setApplicationStatus(prev => ({ ...prev, [jobId]: 'applied' }))
       setAppStats(prev => ({ ...prev, applied: prev.applied + 1 }))
-    } catch {
-      setApplicationStatus(prev => ({ ...prev, [jobId]: 'applied' }))
+      setApplicationMessage('Application submitted.')
+    } catch (error: any) {
+      const message = error?.response?.data?.message || error?.response?.data?.errors?.[0]?.message || 'We could not submit your application. Please try again.'
+      setApplicationError(message)
+    } finally {
+      setApplyingJobs(prev => ({ ...prev, [jobId]: false }))
     }
   }
 
@@ -168,7 +190,6 @@ export default function JobsPage() {
             <Button variant="outline" asChild>
               <Link href="/student/jobs/applications">My Applications</Link>
             </Button>
-            <Button>Upload Resume</Button>
           </div>
         </header>
 
@@ -205,6 +226,34 @@ export default function JobsPage() {
           </div>
           <Button variant="outline">View Match Score</Button>
         </motion.div>
+
+        <div className="rounded-xl border border-border bg-card p-4">
+          <div className="grid gap-3 md:grid-cols-[1fr_2fr] md:items-center">
+            <div>
+              <h2 className="text-sm font-semibold">Resume link</h2>
+              <p className="text-sm text-muted-foreground">Use an HTTPS link from your portfolio, drive, or resume host.</p>
+            </div>
+            <Input
+              type="url"
+              value={resumeUrl}
+              onChange={(e) => setResumeUrl(e.target.value)}
+              placeholder="https://example.com/resume.pdf"
+              aria-label="Resume URL"
+            />
+          </div>
+          {applicationError && (
+            <p role="alert" className="mt-3 flex items-center gap-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              {applicationError}
+            </p>
+          )}
+          {applicationMessage && (
+            <p className="mt-3 flex items-center gap-2 text-sm text-emerald-600">
+              <CheckCircle className="h-4 w-4" />
+              {applicationMessage}
+            </p>
+          )}
+        </div>
 
         {/* ── Filters ──────────────────────────────────────────────────── */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -349,9 +398,9 @@ export default function JobsPage() {
                         Applied
                       </Button>
                     ) : (
-                      <Button onClick={() => handleApply(job.id)} className="w-full gap-1.5">
-                        <Send className="h-4 w-4" />
-                        Apply Now
+                      <Button onClick={() => handleApply(job.id)} disabled={Boolean(applyingJobs[job.id])} className="w-full gap-1.5">
+                        {applyingJobs[job.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                        {applyingJobs[job.id] ? 'Applying' : 'Apply Now'}
                       </Button>
                     )}
                   </div>

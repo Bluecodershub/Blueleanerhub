@@ -56,10 +56,10 @@ export default function CodePlayground({
   }
 
   return (
-    <div className="flex h-full flex-col bg-gray-900">
+    <div className="flex h-full flex-col bg-card">
       {/* Toolbar */}
-      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
-        <span className="text-sm font-semibold text-white">Code Playground</span>
+      <div className="flex items-center justify-between border-b border-border bg-secondary px-4 py-2">
+        <span className="text-sm font-semibold text-foreground">Code Playground</span>
 
         <div className="flex items-center gap-2">
           <Button
@@ -84,7 +84,7 @@ export default function CodePlayground({
       {/* Editor & Output */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <Tabs defaultValue="editor" className="flex flex-1 flex-col">
-          <TabsList className="w-full justify-start rounded-none border-b border-gray-700">
+          <TabsList className="w-full justify-start rounded-none border-b border-border">
             <TabsTrigger value="editor">Editor</TabsTrigger>
             <TabsTrigger value="output">Output</TabsTrigger>
           </TabsList>
@@ -101,7 +101,7 @@ export default function CodePlayground({
 
           <TabsContent
             value="output"
-            className="m-0 flex-1 overflow-auto bg-black p-4 font-mono text-sm text-sky-400"
+            className="m-0 flex-1 overflow-auto bg-sky-50 p-4 font-mono text-sm text-sky-800"
           >
             {output.length > 0 ? (
               <div className="space-y-2">
@@ -110,7 +110,7 @@ export default function CodePlayground({
                 ))}
               </div>
             ) : (
-              <div className="text-gray-600">Click "Run" to see output...</div>
+              <div className="text-muted-foreground">Click "Run" to see output...</div>
             )}
           </TabsContent>
         </Tabs>

@@ -65,15 +65,15 @@ L, W, H = 20, 10, 2  # cm
 V_cast  = L * W * H
 SA_cast = 2*(L*W + L*H + W*H)
 
-# Riser: cylindrical, D = H_riser = 8 cm
+# Riser: blind cylindrical riser, D = H_riser = 8 cm
 D_r = 8
 V_riser  = math.pi * (D_r/2)**2 * D_r
-SA_riser = math.pi * (D_r/2)**2 + math.pi * D_r * D_r  # top open riser
+SA_riser = 2 * math.pi * (D_r/2)**2 + math.pi * D_r * D_r  # closed/blind riser
 
 result = check_riser_design(V_cast, SA_cast, V_riser, SA_riser)
 print("=== Casting: 200×100×20mm Plate ===")
 print(f"Casting volume: {V_cast} cm³  |  Surface area: {SA_cast} cm²")
-print(f"Riser: D={D_r}cm cylinder")
+print(f"Riser: D=H={D_r}cm blind cylinder")
 for k, v in result.items():
     print(f"  {k:<30} {v}")
 
@@ -91,13 +91,13 @@ print("\n=== Riser Size vs Solidification Time ===")
 print(f"{'Riser D (cm)':>14} {'Modulus':>10} {'t_riser/t_cast':>15} {'Adequate?':>10}")
 for D in [4, 6, 7, 8, 10]:
     V_r  = math.pi * (D/2)**2 * D
-    SA_r = math.pi * (D/2)**2 + math.pi * D * D
+    SA_r = 2 * math.pi * (D/2)**2 + math.pi * D * D
     ratio = solidification_time(V_r, SA_r) / solidification_time(V_cast, SA_cast)
     ok    = "Yes" if ratio > 1.0 else "No"
     print(f"{D:>14}    {V_r/SA_r:>10.3f} {ratio:>15.3f} {ok:>10}")`,
         output: `=== Casting: 200×100×20mm Plate ===
-Casting volume: 4000 cm³  |  Surface area: 5200 cm²
-Riser: D=8cm cylinder
+Casting volume: 400 cm³  |  Surface area: 520 cm²
+Riser: D=H=8cm blind cylinder
 
   casting_modulus_cm             0.769
   riser_modulus_cm               1.333
@@ -177,14 +177,13 @@ Riser: D=8cm cylinder
     whyImportant: 'Every precision component — shafts, gears, engine parts, surgical implants — is machined. Selecting wrong cutting parameters causes premature tool failure (cost), poor surface finish (quality rejection), or workpiece damage (scrap). Taylor\'s tool life equation and MRR calculations are standard GATE ME topics. Machinability data enables process planning and cost estimation.',
     simpleExplanation: 'Machining is like sharpening a pencil — you use a harder material (the cutter) to scrape away the softer material (the workpiece). Too fast or too deep and the cutter wears out or breaks. Too slow and the job takes forever. Taylor\'s equation is the tool life formula that finds the sweet spot — the cutting speed that balances productivity and tool cost.',
     detailedExplanation: 'Orthogonal cutting (2D model): chip forms when compressive stress exceeds shear yield strength along the shear plane. Chip thickness ratio r = t₁/t₂ (uncut / chip thickness). Shear plane angle φ = arctan(r·cosα/(1-r·sinα)), where α is rake angle. Merchant\'s minimum energy criterion: 2φ + β - α = π/2 (β = friction angle). Specific cutting energy u = Fc/(MRR). Tool failure modes: flank wear (abrasion, measured VB), crater wear (diffusion, on rake face), built-up edge (BUE, at low speeds in ductile materials). Taylor\'s extended equation: VT^n × f^a × d^b = C (considers feed and depth effects).',
-    realWorldExample: 'CNC turning of an automotive crankshaft (forged steel, 42CrMo4): carbide inserts with V = 250 m/min, f = 0.3 mm/rev, d = 3mm. MRR = 250,000 × 0.3 × 3 = 225,000 mm³/min. Taylor\'s n = 0.25 for carbide-steel. At V = 250 m/min and reference speed V_ref = 300 m/min giving T_ref = 20 min: T = 20 × (300/250)^(1/0.25) = 51 min. Each insert machines ~3 crankshafts before replacement at $8/insert vs $3,000 scrap cost of a damaged crankshaft.',
-    formula: 'Material Removal Rate:\nMRR = V × f × d   (mm³/min or cm³/min)\nV in mm/min, f in mm/rev, d in mm\n\nTaylor\'s Tool Life Equation:\nV × T^n = C\nT = (C/V)^(1/n)\n\nOptimum cutting speed for minimum cost:\nV_opt = C / [T_c × (1/n - 1) + T_tc]^n\n\nShear plane angle (Merchant):\nφ = 45° + α/2 − β/2\nα = rake angle, β = friction angle = arctan(μ)',
+    realWorldExample: 'CNC turning of an automotive crankshaft (forged steel, 42CrMo4): carbide inserts with V = 250 m/min, f = 0.3 mm/rev, d = 3mm. MRR = 250,000 x 0.3 x 3 = 225,000 mm3/min. Taylor\'s n = 0.25 for carbide-steel. If V_ref = 300 m/min gives T_ref = 20 min, then at V = 250 m/min: T = 20 x (300/250)^(1/0.25) = 41.5 min. Each insert can machine multiple crankshafts before replacement, while a damaged crankshaft can cost thousands in scrap.',
+    formula: 'Material Removal Rate:\nMRR = V x f x d   (mm3/min or cm3/min)\nV in mm/min, f in mm/rev, d in mm\n\nTaylor Tool Life Equation:\nV x T^n = C\nT = (C/V)^(1/n)\n\nMinimum-cost tool life:\nT_opt = (C_t/C_m + t_c) x (1/n - 1)\nV_opt = C / T_opt^n\n\nShear plane angle (Merchant):\nphi = 45 deg + alpha/2 - beta/2\nalpha = rake angle, beta = friction angle = arctan(mu)',
     codeExamples: [
       {
         title: 'Taylor\'s Tool Life and Optimal Cutting Speed',
         language: 'python',
         code: `import math
-import numpy as np
 
 # ── Taylor's Tool Life: VT^n = C ──
 def tool_life(V, C, n):
@@ -247,16 +246,16 @@ for V in speeds:
 print("\n=== Optimal Cutting Speed (Carbide P20, Mild Steel) ===")
 C, n = 300, 0.25
 T_c  = 2    # min per tool change
-C_t  = 50   # ₹ per cutting edge
-C_m  = 5    # ₹/min (machine + operator)
+C_t  = 50   # Rs per cutting edge
+C_m  = 5    # Rs/min (machine + operator)
 
 V_opt, T_opt = optimal_speed_min_cost(C, n, T_c, C_t, C_m)
 print(f"Tool change time:     {T_c} min")
-print(f"Tool cost per edge:   ₹{C_t}")
-print(f"Machine cost:         ₹{C_m}/min")
+print(f"Tool cost per edge:   Rs {C_t}")
+print(f"Machine cost:         Rs {C_m}/min")
 print(f"Optimum tool life:    {T_opt:.1f} min")
 print(f"Optimum speed V_opt:  {V_opt:.1f} m/min")
-print(f"Actual tool life at V_opt: {tool_life(V_opt, C, n):.1f} min ✓")
+print(f"Actual tool life at V_opt: {tool_life(V_opt, C, n):.1f} min ok")
 
 # ── MRR and cycle time ──
 print("\n=== Turning Operation: MRR & Cycle Time ===")
@@ -277,21 +276,21 @@ print(f"MRR:               {MRR_val/1000:.0f} cm³/min")
 print(f"Machining time:    {t_cycle:.2f} min")`,
         output: `=== Tool Life vs Cutting Speed ===
   Speed (m/min)               HSS  Carbide (P20)           Ceramic
-            50          948.9m         8000.0m         34426.9m
-            80          196.1m         2441.4m          8915.1m
-           100           80.0m         1296.0m          4096.0m
-           150           17.5m          409.6m          1015.1m
-           200            5.0m          164.0m           371.5m
-           250            2.0m           76.7m           161.0m
-           300            0.9m           40.5m            78.4m
+            50           42.9m         1296.0m           498.8m
+            80            1.0m          197.8m           154.0m
+           100            0.2m           81.0m            88.2m
+           150          < 0.1 min           16.0m            32.0m
+           200          < 0.1 min            5.1m            15.6m
+           250          < 0.1 min            2.1m             8.9m
+           300          < 0.1 min            1.0m             5.7m
 
 === Optimal Cutting Speed (Carbide P20, Mild Steel) ===
 Tool change time:     2 min
-Tool cost per edge:   ₹50
-Machine cost:         ₹5/min
-Optimum tool life:    18.0 min
-Optimum speed V_opt:  222.7 m/min
-Actual tool life at V_opt: 18.0 min ✓
+Tool cost per edge:   Rs 50
+Machine cost:         Rs 5/min
+Optimum tool life:    36.0 min
+Optimum speed V_opt:  122.5 m/min
+Actual tool life at V_opt: 36.0 min ok
 
 === Turning Operation: MRR & Cycle Time ===
 Workpiece: D=80mm, L=300mm
@@ -299,7 +298,7 @@ V=200 m/min, f=0.2 mm/rev, d=2.5 mm
 Spindle speed N:   796 rpm
 MRR:               100 cm³/min
 Machining time:    1.88 min`,
-        explanation: 'Carbide achieves tool lives 10–20× longer than HSS at the same cutting speed — enabling much higher productivity. The optimal speed V_opt = 222.7 m/min gives T_opt = 18 min, balancing high MRR against tool replacement cost. Increasing machine cost (C_m) pushes V_opt higher (time is more expensive, so cut faster). Increasing tool cost (C_t) pushes V_opt lower (tools are expensive, so make them last longer). This trade-off is at the heart of process planning decisions.',
+        explanation: 'The table is calculated directly from Taylor\'s equation VT^n = C. HSS tool life collapses at high cutting speed, while carbide and ceramic tools remain usable. For the cost inputs shown, the minimum-cost carbide speed is 122.5 m/min and the matching tool life is 36.0 min. Increasing machine cost pushes V_opt higher; increasing tool cost pushes V_opt lower.',
       },
     ],
     commonMistakes: [
@@ -313,7 +312,7 @@ Machining time:    1.88 min`,
       'Use cutting fluid appropriately — flood cooling for steel, mist for cast iron, dry for most aluminium (chip adhesion with coolant).',
     ],
     exercises: [
-      'A carbide tool (C=200, n=0.25) cuts at V=120 m/min with tool life T=35 min. Find: (a) C value, (b) tool life at V=200 m/min.',
+      'A carbide tool with n=0.25 cuts at V=120 m/min with tool life T=35 min. Find: (a) C value, (b) tool life at V=200 m/min.',
       'In a turning operation (D=60mm, L=200mm, f=0.25mm/rev, d=3mm, V=150 m/min), find MRR in cm³/min and machining time.',
       'Compare the optimum cutting speed for minimum time vs minimum cost. Which is always higher and why?',
     ],

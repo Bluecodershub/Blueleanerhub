@@ -1,6 +1,6 @@
-import rateLimit, { Store, IncrementResponse } from 'express-rate-limit';
+import rateLimit, { Store, IncrementResponse, MemoryStore } from 'express-rate-limit';
 import { config } from '../config';
-import { redisClient } from '../utils/database';
+import { isRedisReady, markRedisUnavailable, redisClient } from '../utils/database';
 
 /**
  * Redis-backed store for express-rate-limit.
@@ -13,42 +13,78 @@ import { redisClient } from '../utils/database';
 class RedisRateLimitStore implements Store {
   readonly prefix: string;
   private readonly windowMs: number;
+  private readonly fallback = new MemoryStore();
 
   constructor(windowMs: number, prefix = 'rl:') {
     this.windowMs = windowMs;
     this.prefix = prefix;
   }
 
+  init(options: Parameters<MemoryStore['init']>[0]): void {
+    this.fallback.init(options);
+  }
+
   async increment(key: string): Promise<IncrementResponse> {
     const ttlSeconds = Math.ceil(this.windowMs / 1000);
     const redisKey = `${this.prefix}${key}`;
 
-    if (!redisClient) {
-      return { totalHits: 1, resetTime: new Date(Date.now() + this.windowMs) };
+    if (!isRedisReady()) {
+      return this.fallback.increment(key);
     }
 
-    const pipeline = redisClient.pipeline();
-    pipeline.incr(redisKey);
-    pipeline.expire(redisKey, ttlSeconds, 'NX'); // Only set TTL on first write
-    const results = await pipeline.exec();
-    const totalHits = (results?.[0]?.[1] as number) ?? 1;
+    try {
+      const pipeline = redisClient.pipeline();
+      pipeline.incr(redisKey);
+      pipeline.expire(redisKey, ttlSeconds, 'NX'); // Only set TTL on first write
+      const results = await pipeline.exec();
+      const totalHits = (results?.[0]?.[1] as number) ?? 1;
 
-    const remainingTtl = await redisClient.ttl(redisKey);
-    const resetTime = remainingTtl > 0
-      ? new Date(Date.now() + remainingTtl * 1000)
-      : new Date(Date.now() + this.windowMs);
+      const remainingTtl = await redisClient.ttl(redisKey);
+      const resetTime = remainingTtl > 0
+        ? new Date(Date.now() + remainingTtl * 1000)
+        : new Date(Date.now() + this.windowMs);
 
-    return { totalHits, resetTime };
+      return { totalHits, resetTime };
+    } catch (error) {
+      markRedisUnavailable(error);
+      return this.fallback.increment(key);
+    }
   }
 
   async decrement(key: string): Promise<void> {
-    if (!redisClient) return;
-    await redisClient.decr(`${this.prefix}${key}`);
+    if (!isRedisReady()) {
+      await this.fallback.decrement(key);
+      return;
+    }
+
+    try {
+      await redisClient.decr(`${this.prefix}${key}`);
+    } catch (error) {
+      markRedisUnavailable(error);
+      await this.fallback.decrement(key);
+    }
   }
 
   async resetKey(key: string): Promise<void> {
-    if (!redisClient) return;
-    await redisClient.del(`${this.prefix}${key}`);
+    if (!isRedisReady()) {
+      await this.fallback.resetKey(key);
+      return;
+    }
+
+    try {
+      await redisClient.del(`${this.prefix}${key}`);
+    } catch (error) {
+      markRedisUnavailable(error);
+      await this.fallback.resetKey(key);
+    }
+  }
+
+  async resetAll(): Promise<void> {
+    await this.fallback.resetAll();
+  }
+
+  shutdown(): void {
+    this.fallback.shutdown();
   }
 }
 

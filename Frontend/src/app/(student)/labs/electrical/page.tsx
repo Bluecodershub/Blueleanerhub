@@ -226,7 +226,7 @@ export default function ElectricalLabPage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      className="h-6 w-full border-none bg-yellow-500 text-[9px] font-black italic text-black shadow-[0_0_10px_rgba(234,179,8,0.2)]"
+                      className="h-6 w-full border-none bg-primary text-[9px] font-black italic text-primary-foreground shadow-[0_0_10px_hsl(var(--primary)/0.2)]"
                     >
                       1ms
                     </Button>

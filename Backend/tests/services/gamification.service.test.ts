@@ -3,68 +3,71 @@
  * Tests for XP, achievements, and leaderboard functionality.
  */
 import { GamificationService } from '../../src/services/gamification.service';
+import { User, UserAchievement, XpTracking } from '../../src/db/models';
 
-// Mock the database
-jest.mock('../../src/db', () => ({
-    db: {
-        select: jest.fn().mockReturnThis(),
-        from: jest.fn().mockReturnThis(),
-        where: jest.fn().mockReturnThis(),
-        update: jest.fn().mockReturnThis(),
-        set: jest.fn().mockReturnThis(),
-        returning: jest.fn().mockResolvedValue([{
-            id: 1,
-            xp: 100,
-            level: 2,
-            last_active: new Date()
-        }]),
-        innerJoin: jest.fn().mockReturnThis(),
-        leftJoin: jest.fn().mockReturnThis(),
-        orderBy: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        insert: jest.fn().mockReturnThis(),
-        values: jest.fn().mockReturnThis(),
-    },
+jest.mock('../../src/db/models', () => ({
+  User: {
+    findById: jest.fn(),
+    find: jest.fn(),
+  },
+  UserAchievement: {
+    findOneAndUpdate: jest.fn(),
+  },
+  XpTracking: {
+    aggregate: jest.fn(),
+  },
 }));
 
-// Mock Redis
 jest.mock('../../src/utils/database', () => ({
-    redisHelpers: {
-        get: jest.fn().mockResolvedValue(null),
-        set: jest.fn().mockResolvedValue('OK'),
-    },
+  redisHelpers: {
+    get: jest.fn().mockResolvedValue(null),
+    set: jest.fn().mockResolvedValue(true),
+    clearPattern: jest.fn().mockResolvedValue(true),
+  },
 }));
+
+const mockUserModel = User as jest.Mocked<typeof User>;
+const mockUserAchievement = UserAchievement as jest.Mocked<typeof UserAchievement>;
 
 describe('GamificationService', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockUserAchievement.findOneAndUpdate.mockResolvedValue(null);
+    mockUserModel.findById.mockResolvedValue({
+      totalPoints: 0,
+      level: 1,
+      lastActiveAt: null,
+      save: jest.fn().mockResolvedValue(undefined),
+    } as any);
+    (XpTracking.aggregate as jest.Mock).mockResolvedValue([]);
+  });
 
-    describe('awardXP', () => {
-        it('should call addExperience with the given amount', async () => {
-            const addExperienceSpy = jest.spyOn(GamificationService, 'addExperience');
-            
-            await GamificationService.awardXP(1, 50, 'Test reason');
-            
-            expect(addExperienceSpy).toHaveBeenCalledWith(1, 50);
-        });
-    });
+  describe('awardXP', () => {
+    it('calls addExperience with the given amount', async () => {
+      const addExperienceSpy = jest.spyOn(GamificationService, 'addExperience');
 
-    describe('addExperience', () => {
-        it('should calculate level based on XP', async () => {
-            const result = await GamificationService.addExperience(1, 100);
-            
-            // XP = 100, level should be Math.floor(sqrt(100/100)) + 1 = 2
-            expect(result).toBeDefined();
-        });
-    });
+      await GamificationService.awardXP('507f1f77bcf86cd799439011', 50, 'Test reason');
 
-    describe('Leaderboard Period type', () => {
-        it('should have valid period values', () => {
-            const periods: Array<'weekly' | 'monthly' | 'all-time'> = ['weekly', 'monthly', 'all-time'];
-            expect(periods).toContain('weekly');
-            expect(periods).toContain('monthly');
-            expect(periods).toContain('all-time');
-        });
+      expect(addExperienceSpy).toHaveBeenCalledWith('507f1f77bcf86cd799439011', 50);
     });
+  });
+
+  describe('addExperience', () => {
+    it('calculates level based on XP', async () => {
+      const result = await GamificationService.addExperience('507f1f77bcf86cd799439011', 100);
+
+      expect(result).toBeDefined();
+      expect(result?.totalPoints).toBeGreaterThanOrEqual(100);
+      expect(result?.level).toBe(2);
+    });
+  });
+
+  describe('Leaderboard Period type', () => {
+    it('has valid period values', () => {
+      const periods: Array<'weekly' | 'monthly' | 'all-time'> = ['weekly', 'monthly', 'all-time'];
+      expect(periods).toContain('weekly');
+      expect(periods).toContain('monthly');
+      expect(periods).toContain('all-time');
+    });
+  });
 });

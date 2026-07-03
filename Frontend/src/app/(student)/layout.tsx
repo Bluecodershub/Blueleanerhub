@@ -1,11 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { useState, lazy, Suspense, useEffect } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { cn, getStorageItem, setStorageItem } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
   BookOpen,
@@ -20,7 +20,6 @@ import {
   Settings,
   Loader2,
   Globe,
-  Users,
   Compass,
   Trophy,
   BarChart3,

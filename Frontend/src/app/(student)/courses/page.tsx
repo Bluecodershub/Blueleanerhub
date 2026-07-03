@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { AlertTriangle, ArrowRight, BookOpen, Clock, GraduationCap, RefreshCw, Search, Sparkles, Users } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -182,7 +181,6 @@ export default function CoursesPage() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   )
 }

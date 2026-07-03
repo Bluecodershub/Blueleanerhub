@@ -96,32 +96,69 @@ const rankSubmissions = catchAsync(async (req, res) => {
 });
 
 const notebookIngest = catchAsync(async (req, res) => {
-  const { source, type } = req.body;
-  if (requireBodyField(res, source, 'source is required')) return;
+  const {
+    source_id: sourceId,
+    notebook_id: notebookId,
+    source_type: sourceType,
+    content,
+    url,
+    file_path: filePath,
+    title,
+  } = req.body;
 
-  const result = await withPython('notebook_ingest', { source, type: type || 'url' },
+  if (requireBodyField(res, sourceId, 'source_id is required')) return;
+  if (requireBodyField(res, notebookId, 'notebook_id is required')) return;
+
+  const result = await withPython('notebook_ingest', {
+    source_id: sourceId,
+    notebook_id: notebookId,
+    source_type: sourceType || 'text',
+    content: content || null,
+    url: url || null,
+    file_path: filePath || null,
+    title: title || 'Untitled Source',
+  },
     () => ({ chunks: 0, status: 'not_available' })
   );
-  res.json({ success: true, data: result });
+  res.json({
+    source_id: sourceId,
+    chunk_count: result.chunk_count ?? result.chunks ?? 0,
+    word_count: result.word_count ?? 0,
+    extracted_text: result.extracted_text || '',
+  });
 });
 
 const notebookChat = catchAsync(async (req, res) => {
-  const { query, sourceIds } = req.body;
-  if (requireBodyField(res, query, 'query is required')) return;
+  const notebookId = req.body.notebook_id || req.body.notebookId;
+  const message = req.body.message || req.body.query;
+  if (requireBodyField(res, notebookId, 'notebook_id is required')) return;
+  if (requireBodyField(res, message, 'message is required')) return;
 
-  const result = await withPython('notebook_chat', { query, source_ids: sourceIds },
+  const result = await withPython('notebook_chat', {
+    notebook_id: notebookId,
+    message,
+    history: Array.isArray(req.body.history) ? req.body.history : [],
+  },
     () => ({ answer: 'Notebook service requires Python ML worker.', citations: [] })
   );
-  res.json({ success: true, data: result });
+  res.json({
+    answer: result.answer,
+    sources: result.sources || result.citations || [],
+  });
 });
 
 const notebookGenerate = catchAsync(async (req, res) => {
-  const { sourceIds, type } = req.body;
+  const notebookId = req.body.notebook_id || req.body.notebookId;
+  const { type } = req.body;
+  if (requireBodyField(res, notebookId, 'notebook_id is required')) return;
 
-  const result = await withPython('notebook_generate', { source_ids: sourceIds, type: type || 'summary' },
+  const result = await withPython('notebook_generate', { notebook_id: notebookId, type: type || 'summary' },
     () => ({ content: 'Notebook generation requires Python ML worker.', type })
   );
-  res.json({ success: true, data: result });
+  res.json({
+    title: result.title || String(type || 'summary').replace(/_/g, ' '),
+    content: result.content || '',
+  });
 });
 
 const generateQuiz = catchAsync(async (req, res) => {

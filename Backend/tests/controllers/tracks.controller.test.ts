@@ -1,15 +1,75 @@
 import { Request, Response } from 'express';
-import { listTracks, getTrack, enrollInTrack, getTrackProgress } from '../../src/controllers/tracks.controller';
-import { db } from '../../src/db';
-import { GamificationService } from '../../src/services/gamification.service';
+import mongoose from 'mongoose';
 import { UserRole } from '../../src/utils/jwt';
 
-jest.mock('../../src/db');
-jest.mock('../../src/services/gamification.service');
-jest.mock('../../src/utils/logger');
+jest.mock('../../src/db', () => ({
+  __esModule: true,
+  LearningTrack: {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    findById: jest.fn(),
+    findByIdAndUpdate: jest.fn(),
+  },
+  TrackCourse: {
+    find: jest.fn(),
+  },
+  TrackEnrollment: {
+    findOne: jest.fn(),
+    findOneAndUpdate: jest.fn(),
+    create: jest.fn(),
+  },
+  Course: {
+    find: jest.fn(),
+  },
+  Certificate: {
+    findOne: jest.fn(),
+    create: jest.fn(),
+  },
+}));
 
-const mockDb = db as jest.Mocked<typeof db>;
-const mockGamificationService = GamificationService as jest.Mocked<typeof GamificationService>;
+jest.mock('../../src/services/gamification.service', () => ({
+  __esModule: true,
+  GamificationService: {
+    awardXP: jest.fn(),
+  },
+}));
+
+jest.mock('../../src/utils/logger', () => ({
+  __esModule: true,
+  default: {
+    error: jest.fn(),
+    info: jest.fn(),
+  },
+}));
+
+import { LearningTrack, TrackCourse, TrackEnrollment, Course } from '../../src/db';
+import { GamificationService } from '../../src/services/gamification.service';
+import { listTracks, getTrack, enrollInTrack, getTrackProgress } from '../../src/controllers/tracks.controller';
+
+jest.setTimeout(30000);
+
+let mockLearningTrack: {
+  find: jest.Mock;
+  findOne: jest.Mock;
+  findById: jest.Mock;
+  findByIdAndUpdate: jest.Mock;
+};
+let mockTrackCourse: {
+  find: jest.Mock;
+};
+let mockTrackEnrollment: {
+  findOne: jest.Mock;
+  create: jest.Mock;
+};
+let mockCourse: {
+  find: jest.Mock;
+};
+let mockAwardXP: jest.Mock;
+
+const chain = (value: unknown) => ({
+  sort: jest.fn().mockReturnThis(),
+  lean: jest.fn().mockResolvedValue(value),
+});
 
 describe('Tracks Controller', () => {
   let mockRequest: Partial<Request>;
@@ -18,8 +78,26 @@ describe('Tracks Controller', () => {
   let statusMock: jest.Mock;
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    mockLearningTrack = {
+      find: LearningTrack.find as jest.Mock,
+      findOne: LearningTrack.findOne as jest.Mock,
+      findById: LearningTrack.findById as jest.Mock,
+      findByIdAndUpdate: LearningTrack.findByIdAndUpdate as jest.Mock,
+    };
+    mockTrackCourse = {
+      find: TrackCourse.find as jest.Mock,
+    };
+    mockTrackEnrollment = {
+      findOne: TrackEnrollment.findOne as jest.Mock,
+      create: TrackEnrollment.create as jest.Mock,
+    };
+    mockCourse = {
+      find: Course.find as jest.Mock,
+    };
+    mockAwardXP = GamificationService.awardXP as jest.Mock;
     jsonMock = jest.fn();
-    statusMock = jest.fn().mockReturnValue({ json: jsonMock });
+    statusMock = jest.fn().mockReturnThis();
     mockResponse = {
       json: jsonMock,
       status: statusMock,
@@ -27,15 +105,11 @@ describe('Tracks Controller', () => {
     mockRequest = {};
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe('listTracks', () => {
-    it('should return tracks list successfully', async () => {
+    it('returns tracks list successfully', async () => {
       const mockTracks = [
         {
-          id: 1,
+          _id: new mongoose.Types.ObjectId(),
           title: 'Web Development Track',
           slug: 'web-development',
           domain: 'Technology',
@@ -46,25 +120,20 @@ describe('Tracks Controller', () => {
       ];
 
       mockRequest.query = {};
-      mockDb.select = jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            orderBy: jest.fn().mockResolvedValue(mockTracks),
-          }),
-        }),
-      });
+      mockLearningTrack.find.mockReturnValue(chain(mockTracks));
 
       await listTracks(mockRequest as Request, mockResponse as Response);
 
+      expect(mockLearningTrack.find).toHaveBeenCalledWith({ isPublished: true });
       expect(jsonMock).toHaveBeenCalledWith({
         success: true,
         data: mockTracks,
       });
     });
 
-    it('should handle database errors', async () => {
+    it('handles database errors', async () => {
       mockRequest.query = {};
-      mockDb.select = jest.fn().mockImplementation(() => {
+      mockLearningTrack.find.mockImplementation(() => {
         throw new Error('Database error');
       });
 
@@ -79,9 +148,12 @@ describe('Tracks Controller', () => {
   });
 
   describe('getTrack', () => {
-    it('should return single track with courses and enrollment', async () => {
+    it('returns single track with courses and enrollment', async () => {
+      const trackId = new mongoose.Types.ObjectId();
+      const courseId = new mongoose.Types.ObjectId();
+      const userId = new mongoose.Types.ObjectId().toHexString();
       const mockTrack = {
-        id: 1,
+        _id: trackId,
         title: 'Web Development Track',
         slug: 'web-development',
         domain: 'Technology',
@@ -89,45 +161,17 @@ describe('Tracks Controller', () => {
         isPublished: true,
         enrollmentCount: 100,
       };
-
-      const mockCourses = [
-        {
-          course: { id: 1, title: 'HTML Basics' },
-          orderIndex: 1,
-          isRequired: true,
-        },
-      ];
-
-      const mockEnrollment = {
-        id: 1,
-        userId: 1,
-        trackId: 1,
-        progressPercentage: 25,
-      };
+      const trackCourses = [{ courseId, orderIndex: 1, isRequired: true }];
+      const courses = [{ _id: courseId, title: 'HTML Basics' }];
+      const enrollment = { _id: new mongoose.Types.ObjectId(), userId, trackId };
 
       mockRequest.params = { slug: 'web-development' };
-      mockRequest.user = { id: 1, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' as UserRole };
+      mockRequest.user = { id: userId, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' as UserRole };
 
-      mockDb.select = jest.fn()
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockResolvedValue([mockTrack]),
-          }),
-        })
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            leftJoin: jest.fn().mockReturnValue({
-              where: jest.fn().mockReturnValue({
-                orderBy: jest.fn().mockResolvedValue(mockCourses),
-              }),
-            }),
-          }),
-        })
-        .mockReturnValueOnce({
-          from: jest.fn().mockReturnValue({
-            where: jest.fn().mockResolvedValue([mockEnrollment]),
-          }),
-        });
+      mockLearningTrack.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(mockTrack) });
+      mockTrackCourse.find.mockReturnValue(chain(trackCourses));
+      mockCourse.find.mockReturnValue({ lean: jest.fn().mockResolvedValue(courses) });
+      mockTrackEnrollment.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(enrollment) });
 
       await getTrack(mockRequest as Request, mockResponse as Response);
 
@@ -135,19 +179,15 @@ describe('Tracks Controller', () => {
         success: true,
         data: {
           ...mockTrack,
-          courses: mockCourses,
-          enrollment: mockEnrollment,
+          courses: [{ course: courses[0], orderIndex: 1, isRequired: true }],
+          enrollment,
         },
       });
     });
 
-    it('should return 404 for non-existent track', async () => {
+    it('returns 404 for non-existent track', async () => {
       mockRequest.params = { slug: 'non-existent' };
-      mockDb.select = jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
-        }),
-      });
+      mockLearningTrack.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(null) });
 
       await getTrack(mockRequest as Request, mockResponse as Response);
 
@@ -160,69 +200,58 @@ describe('Tracks Controller', () => {
   });
 
   describe('enrollInTrack', () => {
-    it('should enroll user in track successfully', async () => {
-      const mockUser: { id: number; email: string; fullName: string; role: UserRole } = { id: 1, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' };
-      const mockEnrollment = { id: 1, userId: 1, trackId: 1, progressPercentage: 0 };
+    it('enrolls user in track successfully', async () => {
+      const userId = new mongoose.Types.ObjectId().toHexString();
+      const trackId = new mongoose.Types.ObjectId().toHexString();
+      const mockUser = { id: userId, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' as UserRole };
+      const enrollment = { _id: new mongoose.Types.ObjectId(), userId, trackId, progressPercentage: 0 };
 
       mockRequest.user = mockUser;
-      mockRequest.params = { id: '1' };
+      mockRequest.params = { id: trackId };
 
-      mockDb.select = jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
-        }),
-      });
-
-      mockDb.insert = jest.fn().mockReturnValue({
-        values: jest.fn().mockReturnValue({
-          returning: jest.fn().mockResolvedValue([mockEnrollment]),
-        }),
-      });
-
-      mockDb.update = jest.fn().mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
-        }),
-      });
-
-      mockGamificationService.awardXP = jest.fn().mockResolvedValue(undefined);
+      mockLearningTrack.findById.mockReturnValue({ lean: jest.fn().mockResolvedValue({ _id: trackId }) });
+      mockTrackEnrollment.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(null) });
+      mockTrackEnrollment.create.mockResolvedValue(enrollment);
+      mockLearningTrack.findByIdAndUpdate.mockResolvedValue({});
+      mockAwardXP.mockResolvedValue(undefined);
 
       await enrollInTrack(mockRequest as Request, mockResponse as Response);
 
       expect(statusMock).toHaveBeenCalledWith(201);
       expect(jsonMock).toHaveBeenCalledWith({
         success: true,
-        data: mockEnrollment,
+        data: enrollment,
       });
-      expect(mockGamificationService.awardXP).toHaveBeenCalledWith(1, 10, 'TRACK_ENROLLED');
+      expect(mockAwardXP).toHaveBeenCalledWith(userId, 10, 'TRACK_ENROLLED');
     });
 
-    it('should return existing enrollment if already enrolled', async () => {
-      const mockUser: { id: number; email: string; fullName: string; role: UserRole } = { id: 1, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' };
-      const mockExistingEnrollment = { id: 1, userId: 1, trackId: 1, progressPercentage: 25 };
+    it('returns existing enrollment if already enrolled', async () => {
+      const userId = new mongoose.Types.ObjectId().toHexString();
+      const trackId = new mongoose.Types.ObjectId().toHexString();
+      const existing = { _id: new mongoose.Types.ObjectId(), userId, trackId, progressPercentage: 25 };
 
-      mockRequest.user = mockUser;
-      mockRequest.params = { id: '1' };
+      mockRequest.user = { id: userId, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' as UserRole };
+      mockRequest.params = { id: trackId };
 
-      mockDb.select = jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([mockExistingEnrollment]),
-        }),
-      });
+      mockLearningTrack.findById.mockReturnValue({ lean: jest.fn().mockResolvedValue({ _id: trackId }) });
+      mockTrackEnrollment.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(existing) });
 
       await enrollInTrack(mockRequest as Request, mockResponse as Response);
 
       expect(jsonMock).toHaveBeenCalledWith({
         success: true,
-        data: mockExistingEnrollment,
+        data: existing,
         alreadyEnrolled: true,
       });
     });
 
-    it('should return 400 for invalid track id', async () => {
-      const mockUser: { id: number; email: string; fullName: string; role: UserRole } = { id: 1, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' };
-
-      mockRequest.user = mockUser;
+    it('returns 400 for invalid track id', async () => {
+      mockRequest.user = {
+        id: new mongoose.Types.ObjectId().toHexString(),
+        email: 'test@example.com',
+        fullName: 'Test User',
+        role: 'STUDENT' as UserRole,
+      };
       mockRequest.params = { id: 'invalid' };
 
       await enrollInTrack(mockRequest as Request, mockResponse as Response);
@@ -236,38 +265,32 @@ describe('Tracks Controller', () => {
   });
 
   describe('getTrackProgress', () => {
-    it('should return track progress for enrolled user', async () => {
-      const mockUser: { id: number; email: string; fullName: string; role: UserRole } = { id: 1, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' };
-      const mockEnrollment = { id: 1, userId: 1, trackId: 1, progressPercentage: 25 };
+    it('returns track progress for enrolled user', async () => {
+      const userId = new mongoose.Types.ObjectId().toHexString();
+      const trackId = new mongoose.Types.ObjectId().toHexString();
+      const enrollment = { _id: new mongoose.Types.ObjectId(), userId, trackId, progressPercentage: 25 };
 
-      mockRequest.user = mockUser;
-      mockRequest.params = { id: '1' };
-
-      mockDb.select = jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([mockEnrollment]),
-        }),
-      });
+      mockRequest.user = { id: userId, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' as UserRole };
+      mockRequest.params = { id: trackId };
+      mockTrackEnrollment.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(enrollment) });
 
       await getTrackProgress(mockRequest as Request, mockResponse as Response);
 
       expect(jsonMock).toHaveBeenCalledWith({
         success: true,
-        data: mockEnrollment,
+        data: enrollment,
       });
     });
 
-    it('should return 404 for non-enrolled user', async () => {
-      const mockUser: { id: number; email: string; fullName: string; role: UserRole } = { id: 1, email: 'test@example.com', fullName: 'Test User', role: 'STUDENT' };
-
-      mockRequest.user = mockUser;
-      mockRequest.params = { id: '1' };
-
-      mockDb.select = jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
-        }),
-      });
+    it('returns 404 for non-enrolled user', async () => {
+      mockRequest.user = {
+        id: new mongoose.Types.ObjectId().toHexString(),
+        email: 'test@example.com',
+        fullName: 'Test User',
+        role: 'STUDENT' as UserRole,
+      };
+      mockRequest.params = { id: new mongoose.Types.ObjectId().toHexString() };
+      mockTrackEnrollment.findOne.mockReturnValue({ lean: jest.fn().mockResolvedValue(null) });
 
       await getTrackProgress(mockRequest as Request, mockResponse as Response);
 

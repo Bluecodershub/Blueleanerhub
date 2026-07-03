@@ -38,7 +38,7 @@ export default function TutorialCard({
 }: TutorialCardProps) {
   const difficultyColors = {
     easy: 'bg-sky-500/10 text-primary/80 border-sky-500/20',
-    medium: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+    medium: 'bg-sky-500/10 text-sky-700 border-sky-500/20',
     hard: 'bg-primary/10 text-foreground/80 border-border',
     expert: 'bg-red-500/10 text-red-500 border-red-500/20',
   }
@@ -46,7 +46,7 @@ export default function TutorialCard({
   const domainColors: Record<string, string> = {
     'computer-science': 'bg-primary',
     mechanical: 'bg-primary',
-    electrical: 'bg-yellow-500',
+    electrical: 'bg-sky-600',
     civil: 'bg-sky-500',
     chemical: 'bg-purple-500',
     management: 'bg-sky-500',
@@ -60,9 +60,9 @@ export default function TutorialCard({
       whileHover={{ y: -4 }}
     >
       <Link href={`/tutorials/${id}`}>
-        <Card className="group h-full cursor-pointer overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-sky-500">
+        <Card className="group h-full cursor-pointer overflow-hidden border-border bg-card transition-all hover:border-primary/60 hover:shadow-lg">
           {/* Thumbnail */}
-          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800">
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-sky-100 to-white">
             {thumbnail ? (
               <img
                 src={thumbnail}
@@ -71,7 +71,7 @@ export default function TutorialCard({
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <BookOpen className="h-16 w-16 text-gray-600" />
+                <BookOpen className="h-16 w-16 text-sky-300" />
               </div>
             )}
 
@@ -93,7 +93,7 @@ export default function TutorialCard({
             </div>
 
             {/* Play Button Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="absolute inset-0 flex items-center justify-center bg-sky-950/20 opacity-0 transition-opacity group-hover:opacity-100">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary">
                 <Play className="ml-1 h-8 w-8 text-white" />
               </div>
@@ -103,12 +103,12 @@ export default function TutorialCard({
           {/* Content */}
           <div className="space-y-3 p-5">
             {/* Title */}
-            <h3 className="line-clamp-2 text-lg font-semibold text-white transition-colors group-hover:text-sky-400">
+            <h3 className="line-clamp-2 text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
               {title}
             </h3>
 
             {/* Description */}
-            <p className="line-clamp-2 text-sm text-gray-400">{description}</p>
+            <p className="line-clamp-2 text-sm text-muted-foreground">{description}</p>
 
             {/* Tags */}
             {tags.length > 0 && (
@@ -117,7 +117,7 @@ export default function TutorialCard({
                   <Badge
                     key={index}
                     variant="outline"
-                    className="border-gray-600 bg-gray-900 text-xs text-gray-400"
+                    className="border-border bg-secondary/70 text-xs text-muted-foreground"
                   >
                     {tag}
                   </Badge>
@@ -125,7 +125,7 @@ export default function TutorialCard({
                 {tags.length > 3 && (
                   <Badge
                     variant="outline"
-                    className="border-gray-600 bg-gray-900 text-xs text-gray-400"
+                    className="border-border bg-secondary/70 text-xs text-muted-foreground"
                   >
                     +{tags.length - 3}
                   </Badge>
@@ -134,7 +134,7 @@ export default function TutorialCard({
             )}
 
             {/* Stats */}
-            <div className="flex items-center gap-4 text-sm text-gray-400">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <BookOpen className="h-4 w-4" />
                 <span>{lessonsCount} lessons</span>
@@ -152,7 +152,7 @@ export default function TutorialCard({
             {/* Progress Bar (if enrolled) */}
             {isEnrolled && (
               <div className="space-y-1 pt-2">
-                <div className="flex items-center justify-between text-xs text-gray-400">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Progress</span>
                   <span className="font-semibold text-sky-400">{progress}%</span>
                 </div>

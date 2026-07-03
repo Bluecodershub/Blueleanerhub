@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, lazy, Suspense } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { BookOpen, Code2, Trophy, Target, Zap, Flame, Award, ArrowRight, CheckCircle2, Circle, Play, Users, Sparkles, ChevronRight, Brain, Bot, CheckCircle, Bookmark, Loader2, RefreshCw } from 'lucide-react'
+import { BookOpen, Code2, Trophy, Target, Zap, Flame, Award, ArrowRight, CheckCircle2, Circle, Play, Users, Sparkles, ChevronRight, Brain, Bot, CheckCircle, Bookmark, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -541,7 +541,7 @@ export default function StudentDashboard() {
                       </div>
                       <Button 
                         onClick={() => router.push(item.tutorialSlug ? `/tutorials/view/${item.tutorialSlug}/${item.lessonId}` : `/tutorials/cs/${item.tutorialId}/${item.lessonId}`)}
-                        className="gap-2 bg-primary hover:bg-primary/90 font-bold text-black shrink-0"
+                        className="gap-2 bg-primary hover:bg-primary/90 font-bold text-primary-foreground shrink-0"
                       >
                         <Play className="h-4 w-4 fill-current" /> Resume
                       </Button>
@@ -608,7 +608,7 @@ export default function StudentDashboard() {
                           onClick={() => router.push(item.tutorialSlug ? `/tutorials/view/${item.tutorialSlug}/${item.lessonId}` : `/tutorials/cs/${item.tutorialId}/${item.lessonId}`)}
                           variant="outline"
                           size="sm"
-                          className="w-full gap-1.5 font-bold hover:bg-primary hover:text-black"
+                          className="w-full gap-1.5 font-bold hover:bg-primary hover:text-primary-foreground"
                         >
                           Read Now <ArrowRight className="h-3 w-3" />
                         </Button>

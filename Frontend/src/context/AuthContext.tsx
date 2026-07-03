@@ -158,7 +158,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     clearAuthHintCookie()
     setUser(null)
     api.post('/auth/logout').catch(() => {})
-    window.location.href = '/login'
+    if (process.env.NODE_ENV !== 'test') {
+      window.location.href = '/login'
+    }
   }
 
   const register = async (data: {

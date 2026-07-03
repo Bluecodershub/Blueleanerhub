@@ -414,7 +414,7 @@ export default function QuizPage() {
                 <Button
                   onClick={handleConfirm}
                   disabled={!selectedAnswer}
-                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-black hover:bg-primary/90"
+                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-primary-foreground hover:bg-primary/90"
                 >
                   Confirm Answer
                   <ChevronRight className="h-4 w-4" />
@@ -422,7 +422,7 @@ export default function QuizPage() {
               ) : (
                 <Button
                   onClick={handleNext}
-                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-black hover:bg-primary/90"
+                  className="h-11 gap-2 rounded-xl bg-primary px-8 font-bold text-primary-foreground hover:bg-primary/90"
                 >
                   {currentIndex === questions.length - 1 ? 'See Results' : 'Next Question'}
                   <ChevronRight className="h-4 w-4" />
@@ -515,7 +515,7 @@ export default function QuizPage() {
                 setAnswers(Array(questions.length).fill(null))
                 setTimeLeft(120)
               }}
-              className="h-12 gap-2 rounded-2xl bg-primary font-bold text-black hover:bg-primary/90"
+              className="h-12 gap-2 rounded-2xl bg-primary font-bold text-primary-foreground hover:bg-primary/90"
             >
               <RotateCcw className="h-4 w-4" />
               Retry Quiz
@@ -675,7 +675,7 @@ export default function QuizPage() {
                   ? setReviewIndex(reviewIndex + 1)
                   : setStep('result')
               }
-              className="flex-1 gap-2 rounded-xl bg-primary text-black hover:bg-primary/90"
+              className="flex-1 gap-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {reviewIndex < questions.length - 1 ? 'Next' : 'Done'}
               <ChevronRight className="h-4 w-4" />

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
   Plus, Trophy, Users, Loader2, RefreshCw,
-  ChevronLeft, ChevronRight, Trash2,
+  Trash2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

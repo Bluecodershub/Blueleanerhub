@@ -9,6 +9,7 @@ import {
 } from '../db/models';
 import logger from '../utils/logger';
 import { hashPassword } from '../utils/encryption';
+import { invalidateUserAuthCache } from '../middleware/auth';
 
 async function paginateModel(
   req: Request,
@@ -152,6 +153,7 @@ export async function updateUserRole(req: Request, res: Response, next: NextFunc
     );
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
+    await invalidateUserAuthCache(String(req.params.id));
     logger.info(`Admin ${req.user!.id} changed user ${req.params.id} role to ${role}`);
     res.json({ success: true, data: user });
   } catch (err) {
@@ -169,6 +171,7 @@ export async function banUser(req: Request, res: Response, next: NextFunction) {
     );
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
+    await invalidateUserAuthCache(String(req.params.id));
     logger.info(`Admin ${req.user!.id} ${ban ? 'banned' : 'unbanned'} user ${req.params.id}`);
     res.json({ success: true, data: user });
   } catch (err) {

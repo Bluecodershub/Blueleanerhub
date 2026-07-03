@@ -21,7 +21,6 @@ import {
   FileText,
 } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import type { LessonTopic, TopicLesson, CodeExample } from './types'
 
 // ─── Static code block ───────────────────────────────────────────────────────
@@ -486,9 +485,6 @@ export default function LessonPage({ domainLabel, domainIcon: DomainIcon, domain
             </div>
           </div>
 
-          <div className="px-6 pb-8">
-            <Footer />
-          </div>
         </main>
       </div>
     </div>

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, User, Mail, Shield, Zap, Trophy, BarChart3, Loader2, Ban, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Shield, Zap, Trophy, BarChart3, Loader2, Ban, CheckCircle } from 'lucide-react'
 import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -25,7 +25,6 @@ const ROLE_COLORS: Record<string, string> = {
 
 export default function AdminUserDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const router = useRouter()
   const [user, setUser] = useState<UserDetail | null>(null)
   const [stats, setStats] = useState<{ quizCount: number; hackathonCount: number; xpTotal: number } | null>(null)
   const [loading, setLoading] = useState(true)

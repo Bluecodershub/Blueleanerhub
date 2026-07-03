@@ -62,7 +62,7 @@ print(f"Welcome to {name} version {version}")`}
       />
 
       {/* Good to know */}
-      <section className="bg-amber-500/10 border-l-4 border-amber-500 p-6 rounded-r-xl">
+      <section className="bg-sky-500/10 border-l-4 border-primary p-6 rounded-r-xl">
         <h3 className="!mt-0">Good to know</h3>
         <p>
           The most recent major version of Python is Python 3, which we shall be using in this tutorial.

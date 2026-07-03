@@ -16,6 +16,7 @@ import { internalApiKeyAuth } from '../middleware/internalAuth';
 import { User, Hackathon, HackathonTeam, Job, JobApplication, QuizAttempt } from '../db/models';
 import { hashPassword } from '../utils/encryption';
 import logger from '../utils/logger';
+import { invalidateUserAuthCache } from '../middleware/auth';
 
 const router = Router();
 
@@ -124,6 +125,7 @@ router.put('/users/:id/role', async (req, res) => {
 
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
+    await invalidateUserAuthCache(String(id));
     logger.info(`Service: Changed user ${id} role to ${role}`);
     res.json({ success: true, data: user });
   } catch (error) {

@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
 import {
-  Building2,
   LayoutDashboard,
   Trophy,
   Users,
@@ -60,10 +59,7 @@ export default function CorporateLayout({
         >
           {/* Logo */}
           <div className="flex h-16 items-center justify-between border-b border-border px-4">
-            <Link href="/corporate/dashboard" className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                <Building2 className="h-5 w-5 text-white" />
-              </div>
+            <Link href="/corporate/dashboard" className="flex items-center">
               {!collapsed && (
                 <span className="font-semibold">BlueLearnerHub</span>
               )}

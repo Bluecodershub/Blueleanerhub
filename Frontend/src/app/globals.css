@@ -24,86 +24,78 @@
     --font-mono: 'SFMono-Regular', 'Cascadia Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
     --radius: 0.5rem;
 
-    /* Backgrounds — Codecademy black canvas */
-    --background: 0 0% 4%;             /* #0A0A0A black */
-    --background-secondary: 0 0% 8%;   /* #141414 */
-    --background-tertiary: 0 0% 11%;   /* #1C1C1C */
-    --foreground: 0 0% 100%;           /* #FFFFFF */
+    --background: 210 45% 98%;
+    --background-secondary: 214 45% 96%;
+    --background-tertiary: 213 35% 92%;
+    --foreground: 222 47% 11%;
 
-    /* Surfaces — minimal elevation above black */
-    --card: 0 0% 7%;                   /* #121212 */
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 9%;                /* #171717 */
-    --popover-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Primary — Codecademy yellow (CTAs) with black text */
-    --primary: 50 100% 50%;            /* #FFD300 yellow */
-    --primary-foreground: 0 0% 0%;     /* black text on yellow */
-    --primary-dark: 48 100% 45%;       /* #E6BE00 */
-    --secondary: 0 0% 12%;             /* #1F1F1F surface */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 64%;      /* #A3A3A3 */
-    --accent: 205 80% 14%;             /* subtle light-blue surface */
-    --accent-foreground: 205 100% 78%; /* light blue */
+    --primary: 212 92% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 215 90% 35%;
+    --secondary: 214 55% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 215 38% 93%;
+    --muted-foreground: 215 18% 42%;
+    --accent: 208 100% 94%;
+    --accent-foreground: 212 92% 34%;
 
-    /* Borders & inputs — neutral grays */
-    --border: 0 0% 16%;                /* #292929 hairline */
-    --border-accent: 50 100% 50%;
-    --input: 0 0% 18%;
-    --ring: 205 100% 60%;              /* light-blue focus */
-    --destructive: 3 86% 49%;          /* #E91C11 */
+    --border: 214 32% 86%;
+    --border-accent: 212 92% 45%;
+    --input: 214 32% 88%;
+    --ring: 212 92% 45%;
+    --destructive: 3 78% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Sidebar — darkest black */
-    --sidebar: 0 0% 3%;                /* #080808 */
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 50 100% 50%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 205 80% 14%;
-    --sidebar-accent-foreground: 205 100% 78%;
-    --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 205 100% 60%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 212 92% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 208 100% 94%;
+    --sidebar-accent-foreground: 212 92% 34%;
+    --sidebar-border: 214 32% 86%;
+    --sidebar-ring: 212 92% 45%;
 
-    /* Semantic — green / orange / red / light-blue */
-    --success: 145 63% 49%;            /* green */
-    --success-light: 145 50% 12%;
-    --warning: 33 100% 50%;            /* #FF8C00 orange */
-    --warning-light: 33 70% 12%;
-    --error: 3 86% 49%;                /* red */
-    --error-light: 3 60% 16%;
-    --info: 205 100% 65%;              /* #66C4FF light blue */
-    --info-light: 205 60% 14%;
+    --success: 150 64% 34%;
+    --success-light: 150 58% 94%;
+    --warning: 38 92% 42%;
+    --warning-light: 42 100% 94%;
+    --error: 3 78% 48%;
+    --error-light: 3 90% 96%;
+    --info: 205 92% 45%;
+    --info-light: 205 100% 94%;
 
-    /* Layered depth — black shadows + light-blue glow */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-    --shadow: 0 2px 14px 0 rgb(0 0 0 / 0.6);
-    --shadow-md: 0 12px 34px -16px rgb(0 0 0 / 0.75);
-    --shadow-lg: 0 24px 56px -28px rgb(0 0 0 / 0.85);
-    --shadow-xl: 0 36px 80px -36px rgb(0 0 0 / 0.9);
-    --glow-blue: 0 0 0 1px hsl(205 100% 60% / 0.28), 0 12px 40px -12px hsl(205 100% 60% / 0.4);
+    --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.06);
+    --shadow: 0 8px 24px -18px rgb(15 23 42 / 0.24);
+    --shadow-md: 0 18px 40px -28px rgb(15 23 42 / 0.35);
+    --shadow-lg: 0 26px 62px -34px rgb(15 23 42 / 0.38);
+    --shadow-xl: 0 40px 90px -46px rgb(15 23 42 / 0.44);
+    --glow-blue: 0 0 0 1px hsl(212 92% 45% / 0.18), 0 18px 48px -22px hsl(212 92% 45% / 0.35);
 
-    /* Brand + gamification — Codecademy accent set */
-    --brand: 50 100% 50%;              /* yellow */
-    --brand-light: 50 100% 65%;
-    --brand-dark: 48 100% 45%;
-    --xp-gold: 50 100% 50%;            /* #FFD300 yellow */
-    --streak-orange: 33 100% 50%;      /* #FF8C00 orange */
-    --level-purple: 205 100% 68%;      /* light blue */
-    --achievement-cyan: 205 100% 65%;  /* light blue */
-    --reward-green: 145 63% 49%;       /* green */
+    --brand: 212 92% 45%;
+    --brand-light: 208 100% 86%;
+    --brand-dark: 215 90% 35%;
+    --xp-gold: 212 92% 45%;
+    --streak-orange: 205 92% 45%;
+    --level-purple: 225 70% 55%;
+    --achievement-cyan: 197 82% 43%;
+    --reward-green: 150 64% 34%;
 
     /* Category accents — Codecademy colourful course-tile palette */
     --cat-purple: 297 100% 70%;        /* #F966FF pink */
     --cat-blue: 205 100% 66%;          /* #66C4FF light blue */
     --cat-teal: 85 75% 55%;            /* #AEE938 lime */
     --cat-coral: 345 75% 64%;          /* #E85D7F carnation */
-    --cat-amber: 50 100% 50%;          /* #FFD300 yellow */
+    --cat-amber: 212 92% 45%;          /* blue */
     --cat-pink: 297 100% 70%;          /* #F966FF pink */
 
     --cs-blue: 205 100% 66%;           /* light blue */
-    --mech-orange: 33 100% 50%;        /* orange */
-    --elec-yellow: 50 100% 50%;        /* yellow */
+    --mech-orange: 212 92% 45%;        /* blue */
+    --elec-yellow: 205 92% 45%;        /* blue */
     --civil-teal: 168 70% 45%;         /* teal */
     --mgmt-purple: 297 100% 70%;       /* pink */
   }
@@ -118,6 +110,7 @@
   }
 
   html {
+    position: relative;
     scroll-behavior: smooth;
   }
 
@@ -138,16 +131,18 @@
 
   body {
     @apply bg-background text-foreground antialiased overflow-x-hidden;
+    position: relative;
     min-height: 100vh;
     font-family: var(--font-sans);
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Codecademy-style flat black canvas with a faint dot grid */
     background-color: hsl(var(--background));
-    background-image: radial-gradient(hsl(0 0% 100% / 0.045) 1px, transparent 1px);
-    background-size: 22px 22px;
-    background-position: -11px -11px;
+    background-image:
+      radial-gradient(hsl(212 92% 45% / 0.08) 1px, transparent 1px),
+      linear-gradient(180deg, hsl(0 0% 100% / 0.85), hsl(210 45% 98%));
+    background-size: 24px 24px, 100% 100%;
+    background-position: -12px -12px, 0 0;
   }
 
   h1,
@@ -222,11 +217,11 @@
   .btn-primary {
     @apply bg-primary text-primary-foreground hover:-translate-y-0.5;
     padding: 0.75rem 1.75rem;
-    box-shadow: 0 8px 22px -12px hsl(50 100% 50% / 0.55);
+    box-shadow: 0 8px 22px -12px hsl(var(--primary) / 0.55);
   }
 
   .btn-primary:hover {
-    box-shadow: 0 14px 30px -12px hsl(50 100% 50% / 0.65);
+    box-shadow: 0 14px 30px -12px hsl(var(--primary) / 0.65);
   }
 
   .btn-outline {
@@ -266,7 +261,7 @@
   .bg-cat-blue   { background: linear-gradient(135deg, hsl(205 100% 66%), hsl(205 100% 52%)); }
   .bg-cat-teal   { background: linear-gradient(135deg, hsl(85 75% 55%), hsl(85 70% 42%)); }
   .bg-cat-coral  { background: linear-gradient(135deg, hsl(345 80% 66%), hsl(345 75% 54%)); }
-  .bg-cat-amber  { background: linear-gradient(135deg, hsl(50 100% 55%), hsl(45 100% 48%)); }
+  .bg-cat-amber  { background: linear-gradient(135deg, hsl(212 92% 56%), hsl(215 90% 42%)); }
   .bg-cat-pink   { background: linear-gradient(135deg, hsl(297 100% 72%), hsl(297 90% 58%)); }
   .bg-cat-indigo { background: linear-gradient(135deg, hsl(205 100% 60%), hsl(205 100% 46%)); }
 

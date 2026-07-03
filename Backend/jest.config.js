@@ -4,7 +4,7 @@ module.exports = {
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   testMatch: ['**/?(*.)+(spec|test).+(ts|tsx|js)'],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
   },
   collectCoverage: true,
   coverageDirectory: 'coverage',
@@ -27,10 +27,5 @@ module.exports = {
   testTimeout: 10000,
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
   },
 };

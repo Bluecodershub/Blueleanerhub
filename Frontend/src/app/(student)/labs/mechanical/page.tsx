@@ -49,7 +49,7 @@ export default function MechanicalLabPage() {
           <Button
             onClick={() => setIsSimulating(!isSimulating)}
             size="sm"
-            className={`${isSimulating ? 'bg-red-600 hover:bg-red-500' : 'bg-primary hover:bg-primary'} h-8 rounded-lg px-4 font-bold text-black`}
+            className={`${isSimulating ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-primary text-primary-foreground hover:bg-primary'} h-8 rounded-lg px-4 font-bold`}
           >
             {isSimulating ? 'HALT_SIMULATION' : 'START_THERMAL_SIM'}
           </Button>
@@ -207,7 +207,7 @@ export default function MechanicalLabPage() {
             </div>
             <Button
               variant="outline"
-              className="border-border text-[10px] font-black uppercase italic tracking-widest text-foreground/70 transition-all hover:bg-primary hover:text-black"
+              className="border-border text-[10px] font-black uppercase italic tracking-widest text-foreground/70 transition-all hover:bg-primary hover:text-primary-foreground"
             >
               Apply Fix <ChevronRight className="ml-1 h-3.5 w-3.5" />
             </Button>

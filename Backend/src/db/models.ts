@@ -316,6 +316,7 @@ const HackathonTeamSchema = new Schema<IHackathonTeam>({
 });
 
 HackathonTeamSchema.index({ hackathonId: 1 });
+HackathonTeamSchema.index({ hackathonId: 1, memberIds: 1 }, { unique: true });
 
 export const HackathonTeam = mongoose.model<IHackathonTeam>('HackathonTeam', HackathonTeamSchema);
 

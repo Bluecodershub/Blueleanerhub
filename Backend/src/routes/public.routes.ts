@@ -8,6 +8,7 @@ import { authenticate, authorize, optionalAuth } from '../middleware/auth';
 import { User, Hackathon, Job, Tutorial } from '../db/models';
 import { db } from '../db';
 import logger from '../utils/logger';
+import { normalizeJobType } from '../utils/jobTypes';
 
 const router = Router();
 
@@ -195,11 +196,11 @@ router.get('/jobs/search', optionalAuth, async (req, res) => {
     const filter: Record<string, any> = { isActive: true };
 
     if (q) {
-      const qRegex = new RegExp(String(q), 'i');
+      const qRegex = new RegExp(escapeRegex(String(q)), 'i');
       filter.$or = [{ title: qRegex }, { description: qRegex }];
     }
-    if (location) filter.location = new RegExp(String(location), 'i');
-    if (jobType) filter.type = jobType;
+    if (location) filter.location = new RegExp(escapeRegex(String(location)), 'i');
+    if (jobType) filter.type = normalizeJobType(jobType) ?? '__INVALID_JOB_TYPE__';
     if (remote === 'true') filter.remote = true;
 
     const allowedSortFields: Record<string, string> = {

@@ -139,7 +139,7 @@ export default function OrganizationsPage() {
                 onClick={() => setType(t)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                   type === t
-                    ? 'bg-primary text-black'
+                    ? 'bg-primary text-primary-foreground'
                     : 'bg-secondary text-muted-foreground hover:text-foreground'
                 }`}
               >

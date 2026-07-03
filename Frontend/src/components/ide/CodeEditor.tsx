@@ -178,7 +178,7 @@ export default function CodeEditor({
             className={`flex items-center gap-2 rounded-xl px-6 py-2 text-sm font-bold transition-all ${
               isRunning
                 ? 'cursor-not-allowed bg-primary/15 text-foreground/80'
-                : 'bg-primary text-black hover:bg-primary/70 hover:shadow-lg hover:shadow-primary/15 active:scale-95'
+                : 'bg-primary text-primary-foreground hover:bg-primary/70 hover:shadow-lg hover:shadow-primary/15 active:scale-95'
             }`}
           >
             {isRunning ? (

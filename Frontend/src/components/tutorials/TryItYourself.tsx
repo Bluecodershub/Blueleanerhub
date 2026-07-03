@@ -39,7 +39,7 @@ export const TryItYourself: React.FC<TryItYourselfProps> = ({
         </div>
       </div>
 
-      <div className="relative flex flex-col gap-6 whitespace-pre-wrap bg-black/20 p-8 font-mono text-lg leading-relaxed text-foreground/90">
+      <div className="relative flex flex-col gap-6 whitespace-pre-wrap bg-sky-50/70 p-8 font-mono text-lg leading-relaxed text-foreground/90">
         <div className="pointer-events-none absolute right-6 top-4">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/30">
             {language}

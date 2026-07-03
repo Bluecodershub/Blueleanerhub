@@ -90,6 +90,7 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     const originalUrl = originalRequest?.url ?? ''
+    const skipAuthRefresh = Boolean(originalRequest?._skipAuthRefresh)
     const isCredentialRequest = [
       '/auth/login',
       '/auth/register',
@@ -99,7 +100,7 @@ api.interceptors.response.use(
       '/auth/refresh-token',
     ].some((path) => originalUrl.includes(path))
 
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !skipAuthRefresh) {
       // Login/register 401s are final; refreshing would hide the real credential error.
       if (isCredentialRequest) {
         redirectToLogin()

@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Users, Search, Filter, Shield, GraduationCap, Building2,
-  Zap, MoreHorizontal, Ban, RefreshCw, ChevronLeft, ChevronRight, Loader2, CheckCircle, XCircle,
+  Users, Search, Shield, GraduationCap, Building2,
+  Zap, Ban, RefreshCw, ChevronLeft, ChevronRight, Loader2, CheckCircle, XCircle,
 } from 'lucide-react'
 import api from '@/lib/api'
 import { Button } from '@/components/ui/button'

@@ -21,15 +21,6 @@ jest.mock('@/lib/api', () => ({
   },
 }))
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-}
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   React.createElement(AuthProvider, null, children)
 )
@@ -37,17 +28,20 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe('useAuth Hook', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    localStorageMock.getItem.mockReturnValue(null)
+    document.cookie = 'auth_hint=; path=/; max-age=0'
   })
 
   describe('initial state', () => {
-    it('should start with loading true when no token', () => {
+    it('should skip session restore when no auth hint exists', async () => {
       const { result } = renderHook(() => useAuth(), { wrapper })
-      expect(result.current.loading).toBe(true)
+
+      await waitFor(() => expect(result.current.loading).toBe(false))
+      expect(result.current.user).toBeNull()
+      expect(mockGet).not.toHaveBeenCalled()
     })
 
-    it('should set user when token exists and /auth/me succeeds', async () => {
-      localStorageMock.getItem.mockReturnValue('valid-token')
+    it('should set user when auth hint exists and /auth/me succeeds', async () => {
+      document.cookie = 'auth_hint=1; path=/'
       mockGet.mockResolvedValueOnce({
         data: {
           data: {
@@ -74,9 +68,9 @@ describe('useAuth Hook', () => {
       expect(result.current.isAuthenticated).toBe(true)
     })
 
-    it('should clear auth when /auth/me fails', async () => {
-      localStorageMock.getItem.mockReturnValue('invalid-token')
-      mockGet.mockRejectedValueOnce(new Error('Unauthorized'))
+    it('should clear auth hint on definitive /auth/me failure', async () => {
+      document.cookie = 'auth_hint=1; path=/'
+      mockGet.mockRejectedValueOnce({ response: { status: 401 } })
 
       const { result } = renderHook(() => useAuth(), { wrapper })
 
@@ -86,7 +80,7 @@ describe('useAuth Hook', () => {
 
       expect(result.current.user).toBeNull()
       expect(result.current.isAuthenticated).toBe(false)
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('token')
+      expect(document.cookie).not.toContain('auth_hint=')
     })
   })
 
@@ -120,7 +114,7 @@ describe('useAuth Hook', () => {
         name: 'Test User',
         role: 'student',
       })
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('token', 'new-token')
+      expect(document.cookie).toContain('auth_hint=1')
     })
 
     it('should throw error on failed login', async () => {
@@ -133,17 +127,13 @@ describe('useAuth Hook', () => {
       const { result } = renderHook(() => useAuth(), { wrapper })
       await waitFor(() => expect(result.current.loading).toBe(false))
 
-      await expect(
-        act(async () => {
-          await result.current.login('test@example.com', 'wrong-password')
-        })
-      ).rejects.toThrow()
+      await expect(result.current.login('test@example.com', 'wrong-password')).rejects.toBeDefined()
     })
   })
 
   describe('logout', () => {
     it('should clear user and token', async () => {
-      localStorageMock.getItem.mockReturnValue('valid-token')
+      document.cookie = 'auth_hint=1; path=/'
       mockGet.mockResolvedValueOnce({
         data: {
           data: {
@@ -167,7 +157,8 @@ describe('useAuth Hook', () => {
 
       expect(result.current.user).toBeNull()
       expect(result.current.isAuthenticated).toBe(false)
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('token')
+      expect(document.cookie).not.toContain('auth_hint=')
+      expect(mockPost).toHaveBeenCalledWith('/auth/logout')
     })
   })
 
@@ -203,9 +194,9 @@ describe('useAuth Hook', () => {
     })
   })
 
-  describe('updateProfile', () => {
-    it('should update user profile', async () => {
-      localStorageMock.getItem.mockReturnValue('valid-token')
+  describe('refreshUser', () => {
+    it('should update user profile from /auth/me', async () => {
+      document.cookie = 'auth_hint=1; path=/'
       mockGet.mockResolvedValueOnce({
         data: {
           data: {
@@ -216,7 +207,7 @@ describe('useAuth Hook', () => {
           },
         },
       })
-      mockPost.mockResolvedValueOnce({
+      mockGet.mockResolvedValueOnce({
         data: {
           data: {
             id: '1',
@@ -232,7 +223,7 @@ describe('useAuth Hook', () => {
       await waitFor(() => expect(result.current.loading).toBe(false))
 
       await act(async () => {
-        await result.current.updateProfile({ name: 'New Name' })
+        await result.current.refreshUser()
       })
 
       expect(result.current.user?.name).toBe('New Name')

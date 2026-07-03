@@ -58,7 +58,7 @@ describe('Auth Controller', () => {
   describe('POST /auth/logout', () => {
     it('should return success on logout', async () => {
       const req = mockReq({
-        user: { id: 1, email: 'user@test.com', role: 'student', fullName: 'Test' },
+        user: { id: '507f1f77bcf86cd799439011', email: 'user@test.com', role: 'student', fullName: 'Test' },
       });
       const res = mockRes();
       const next = jest.fn();
@@ -146,7 +146,7 @@ describe('Auth Controller Source Code', () => {
       path.resolve(__dirname, '../../src/controllers/auth.controller.ts'),
       'utf-8'
     );
-    expect(source).toMatch(/\/api\/auth\/refresh-token/);
+    expect(source).toMatch(/\/api\/v1\/auth\/refresh-token/);
   });
 
   it('should export CSRF cookie functions', () => {
@@ -171,7 +171,7 @@ describe('Auth Controller Source Code', () => {
 
 describe('Corporate Registration', () => {
   describe('POST /auth/corporate/register', () => {
-    it('should handle corporate registration request with valid org email', async () => {
+    it('should require admin approval for corporate registration', async () => {
       const req = mockReq({
         body: {
           email: 'admin@techcorp.com',
@@ -185,10 +185,17 @@ describe('Corporate Registration', () => {
 
       await authController.corporateRegister(req, res, next);
 
-      expect(next).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: false,
+          message: expect.stringContaining('administrator'),
+        })
+      );
+      expect(next).not.toHaveBeenCalled();
     });
 
-    it('should reject personal email domains for corporate registration', async () => {
+    it('should not create corporate accounts directly', async () => {
       const req = mockReq({
         body: {
           email: 'admin@gmail.com',
@@ -202,11 +209,11 @@ describe('Corporate Registration', () => {
 
       await authController.corporateRegister(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,
-          message: expect.stringContaining('Personal email')
+          message: expect.stringContaining('administrator')
         })
       );
     });
@@ -267,14 +274,15 @@ describe('Role-based Registration', () => {
     expect(source).toMatch(/role\?:.*'STUDENT'.*'CORPORATE'/);
   });
 
-  it('should pass role to UserModel.create in corporateRegister', () => {
+  it('should not self-assign CORPORATE role in corporateRegister', () => {
     const fs = require('fs');
     const path = require('path');
     const source = fs.readFileSync(
       path.resolve(__dirname, '../../src/controllers/auth.controller.ts'),
       'utf-8'
     );
-    expect(source).toMatch(/role:\s*'CORPORATE'/);
+    const fn = source.match(/async corporateRegister[\s\S]*?(?=\n\n  async|\n  async)/)?.[0] ?? '';
+    expect(fn).not.toMatch(/role:\s*'CORPORATE'/);
   });
 
   it('should include role in INSERT query', () => {

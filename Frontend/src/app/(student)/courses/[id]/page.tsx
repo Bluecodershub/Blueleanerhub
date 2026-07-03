@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { ArrowLeft, BookOpen, CheckCircle2, Clock, GraduationCap, Loader2, PlayCircle } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -184,7 +183,6 @@ export default function CourseDetailPage() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   )
 }

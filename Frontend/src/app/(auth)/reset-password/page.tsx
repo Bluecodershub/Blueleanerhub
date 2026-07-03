@@ -115,7 +115,7 @@ function ResetPasswordContent() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <label className="ml-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                <label className="ml-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
                   New_Password
                 </label>
                 <div className="relative">
@@ -124,14 +124,14 @@ function ResetPasswordContent() {
                     placeholder="Min. 8 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 border-white/20 bg-black pr-10 font-mono text-xs transition-none placeholder:text-white/10 focus:border-white"
+                    className="h-11 border-border bg-background pr-10 font-mono text-xs text-foreground transition-none placeholder:text-muted-foreground focus:border-primary"
                     required
                     minLength={8}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 transition-colors hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -139,7 +139,7 @@ function ResetPasswordContent() {
               </div>
 
               <div className="space-y-2">
-                <label className="ml-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                <label className="ml-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
                   Confirm_Password
                 </label>
                 <Input
@@ -147,7 +147,7 @@ function ResetPasswordContent() {
                   placeholder="Repeat password"
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
-                  className="h-11 border-white/20 bg-black font-mono text-xs transition-none placeholder:text-white/10 focus:border-white"
+                  className="h-11 border-border bg-background font-mono text-xs text-foreground transition-none placeholder:text-muted-foreground focus:border-primary"
                   required
                 />
               </div>
@@ -156,7 +156,7 @@ function ResetPasswordContent() {
                 <Button
                   type="submit"
                   disabled={loading || !token}
-                  className="h-12 w-full border-2 border-white bg-white font-mono text-[12px] font-black uppercase tracking-widest text-black transition-none hover:bg-black hover:text-white"
+                  className="h-12 w-full border-2 border-primary bg-primary font-mono text-[12px] font-black uppercase tracking-widest text-primary-foreground transition-none hover:bg-primary/90"
                 >
                   {loading ? 'Updating...' : 'Set_New_Password'}
                 </Button>

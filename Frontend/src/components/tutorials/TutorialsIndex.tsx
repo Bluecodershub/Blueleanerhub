@@ -41,8 +41,8 @@ const tutorials: Tutorial[] = [
     icon: Terminal,
     lessons: 45,
     level: 'Beginner',
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-500/10',
+    color: 'text-primary',
+    bgColor: 'bg-sky-500/10',
     topics: ['Syntax', 'Variables', 'Functions', 'OOP', 'File Handling']
   },
   {
@@ -52,8 +52,8 @@ const tutorials: Tutorial[] = [
     icon: Code2,
     lessons: 52,
     level: 'Beginner',
-    color: 'text-amber-500',
-    bgColor: 'bg-amber-500/10',
+    color: 'text-sky-600',
+    bgColor: 'bg-sky-500/10',
     topics: ['DOM', 'Events', 'AJAX', 'ES6+', 'Async']
   },
   {
@@ -126,8 +126,8 @@ const tutorials: Tutorial[] = [
 
 const levelColors = {
   Beginner: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-  Intermediate: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-  Advanced: 'bg-orange-500/10 text-orange-600 border-orange-500/20',
+  Intermediate: 'bg-sky-500/10 text-sky-700 border-sky-500/20',
+  Advanced: 'bg-blue-500/10 text-blue-700 border-blue-500/20',
   Expert: 'bg-red-500/10 text-red-600 border-red-500/20',
 }
 

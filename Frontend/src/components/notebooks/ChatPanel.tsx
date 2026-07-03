@@ -206,7 +206,7 @@ export default function ChatPanel({
                 <div
                   className={`whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'rounded-tr-sm bg-primary text-black'
+                      ? 'rounded-tr-sm bg-primary text-primary-foreground'
                       : 'rounded-tl-sm border border-sky-100/70 bg-white/90 text-gray-900 shadow-sm backdrop-blur dark:border-border dark:bg-card/90 dark:text-foreground'
                   }`}
                 >
@@ -301,7 +301,7 @@ export default function ChatPanel({
         <Button
           type="submit"
           disabled={!input.trim() || sending || readySources.length === 0}
-          className="bg-primary px-4 text-black hover:bg-primary/90"
+          className="bg-primary px-4 text-primary-foreground hover:bg-primary/90"
         >
           {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </Button>

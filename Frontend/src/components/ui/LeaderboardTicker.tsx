@@ -15,7 +15,7 @@ const ACHIEVEMENTS = [
 export function LeaderboardTicker() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 h-10 border-t border-border bg-background/80 flex items-center overflow-hidden backdrop-blur-md">
-      <div className="flex h-full items-center bg-primary px-4 text-[10px] font-extrabold uppercase tracking-widest text-black shadow-xl">
+      <div className="flex h-full items-center bg-primary px-4 text-[10px] font-extrabold uppercase tracking-widest text-primary-foreground shadow-xl">
         Live Feed
       </div>
       

@@ -6,6 +6,11 @@ import { hackathonService } from '../services/hackathon';
 import { StripeService } from '../services/stripe.service';
 import logger from '../utils/logger';
 
+const isDuplicateKeyError = (error: unknown) =>
+  typeof error === 'object' &&
+  error !== null &&
+  (error as { code?: number }).code === 11000;
+
 export class HackathonController {
   async createHackathon(req: Request, res: Response, next: NextFunction) {
     try {
@@ -183,13 +188,21 @@ export class HackathonController {
         return res.status(409).json({ success: false, message: 'Already registered for this hackathon' });
       }
 
-      const team = await db.query.hackathonTeams.create({
-        hackathonId: new Types.ObjectId(id),
-        leaderId: new Types.ObjectId(userId),
-        name: `Solo-${userId.slice(-6)}`,
-        memberIds: [new Types.ObjectId(userId)],
-        createdAt: new Date(),
-      });
+      let team;
+      try {
+        team = await db.query.hackathonTeams.create({
+          hackathonId: new Types.ObjectId(id),
+          leaderId: new Types.ObjectId(userId),
+          name: `Solo-${userId.slice(-6)}`,
+          memberIds: [new Types.ObjectId(userId)],
+          createdAt: new Date(),
+        });
+      } catch (error) {
+        if (isDuplicateKeyError(error)) {
+          return res.status(409).json({ success: false, message: 'Already registered for this hackathon' });
+        }
+        throw error;
+      }
 
       res.json({
         success: true,

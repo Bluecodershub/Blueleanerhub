@@ -223,8 +223,8 @@ class NotebookService:
 
     def ingest_source(
         self,
-        source_id: int,
-        notebook_id: int,
+        source_id: str,
+        notebook_id: str,
         source_type: str,
         content: Optional[str],
         url: Optional[str],
@@ -246,6 +246,18 @@ class NotebookService:
             raw_text = _extract_pdf_text(file_path)
 
         if not raw_text.strip():
+            self._upsert_source_metadata(
+                source_id=source_id,
+                notebook_id=notebook_id,
+                source_type=source_type,
+                title=title,
+                content=None,
+                url=url,
+                file_path=file_path,
+                chunk_count=0,
+                word_count=0,
+                status="failed",
+            )
             logger.warning(f"[NotebookService] Source {source_id} has no text to ingest")
             return {"chunk_count": 0, "word_count": 0, "extracted_text": ""}
 
@@ -260,6 +272,20 @@ class NotebookService:
 
         with SessionLocal() as db:
             try:
+                self._upsert_source_metadata(
+                    source_id=source_id,
+                    notebook_id=notebook_id,
+                    source_type=source_type,
+                    title=title,
+                    content=raw_text[:250_000],
+                    url=url,
+                    file_path=file_path,
+                    chunk_count=len(chunks),
+                    word_count=word_count,
+                    status="processing",
+                    db=db,
+                )
+
                 # Remove any existing chunks for this source (re-ingestion)
                 db.execute(
                     text("DELETE FROM notebook_chunks WHERE source_id = :sid"),
@@ -283,6 +309,18 @@ class NotebookService:
                             "emb":     vec_str,
                         },
                     )
+                db.execute(
+                    text(
+                        """
+                        UPDATE notebook_sources
+                        SET status = 'ready',
+                            chunk_count = :chunk_count,
+                            word_count = :word_count
+                        WHERE id = :sid
+                        """
+                    ),
+                    {"sid": source_id, "chunk_count": len(chunks), "word_count": word_count},
+                )
                 db.commit()
             except Exception:
                 db.rollback()
@@ -291,14 +329,74 @@ class NotebookService:
         logger.info(f"[NotebookService] Ingested source {source_id}: {len(chunks)} chunks, {word_count} words")
         return {"chunk_count": len(chunks), "word_count": word_count, "extracted_text": raw_text[:50000]}
 
-    def delete_source_chunks(self, source_id: int) -> None:
+    def _upsert_source_metadata(
+        self,
+        source_id: str,
+        notebook_id: str,
+        source_type: str,
+        title: str,
+        content: Optional[str],
+        url: Optional[str],
+        file_path: Optional[str],
+        chunk_count: int,
+        word_count: int,
+        status: str,
+        db: Optional[Session] = None,
+    ) -> None:
+        owns_session = db is None
+        session = db or SessionLocal()
+        try:
+            session.execute(
+                text(
+                    """
+                    INSERT INTO notebook_sources
+                        (id, notebook_id, title, source_type, content, url, s3_key, chunk_count, word_count, status, created_at)
+                    VALUES
+                        (:sid, :nid, :title, CAST(:source_type AS notebook_source_type), :content, :url, :s3_key, :chunk_count, :word_count, CAST(:status AS notebook_source_status), NOW())
+                    ON CONFLICT (id) DO UPDATE SET
+                        notebook_id = EXCLUDED.notebook_id,
+                        title = EXCLUDED.title,
+                        source_type = EXCLUDED.source_type,
+                        content = EXCLUDED.content,
+                        url = EXCLUDED.url,
+                        s3_key = EXCLUDED.s3_key,
+                        chunk_count = EXCLUDED.chunk_count,
+                        word_count = EXCLUDED.word_count,
+                        status = EXCLUDED.status
+                    """
+                ),
+                {
+                    "sid": source_id,
+                    "nid": notebook_id,
+                    "title": title[:255],
+                    "source_type": source_type,
+                    "content": content,
+                    "url": url,
+                    "s3_key": file_path,
+                    "chunk_count": chunk_count,
+                    "word_count": word_count,
+                    "status": status,
+                },
+            )
+            if owns_session:
+                session.commit()
+        except Exception:
+            if owns_session:
+                session.rollback()
+            raise
+        finally:
+            if owns_session:
+                session.close()
+
+    def delete_source_chunks(self, source_id: str) -> None:
         with SessionLocal() as db:
             db.execute(text("DELETE FROM notebook_chunks WHERE source_id = :sid"), {"sid": source_id})
+            db.execute(text("DELETE FROM notebook_sources WHERE id = :sid"), {"sid": source_id})
             db.commit()
 
     # ── RAG retrieval ─────────────────────────────────────────────────────────
 
-    def _retrieve_chunks(self, notebook_id: int, query: str, top_k: int = TOP_K) -> List[Dict]:
+    def _retrieve_chunks(self, notebook_id: str, query: str, top_k: int = TOP_K) -> List[Dict]:
         """Return the top-k most semantically similar chunks for a notebook."""
         query_emb = self.embedder.embed(query)
         vec_str   = "[" + ",".join(f"{v:.6f}" for v in query_emb) + "]"
@@ -340,7 +438,7 @@ class NotebookService:
 
     def chat(
         self,
-        notebook_id: int,
+        notebook_id: str,
         message: str,
         history: List[Dict],
     ) -> Dict[str, Any]:
@@ -358,7 +456,7 @@ class NotebookService:
 
         # Build context block with source references
         context_parts: List[str] = []
-        seen_sources: Dict[int, str] = {}
+        seen_sources: Dict[str, str] = {}
         for i, c in enumerate(chunks, 1):
             sid = c["source_id"]
             seen_sources[sid] = c["source_title"]
@@ -418,7 +516,7 @@ class NotebookService:
 
     # ── Generation ───────────────────────────────────────────────────────────
 
-    def generate(self, notebook_id: int, gen_type: str) -> Dict[str, Any]:
+    def generate(self, notebook_id: str, gen_type: str) -> Dict[str, Any]:
         """
         Produce a study artefact from all notebook content.
         gen_type: summary | study_guide | faq | flashcards | quiz

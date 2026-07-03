@@ -22,8 +22,8 @@ END $$;
 
 -- notebooks: user-owned study workspaces
 CREATE TABLE IF NOT EXISTS notebooks (
-  id           SERIAL PRIMARY KEY,
-  user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id           VARCHAR(80) PRIMARY KEY,
+  user_id      VARCHAR(80) NOT NULL,
   title        VARCHAR(255) NOT NULL,
   description  TEXT,
   emoji        VARCHAR(10) NOT NULL DEFAULT '📓',
@@ -36,8 +36,8 @@ CREATE INDEX IF NOT EXISTS idx_notebooks_user_id ON notebooks(user_id);
 
 -- notebook_sources: individual documents added to a notebook
 CREATE TABLE IF NOT EXISTS notebook_sources (
-  id          SERIAL PRIMARY KEY,
-  notebook_id INTEGER NOT NULL REFERENCES notebooks(id) ON DELETE CASCADE,
+  id          VARCHAR(80) PRIMARY KEY,
+  notebook_id VARCHAR(80) NOT NULL,
   title       VARCHAR(255) NOT NULL,
   source_type notebook_source_type NOT NULL,
   content     TEXT,
@@ -55,8 +55,8 @@ CREATE INDEX IF NOT EXISTS idx_notebook_sources_notebook_id ON notebook_sources(
 -- Each row is a ~500-word chunk from a source document with its embedding.
 CREATE TABLE IF NOT EXISTS notebook_chunks (
   id          SERIAL PRIMARY KEY,
-  source_id   INTEGER NOT NULL REFERENCES notebook_sources(id) ON DELETE CASCADE,
-  notebook_id INTEGER NOT NULL REFERENCES notebooks(id)        ON DELETE CASCADE,
+  source_id   VARCHAR(80) NOT NULL REFERENCES notebook_sources(id) ON DELETE CASCADE,
+  notebook_id VARCHAR(80) NOT NULL,
   chunk_index INTEGER NOT NULL,
   content     TEXT NOT NULL,
   embedding   vector(384),   -- sentence-transformers/all-MiniLM-L6-v2 (384-dim)
@@ -74,8 +74,8 @@ CREATE INDEX IF NOT EXISTS idx_notebook_chunks_source_id   ON notebook_chunks(so
 -- notebook_chats: persisted conversation history (messages stored as JSONB)
 CREATE TABLE IF NOT EXISTS notebook_chats (
   id          SERIAL PRIMARY KEY,
-  notebook_id INTEGER NOT NULL REFERENCES notebooks(id) ON DELETE CASCADE,
-  user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  notebook_id VARCHAR(80) NOT NULL,
+  user_id     VARCHAR(80) NOT NULL,
   messages    JSONB NOT NULL DEFAULT '[]',
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS notebook_chats (
 -- notebook_generations: AI-generated study artefacts
 CREATE TABLE IF NOT EXISTS notebook_generations (
   id          SERIAL PRIMARY KEY,
-  notebook_id INTEGER NOT NULL REFERENCES notebooks(id) ON DELETE CASCADE,
+  notebook_id VARCHAR(80) NOT NULL,
   type        notebook_generate_type NOT NULL,
   title       VARCHAR(255) NOT NULL,
   content     TEXT NOT NULL,
@@ -97,9 +97,9 @@ CREATE INDEX IF NOT EXISTS idx_notebook_generations_notebook_id ON notebook_gene
 -- notebook_source_annotations: saved highlights + personal notes on source evidence
 CREATE TABLE IF NOT EXISTS notebook_source_annotations (
   id          SERIAL PRIMARY KEY,
-  notebook_id INTEGER NOT NULL REFERENCES notebooks(id) ON DELETE CASCADE,
-  source_id   INTEGER NOT NULL REFERENCES notebook_sources(id) ON DELETE CASCADE,
-  user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  notebook_id VARCHAR(80) NOT NULL,
+  source_id   VARCHAR(80) NOT NULL REFERENCES notebook_sources(id) ON DELETE CASCADE,
+  user_id     VARCHAR(80) NOT NULL,
   quote       TEXT NOT NULL,
   note        TEXT,
   chunk_index INTEGER,

@@ -152,7 +152,7 @@ export default function CandidateProfilePage() {
                   <AvatarFallback className="text-2xl">{candidate.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="mt-2 flex items-center gap-1">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-black">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
                     {candidate.rank}
                   </div>
                   <span className="text-sm font-medium">Global Rank</span>

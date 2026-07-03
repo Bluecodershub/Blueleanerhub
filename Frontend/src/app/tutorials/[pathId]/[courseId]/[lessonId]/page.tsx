@@ -455,7 +455,7 @@ export default function LessonPage() {
                   }}
                   className={`group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-all ${
                     i === activeLessonIndex
-                      ? 'bg-primary text-black shadow-sm shadow-primary/20'
+                      ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
                       : 'text-muted-foreground hover:bg-muted/50'
                   }`}
                 >
@@ -514,7 +514,7 @@ export default function LessonPage() {
               size="sm"
               variant={playgroundOpen ? 'default' : 'outline'}
               onClick={() => setPlaygroundOpen(!playgroundOpen)}
-              className={`h-8 gap-1.5 rounded-xl border-border px-3 text-xs font-bold ${playgroundOpen ? 'bg-primary text-black' : ''}`}
+              className={`h-8 gap-1.5 rounded-xl border-border px-3 text-xs font-bold ${playgroundOpen ? 'bg-primary text-primary-foreground' : ''}`}
             >
               <Play className="h-3.5 w-3.5" />
               {playgroundOpen ? 'Close' : 'Try it'}
@@ -629,7 +629,7 @@ export default function LessonPage() {
                   <Button
                     onClick={() => navigateLesson('next')}
                     disabled={activeLessonIndex === lessons.length - 1}
-                    className="h-12 flex-1 gap-2 rounded-2xl bg-primary px-8 font-bold text-black hover:bg-primary/90"
+                    className="h-12 flex-1 gap-2 rounded-2xl bg-primary px-8 font-bold text-primary-foreground hover:bg-primary/90"
                   >
                     Next Lesson
                     <ChevronRight className="h-4 w-4" />
@@ -712,7 +712,7 @@ export default function LessonPage() {
                   />
                   <Button
                     size="sm"
-                    className="h-8 w-full rounded-xl bg-primary text-xs font-bold text-black hover:bg-primary/90"
+                    className="h-8 w-full rounded-xl bg-primary text-xs font-bold text-primary-foreground hover:bg-primary/90"
                   >
                     Save Note
                   </Button>

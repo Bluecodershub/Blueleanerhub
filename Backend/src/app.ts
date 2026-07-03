@@ -14,7 +14,7 @@ import { generalLimiter } from './middleware/rateLimiter';
 import { requestContext } from './middleware/requestContext';
 import { csrfProtection } from './middleware/csrf';
 import { getDBStatus } from './db/mongodb';
-import { redisClient } from './utils/database';
+import { getRedisStatus } from './utils/database';
 import logger from './utils/logger';
 
 export function createApp(): Application {
@@ -171,7 +171,7 @@ export function createApp(): Application {
   // Health check
   app.get('/health', (_req, res) => {
     const mongo = getDBStatus();
-    const redisStatus = redisClient ? redisClient.status : 'disabled';
+    const redisStatus = getRedisStatus();
     const isHealthy = mongo.isConnected;
 
     res.status(isHealthy ? 200 : 503).json({
@@ -186,8 +186,9 @@ export function createApp(): Application {
           name: mongo.name || null,
         },
         redis: {
-          enabled: Boolean(redisClient),
-          status: redisStatus,
+          enabled: redisStatus.configured,
+          available: redisStatus.available,
+          status: redisStatus.status,
         },
       },
     });

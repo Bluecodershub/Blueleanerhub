@@ -13,7 +13,6 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
-import { BrandMark } from '@/components/branding/Logo'
 
 const navItems = [
   { title: 'Dashboard',    href: '/admin/dashboard',    icon: LayoutDashboard },
@@ -43,8 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="app-workspace flex min-h-screen text-foreground">
       {/* ─── DESKTOP SIDEBAR ─────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card lg:flex">
-        <div className="flex h-16 items-center gap-3 px-6 border-b border-border">
-          <BrandMark size={36} className="rounded-xl" priority />
+        <div className="flex h-16 items-center px-6 border-b border-border">
           <div>
             <p className="font-bold text-sm text-foreground leading-none">Admin Panel</p>
             <p className="mt-0.5 text-[10px] font-bold uppercase text-primary">Bluelearnerhub</p>
@@ -130,8 +128,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="fixed inset-y-0 left-0 z-50 w-72 border-r border-border bg-card p-6 lg:hidden"
             >
               <div className="mb-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <BrandMark size={36} className="rounded-xl" />
+                <div className="flex items-center">
                   <span className="font-bold text-foreground">Admin Panel</span>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="rounded-lg border border-border p-2 text-muted-foreground">
@@ -183,8 +180,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <button onClick={() => setMobileMenuOpen(true)} className="rounded-lg border border-border p-2 text-muted-foreground">
             <Menu className="h-4 w-4" />
           </button>
-          <div className="flex items-center gap-2">
-            <BrandMark size={22} className="rounded-md" />
+          <div className="flex items-center">
             <span className="font-bold text-sm text-foreground">Admin Panel</span>
           </div>
           <div className="w-9" />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import api from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -37,7 +37,7 @@ export function AdminCollectionPage({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true)
     setError('')
     try {
@@ -49,11 +49,11 @@ export function AdminCollectionPage({
     } finally {
       setLoading(false)
     }
-  }
+  }, [endpoint, itemKey])
 
   useEffect(() => {
     load()
-  }, [endpoint])
+  }, [load])
 
   const count = useMemo(() => rows.length, [rows])
 

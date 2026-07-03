@@ -2,11 +2,12 @@ import { AppError } from '../middleware/error';
 import { Job, JobApplication } from '../db/models';
 import logger from '../utils/logger';
 import mongoose from 'mongoose';
+import { normalizeJobType } from '../utils/jobTypes';
 
 export class JobService {
   async getJobs(filters: any, page: number, limit: number) {
     const filter: Record<string, any> = { isActive: true };
-    if (filters.jobType)   filter.type     = filters.jobType;
+    if (filters.jobType)   filter.type     = normalizeJobType(filters.jobType) ?? '__INVALID_JOB_TYPE__';
     if (filters.location)  filter.location = new RegExp(filters.location, 'i');
     if (filters.companyId) filter.postedBy = new mongoose.Types.ObjectId(filters.companyId);
 
@@ -40,9 +41,9 @@ export class JobService {
   async createJob(companyId: string, data: any) {
     const job = await Job.create({
       title:        data.title,
-      company:      data.company || '',
+      company:      data.company || 'Hiring partner',
       location:     data.location,
-      type:         data.jobType || 'FULL_TIME',
+      type:         normalizeJobType(data.jobType) || 'FULL_TIME',
       description:  data.description,
       requirements: data.requirements || [],
       applyUrl:     data.applyUrl,

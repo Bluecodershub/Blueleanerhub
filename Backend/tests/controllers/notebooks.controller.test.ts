@@ -1,31 +1,25 @@
 // @ts-nocheck
 import axios from 'axios';
+import mongoose from 'mongoose';
 import * as notebooksController from '@/controllers/notebooks.controller';
-import { db } from '@/db';
+import { Notebook } from '@/db/models';
 
 jest.mock('axios');
-jest.mock('@/db', () => ({
-  db: {
-    select: jest.fn(),
-    insert: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    execute: jest.fn(),
+jest.mock('@/db/models', () => ({
+  Notebook: {
+    findOne: jest.fn(),
   },
 }));
 
 describe('Notebooks Controller hardening', () => {
   const mockedAxios = axios as jest.Mocked<typeof axios>;
-  const mockedDb = db as jest.Mocked<typeof db>;
+  const mockedNotebook = Notebook as jest.Mocked<typeof Notebook>;
 
-  const makeRes = () => {
-    const res: any = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
-      setHeader: jest.fn().mockReturnThis(),
-    };
-    return res;
-  };
+  const makeRes = () => ({
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis(),
+    setHeader: jest.fn().mockReturnThis(),
+  } as any);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -36,7 +30,7 @@ describe('Notebooks Controller hardening', () => {
     it('proxies health response and forwards request ids', async () => {
       const req: any = {
         requestId: 'req-123',
-        user: { id: 1 },
+        user: { id: new mongoose.Types.ObjectId().toHexString() },
       };
       const res = makeRes();
 
@@ -63,7 +57,10 @@ describe('Notebooks Controller hardening', () => {
     });
 
     it('returns 504 on upstream timeout', async () => {
-      const req: any = { requestId: 'req-timeout', user: { id: 1 } };
+      const req: any = {
+        requestId: 'req-timeout',
+        user: { id: new mongoose.Types.ObjectId().toHexString() },
+      };
       const res = makeRes();
 
       mockedAxios.get.mockRejectedValueOnce({
@@ -84,24 +81,19 @@ describe('Notebooks Controller hardening', () => {
 
   describe('upstream error mapping for AI endpoints', () => {
     it('returns 504 for chat upstream timeout', async () => {
+      const notebookId = new mongoose.Types.ObjectId().toHexString();
+      const userId = new mongoose.Types.ObjectId().toHexString();
       const req: any = {
         requestId: 'chat-timeout-1',
-        user: { id: 7 },
-        params: { id: '99' },
+        user: { id: userId },
+        params: { id: notebookId },
         body: { message: 'Summarize this' },
       };
       const res = makeRes();
 
-      // Ownership check
-      mockedDb.select.mockImplementationOnce(() => ({
-        from: () => ({ where: () => Promise.resolve([{ id: 99, title: 'Notebook' }]) }),
-      }) as any);
-
-      // Existing chat row
-      mockedDb.select.mockImplementationOnce(() => ({
-        from: () => ({ where: () => ({ limit: () => Promise.resolve([{ id: 1, messages: [] }]) }) }),
-      }) as any);
-
+      mockedNotebook.findOne.mockReturnValueOnce({
+        lean: jest.fn().mockResolvedValue({ _id: notebookId, title: 'Notebook' }),
+      } as any);
       mockedAxios.post.mockRejectedValueOnce({
         isAxiosError: true,
         code: 'ECONNABORTED',
@@ -117,18 +109,19 @@ describe('Notebooks Controller hardening', () => {
     });
 
     it('returns 504 for generate upstream timeout', async () => {
+      const notebookId = new mongoose.Types.ObjectId().toHexString();
+      const userId = new mongoose.Types.ObjectId().toHexString();
       const req: any = {
         requestId: 'gen-timeout-1',
-        user: { id: 7 },
-        params: { id: '99' },
+        user: { id: userId },
+        params: { id: notebookId },
         body: { type: 'summary' },
       };
       const res = makeRes();
 
-      mockedDb.select.mockImplementationOnce(() => ({
-        from: () => ({ where: () => Promise.resolve([{ id: 99, title: 'Notebook' }]) }),
-      }) as any);
-
+      mockedNotebook.findOne.mockReturnValueOnce({
+        lean: jest.fn().mockResolvedValue({ _id: notebookId, title: 'Notebook' }),
+      } as any);
       mockedAxios.post.mockRejectedValueOnce({
         isAxiosError: true,
         code: 'ECONNABORTED',

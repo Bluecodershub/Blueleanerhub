@@ -85,7 +85,6 @@ function OnboardingContent() {
 
   useEffect(() => {
     handleDomainSelect(requestedDomain)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestedDomain])
 
   // Redirect onboarded users

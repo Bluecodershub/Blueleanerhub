@@ -38,13 +38,14 @@ def handle(method, params):
         return svc.CodeQualityEvaluator().review(**params)
     elif method == 'notebook_ingest':
         svc = get_service('notebook_service')
-        return svc.NotebookService().ingest(**params)
+        return svc.NotebookService().ingest_source(**params)
     elif method == 'notebook_chat':
         svc = get_service('notebook_service')
         return svc.NotebookService().chat(**params)
     elif method == 'notebook_generate':
         svc = get_service('notebook_service')
-        return svc.NotebookService().generate(**params)
+        gen_type = params.pop('type', params.pop('gen_type', 'summary'))
+        return svc.NotebookService().generate(gen_type=gen_type, **params)
     elif method == 'health':
         return {'status': 'ok', 'services': list(_services.keys())}
     else:

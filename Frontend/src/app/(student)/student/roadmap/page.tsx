@@ -13,7 +13,6 @@ import {
   Sparkles,
   Clock,
   Bot,
-  Play,
   ArrowLeft,
   Trophy,
   BookOpen,

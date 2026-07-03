@@ -1,5 +1,5 @@
 import { comparePassword, hashPassword } from '../utils/encryption';
-import { signAccessToken, signRefreshToken } from '../utils/jwt';
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/jwt';
 import { AppError } from '../middleware/error';
 import { db, RefreshToken } from '../db';
 import { CURRENT_POLICY_VERSION } from '../config/legal';
@@ -172,12 +172,25 @@ export class AuthService {
   }
 
   async refreshAccessToken(refreshToken: string) {
-    // Verify refresh token exists and is not revoked
-    const tokenData = await RefreshToken.findOne({
-      token: refreshToken,
-      revoked: false,
-      expiresAt: { $gt: new Date() },
-    });
+    let decoded;
+    try {
+      decoded = verifyRefreshToken(refreshToken);
+    } catch {
+      throw new AppError('Invalid or expired refresh token', 401);
+    }
+
+    // Atomically consume the refresh token so parallel refreshes cannot mint
+    // multiple valid replacement tokens from the same old token.
+    const tokenData = await RefreshToken.findOneAndUpdate(
+      {
+        token: refreshToken,
+        userId: decoded.userId,
+        revoked: false,
+        expiresAt: { $gt: new Date() },
+      },
+      { $set: { revoked: true } },
+      { new: false },
+    ).lean();
 
     if (!tokenData) {
       throw new AppError('Invalid or expired refresh token', 401);
@@ -185,7 +198,7 @@ export class AuthService {
 
     const user = await db.query.users.findFirst({ _id: tokenData.userId });
 
-    if (!user || !user.isActive) {
+    if (!user || !user.isActive || user.isBanned) {
       throw new AppError('User account is not active', 403);
     }
 
@@ -201,9 +214,6 @@ export class AuthService {
       email: user.email,
       role: user.role || 'STUDENT',
     });
-
-    // Invalidate old refresh token
-    await RefreshToken.updateOne({ token: refreshToken }, { revoked: true });
 
     // Store new refresh token
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);

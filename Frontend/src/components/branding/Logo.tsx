@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { brandConfig } from '@/config/theme'
 
 interface BrandMarkProps {
@@ -15,28 +14,13 @@ interface LogoProps {
   markSize?: number
 }
 
-export function BrandMark({
-  size = 32,
-  className = '',
-  priority = false,
-  alt = 'BlueLearnerHub logo',
-}: BrandMarkProps) {
-  return (
-    <Image
-      src="/images/branding/bluelearnerhub-mark.svg"
-      alt={alt}
-      width={size}
-      height={size}
-      className={`shrink-0 rounded-[10px] shadow-sm shadow-primary/20 ${className}`}
-      priority={priority}
-    />
-  )
+export function BrandMark(_props: BrandMarkProps) {
+  return null
 }
 
-export function Logo({ variant = 'default', className = '', showText = true, markSize = 32 }: LogoProps) {
+export function Logo({ variant = 'default', className = '', showText = true, markSize: _markSize = 32 }: LogoProps) {
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <BrandMark size={markSize} priority />
+    <div className={`flex items-center ${className}`}>
       {showText && (
         <span
           className={`whitespace-nowrap font-heading text-xl font-bold ${variant === 'white' ? 'text-white' : 'text-foreground'}`}

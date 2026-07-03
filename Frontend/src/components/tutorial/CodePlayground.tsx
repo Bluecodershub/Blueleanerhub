@@ -116,7 +116,7 @@ export default function CodePlayground({
               'flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-all',
               isRunning
                 ? 'cursor-wait bg-sky-400 text-white'
-                : 'bg-primary text-black hover:bg-primary/90 active:scale-95'
+                : 'bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95'
             )}
           >
             <Play className={cn('h-3 w-3', isRunning && 'animate-pulse')} />

@@ -184,7 +184,7 @@ export default function AICompanionPage() {
       <aside className="hidden w-72 flex-col gap-4 lg:flex">
         <Button
           onClick={handleNewChat}
-          className="h-12 gap-2 rounded-2xl bg-primary font-bold text-black shadow-lg shadow-primary/20"
+          className="h-12 gap-2 rounded-2xl bg-primary font-bold text-primary-foreground shadow-lg shadow-primary/20"
         >
           <PlusCircle className="h-5 w-5" /> New Conversation
         </Button>
@@ -298,7 +298,7 @@ export default function AICompanionPage() {
                 <div
                   className={`rounded-3xl p-5 text-[15px] leading-relaxed shadow-sm ${
                     msg.role === 'user'
-                      ? 'rounded-tr-none bg-primary text-black'
+                      ? 'rounded-tr-none bg-primary text-primary-foreground'
                       : msg.error
                         ? 'rounded-tl-none border border-amber-500/30 bg-amber-500/10 text-foreground'
                         : 'rounded-tl-none border border-border/50 bg-muted/50 text-foreground'
@@ -371,7 +371,7 @@ export default function AICompanionPage() {
                 size="icon"
                 onClick={() => sendMessage(input)}
                 disabled={isLoading || !input.trim()}
-                className="h-10 w-10 shrink-0 rounded-xl bg-primary text-black shadow-md shadow-primary/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+                className="h-10 w-10 shrink-0 rounded-xl bg-primary text-primary-foreground shadow-md shadow-primary/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
               >
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />

@@ -38,17 +38,34 @@ export class SessionService {
 
   async init(): Promise<void> {
     if (isRedisAvailable()) {
+      let client: any = null;
       try {
         const { Redis } = await import('ioredis');
-        this.redisClient = new Redis((config as any).redis.url, {
+        let errorLogged = false;
+        client = new Redis((config as any).redis.url, {
           maxRetriesPerRequest: 3,
           retryStrategy: (times: number) => Math.min(times * 50, 2000),
+          enableOfflineQueue: false,
           lazyConnect: true,
         });
-        await this.redisClient.ping();
+        client.on('error', (error: Error) => {
+          if (!errorLogged) {
+            logger.warn('SessionService: Redis client error, using in-memory storage', {
+              error: error.message,
+            });
+            errorLogged = true;
+          }
+          if (this.redisClient === client) {
+            this.redisClient = null;
+          }
+        });
+
+        await client.ping();
+        this.redisClient = client;
         logger.info('SessionService: Redis connected');
       } catch (err) {
         logger.warn('SessionService: Redis unavailable, using in-memory storage', { error: err });
+        client?.disconnect();
         this.redisClient = null;
       }
     } else {

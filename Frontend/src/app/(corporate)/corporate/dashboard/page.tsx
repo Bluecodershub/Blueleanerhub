@@ -209,7 +209,7 @@ export default function CorporateDashboard() {
                         <div className="flex h-10 w-10 items-center justify-center rounded-[8px] border border-primary/20 bg-primary/[0.08] font-bold text-primary">
                           {c.fullName?.[0]?.toUpperCase() ?? '?'}
                         </div>
-                        <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-md bg-primary text-[10px] font-bold text-black">
+                        <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-md bg-primary text-[10px] font-bold text-primary-foreground">
                           {i + 1}
                         </div>
                       </div>

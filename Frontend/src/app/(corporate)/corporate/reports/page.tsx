@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   BarChart3, Loader2, RefreshCw, Briefcase, Trophy,
-  Users, TrendingUp, Building2,
+  Users, TrendingUp,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'

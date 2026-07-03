@@ -74,14 +74,14 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                     key={lesson.id}
                     className={`group flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all ${
                       lesson.active
-                        ? 'bg-primary text-black shadow-lg shadow-primary/15'
+                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/15'
                         : 'text-muted-foreground hover:bg-slate-50 dark:text-muted-foreground dark:hover:bg-secondary'
                     }`}
                   >
                     {lesson.completed ? (
                       <CheckCircle2
                         size={16}
-                        className={lesson.active ? 'text-white' : 'text-foreground/80'}
+                        className={lesson.active ? 'text-primary-foreground' : 'text-foreground/80'}
                       />
                     ) : (
                       <div
@@ -125,7 +125,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
               className={`h-9 gap-2 rounded-xl px-4 text-[10px] font-black uppercase tracking-widest transition-all ${
                 isPlaygroundOpen
                   ? 'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-secondary dark:text-white'
-                  : 'bg-primary text-black hover:bg-primary/90'
+                  : 'bg-primary text-primary-foreground hover:bg-primary/90'
               }`}
             >
               <Play size={14} className={isPlaygroundOpen ? '' : 'fill-current'} />
@@ -155,7 +155,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                 <Button variant="outline" className="h-12 gap-2 rounded-2xl px-6 font-bold">
                   <ChevronLeft size={18} /> Previous
                 </Button>
-                <Button className="h-12 gap-2 rounded-2xl bg-primary px-10 font-black italic tracking-tighter text-black shadow-lg shadow-primary/15 hover:bg-primary/90">
+                <Button className="h-12 gap-2 rounded-2xl bg-primary px-10 font-black italic tracking-tighter text-primary-foreground shadow-lg shadow-primary/15 hover:bg-primary/90">
                   Next Chapter <ChevronRight size={18} />
                 </Button>
               </div>
@@ -174,7 +174,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                 <div className="flex h-14 shrink-0 items-center justify-between border-b border-white/5 bg-[#0f172a] px-6">
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                       Live Playground
                     </span>
                   </div>
@@ -182,7 +182,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-lg text-white/40 hover:text-white"
+                      className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
                     >
                       <Maximize2 size={14} />
                     </Button>
@@ -190,7 +190,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                       variant="ghost"
                       size="icon"
                       onClick={() => setIsPlaygroundOpen(false)}
-                      className="h-8 w-8 rounded-lg text-white/40 hover:text-white"
+                      className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
                     >
                       <Minimize2 size={14} />
                     </Button>

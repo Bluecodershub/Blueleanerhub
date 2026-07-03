@@ -108,7 +108,7 @@ export default function NotebooksPage() {
         </div>
         <Button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 bg-primary text-black hover:bg-primary/90"
+          className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
         >
           <Plus className="h-4 w-4" />
           New Notebook
@@ -168,7 +168,7 @@ export default function NotebooksPage() {
                 <Button
                   type="submit"
                   disabled={creating || !form.title.trim()}
-                  className="bg-primary text-black hover:bg-primary/90"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Create Notebook
@@ -193,7 +193,7 @@ export default function NotebooksPage() {
           </p>
           <Button
             onClick={() => setShowForm(true)}
-            className="bg-primary text-black hover:bg-primary/90"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create your first notebook

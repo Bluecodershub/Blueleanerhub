@@ -97,13 +97,13 @@ describe('ErrorBoundary', () => {
 
     expect(screen.getByTestId('error-boundary')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByTestId('retry-button'))
-
     rerender(
       <ErrorBoundary>
         <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     )
+
+    fireEvent.click(screen.getByTestId('retry-button'))
 
     expect(screen.getByTestId('normal-content')).toBeInTheDocument()
   })

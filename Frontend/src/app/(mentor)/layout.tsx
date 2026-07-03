@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { LayoutDashboard, Users, ClipboardCheck, UserCircle, Menu, X, LogOut } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { RoleGuard } from '@/components/auth/RoleGuard'
-import { BrandMark, Logo } from '@/components/branding/Logo'
+import { Logo } from '@/components/branding/Logo'
 
 const navItems = [
   { title: 'Dashboard', href: '/mentor/dashboard', icon: LayoutDashboard },
@@ -66,9 +66,9 @@ export default function MentorLayout({ children }: { children: React.ReactNode }
 
         {/* Mobile top bar */}
         <div className="flex items-center justify-between border-b border-border px-4 py-3 lg:hidden">
-          <Link href="/mentor/dashboard" className="flex items-center gap-2">
-            <BrandMark size={26} className="rounded-lg" />
-            <span className="font-heading text-base font-bold">Mentor</span>
+          <Link href="/mentor/dashboard" className="flex flex-col leading-tight">
+            <span className="font-heading text-base font-bold">Bluelearnerhub</span>
+            <span className="text-[10px] font-bold uppercase text-primary">Mentor</span>
           </Link>
           <button onClick={() => setOpen(true)} className="rounded-lg border border-border p-2"><Menu className="h-4 w-4" /></button>
         </div>

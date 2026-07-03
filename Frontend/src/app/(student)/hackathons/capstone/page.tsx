@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, GraduationCap, UploadCloud } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -59,7 +58,6 @@ export default function CapstonePage() {
           </Card>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }

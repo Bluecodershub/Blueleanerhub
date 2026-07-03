@@ -142,7 +142,7 @@ export default function QnAPage() {
                     onClick={() => setSort(value)}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                       sort === value
-                        ? 'bg-primary text-black'
+                        ? 'bg-primary text-primary-foreground'
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -197,7 +197,7 @@ export default function QnAPage() {
                       onClick={() => setActiveTag(activeTag === tag ? null : tag)}
                       className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                         activeTag === tag
-                          ? 'bg-primary text-black'
+                          ? 'bg-primary text-primary-foreground'
                           : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                     >

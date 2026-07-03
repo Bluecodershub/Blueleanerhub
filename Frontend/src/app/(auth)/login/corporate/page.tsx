@@ -42,6 +42,11 @@ const isOrganizationEmail = (email: string): { valid: boolean; reason?: string }
   return { valid: true }
 }
 
+function hasAuthHintCookie(): boolean {
+  if (typeof document === 'undefined') return false
+  return document.cookie.split(';').some((cookie) => cookie.trim().startsWith('auth_hint='))
+}
+
 function CorporateLoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -54,8 +59,10 @@ function CorporateLoginContent() {
   useEffect(() => {
     // Check if already authenticated
     const checkAuth = async () => {
+      if (!hasAuthHintCookie()) return
+
       try {
-        await api.get('/auth/me')
+        await api.get('/auth/me', { _skipAuthRefresh: true } as any)
         const from = searchParams.get('from')
         router.replace(from && from.startsWith('/') ? from : '/corporate/dashboard')
       } catch {
@@ -107,7 +114,7 @@ function CorporateLoginContent() {
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-12">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-amber-500/5 blur-[150px]" />
+        <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/5 blur-[150px]" />
       </div>
 
       <motion.div
@@ -123,8 +130,8 @@ function CorporateLoginContent() {
           </Link>
           
           <div className="mb-4 flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg shadow-amber-500/25">
-              <Building2 className="h-8 w-8 text-white" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-sky-500 shadow-lg shadow-primary/25">
+              <Building2 className="h-8 w-8 text-primary-foreground" />
             </div>
           </div>
           
@@ -133,18 +140,18 @@ function CorporateLoginContent() {
         </div>
 
         {/* Verification Badge */}
-        <div className="flex items-center justify-center gap-2 rounded-xl bg-amber-500/10 p-3 border border-amber-500/20">
-          <Shield className="h-5 w-5 text-amber-500" />
-          <span className="text-sm font-medium text-amber-600">Verified Organization Access</span>
+        <div className="flex items-center justify-center gap-2 rounded-xl border border-primary/20 bg-primary/10 p-3">
+          <Shield className="h-5 w-5 text-primary" />
+          <span className="text-sm font-medium text-primary">Verified Organization Access</span>
         </div>
 
         {/* Email Warning */}
-        <div className="rounded-xl bg-amber-500/5 p-4 border border-amber-500/20">
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
             <div>
-              <p className="text-sm font-medium text-amber-700">Organization Email Required</p>
-              <p className="text-xs text-amber-600/80 mt-1">
+              <p className="text-sm font-medium text-primary">Organization Email Required</p>
+              <p className="mt-1 text-xs text-primary/80">
                 Only organizational email addresses are accepted. Personal email services like Gmail, Yahoo, Outlook, Zoho, etc. are not permitted.
               </p>
             </div>
@@ -217,7 +224,7 @@ function CorporateLoginContent() {
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700" 
+              className="w-full bg-gradient-to-r from-primary to-sky-600 text-primary-foreground hover:from-primary/90 hover:to-sky-700" 
               disabled={loading || (emailStatus !== null && !emailStatus.valid)}
             >
               {loading ? 'Signing in...' : 'Sign In to Portal'}
@@ -249,7 +256,7 @@ export default function CorporateLoginPage() {
   return (
     <Suspense fallback={
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-amber-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     }>
       <CorporateLoginContent />

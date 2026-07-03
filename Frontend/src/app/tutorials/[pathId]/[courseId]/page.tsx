@@ -154,7 +154,7 @@ export default function CategoryLibraryPage() {
                         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
                         <div className="mb-10 flex items-start justify-between">
-                          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary transition-all duration-500 group-hover:scale-110 group-hover:bg-primary group-hover:text-black">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary transition-all duration-500 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                             <tutorial.icon size={32} />
                           </div>
                           <Badge
@@ -183,7 +183,7 @@ export default function CategoryLibraryPage() {
                           </div>
                         </div>
 
-                        <div className="mt-10 flex translate-y-4 items-center justify-center gap-2 rounded-full border border-border bg-background py-3 text-[11px] font-black uppercase tracking-widest text-black opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:bg-primary group-hover:opacity-100">
+                        <div className="mt-10 flex translate-y-4 items-center justify-center gap-2 rounded-full border border-border bg-background py-3 text-[11px] font-black uppercase tracking-widest text-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:bg-primary group-hover:text-primary-foreground group-hover:opacity-100">
                           <Play size={14} className="fill-current" /> Continue Learning
                         </div>
                       </motion.div>

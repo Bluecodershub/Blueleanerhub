@@ -1,68 +1,70 @@
 /**
  * API Client Tests
  * Tests the Axios API client with interceptors for CSRF, token refresh, and error handling.
- *
- * NOTE: jest.isolateModules() requires synchronous require() calls.
- * Dynamic import() is async and incompatible with isolateModules().
  */
 /* eslint-disable @typescript-eslint/no-require-imports */
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
+import { InternalAxiosRequestConfig } from 'axios'
 
-// Mock axios
-jest.mock('axios')
-const mockedAxios = axios as jest.Mocked<typeof axios>
+const makeAxiosInstance = () => ({
+  defaults: { headers: { common: {} } },
+  interceptors: {
+    request: {
+      use: jest.fn((handler) => {
+        mockAxiosInstance.requestHandlers = mockAxiosInstance.requestHandlers || []
+        mockAxiosInstance.requestHandlers.push(handler)
+        return handler
+      }),
+    },
+    response: {
+      use: jest.fn((success, error) => {
+        mockAxiosInstance.responseSuccessHandler = success
+        mockAxiosInstance.responseErrorHandler = error
+        return { success, error }
+      }),
+    },
+  },
+  get: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn(),
+  patch: jest.fn(),
+  request: jest.fn(),
+})
+
+let mockAxiosInstance: any
+let mockCreate: jest.Mock
+
+function loadApiModule() {
+  jest.resetModules()
+  mockAxiosInstance = makeAxiosInstance()
+  mockCreate = jest.fn(() => mockAxiosInstance)
+  jest.doMock('axios', () => ({
+    __esModule: true,
+    default: { create: mockCreate },
+    create: mockCreate,
+  }))
+  return require('@/lib/api')
+}
 
 describe('API Client', () => {
-  let mockAxiosInstance: any
-
   beforeEach(() => {
-    jest.clearAllMocks()
-
-    // Setup mock axios instance
-    mockAxiosInstance = {
-      defaults: { headers: { common: {} } },
-      interceptors: {
-        request: { use: jest.fn((handler) => {
-          mockAxiosInstance.requestHandlers = mockAxiosInstance.requestHandlers || []
-          mockAxiosInstance.requestHandlers.push(handler)
-          return handler
-        })},
-        response: { use: jest.fn((success, error) => {
-          mockAxiosInstance.responseSuccessHandler = success
-          mockAxiosInstance.responseErrorHandler = error
-          return { success, error }
-        })},
-      },
-      get: jest.fn(),
-      post: jest.fn(),
-      put: jest.fn(),
-      delete: jest.fn(),
-      patch: jest.fn(),
-      request: jest.fn(),
-    }
-
-    mockedAxios.create.mockReturnValue(mockAxiosInstance as any)
-    mockedAxios.AxiosError = AxiosError
+    document.cookie = ''
   })
 
   afterEach(() => {
+    jest.dontMock('axios')
     jest.resetModules()
-    delete (window as any).location
   })
 
   describe('CSRF Token Handling', () => {
-    it('should attach CSRF token on mutating requests', async () => {
-      // Setup cookie
+    it('attaches CSRF token on mutating requests', async () => {
       Object.defineProperty(document, 'cookie', {
         writable: true,
         value: '_csrf=test-token-123',
         configurable: true,
       })
 
-      // Import fresh instance
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
+      loadApiModule()
 
       const config: InternalAxiosRequestConfig = {
         method: 'post',
@@ -70,23 +72,18 @@ describe('API Client', () => {
         headers: {},
       } as InternalAxiosRequestConfig
 
-      // Execute request interceptor
-      if (mockAxiosInstance.requestHandlers?.[0]) {
-        const result = await mockAxiosInstance.requestHandlers[0](config)
-        expect(result.headers['X-CSRF-Token']).toBe('test-token-123')
-      }
+      const result = await mockAxiosInstance.requestHandlers[0](config)
+      expect(result.headers['X-CSRF-Token']).toBe('test-token-123')
     })
 
-    it('should not attach CSRF token on GET requests', async () => {
+    it('does not attach CSRF token on GET requests', async () => {
       Object.defineProperty(document, 'cookie', {
         writable: true,
         value: '_csrf=test-token-123',
         configurable: true,
       })
 
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
+      loadApiModule()
 
       const config: InternalAxiosRequestConfig = {
         method: 'get',
@@ -94,22 +91,18 @@ describe('API Client', () => {
         headers: {},
       } as InternalAxiosRequestConfig
 
-      if (mockAxiosInstance.requestHandlers?.[0]) {
-        const result = await mockAxiosInstance.requestHandlers[0](config)
-        expect(result.headers['X-CSRF-Token']).toBeUndefined()
-      }
+      const result = await mockAxiosInstance.requestHandlers[0](config)
+      expect(result.headers['X-CSRF-Token']).toBeUndefined()
     })
 
-    it('should handle missing CSRF cookie gracefully', async () => {
+    it('handles missing CSRF cookie gracefully', async () => {
       Object.defineProperty(document, 'cookie', {
         writable: true,
         value: 'other=value',
         configurable: true,
       })
 
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
+      loadApiModule()
 
       const config: InternalAxiosRequestConfig = {
         method: 'post',
@@ -117,86 +110,47 @@ describe('API Client', () => {
         headers: {},
       } as InternalAxiosRequestConfig
 
-      if (mockAxiosInstance.requestHandlers?.[0]) {
-        const result = await mockAxiosInstance.requestHandlers[0](config)
-        // Should not have X-CSRF-Token header when cookie missing
-        expect(result.headers['X-CSRF-Token']).toBeUndefined()
-      }
+      const result = await mockAxiosInstance.requestHandlers[0](config)
+      expect(result.headers['X-CSRF-Token']).toBeUndefined()
     })
   })
 
   describe('Error Response Handling', () => {
-    it('should handle 401 errors with token refresh', async () => {
-      const mockOriginalRequest = {
-        _retry: false,
-        url: '/api/protected',
-      }
+    it('registers a response interceptor for 401 refresh handling', () => {
+      loadApiModule()
 
-      // Import module
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
-
-      const error = {
-        response: { status: 401 },
-        config: mockOriginalRequest,
-      }
-
-      // Test error interceptor (mock the actual behavior)
-      expect(error.response.status).toBe(401)
+      expect(mockAxiosInstance.interceptors.response.use).toHaveBeenCalled()
+      expect(mockAxiosInstance.responseErrorHandler).toEqual(expect.any(Function))
     })
 
-    it('should redirect to login on 401 refresh failure', async () => {
-      // Mock window.location
-      delete (window as any).location
-      window.location = { href: '' } as any
-
-      // Import module
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
-
-      // The actual redirect is tested through the API interceptors
-      expect(window.location.href).toBe('')
-    })
-
-    it('should handle 403 forbidden errors', async () => {
+    it('handles 403 forbidden errors through the response interceptor', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()
+      loadApiModule()
 
       const error = {
         response: { status: 403, data: { message: 'Access denied' } },
         config: { url: '/api/admin' },
       }
 
-      // Import module
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
-
-      expect(error.response.status).toBe(403)
+      await expect(mockAxiosInstance.responseErrorHandler(error)).rejects.toBe(error)
+      expect(consoleSpy).toHaveBeenCalledWith('Access forbidden:', 'Access denied')
       consoleSpy.mockRestore()
     })
 
-    it('should handle network errors', async () => {
+    it('passes through network errors', async () => {
+      loadApiModule()
       const error = new Error('Network Error')
 
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
-
-      // Should be handled by error interceptor
-      expect(error.message).toBe('Network Error')
+      await expect(mockAxiosInstance.responseErrorHandler(error)).rejects.toBe(error)
     })
   })
 
   describe('API Configuration', () => {
-    it('should create axios instance with correct base URL', () => {
-      jest.isolateModules(() => {
-        require('@/lib/api')
-      })
+    it('creates axios instance with correct base URL', () => {
+      loadApiModule()
 
-      expect(mockedAxios.create).toHaveBeenCalled()
-      const createCall = mockedAxios.create.mock.calls[0][0]
+      expect(mockCreate).toHaveBeenCalled()
+      const createCall = mockCreate.mock.calls[0][0]
       expect(createCall).toHaveProperty('baseURL')
       expect(createCall).toHaveProperty('timeout', 10000)
       expect(createCall).toHaveProperty('withCredentials', true)
@@ -205,6 +159,11 @@ describe('API Client', () => {
 })
 
 describe('getCsrfToken helper', () => {
+  afterEach(() => {
+    jest.dontMock('axios')
+    jest.resetModules()
+  })
+
   it('extracts CSRF token from cookie', () => {
     Object.defineProperty(document, 'cookie', {
       writable: true,
@@ -212,8 +171,8 @@ describe('getCsrfToken helper', () => {
       configurable: true,
     })
 
-    // The helper is internal to the module, tested through request interceptor
-    expect(document.cookie).toContain('_csrf=abc123')
+    const { getCsrfToken } = loadApiModule()
+    expect(getCsrfToken()).toBe('abc123')
   })
 
   it('returns null when no CSRF cookie present', () => {
@@ -223,19 +182,17 @@ describe('getCsrfToken helper', () => {
       configurable: true,
     })
 
-    expect(document.cookie).not.toContain('_csrf=')
+    const { getCsrfToken } = loadApiModule()
+    expect(getCsrfToken()).toBeNull()
   })
 
-  it('handles SSR context (no document)', () => {
-    // In SSR, document is undefined
+  it('handles SSR context', () => {
     const originalDocument = global.document
-    // @ts-ignore
+    // @ts-expect-error test SSR branch
     global.document = undefined
 
-    // Should return null without error
-    expect(() => {
-      // Simulate SSR context
-    }).not.toThrow()
+    const { getCsrfToken } = loadApiModule()
+    expect(getCsrfToken()).toBeNull()
 
     global.document = originalDocument
   })

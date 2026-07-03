@@ -162,8 +162,8 @@ async def notebooks_health():
 # ─────────────────────────────────────────────────────────────────────────────
 
 class IngestRequest(BaseModel):
-    source_id:   int
-    notebook_id: int
+    source_id:   str = Field(..., min_length=1, max_length=80)
+    notebook_id: str = Field(..., min_length=1, max_length=80)
     source_type: str = Field(..., pattern="^(text|url|pdf)$")
     content:     Optional[str] = None
     url:         Optional[str] = None
@@ -172,20 +172,20 @@ class IngestRequest(BaseModel):
 
 
 class IngestResponse(BaseModel):
-    source_id:   int
+    source_id:   str
     chunk_count: int
     word_count:  int
     extracted_text: str = ""
 
 
 class ChatRequest(BaseModel):
-    notebook_id: int
+    notebook_id: str = Field(..., min_length=1, max_length=80)
     message:     str = Field(..., min_length=1, max_length=4096)
     history:     List[Dict[str, Any]] = Field(default_factory=list)
 
 
 class CitedSource(BaseModel):
-    source_id: int
+    source_id: str
     title:     str
     snippet:   Optional[str] = None
     chunk_index: Optional[int] = None
@@ -198,7 +198,7 @@ class ChatResponse(BaseModel):
 
 
 class GenerateRequest(BaseModel):
-    notebook_id: int
+    notebook_id: str = Field(..., min_length=1, max_length=80)
     type:        str = Field(..., pattern="^(summary|study_guide|notebook_guide|faq|flashcards|quiz|audio_overview|compare_sources)$")
 
 
@@ -260,7 +260,7 @@ async def ingest_source(req: IngestRequest, request: Request, response: Response
 
 
 @router.delete("/sources/{source_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_source_chunks(source_id: int, request: Request, response: Response):
+async def delete_source_chunks(source_id: str, request: Request, response: Response):
     """Remove all vector chunks for a deleted source."""
     request_id = _request_id(request)
     started_at = perf_counter()

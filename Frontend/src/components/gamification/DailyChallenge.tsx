@@ -130,7 +130,7 @@ export function DailyChallenge({
             ) : (
               <Button
                 onClick={onStart}
-                className="group/btn h-16 rounded-2xl bg-primary px-10 text-xl font-black italic tracking-tighter text-black shadow-2xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95"
+                className="group/btn h-16 rounded-2xl bg-primary px-10 text-xl font-black italic tracking-tighter text-primary-foreground shadow-2xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95"
               >
                 SOLVE_NOW
                 <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover/btn:translate-x-2" />

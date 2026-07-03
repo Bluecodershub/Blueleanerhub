@@ -42,9 +42,9 @@ print(f"Pressure: {P/1000:.2f} kPa")
 P_atm = 101325  # Pa
 T_25C = 298.15  # K
 V2 = ideal_gas_volume(2.0, P_atm, T_25C)
-print(f"Volume at STP: {V2*1000:.2f} L")`,
-        output: `Pressure: 99.77 kPa\nVolume at STP: 49.04 L`,
-        explanation: 'The ideal gas law PV = nRT relates pressure, volume, moles, and temperature. R = 8.314 J/(mol·K). At standard conditions, 1 mol of ideal gas occupies ~22.4 L. Real gases deviate at high pressures and low temperatures.',
+print(f"Volume at 25C, 1 atm: {V2*1000:.2f} L")`,
+        output: `Pressure: 99.77 kPa\nVolume at 25C, 1 atm: 48.93 L`,
+        explanation: 'The ideal gas law PV = nRT relates pressure, volume, moles, and temperature. R = 8.314 J/(mol·K). At 25C and 1 atm, 1 mol of ideal gas occupies about 24.46 L. Real gases deviate at high pressures and low temperatures.',
       },
     ],
     commonMistakes: [
@@ -213,7 +213,7 @@ R = 8.314; n = 1.0; T = 400  # K
 V1, V2 = 0.01, 0.03           # m³
 W3 = work_isothermal(n, R, T, V1, V2)
 print(f"Isothermal work = {W3:.1f} J")`,
-        output: `ΔU = 300 J  (internal energy increased)\nQ (const. vol.) = 17950.0 J\nΔU = 17950.0 J\nIsothermal work = 3650.6 J`,
+        output: `ΔU = 300 J  (internal energy increased)\nQ (const. vol.) = 17950.0 J\nΔU = 17950.0 J\nIsothermal work = 3653.5 J`,
         explanation: 'Example 1: 500 J in, 200 J out as work → 300 J stored. Example 2: constant volume means W=0, so all heat becomes internal energy. Example 3: isothermal expansion — gas does work while temperature stays constant (ΔU=0, so Q=W).',
       },
     ],
@@ -291,7 +291,7 @@ cp = 1005     # J/(kg·K)
 V1, V2 = 1.0, 2.0
 
 ds = entropy_change_ideal_gas(m, cv, cp, T, T, V1, V2)
-print(f"ΔS (isothermal expansion) = {ds:.3f} J/K")
+print(f"ΔS (isothermal expansion) = {ds:.1f} J/K")
 
 # Example 2: Check Universe entropy
 # Heat Q = 200 J flows from hot (500 K) to cold (300 K)
@@ -303,8 +303,8 @@ ds_universe = ds_hot + ds_cold
 print(f"ΔS_hot        = {ds_hot:.4f} J/K")
 print(f"ΔS_cold       = {ds_cold:.4f} J/K")
 print(f"ΔS_universe   = {ds_universe:.4f} J/K  (> 0: natural process)")`,
-        output: `ΔS (isothermal expansion) = 0.204 J/K\nΔS_hot        = -0.4000 J/K\nΔS_cold       = 0.6667 J/K\nΔS_universe   = 0.2667 J/K  (> 0: natural process)`,
-        explanation: 'Heat flowing from hot to cold increases the universe\'s entropy — confirming it\'s a natural (spontaneous) process. Entropy gained by the cold reservoir exceeds entropy lost by the hot reservoir because T_cold < T_hot.',
+        output: `ΔS (isothermal expansion) = 198.9 J/K\nΔS_hot        = -0.4000 J/K\nΔS_cold       = 0.6667 J/K\nΔS_universe   = 0.2667 J/K  (> 0: natural process)`,
+        explanation: 'For 1 kg of air, doubling volume is a large entropy change: ΔS = mR ln(V2/V1) = 198.9 J/K. Heat flowing from hot to cold increases the universe\'s entropy because the cold reservoir gains more entropy than the hot reservoir loses.',
       },
     ],
     commonMistakes: [
@@ -464,9 +464,10 @@ def work_isochoric():
 def work_adiabatic(P1, V1, P2, V2, gamma):
     return (P1*V1 - P2*V2) / (gamma - 1)
 
-# All starting at: P1=100 kPa, V1=0.1 m³, T1=300 K, m=1 kg
+# All starting at: P1=100 kPa, V1=0.1 m³, T1=300 K
 # Expand to V2 = 0.2 m³ (volume doubles)
-P1, V1, T1, m = 100, 0.1, 300, 1.0
+P1, V1, T1 = 100, 0.1, 300
+m = P1 * V1 / (R * T1)  # kg, from ideal gas law PV = mRT
 
 # Isothermal: T stays 300 K
 W_iso = work_isothermal(m, R, T1, V1, 2*V1)
@@ -487,7 +488,7 @@ print(f"Isobaric work:    {W_isobar:.3f} kJ")
 print(f"Isochoric work:   {W_isoV:.3f} kJ")
 print(f"Adiabatic work:   {W_ad:.3f} kJ")
 print(f"Adiabatic P2:     {P2_ad:.2f} kPa")`,
-        output: `Isothermal work:  0.199 kJ\nIsobaric work:    10.000 kJ\nIsochoric work:   0.000 kJ\nAdiabatic work:   8.128 kJ`,
+        output: `Isothermal work:  6.931 kJ\nIsobaric work:    10.000 kJ\nIsochoric work:   0.000 kJ\nAdiabatic work:   6.054 kJ\nAdiabatic P2:     37.89 kPa`,
         explanation: 'Isobaric gives the most work (constant high pressure throughout expansion). Adiabatic gives less than isobaric (pressure drops faster). Isothermal stays at constant temperature — pressure drops slowly, giving moderate work. Isochoric: volume fixed, no work done.',
       },
     ],
@@ -580,7 +581,7 @@ print(f"Isentropic work:{w_isen:.2f} kJ/kg")
 print(f"Actual T2:      {T2_actual:.1f} K")
 print(f"Actual work:    {w_actual:.2f} kJ/kg")
 print(f"ΔS (per kg):    {delta_s:.4f} kJ/(kg·K)  > 0 (entropy generated)")`,
-        output: `Isentropic T2:  568.8 K\nIsentropic work:333.15 kJ/kg\nActual T2:      610.4 K\nActual work:    289.84 kJ/kg\nΔS (per kg):    0.0745 kJ/(kg·K)  > 0 (entropy generated)`,
+        output: `Isentropic T2:  568.2 K\nIsentropic work:333.41 kJ/kg\nActual T2:      611.4 K\nActual work:    290.07 kJ/kg\nΔS (per kg):    0.0733 kJ/(kg·K)  > 0 (entropy generated)`,
         explanation: 'The real turbine generates entropy — the exit temperature is higher than the isentropic value, meaning more energy stays in the exhaust gas instead of becoming useful work. Positive ΔS confirms irreversibility.',
       },
     ],
@@ -660,7 +661,7 @@ for r in [4, 6, 8, 10, 12, 14, 16, 18, 20]:
 print("\nTypical real engine efficiencies:")
 print(f"  Gasoline (r≈9):  ~{otto_efficiency(9):.1%} theoretical, ~30% actual")
 print(f"  Diesel   (r≈18): ~{diesel_efficiency(18,2):.1%} theoretical, ~40% actual")`,
-        output: `  Compression Ratio      Otto η   Diesel η (rc=2)\n----------------------------------------------------\n                   4        42.6%             33.6%\n                   6        51.2%             42.0%\n                   8        56.5%             47.6%\n                  10        60.2%             51.8%\n                  12        63.0%             55.1%\n                  14        65.2%             57.9%\n                  16        67.0%             60.2%\n                  18        68.5%             62.2%\n                  20        69.8%             64.0%\n\nTypical real engine efficiencies:\n  Gasoline (r≈9):  ~57.5% theoretical, ~30% actual\n  Diesel   (r≈18): ~62.7% theoretical, ~40% actual`,
+        output: `  Compression Ratio      Otto η   Diesel η (rc=2)\n----------------------------------------------------\n                   4        42.6%             32.8%\n                   6        51.2%             42.8%\n                   8        56.5%             49.0%\n                  10        60.2%             53.4%\n                  12        63.0%             56.7%\n                  14        65.2%             59.3%\n                  16        67.0%             61.4%\n                  18        68.5%             63.2%\n                  20        69.8%             64.7%\n\nTypical real engine efficiencies:\n  Gasoline (r≈9):  ~58.5% theoretical, ~30% actual\n  Diesel   (r≈18): ~63.2% theoretical, ~40% actual`,
         explanation: 'Higher compression ratios improve efficiency. Diesel engines run at higher compression ratios (14-22 vs 8-12 for gasoline) — giving better efficiency. Real engines fall far short of theoretical values due to heat losses, friction, and non-ideal combustion.',
       },
     ],
@@ -752,8 +753,8 @@ for name, r in zip(names, R):
     print(f"  {name:<12}: {r:.4f} K/W  ({r/R_total*100:.1f}%)")
 print(f"\nTotal R = {R_total:.4f} K/W")
 print(f"Heat loss = {q:.2f} W/m²")`,
-        output: `Individual resistances (K/W):\n  Conv_in     : 0.1000 K/W  (6.4%)\n  Plaster     : 0.0286 K/W  (1.8%)\n  Brick       : 0.1111 K/W  (7.1%)\n  Insulation  : 1.2500 K/W  (79.9%)\n  Conv_out    : 0.0400 K/W  (2.6%)\n\nTotal R = 1.5297 K/W\nHeat loss = 19.61 W/m²`,
-        explanation: 'The insulation layer has the highest thermal resistance (79.9% of total) — it is the bottleneck that most reduces heat loss. This is why well-insulated buildings use low-k insulation despite the relatively small thickness. Add more insulation to further reduce heat loss.',
+        output: `Individual resistances (K/W):\n  Conv_in     : 0.1000 K/W  (6.5%)\n  Plaster     : 0.0286 K/W  (1.9%)\n  Brick       : 0.1111 K/W  (7.3%)\n  Insulation  : 1.2500 K/W  (81.7%)\n  Conv_out    : 0.0400 K/W  (2.6%)\n\nTotal R = 1.5297 K/W\nHeat loss = 19.61 W/m²`,
+        explanation: 'The insulation layer has the highest thermal resistance (81.7% of total) — it is the bottleneck that most reduces heat loss. This is why well-insulated buildings use low-k insulation despite the relatively small thickness. Add more insulation to further reduce heat loss.',
       },
     ],
     commonMistakes: [

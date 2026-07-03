@@ -97,7 +97,7 @@ export default function DomainTools() {
                     }}
                     className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
                       activeTab === tool.id
-                        ? 'scale-[1.02] bg-primary text-black shadow-lg shadow-primary/20'
+                        ? 'scale-[1.02] bg-primary text-primary-foreground shadow-lg shadow-primary/20'
                         : 'text-white/50 hover:bg-white/5 hover:text-white/80'
                     }`}
                   >

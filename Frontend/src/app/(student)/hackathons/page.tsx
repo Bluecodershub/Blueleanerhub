@@ -382,6 +382,7 @@ export default function HackathonsPage() {
               src="/img/hackathon.jpg"
               alt="Students collaborating during a hackathon"
               fill
+              sizes="(max-width: 1024px) 100vw, 420px"
               className="object-cover"
               priority
             />

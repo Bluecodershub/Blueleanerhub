@@ -5,11 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   User,
-  GraduationCap,
   Building,
-  Calendar,
-  Compass,
-  Zap,
   Target,
   FileText,
   Globe,
@@ -18,7 +14,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Phone,
-  Bookmark
 } from 'lucide-react'
 import { Github, Linkedin } from '@/components/ui/BrandIcons'
 import { useAuth } from '@/context/AuthContext'
@@ -203,7 +198,7 @@ export default function OnboardingPage() {
                   className={cn(
                     'flex h-6 w-6 items-center justify-center rounded-full font-mono text-xs font-bold transition-all duration-300',
                     step >= num
-                      ? 'bg-primary text-black border-primary shadow-sm'
+                      ? 'bg-primary text-primary-foreground border-primary shadow-sm'
                       : 'bg-secondary text-muted-foreground border border-border'
                   )}
                 >

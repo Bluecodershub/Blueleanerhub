@@ -4,6 +4,7 @@ import { apiLimiter } from '../middleware/rateLimiter';
 import { Job, Hackathon, JobApplication, HackathonTeam, CorporateProfile, Bounty } from '../db/models';
 import logger from '../utils/logger';
 import mongoose from 'mongoose';
+import { normalizeJobType } from '../utils/jobTypes';
 
 const router = Router();
 
@@ -100,11 +101,23 @@ router.get('/jobs', async (req, res, next) => {
 router.post('/jobs', apiLimiter, async (req, res, next) => {
   try {
     const userId = req.user!.id;
-    const { title, description, location, jobType, salary, requirements } = req.body;
+    const { title, company, description, location, jobType, salary, requirements } = req.body;
+    const type = normalizeJobType(jobType);
+    if (!type) {
+      return res.status(400).json({ success: false, message: 'jobType must be one of full-time, part-time, internship, or contract' });
+    }
+
+    const profile = await CorporateProfile.findOne({ userId: new mongoose.Types.ObjectId(userId) }).lean();
+    const requestedCompany = typeof company === 'string' ? company.trim() : '';
+    const profileCompany = typeof profile?.companyName === 'string' ? profile.companyName.trim() : '';
+    const companyName = requestedCompany || profileCompany || 'Hiring partner';
 
     const job = await Job.create({
-      title, description, location,
-      type: jobType,
+      title,
+      company: companyName,
+      description,
+      location,
+      type,
       salary,
       requirements: requirements || [],
       isActive: true,
@@ -131,8 +144,17 @@ router.put('/jobs/:id', apiLimiter, async (req, res, next) => {
     for (const key of ALLOWED_FIELDS) {
       if (Object.prototype.hasOwnProperty.call(req.body, key)) update[key] = req.body[key];
     }
+    if (typeof update.type === 'string') {
+      const type = normalizeJobType(update.type);
+      if (!type) return res.status(400).json({ success: false, message: 'type must be one of full-time, part-time, internship, or contract' });
+      update.type = type;
+    }
     // Accept the frontend's `jobType` alias for the schema's `type` field.
-    if (typeof req.body.jobType === 'string') update.type = req.body.jobType;
+    if (typeof req.body.jobType === 'string') {
+      const type = normalizeJobType(req.body.jobType);
+      if (!type) return res.status(400).json({ success: false, message: 'jobType must be one of full-time, part-time, internship, or contract' });
+      update.type = type;
+    }
 
     const job = await Job.findOneAndUpdate(
       { _id: id, postedBy: new mongoose.Types.ObjectId(userId) },

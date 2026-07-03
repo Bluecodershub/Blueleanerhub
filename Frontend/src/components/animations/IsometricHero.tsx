@@ -19,6 +19,7 @@ export default function IsometricHero() {
   return (
     <section
       ref={containerRef}
+      style={{ position: 'relative' }}
       className="relative flex min-h-screen flex-col overflow-hidden bg-black"
     >
       <motion.div

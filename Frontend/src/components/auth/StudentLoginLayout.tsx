@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { BrandMark } from '@/components/branding/Logo'
 
 interface StudentLoginLayoutProps {
   children: React.ReactNode
@@ -15,9 +14,8 @@ export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 mb-6 flex items-center gap-2"
+        className="relative z-10 mb-6 flex items-center"
       >
-        <BrandMark size={36} className="rounded-xl" priority />
         <span className="font-heading text-lg font-semibold text-foreground">Bluelearnerhub</span>
       </motion.div>
 

@@ -49,7 +49,7 @@ export default function SoftwareLabPage() {
           <div className="mx-1 h-4 w-px bg-secondary" />
           <Button
             size="sm"
-            className="h-8 rounded-lg bg-primary/90 px-4 font-bold text-black hover:bg-primary"
+            className="h-8 rounded-lg bg-primary/90 px-4 font-bold text-primary-foreground hover:bg-primary"
           >
             <Play className="mr-2 h-3.5 w-3.5 fill-current" /> RUN_PROJECT
           </Button>

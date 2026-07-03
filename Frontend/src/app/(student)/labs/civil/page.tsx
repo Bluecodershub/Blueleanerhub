@@ -45,7 +45,7 @@ export default function CivilLabPage() {
           <Button
             onClick={() => setIsAnalyzing(!isAnalyzing)}
             size="sm"
-            className={`${isAnalyzing ? 'bg-primary/90 hover:bg-primary' : 'bg-secondary hover:bg-muted'} h-8 rounded-lg px-4 font-bold text-black transition-all`}
+            className={`${isAnalyzing ? 'bg-primary/90 text-primary-foreground hover:bg-primary' : 'bg-secondary text-foreground hover:bg-muted'} h-8 rounded-lg px-4 font-bold transition-all`}
           >
             {isAnalyzing ? 'LIVE_ANALYSIS_ON' : 'RUN_STRUCTURAL_LOAD'}
           </Button>

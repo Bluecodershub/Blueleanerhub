@@ -1,4 +1,5 @@
 import { body, param, query } from 'express-validator';
+import { isJobType } from './jobTypes';
 
 const PASSWORD_COMPLEXITY_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
@@ -76,7 +77,7 @@ export const jobValidators = {
   createJob: [
     body('title').trim().notEmpty().withMessage('Job title is required'),
     body('location').trim().notEmpty().withMessage('Location is required'),
-    body('jobType').isIn(['full_time', 'part_time', 'contract', 'internship']),
+    body('jobType').custom(isJobType).withMessage('jobType must be one of full-time, part-time, internship, or contract'),
     body('description').trim().notEmpty().withMessage('Description is required'),
   ],
 

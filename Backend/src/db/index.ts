@@ -275,7 +275,7 @@ function toSetUpdate(data: any): any {
 export const db = {
   query: {
     users: {
-      findMany: async (filter: any = {}) => injectSession(User.find(filter)).lean(),
+      findMany: (filter: any = {}) => injectSession(User.find(filter)).lean(),
       findFirst: async (filter: any) => injectSession(User.findOne(filter)).lean(),
       findById: async (id: any) => injectSession(User.findById(id)).lean(),
       create: async (data: any) => sessionCreate(User, data),

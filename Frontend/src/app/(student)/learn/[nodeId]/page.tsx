@@ -7,9 +7,7 @@ import {
   BookOpen,
   Code2,
   CheckCircle2,
-  Circle,
   ArrowLeft,
-  ArrowRight,
   Loader2,
   Brain,
   Trophy,
@@ -129,7 +127,7 @@ function QuizBlock({ quizItems }: { quizItems: ContentSection['quiz'] }) {
         </div>
       ))}
       {!checked ? (
-        <Button onClick={() => setChecked(true)} disabled={Object.keys(answers).length < quizItems.length} size="sm" className="rounded-xl bg-primary text-black">
+        <Button onClick={() => setChecked(true)} disabled={Object.keys(answers).length < quizItems.length} size="sm" className="rounded-xl bg-primary text-primary-foreground">
           Check Answers
         </Button>
       ) : (
@@ -290,7 +288,7 @@ export default function LearnPage() {
               nodeTitle
             })
             setContent(genRes.data.data)
-          } catch (genErr) {
+          } catch {
             setError('Failed to generate lesson content. Please try again.')
           }
         } else {

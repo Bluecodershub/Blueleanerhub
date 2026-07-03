@@ -187,7 +187,14 @@ export class AuthController {
       const refreshToken = req.signedCookies?.refreshToken;
 
       if (req.user) {
-        await authService.logout(req.user.id, refreshToken);
+        try {
+          await authService.logout(req.user.id, refreshToken);
+        } catch (err: any) {
+          logger.warn('Failed to revoke refresh tokens during logout', {
+            userId: req.user.id,
+            error: err?.message,
+          });
+        }
       }
 
       clearAuthCookies(res);

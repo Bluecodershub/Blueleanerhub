@@ -96,13 +96,13 @@ beforeEach(() => {
 // Global test utilities
 global.testUtils = {
   mockUser: {
-    id: 1,
+    id: '1',
     email: 'test@example.com',
     role: 'user',
     fullName: 'Test User',
   },
   mockAdmin: {
-    id: 2,
+    id: '2',
     email: 'admin@example.com',
     role: 'admin',
     fullName: 'Admin User',
@@ -122,5 +122,26 @@ jest.mock('../src/db', () => ({
     set: jest.fn().mockReturnThis(),
     values: jest.fn().mockResolvedValue([]),
     returning: jest.fn().mockResolvedValue([]),
+  },
+  LearningTrack: {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    findById: jest.fn(),
+    findByIdAndUpdate: jest.fn(),
+  },
+  TrackCourse: {
+    find: jest.fn(),
+  },
+  TrackEnrollment: {
+    findOne: jest.fn(),
+    findOneAndUpdate: jest.fn(),
+    create: jest.fn(),
+  },
+  Course: {
+    find: jest.fn(),
+  },
+  Certificate: {
+    findOne: jest.fn(),
+    create: jest.fn(),
   },
 }));

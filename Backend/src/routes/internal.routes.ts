@@ -17,6 +17,7 @@ import { User, Hackathon } from '../db/models';
 import { config } from '../config';
 import logger from '../utils/logger';
 import mongoose from 'mongoose';
+import { invalidateUserAuthCache } from '../middleware/auth';
 
 const router = Router();
 
@@ -191,6 +192,7 @@ router.post('/users/bulk', async (req, res) => {
         return res.status(400).json({ success: false, message: 'Invalid action' });
     }
 
+    await Promise.all(objectIds.map((id) => invalidateUserAuthCache(id.toString())));
     res.json({ success: true, message: `Bulk action '${action}' completed for ${userIds.length} users` });
   } catch (error) {
     logger.error('Bulk user operation error:', error);

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -17,10 +17,8 @@ import {
   Briefcase,
   ChevronDown,
   Menu,
-  X,
 } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import type { Lesson, TopicContent, ContentSection } from '@/data/library/types'
 
 function formatInlineText(text: string, codeClassName: string): React.ReactNode[] {
@@ -183,7 +181,7 @@ function SectionBlock({ section }: { section: ContentSection }) {
         <ol className="my-4 space-y-3 pl-1">
           {section.steps.map((step, i) => (
             <li key={i} className="flex gap-3">
-              <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-black text-xs font-bold">{i + 1}</span>
+              <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">{i + 1}</span>
               <span className="text-sm text-foreground/85 leading-relaxed pt-0.5">
                 {formatInlineText(step, 'bg-muted px-1 py-0.5 rounded text-xs font-mono text-primary')}
               </span>
@@ -401,8 +399,6 @@ export default function LessonLayout({
   lesson,
   backLabel = 'Library',
   backHref = '/library',
-  domainIcon,
-  domainColor = 'hsl(var(--primary))',
 }: LessonLayoutProps) {
   const [selectedTopic, setSelectedTopic] = useState(lesson.topics[0]?.id ?? '')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -549,9 +545,6 @@ export default function LessonLayout({
             </div>
           </div>
 
-          <div className="px-4 sm:px-6">
-            <Footer />
-          </div>
         </main>
       </div>
     </div>

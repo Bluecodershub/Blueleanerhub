@@ -29,12 +29,19 @@ const CSRF_HEADER = 'x-csrf-token';
 
 /** Paths that are exempt from CSRF validation. */
 const EXEMPT_PATHS = new Set([
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/auth/corporate/login',
+  '/api/auth/corporate/register',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
   '/api/v1/auth/login',
   '/api/v1/auth/register',
   '/api/v1/auth/corporate/login',
   '/api/v1/auth/corporate/register',
   '/api/v1/auth/forgot-password',
   '/api/v1/auth/reset-password',
+  '/api/payments/webhook',
   '/api/v1/payments/webhook',
   '/api/v1/legal/grievance', // public, anonymous grievance form (rate-limited + validated)
   '/health',

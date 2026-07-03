@@ -9,11 +9,9 @@ import {
   Code, 
   Cpu, 
   Zap,
-  Users,
   Trophy,
   Layout,
   ArrowRight,
-  LockKeyhole,
   Code2,
   Rocket,
 } from 'lucide-react'

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { BarChart3, Users, Trophy, Award, Zap, TrendingUp, RefreshCw, Loader2, Shield } from 'lucide-react'
+import { BarChart3, Users, Trophy, Award, Zap, RefreshCw, Loader2 } from 'lucide-react'
 import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

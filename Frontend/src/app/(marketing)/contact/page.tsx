@@ -176,7 +176,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-black transition-all hover:scale-[1.01] hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)] disabled:opacity-50"
+                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition-all hover:scale-[1.01] hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)] disabled:opacity-50"
               >
                 {loading ? 'Sending…' : 'Send Message'}
               </button>

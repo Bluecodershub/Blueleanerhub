@@ -49,7 +49,7 @@ export default function LearningPathCard({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group flex h-full flex-col overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-sky-500">
+      <Card className="group flex h-full flex-col overflow-hidden border-border bg-card transition-all hover:border-primary/60 hover:shadow-lg">
         {/* Thumbnail */}
         <div className="relative h-56 overflow-hidden bg-gradient-to-br from-sky-600 to-primary">
           {thumbnail ? (
@@ -67,18 +67,18 @@ export default function LearningPathCard({
           {/* Overlay Badges */}
           <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
             <Badge className="border-0 bg-white/90 text-gray-900">{domain}</Badge>
-            <div className="flex items-center gap-1 rounded bg-black/60 px-2 py-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-semibold text-white">{rating}</span>
-              <span className="text-xs text-gray-300">({reviewsCount})</span>
+            <div className="flex items-center gap-1 rounded bg-white/90 px-2 py-1 shadow-sm">
+              <Star className="h-4 w-4 fill-primary text-primary" />
+              <span className="text-sm font-semibold text-foreground">{rating}</span>
+              <span className="text-xs text-muted-foreground">({reviewsCount})</span>
             </div>
           </div>
 
           {/* Progress Indicator (if enrolled) */}
           {isEnrolled && (
-            <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2">
+            <div className="absolute bottom-0 left-0 right-0 bg-white/90 px-4 py-2 backdrop-blur">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-xs font-medium text-white">{progress}% Complete</span>
+                <span className="text-xs font-medium text-foreground">{progress}% Complete</span>
                 <TrendingUp className="h-4 w-4 text-sky-400" />
               </div>
               <Progress value={progress} className="h-1" />
@@ -90,14 +90,14 @@ export default function LearningPathCard({
         <div className="flex flex-1 flex-col space-y-4 p-6">
           {/* Title & Description */}
           <div className="flex-1">
-            <h3 className="mb-2 line-clamp-2 text-xl font-bold text-white transition-colors group-hover:text-sky-400">
+            <h3 className="mb-2 line-clamp-2 text-xl font-bold text-foreground transition-colors group-hover:text-primary">
               {title}
             </h3>
-            <p className="line-clamp-3 text-sm text-gray-400">{description}</p>
+            <p className="line-clamp-3 text-sm text-muted-foreground">{description}</p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-3 text-sm text-gray-400">
+          <div className="grid grid-cols-2 gap-3 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <BookOpen className="h-4 w-4 text-sky-400" />
               <span>{coursesCount} courses</span>
@@ -107,7 +107,7 @@ export default function LearningPathCard({
               <span>{enrolledCount.toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-yellow-400" />
+              <Clock className="h-4 w-4 text-primary" />
               <span>{duration}h total</span>
             </div>
             <div>
@@ -120,7 +120,7 @@ export default function LearningPathCard({
           {/* Prerequisites */}
           {prerequisites.length > 0 && (
             <div>
-              <div className="mb-2 text-xs text-gray-500">Prerequisites:</div>
+              <div className="mb-2 text-xs text-muted-foreground">Prerequisites:</div>
               <div className="flex flex-wrap gap-1">
                 {prerequisites.slice(0, 2).map((prereq, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">

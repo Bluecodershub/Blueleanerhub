@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Trophy, Search, RefreshCw, ChevronLeft, ChevronRight, Loader2, Trash2, CheckCircle } from 'lucide-react'
+import { Trophy, RefreshCw, ChevronLeft, ChevronRight, Loader2, Trash2, CheckCircle } from 'lucide-react'
 import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 

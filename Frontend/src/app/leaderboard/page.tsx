@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Trophy, Zap, Flame, TrendingUp, Loader2, RefreshCw,
+  Trophy, Zap, Loader2,
   Crown, Medal, Star,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -67,7 +67,6 @@ export default function LeaderboardPage() {
   useEffect(() => { load(period) }, [period])
 
   const top3 = entries.slice(0, 3)
-  const rest  = entries.slice(3)
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,7 +90,7 @@ export default function LeaderboardPage() {
               className={cn(
                 'flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all',
                 period === value
-                  ? 'bg-primary text-black shadow-sm'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
               )}
             >

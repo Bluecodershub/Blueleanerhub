@@ -235,7 +235,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
                   (addMode === 'text' && !content.trim()) ||
                   (addMode === 'url' && !url.trim())
                 }
-                className="h-7 bg-primary px-3 text-xs text-black hover:bg-primary/90"
+                className="h-7 bg-primary px-3 text-xs text-primary-foreground hover:bg-primary/90"
               >
                 {adding ? (
                   <Loader2 className="mr-1 h-3 w-3 animate-spin" />

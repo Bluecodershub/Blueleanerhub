@@ -119,7 +119,7 @@ export default function HackathonCard({
 
         {/* Enhanced CTA */}
         <Link href={`/hackathons/${id}`} className="block">
-          <Button className="group/btn h-14 w-full gap-2 rounded-2xl bg-primary text-base font-black text-black shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <Button className="group/btn h-14 w-full gap-2 rounded-2xl bg-primary text-base font-black text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
             {status === 'completed' ? 'View Final Leaderboard' : 'Enter Arena'}
             <ChevronRight className="h-5 w-5 transition-transform group-hover/btn:translate-x-1" />
           </Button>
