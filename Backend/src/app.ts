@@ -168,8 +168,9 @@ export function createApp(): Application {
     logger.info(`Swagger UI available at http://localhost:${config.port}/api-docs`);
   }
 
-  // Health check
-  app.get('/health', (_req, res) => {
+  // Health check — exposed at both /health and /api/v1/health so monitors
+  // can hit either path.
+  const healthHandler = (_req: express.Request, res: express.Response) => {
     const mongo = getDBStatus();
     const redisStatus = getRedisStatus();
     const isHealthy = mongo.isConnected;
@@ -192,7 +193,9 @@ export function createApp(): Application {
         },
       },
     });
-  });
+  };
+  app.get('/health', healthHandler);
+  app.get('/api/v1/health', healthHandler);
 
   // Error handling
   app.use(notFound);
