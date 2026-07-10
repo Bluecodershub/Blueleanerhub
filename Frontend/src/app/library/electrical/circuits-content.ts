@@ -13,48 +13,48 @@ export const circuitLessons: TopicLesson[] = [
     formula: 'Ohm\'s Law: V = IR\nPower: P = VI = I²R = V²/R\nEnergy: E = Pt  [Joules]\n\nSeries: R_eq = R₁ + R₂ + ... + Rₙ\nParallel: 1/R_eq = 1/R₁ + 1/R₂ + ... + 1/Rₙ\n\nCurrent divider: I₁ = I_total × R₂/(R₁+R₂)\nVoltage divider: V₁ = V_total × R₁/(R₁+R₂)',
     codeExamples: [
       {
-        title: 'Resistor Network Analysis',
-        language: 'python',
-        code: `def series_resistance(*resistors):
-    return sum(resistors)
+        title: 'Worked Example — Resistor Network with Series-Parallel Reduction',
+        language: 'circuit analysis',
+        kind: 'worked-example',
+        code: `CIRCUIT
+────────
+                     ┌──[ R1=100Ω ]──[ R2=200Ω ]──┐
+        + V_s=12V ── │                             │ ── −
+                     └──────────[ R3=150Ω ]────────┘
 
-def parallel_resistance(*resistors):
-    return 1 / sum(1/r for r in resistors)
+Two parallel branches across the 12 V source:
+    Branch A:  R1 in series with R2         (upper path)
+    Branch B:  R3 alone                     (lower path)
 
-def voltage_divider(V_total, R1, R2):
-    """Voltage across R1 in a voltage divider."""
-    return V_total * R1 / (R1 + R2)
+STEP 1 — Reduce Branch A
+    R_series = R1 + R2 = 100 + 200 = 300 Ω
 
-def current_divider(I_total, R1, R2):
-    """Current through R1 in parallel (draws less current because higher R)."""
-    # I1 = I_total * R2 / (R1 + R2)  ← higher R → less current
-    return I_total * R2 / (R1 + R2)
+STEP 2 — Combine branches in parallel
+    1/R_total = 1/300 + 1/150 = 1/300 + 2/300 = 3/300
+    R_total   = 100 Ω
 
-def power_dissipated(V=None, I=None, R=None):
-    if V and I:   return V * I
-    if I and R:   return I**2 * R
-    if V and R:   return V**2 / R
+STEP 3 — Total current from the source (Ohm's law)
+    I_total = V_s / R_total = 12 / 100 = 0.120 A = 120 mA
 
-# Network analysis: 12V source
-# R1=100Ω and R2=200Ω in series, then R3=150Ω in parallel with R_series
-V_s = 12   # V
-R1, R2, R3 = 100, 200, 150
+STEP 4 — Branch currents (parallel branches see the same 12 V)
+    I_A  (through R1, R2) = 12 / 300 = 40 mA
+    I_B  (through R3)     = 12 / 150 = 80 mA
+    Check:  I_A + I_B = 40 + 80 = 120 mA  ✓  (KCL at source)
 
-R_series  = series_resistance(R1, R2)      # 300Ω
-R_total   = parallel_resistance(R_series, R3)  # 300||150
-I_total   = V_s / R_total
-I_series  = V_s / R_series   # current in R1-R2 branch
-I_R3      = V_s / R3         # current in R3 branch
+STEP 5 — Voltages inside Branch A (voltage divider)
+    V_R1 = 12 · R1/(R1+R2) = 12 · 100/300 = 4.0 V
+    V_R2 = 12 − V_R1 = 8.0 V
 
-print(f"R_series (R1+R2):    {R_series:.1f} Ω")
-print(f"R_total:             {R_total:.1f} Ω")
-print(f"Total current:       {I_total*1000:.1f} mA")
-print(f"Current in R1-R2:    {I_series*1000:.1f} mA")
-print(f"Current in R3:       {I_R3*1000:.1f} mA")
-print(f"Power in R1:         {power_dissipated(I=I_series, R=R1)*1000:.2f} mW")
-print(f"Total power:         {power_dissipated(V=V_s, I=I_total):.3f} W")`,
-        output: `R_series (R1+R2):    300.0 Ω\nR_total:             100.0 Ω\nTotal current:       120.0 mA\nCurrent in R1-R2:    40.0 mA\nCurrent in R3:       80.0 mA\nPower in R1:         160.00 mW\nTotal power:         1.440 W`,
-        explanation: '300Ω in parallel with 150Ω gives 100Ω total. The R3 branch draws 80mA (2× the series branch) because it has lower resistance. Power check: V²/R_total = 144/100 = 1.44W ✓',
+STEP 6 — Power balance
+    P_R1     = I_A² · R1 = (0.04)² · 100 = 0.160 W = 160 mW
+    P_R2     = I_A² · R2 = (0.04)² · 200 = 0.320 W = 320 mW
+    P_R3     = I_B² · R3 = (0.08)² · 150 = 0.960 W = 960 mW
+    P_supply = V_s · I_total = 12 · 0.120 = 1.440 W
+    Check:  P_R1 + P_R2 + P_R3 = 0.16 + 0.32 + 0.96 = 1.44 W  ✓`,
+        output: `R_total   = 100 Ω
+I_total   = 120 mA  (I_A = 40 mA,  I_B = 80 mA)
+P_supply  = 1.44 W  (matches Σ resistor dissipations)`,
+        explanation: 'Two rules do all the work: (1) resistors in series ADD, (2) resistors in parallel COMBINE AS RECIPROCALS. The lower-resistance branch (R3 = 150 Ω) draws double the current of the higher-resistance branch (R1+R2 = 300 Ω) — current always prefers the easier path. Energy conservation is your best sanity check: source power must equal the sum of the resistor dissipations.',
       },
     ],
     commonMistakes: [
@@ -107,54 +107,67 @@ print(f"Total power:         {power_dissipated(V=V_s, I=I_total):.3f} W")`,
     formula: 'KCL at node: ΣI_entering = ΣI_leaving\n  OR: Σ(V_node - V_adjacent) / R = 0\n\nKVL around loop: ΣV = 0\n  (voltage rises: +V_source, voltage drops: -IR)\n\nMesh analysis:\n[R matrix][I mesh] = [V source]\n\nNodal analysis:\n[G matrix][V node] = [I source]',
     codeExamples: [
       {
-        title: 'KVL Mesh Analysis: Solving a 2-Mesh Circuit',
-        language: 'python',
-        code: `import numpy as np
+        title: 'Worked Example — KVL Mesh Analysis (Two-Mesh Circuit)',
+        language: 'mesh analysis',
+        kind: 'worked-example',
+        code: `CIRCUIT
+────────
+      + V1=10V −         + V2=6V −
+        │                    │
+        ├─[ R1=2Ω ]─A─[ R2=4Ω ]─B
+        │            │            │
+        │           R3=3Ω         │
+        │            │            │
+        └────────────┴────────────┘ (ground)
 
-# Circuit: Two meshes sharing a common branch
-#
-#   V1=10V --- R1=2Ω --- (A) --- R2=4Ω --- (B)
-#                         |                  |
-#                         R3=3Ω              V2=6V
-#                         |                  |
-#                        GND ─────────────────
-#
-# Mesh 1 (clockwise, current I1): V1, R1, R2||R3 (passes through R3 downward)
-# Mesh 2 (clockwise, current I2): V2, R2, R3
-#
-# KVL Mesh 1: V1 = I1*R1 + (I1-I2)*R3      → 10 = I1*(2+3) - I2*3
-# KVL Mesh 2: -V2 = -I2*R2 + (I2-I1)*R3   → 6 = -I1*(-3) + I2*(4+3)
+Assume mesh currents I₁ (left mesh) and I₂ (right mesh), both CW.
+R3 is the shared branch — current through it = (I₁ − I₂).
 
-R1, R2, R3 = 2, 4, 3
-V1, V2 = 10, 6
+KVL — Mesh 1  (source V1 pumps current):
+    +V1 − I₁·R1 − (I₁ − I₂)·R3 = 0
+    10 − 2 I₁ − 3 (I₁ − I₂)     = 0
+    (R1 + R3) I₁ − R3 I₂        = V1
+    5 I₁ − 3 I₂ = 10                                     ...(1)
 
-# Mesh equations in matrix form: [A][I] = [B]
-# Row 1: (R1+R3)*I1 - R3*I2 = V1
-# Row 2: -R3*I1 + (R2+R3)*I2 = -V2  (V2 opposes mesh 2 direction)
-A = np.array([
-    [R1 + R3,     -R3      ],
-    [-R3,          R2 + R3 ]
-])
-B = np.array([V1, -V2])
+KVL — Mesh 2  (V2 opposes CW direction):
+    − V2 − I₂·R2 − (I₂ − I₁)·R3 = 0
+    − R3 I₁ + (R2 + R3) I₂       = − V2
+    − 3 I₁ + 7 I₂ = − 6                                  ...(2)
 
-I_mesh = np.linalg.solve(A, B)
-I1, I2 = I_mesh
+MATRIX FORM
+    ⎡  5  −3 ⎤ ⎡ I₁ ⎤   ⎡  10 ⎤
+    ⎣ −3   7 ⎦ ⎣ I₂ ⎦ = ⎣ −6 ⎦
 
-# Node voltages and branch currents
-I_R3 = I1 - I2
-V_A  = V1 - I1 * R1   # node A voltage
-print(f"Mesh 1 current: I1 = {I1:.4f} A")
-print(f"Mesh 2 current: I2 = {I2:.4f} A")
-print(f"Current in R3:  {I_R3:.4f} A")
-print(f"Voltage at A:   {V_A:.4f} V")
-print(f"\nPower check:")
-print(f"  P_V1 (supplied) = {V1*I1:.4f} W")
-print(f"  P_V2 (supplied) = {V2*abs(I2):.4f} W")
-print(f"  P_R1 = {I1**2*R1:.4f} W")
-print(f"  P_R2 = {I2**2*R2:.4f} W")
-print(f"  P_R3 = {I_R3**2*R3:.4f} W")`,
-        output: `Mesh 1 current: I1 = 1.4545 A\nMesh 2 current: I2 = -0.0909 A\nCurrent in R3:  1.5455 A\nVoltage at A:   7.0909 V\n\nPower check:\n  P_V1 (supplied) = 14.5455 W\n  P_V2 (supplied) = 0.5455 W\n  P_R1 = 4.2397 W\n  P_R2 = 0.0331 W\n  P_R3 = 7.1653 W`,
-        explanation: 'Mesh analysis converts KVL equations into a linear system. Negative I2 means mesh 2 current actually flows counter-clockwise (V2 dominates in that mesh). Power supplied by sources = power dissipated in resistors ✓ (15.09W ≈ 4.24+0.03+7.17 = 11.44W — note: negative I2 means V2 absorbs power in this configuration).',
+    Δ  = 5·7 − (−3)·(−3) = 35 − 9 = 26
+    I₁ = ( 10·7 − (−3)·(−6) ) / 26 = (70 − 18)/26 = 52/26 = 2.000 A
+    Wait — check:  cross-check by Cramer with the original equations.
+    I₁ = |  10  −3 |   / 26 = (10·7 − (−3)·(−6))/26 = 52/26 = 2.000 A ✗ recompute
+        |  −6   7 |
+    I₂ = |  5   10 |   / 26 = (5·(−6) − 10·(−3))/26 = 0/26 = 0.000 A
+        | −3   −6 |
+
+Recomputing Cramer carefully (this is a common trap — pay attention to signs):
+    I₁ = det[[10,−3],[−6,7]] / 26 = (10·7 − (−3)·(−6)) / 26 = (70 − 18)/26 = 52/26 ≈ 2.000 A
+    I₂ = det[[5,10],[−3,−6]] / 26 = (5·(−6) − 10·(−3)) / 26 = (−30 + 30)/26 = 0 A
+
+Hmm — for this particular (V1, V2) pair the second mesh happens to sit at zero.
+BRANCH CURRENT (through R3):
+    I_R3 = I₁ − I₂ = 2.000 − 0 = 2.000 A  (downward)
+
+NODE VOLTAGE at A:
+    V_A = V1 − I₁·R1 = 10 − 2·2 = 6 V
+
+POWER BALANCE (sanity check)
+    P_V1 supplied   = V1·I₁         = 10·2       = 20 W
+    P_V2 supplied   = V2·(−I₂)      = 6·0        =  0 W
+    P_R1 dissipated = I₁²·R1        = 4·2        =  8 W
+    P_R2 dissipated = I₂²·R2        = 0          =  0 W
+    P_R3 dissipated = I_R3²·R3      = 4·3        = 12 W
+    Σ supplied = 20 W  ≡  Σ dissipated (8 + 0 + 12) = 20 W  ✓`,
+        output: `I₁ = 2.00 A,  I₂ = 0.00 A,  I_R3 = 2.00 A
+V_A = 6 V
+Power supplied by sources = 20 W  =  Power dissipated in resistors  ✓`,
+        explanation: 'Mesh analysis reduces any planar circuit to a small linear system in the mesh currents. Assume CW for every mesh and let signs speak for themselves — a negative answer just means the true current flows CCW. Once you have the mesh currents, every branch current is a simple algebraic sum, and every node voltage falls out of Ohm\'s law along a single traversal. Always finish with a power balance: if it fails, the sign of one of your KVL terms is wrong.',
       },
     ],
     commonMistakes: [
@@ -207,46 +220,53 @@ print(f"  P_R3 = {I_R3**2*R3:.4f} W")`,
     formula: 'Impedances:\nZ_R = R          (no phase shift)\nZ_C = 1/(jωC) = -j/(ωC)  (current leads voltage by 90°)\nZ_L = jωL         (current lags voltage by 90°)\n\nOhm\'s Law for AC:\nV = Z × I  (complex numbers)\n\nPower:\nS = V_rms × I_rms* = P + jQ\nP = |I|²R = V²_rms/R  [W]\nQ = |I|²X  [VAR]\nPower factor = P/S = cos(θ)',
     codeExamples: [
       {
-        title: 'Series RLC Impedance and Resonance',
-        language: 'python',
-        code: `import numpy as np
-import cmath
+        title: 'Worked Example — Series RLC Impedance, Resonance & Power',
+        language: 'phasor analysis',
+        kind: 'worked-example',
+        code: `CIRCUIT   Series RLC   R = 50 Ω,  L = 10 mH,  C = 100 µF
+Source    V_rms = 120 V
 
-def impedance_series_RLC(R, L, C, f):
-    omega = 2 * np.pi * f
-    Z_R = complex(R, 0)
-    Z_L = complex(0, omega * L)
-    Z_C = complex(0, -1/(omega * C))
-    return Z_R + Z_L + Z_C
+STEP 1 — Component impedances (phasor form)
+    Z_R = R                     = 50    ∠  0°
+    Z_L = j ω L
+    Z_C = 1 / (j ω C) = − j / (ω C)
 
-def resonant_frequency(L, C):
-    return 1 / (2 * np.pi * np.sqrt(L * C))
+STEP 2 — Resonant frequency  (Z_L cancels Z_C)
+    ω₀ = 1 / √(L C) = 1 / √(0.01 · 0.0001) = 1000 rad/s
+    f₀ = ω₀ / (2 π) ≈ 159.2 Hz
 
-def ac_power(V_rms, Z):
-    I_rms = V_rms / abs(Z)
-    theta = cmath.phase(Z)
-    P = V_rms * I_rms * np.cos(theta)   # real power [W]
-    Q = V_rms * I_rms * np.sin(theta)   # reactive [VAR]
-    S = V_rms * I_rms                   # apparent [VA]
-    PF = np.cos(theta)
-    return P, Q, S, PF, I_rms
+FREQUENCY SWEEP  (V_rms = 120 V)
+┌──────────┬─────────┬───────────┬────────────┬──────────┬──────────┬──────────┬──────────┐
+│  f (Hz)  │  ω L    │  1/(ω C)  │  X = ωL−1/ωC│ |Z| (Ω)  │  θ       │ I_rms (A)│    PF    │
+├──────────┼─────────┼───────────┼────────────┼──────────┼──────────┼──────────┼──────────┤
+│  79.6    │  5.0    │  20.0     │  −15.0     │  52.2    │ −16.7°   │  2.30    │  0.958   │
+│ 159.2 ★  │ 10.0    │  10.0     │    0.0     │  50.0    │   0.0°   │  2.40    │  1.000   │
+│ 318.3    │ 20.0    │   5.0     │  +15.0     │  52.2    │ +16.7°   │  2.30    │  0.958   │
+└──────────┴─────────┴───────────┴────────────┴──────────┴──────────┴──────────┴──────────┘
+    ( θ < 0  ⇒  capacitive,  I leads V.
+      θ > 0  ⇒  inductive,   I lags  V.
+      θ = 0  ⇒  purely resistive at resonance. )
 
-# Series RLC circuit: R=50Ω, L=10mH, C=100μF
-R, L, C = 50, 10e-3, 100e-6
-V_rms = 120   # V
+STEP 3 — Power at resonance (f₀ = 159.2 Hz)
+    I_rms  = V_rms / |Z| = 120 / 50 = 2.40 A
+    P (real)      = V·I·cos θ  = 120·2.40·1.000 = 288 W
+    Q (reactive)  = V·I·sin θ  = 0    (perfectly balanced L and C)
+    S (apparent)  = V·I        = 288 VA
+    Power factor  = cos θ      = 1.000  (unity)
 
-f0 = resonant_frequency(L, C)
-print(f"Resonant frequency: {f0:.1f} Hz")
+STEP 4 — Away from resonance (f = f₀/2 or 2 f₀)
+    |Z| rises,  I falls,  P falls,  |Q| grows, PF worsens.
+    The current is 47 % lower and reactive power appears — power grid
+    operators dislike this because it inflates I without delivering P.
 
-for f in [f0/2, f0, f0*2]:
-    Z = impedance_series_RLC(R, L, C, f)
-    P, Q, S, PF, I = ac_power(V_rms, Z)
-    print(f"\nf = {f:.1f} Hz:")
-    print(f"  |Z| = {abs(Z):.2f} Ω,  θ = {np.degrees(cmath.phase(Z)):.1f}°")
-    print(f"  I_rms = {I:.3f} A")
-    print(f"  P = {P:.1f} W,  Q = {Q:.1f} VAR,  PF = {PF:.3f}")`,
-        output: `Resonant frequency: 159.2 Hz\n\nf = 79.6 Hz:\n  |Z| = 107.31 Ω,  θ = -62.3°\n  I_rms = 1.118 A\n  P = 62.5 W,  Q = -117.8 VAR,  PF = 0.466\n\nf = 159.2 Hz:\n  |Z| = 50.00 Ω,  θ = 0.0°\n  I_rms = 2.400 A\n  P = 288.0 W,  Q = 0.0 VAR,  PF = 1.000\n\nf = 318.3 Hz:\n  |Z| = 107.31 Ω,  θ = 62.3°\n  I_rms = 1.118 A\n  P = 62.5 W,  Q = 117.8 VAR,  PF = 0.466`,
-        explanation: 'At resonance (159.2 Hz): impedance is minimum (= R only), current is maximum, power factor = 1.0 (purely resistive). Below resonance: capacitive (θ<0, Q<0). Above resonance: inductive (θ>0, Q>0). At half/double resonant frequency, current drops to ~47% of maximum.',
+PHASOR-DIAGRAM SKETCH (below resonance, capacitive)
+        Voltage phasor V     ────►
+        Current phasor I  ↗   (leads V by |θ|)
+        V_R along I,   V_L 90° ahead, V_C 90° behind of I.`,
+        output: `f₀ ≈ 159.2 Hz  (resonance)
+At f₀: |Z| = 50 Ω, I = 2.40 A, P = 288 W, PF = 1.00
+Off resonance: |Z| grows, PF drops, and reactive power appears.`,
+        explanation: 'A series RLC has a single "sweet spot" at ω₀ = 1/√(LC) where Z_L and Z_C annihilate each other and impedance shrinks to just R. Below resonance the capacitor dominates (leading current); above resonance the inductor does (lagging current). Real motor loads sit above the natural resonance of their own reactive circuit — that\'s why plants install PF-correction capacitors to push cos θ back toward 1 and reduce billed apparent power.',
       },
     ],
     commonMistakes: [
@@ -299,57 +319,65 @@ for f in [f0/2, f0, f0*2]:
     formula: 'Thévenin equivalent:\nV_th = open-circuit voltage\nR_th = resistance with all sources deactivated\n\nNorton equivalent:\nI_N = short-circuit current = V_th / R_th\nR_N = R_th\n\nMax Power Transfer:\nR_L = R_th  →  P_max = V_th² / (4·R_th)',
     codeExamples: [
       {
-        title: 'Thévenin Equivalent and Maximum Power Transfer',
-        language: 'python',
-        code: `import numpy as np
+        title: 'Worked Example — Thévenin Equivalent & Maximum Power Transfer',
+        language: 'circuit theorems',
+        kind: 'worked-example',
+        code: `CIRCUIT
+────────
+                 R1 = 6 Ω
+    +24 V ──[////]──┬──── A   (load terminal)
+                    │
+                   [//]  R2 = 3 Ω
+                    │
+                    ↓
+                    ⏚
 
-def thevenin_from_voc_isc(V_oc, I_sc):
-    """Find Thévenin equivalent from open-circuit V and short-circuit I."""
-    R_th = V_oc / I_sc
-    return V_oc, R_th
+STEP 1 — Open-circuit voltage V_th at terminals A–ground
+    (Load removed → no current through R1, no drop across R1
+     but the R1–R2 divider still sets V_A when a "virtual" load is absent...
+     actually with load OPEN, no current at all flows; V_A = V_R2 by KVL on
+     the R1–R2 series pair driven by 24 V.)
 
-def load_voltage_and_power(V_th, R_th, R_L):
-    """Voltage across and power in load R_L."""
-    I = V_th / (R_th + R_L)
-    V_L = I * R_L
-    P_L = I**2 * R_L
-    return V_L, I, P_L
+    V_th = V_s · R2 / (R1 + R2)
+         = 24  · 3   / (6 + 3)
+         = 24  · 3/9
+         = 8.00 V
 
-def max_power_transfer(V_th, R_th):
-    R_L_optimal = R_th
-    P_max = V_th**2 / (4 * R_th)
-    return R_L_optimal, P_max
+STEP 2 — Thévenin resistance R_th (deactivate 24 V source → short it)
+    Looking back from terminals A–gnd, R1 and R2 appear in PARALLEL:
+    R_th = (R1·R2)/(R1+R2) = (6·3)/(6+3) = 18/9 = 2.00 Ω
 
-# Example: 24V source, R1=6Ω, R2=3Ω, find Thévenin seen by R_L
-# Circuit: 24V ─ R1(6Ω) ─ node_A ─ R_L
-#                           |
-#                          R2(3Ω)
-#                           |
-#                          GND
+STEP 3 — Cross-check with short-circuit current
+    I_sc = V_th / R_th = 8 / 2 = 4.00 A
+    ( Independently: short the terminals, then I_sc = V_s / R1 with R2 bypassed
+      by the short — actually 24/6 = 4 A ✓ )
 
-V_s = 24; R1 = 6; R2 = 3
+STEP 4 — Load-side analysis
+    Any load R_L sees:  V_L = V_th · R_L/(R_th + R_L),   I = V_th/(R_th + R_L),
+                        P_L = I² R_L
 
-# V_th = voltage at node_A with R_L removed (voltage divider)
-V_th = V_s * R2 / (R1 + R2)
+MAX POWER TRANSFER   (∂P_L/∂R_L = 0)
+    Optimal R_L = R_th = 2.00 Ω
+    P_L,max     = V_th² / (4 R_th) = 8² / (4·2) = 8.00 W
 
-# R_th = R1 || R2 (deactivate V_s → short circuit)
-R_th = R1 * R2 / (R1 + R2)
+┌────────┬──────────┬──────────┬──────────┐
+│ R_L Ω  │  I (A)   │ V_L (V)  │  P_L (W) │
+├────────┼──────────┼──────────┼──────────┤
+│  0.5   │  3.20    │  1.60    │   5.12   │
+│  1.0   │  2.667   │  2.67    │   7.11   │
+│  2.0★  │  2.000   │  4.00    │   8.00   │
+│  4.0   │  1.333   │  5.33    │   7.11   │
+│  8.0   │  0.800   │  6.40    │   5.12   │
+│ 16.0   │  0.444   │  7.11    │   3.16   │
+└────────┴──────────┴──────────┴──────────┘
 
-print(f"Thévenin Equivalent:")
-print(f"  V_th = {V_th:.2f} V")
-print(f"  R_th = {R_th:.2f} Ω")
-
-R_opt, P_max = max_power_transfer(V_th, R_th)
-print(f"\nMax Power Transfer:")
-print(f"  Optimal R_L = {R_opt:.2f} Ω")
-print(f"  P_max = {P_max:.3f} W")
-
-print(f"\nPower vs Load Resistance:")
-for R_L in [0.5, 1, 2, R_opt, 4, 8, 16]:
-    V_L, I, P_L = load_voltage_and_power(V_th, R_th, R_L)
-    print(f"  R_L={R_L:5.1f}Ω: V_L={V_L:.2f}V, I={I:.3f}A, P={P_L:.3f}W")`,
-        output: `Thévenin Equivalent:\n  V_th = 8.00 V\n  R_th = 2.00 Ω\n\nMax Power Transfer:\n  Optimal R_L = 2.00 Ω\n  P_max = 8.000 W\n\nPower vs Load Resistance:\n  R_L=  0.5Ω: V_L=1.60V, I=0.800A, P=1.280W\n  R_L=  1.0Ω: V_L=2.67V, I=0.667A, P=1.778W\n  R_L=  2.0Ω: V_L=4.00V, I=0.500A, P=2.000W\n  R_L=  2.0Ω: V_L=4.00V, I=0.500A, P=8.000W\n  R_L=  4.0Ω: V_L=5.33V, I=0.333A, P=1.778W\n  R_L=  8.0Ω: V_L=6.40V, I=0.200A, P=1.280W\n  R_L= 16.0Ω: V_L=7.11V, I=0.111A, P=0.790W`,
-        explanation: 'Maximum power (8W) delivered when R_L = R_th = 2Ω. Power drops on both sides: with R_L too small (current large but voltage tiny) or R_L too large (voltage high but current tiny). This RL=R_th condition is the basis for impedance matching in audio amplifiers and RF transmission.',
+EFFICIENCY NOTE
+   At R_L = R_th, load power = source power / 2  ⇒  efficiency = 50 %.
+   Fine for signal-matching (audio out, RF antenna), unacceptable for
+   power delivery where you want R_L ≫ R_th to keep efficiency high.`,
+        output: `V_th = 8.00 V,  R_th = 2.00 Ω,  I_sc = 4.00 A
+Max power to load:  8.00 W, at R_L = R_th = 2.00 Ω  (efficiency = 50 %)`,
+        explanation: 'Thévenin equivalents replace an arbitrarily complex linear source with a simple V_th–R_th pair — analysis of any load then reduces to a single voltage divider. Max power transfer occurs at R_L = R_th but sacrifices efficiency (50 % into the load, 50 % dissipated internally). Signal chains match impedance; power grids deliberately mismatch so R_L ≫ R_th and efficiency ≫ 50 %.',
       },
     ],
     commonMistakes: [

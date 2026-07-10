@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+export const dynamic = 'force-dynamic'
+
+import { Suspense, useState, useEffect, useRef } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -236,6 +238,14 @@ function Section({ section, index }: { section: ContentSection; index: number })
 }
 
 export default function LearnPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <LearnPageInner />
+    </Suspense>
+  )
+}
+
+function LearnPageInner() {
   const params = useParams()
   const router = useRouter()
   const searchParams = useSearchParams()

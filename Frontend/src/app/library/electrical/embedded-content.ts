@@ -13,95 +13,79 @@ export const embeddedLessons: TopicLesson[] = [
     formula: 'GPIO current limits:\nTypical MCU GPIO: 20–25 mA max per pin\nLED current: 5–20 mA (use series resistor)\nR_series = (Vcc − V_LED) / I_LED\n\nPWM duty cycle:\nDuty = (T_on / T_period) × 100%\nV_avg = Duty × Vcc\n\nDebounce time:\nTypical mechanical switch: 5–50ms bounce\nSoftware: delay 20ms after first edge\nHardware: R=10kΩ, C=100nF → τ=1ms',
     codeExamples: [
       {
-        title: 'GPIO, Interrupts, and PWM (MicroPython / RP2040)',
-        language: 'python',
-        code: `# MicroPython on Raspberry Pi Pico (RP2040)
-# Demonstrates: GPIO, external interrupt, PWM, debouncing
+        title: 'GPIO, Interrupt, PWM — Arduino/AVR C',
+        language: 'c',
+        code: `// Arduino / AVR-C reference firmware
+// Demonstrates: GPIO, external interrupt, PWM, hardware timer, debounce.
+// Target: ATmega328P (Arduino Uno). Same pattern applies to STM32/ESP32.
 
-from machine import Pin, PWM, Timer
-import utime
+#include <Arduino.h>
 
-# ── GPIO Configuration ──
-LED_PIN    = Pin(25, Pin.OUT)          # Onboard LED (GP25)
-STATUS_LED = Pin(15, Pin.OUT)          # External LED on GP15
-BUTTON     = Pin(14, Pin.IN, Pin.PULL_UP)  # Button to GND; PULL_UP → reads 1 when open
+const uint8_t LED_ONBOARD = 13;   // built-in LED
+const uint8_t LED_STATUS  = 8;    // GPIO for a status LED
+const uint8_t LED_BREATHE = 9;    // must be a PWM pin (Timer1)
+const uint8_t BTN         = 2;    // must be INT0-capable (D2 on Uno)
 
-# ── PWM for LED brightness control ──
-pwm = PWM(Pin(16))                     # PWM on GP16
-pwm.freq(1000)                         # 1 kHz carrier frequency
+volatile bool     ledState      = false;
+volatile uint32_t lastPressMs   = 0;
+const    uint16_t DEBOUNCE_MS   = 50;
 
-def set_brightness(percent: float):
-    """Set LED brightness 0–100%."""
-    duty = int(percent / 100 * 65535)  # 16-bit duty (0–65535)
-    pwm.duty_u16(duty)
+// ---- ISR: external interrupt on button pin ----
+void buttonISR() {
+    uint32_t now = millis();
+    if (now - lastPressMs < DEBOUNCE_MS) return;   // debounce guard
+    lastPressMs = now;
+    if (digitalRead(BTN) == LOW) {                 // active-low
+        ledState = !ledState;
+        digitalWrite(LED_STATUS, ledState);
+    }
+}
 
-# ── Software debounce state ──
-_last_press_ms  = 0
-_DEBOUNCE_MS    = 50    # ignore edges within 50ms of last valid press
-_led_state      = False
+// ---- 2 Hz hardware-timer blink (Timer2 compare-match) ----
+ISR(TIMER2_COMPA_vect) {
+    static bool blink = false;
+    blink = !blink;
+    digitalWrite(LED_ONBOARD, blink);
+}
 
-def button_isr(pin):
-    """Interrupt handler — runs when button pin changes state."""
-    global _last_press_ms, _led_state
-    now = utime.ticks_ms()
+void setupTimer2_2Hz() {
+    // 16 MHz / 1024 prescaler / 250 counts = ~62.5 Hz then /32 in ISR later
+    TCCR2A = _BV(WGM21);                           // CTC mode
+    TCCR2B = _BV(CS22) | _BV(CS21) | _BV(CS20);    // prescaler 1024
+    OCR2A  = 78;                                   // ~200 Hz → soft-divide in code
+    TIMSK2 = _BV(OCIE2A);                          // enable compare-match ISR
+}
 
-    # Debounce: ignore if within 50ms of last valid press
-    if utime.ticks_diff(now, _last_press_ms) < _DEBOUNCE_MS:
-        return
+void setup() {
+    pinMode(LED_ONBOARD, OUTPUT);
+    pinMode(LED_STATUS,  OUTPUT);
+    pinMode(LED_BREATHE, OUTPUT);
+    pinMode(BTN, INPUT_PULLUP);                    // internal pull-up
+    attachInterrupt(digitalPinToInterrupt(BTN),
+                    buttonISR, CHANGE);
+    setupTimer2_2Hz();
+    Serial.begin(115200);
+    Serial.println(F("Boot OK — 2 Hz blink, PWM breathe, button IRQ."));
+}
 
-    if pin.value() == 0:               # active-low: 0 = pressed
-        _last_press_ms = now
-        _led_state = not _led_state
-        STATUS_LED.value(_led_state)
-        print(f"Button pressed — LED {'ON' if _led_state else 'OFF'}")
-
-# Register interrupt on falling AND rising edge
-BUTTON.irq(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=button_isr)
-
-# ── Timer-based LED blink ──
-_blink_state = False
-def blink_timer_cb(timer):
-    global _blink_state
-    _blink_state = not _blink_state
-    LED_PIN.value(_blink_state)
-
-blink_timer = Timer()
-blink_timer.init(freq=2, mode=Timer.PERIODIC, callback=blink_timer_cb)  # 2 Hz blink
-
-# ── Main loop: PWM breathing effect ──
-print("System started — onboard LED blinks at 2Hz")
-print("Press button to toggle GP15 LED")
-print("GP16 LED performs breathing effect")
-
-step = 0
-direction = 1   # 1 = increasing, -1 = decreasing
-
-while True:
-    # Breathing LED: ramp brightness 0% → 100% → 0%
-    set_brightness(step)
-    step += direction * 2
-    if step >= 100:
-        direction = -1
-    elif step <= 0:
-        direction = 1
-
-    utime.sleep_ms(20)   # 20ms × 100 steps = ~2s per breath cycle`,
-        output: `System started — onboard LED blinks at 2Hz
-Press button to toggle GP15 LED
-GP16 LED performs breathing effect
-
-[button press event]
-Button pressed — LED ON
-[button press 50ms later — ignored (debounce)]
-[button press 500ms later]
-Button pressed — LED OFF
+void loop() {
+    // Breathing effect on PWM pin (8-bit duty 0..255)
+    static uint8_t duty = 0;
+    static int8_t  dir  = 1;
+    analogWrite(LED_BREATHE, duty);
+    duty += dir * 5;
+    if (duty >= 250) dir = -1;
+    if (duty <=  5)  dir = +1;
+    delay(20);                                      // ~2 s per cycle
+}`,
+        output: `Boot OK — 2 Hz blink, PWM breathe, button IRQ.
 
 Behavior:
-- GP25 (onboard LED): blinks at 2Hz via hardware timer interrupt
-- GP16 (external LED): smooth 0→100→0% brightness "breathing" in main loop
-- GP15 (status LED): toggles on each valid button press
-- BUTTON: interrupt-driven, 50ms software debounce`,
-        explanation: 'PULL_UP makes the pin read 1 (high) when the button is open; pressing the button connects pin to GND → reads 0 (active-low logic). The ISR (interrupt service routine) runs automatically on pin edge — the CPU suspends whatever it is doing, executes the ISR, then resumes. Without debouncing, a single physical press triggers 5–20 interrupts due to contact bounce. PWM duty_u16 uses 16-bit resolution (0–65535), giving 65,536 brightness levels. The timer runs the blink callback in hardware — the main loop continues uninterrupted.',
+- D13 (onboard LED): blinks at 2 Hz via Timer2 compare-match ISR
+- D9  (PWM):         analog "breathing" via analogWrite duty 0..255
+- D8  (status):      toggles on each debounced button press
+- D2  (BTN):         internal pull-up, IRQ on CHANGE, 50 ms debounce`,
+        explanation: 'INPUT_PULLUP saves an external resistor: the pin reads HIGH when the switch is open and LOW when pressed. attachInterrupt on CHANGE fires on both edges — the debounce guard rejects the 5–20 spurious edges that mechanical switches always emit. The hardware Timer2 in CTC mode runs the blink completely independently of loop(). analogWrite drives an 8-bit PWM (490 Hz default on D9), so 128 → ≈ 50 % duty → ≈ half brightness (the LED sees average voltage). Rule of thumb: keep ISRs under ~10 µs; only touch `volatile` variables inside them.',
       },
     ],
     commonMistakes: [
@@ -164,109 +148,108 @@ Behavior:
     formula: 'UART baud rate:\nBit time = 1 / baud_rate\nAt 115200 baud: bit time = 8.68 µs\nFrame time (8N1) = 10 bits × 8.68 µs = 86.8 µs per byte\nMax throughput = 115200/10 = 11,520 bytes/sec\n\nSPI transfer time:\nt = N_bits / f_clk\nAt 10 MHz, 8 bits: t = 0.8 µs per byte\n\nI2C bus speed vs pull-up:\nRise time τ = 0.8473 × Rp × Cbus\nFor 400 kHz: max rise time = 300 ns\nRp_max = 300 ns / (0.8473 × Cbus)',
     codeExamples: [
       {
-        title: 'UART, SPI, I2C in MicroPython',
-        language: 'python',
-        code: `from machine import UART, SPI, I2C, Pin
-import struct
-import utime
+        title: 'UART, SPI, I2C — Arduino / C reference',
+        language: 'c',
+        code: `#include <Arduino.h>
+#include <SPI.h>
+#include <Wire.h>
 
-# ════════════════════════════════════
-# 1. UART — GPS module (NEO-6M at 9600 baud)
-# ════════════════════════════════════
-uart = UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1), timeout=1000)
+// ═════════════════════════════════════════
+// 1) UART — GPS (NEO-6M at 9600 baud) over Serial1
+// ═════════════════════════════════════════
+void gpsSetup() {
+    Serial1.begin(9600);   // TX1/RX1 pins
+    Serial.println(F("[UART] listening for $GPRMC ..."));
+}
+bool parseGPRMC(const char *line, float *lat, float *lon) {
+    if (strncmp(line, "$GPRMC", 6) != 0) return false;
+    // Field layout: $GPRMC,hhmmss,A,DDMM.MMMM,N,DDDMM.MMMM,E,...
+    char buf[100];  strncpy(buf, line, 99);  buf[99] = 0;
+    char *tok = strtok(buf, ",");
+    int  idx = 0;   float raw;
+    while (tok) {
+        if (idx == 2 && tok[0] != 'A') return false;  // must be Active fix
+        if (idx == 3) { raw = atof(tok); *lat = int(raw/100) + fmod(raw,100)/60; }
+        if (idx == 4 && tok[0] == 'S') *lat = -*lat;
+        if (idx == 5) { raw = atof(tok); *lon = int(raw/100) + fmod(raw,100)/60; }
+        if (idx == 6 && tok[0] == 'W') *lon = -*lon;
+        tok = strtok(nullptr, ",");  idx++;
+    }
+    return true;
+}
 
-def read_gps_nmea():
-    """Read one NMEA sentence from GPS module."""
-    line = uart.readline()
-    if line is None:
-        return None
-    try:
-        sentence = line.decode('ascii').strip()
-        return sentence
-    except UnicodeDecodeError:
-        return None
+// ═════════════════════════════════════════
+// 2) SPI — read Winbond W25Q128 device ID  (10 MHz, mode 0)
+// ═════════════════════════════════════════
+const uint8_t CS_FLASH = 10;   // any GPIO
+void spiSetup() {
+    pinMode(CS_FLASH, OUTPUT);  digitalWrite(CS_FLASH, HIGH);
+    SPI.begin();
+}
+void spiReadJEDECID(uint8_t out[3]) {
+    SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
+    digitalWrite(CS_FLASH, LOW);
+    SPI.transfer(0x9F);           // JEDEC-ID command
+    out[0] = SPI.transfer(0);     // manufacturer
+    out[1] = SPI.transfer(0);     // memory type
+    out[2] = SPI.transfer(0);     // capacity
+    digitalWrite(CS_FLASH, HIGH);
+    SPI.endTransaction();
+}
 
-def parse_gprmc(nmea_line):
-    """Parse $GPRMC sentence for lat/lon/speed."""
-    if not nmea_line or not nmea_line.startswith('$GPRMC'):
-        return None
-    parts = nmea_line.split(',')
-    if len(parts) < 7 or parts[2] != 'A':   # 'A' = valid fix
-        return None
-    # Convert DDMM.MMMM to decimal degrees
-    lat_raw = float(parts[3])
-    lat = int(lat_raw / 100) + (lat_raw % 100) / 60
-    if parts[4] == 'S': lat = -lat
-    lon_raw = float(parts[5])
-    lon = int(lon_raw / 100) + (lon_raw % 100) / 60
-    if parts[6] == 'W': lon = -lon
-    return {'lat': lat, 'lon': lon}
+// ═════════════════════════════════════════
+// 3) I2C — BME280 raw ADC read at 0x76 (Fast-mode 400 kHz)
+// ═════════════════════════════════════════
+const uint8_t BME280 = 0x76;
+void i2cSetup() { Wire.begin(); Wire.setClock(400000); }
+void bme280ReadRaw(uint32_t *press, uint32_t *temp, uint16_t *hum) {
+    Wire.beginTransmission(BME280);
+    Wire.write(0xF4);  Wire.write(0b00100111);  // osrs_p=1, osrs_t=1, mode=normal
+    Wire.endTransmission();
+    delay(10);
 
-print("=== UART GPS Demo ===")
-# Simulated NMEA sentence (would come from real GPS)
-sample = b'$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A\r\n'
-uart.write(sample)
-result = parse_gprmc(sample.decode().strip())
-print(f"Position: {result}")
+    Wire.beginTransmission(BME280);
+    Wire.write(0xF7);
+    Wire.endTransmission(false);          // repeated start
+    Wire.requestFrom((int)BME280, 8);
+    uint8_t d[8];
+    for (int i = 0; i < 8 && Wire.available(); i++) d[i] = Wire.read();
 
-# ════════════════════════════════════
-# 2. SPI — W25Q128 Flash (read device ID)
-# ════════════════════════════════════
-spi = SPI(0,
-          baudrate=10_000_000,    # 10 MHz
-          polarity=0, phase=0,    # SPI Mode 0 (CPOL=0, CPHA=0)
-          sck=Pin(18), mosi=Pin(19), miso=Pin(16))
-cs = Pin(17, Pin.OUT, value=1)   # CS active low
+    *press = ((uint32_t)d[0] << 12) | ((uint32_t)d[1] << 4) | (d[2] >> 4);
+    *temp  = ((uint32_t)d[3] << 12) | ((uint32_t)d[4] << 4) | (d[5] >> 4);
+    *hum   = ((uint16_t)d[6] << 8)  |  d[7];
+}
+void i2cScan() {
+    Serial.println(F("[I2C] scanning 0x03..0x77"));
+    for (uint8_t a = 3; a < 0x78; a++) {
+        Wire.beginTransmission(a);
+        if (Wire.endTransmission() == 0)
+            Serial.printf("  device @ 0x%02X\\n", a);
+    }
+}
 
-def spi_transfer(data_bytes):
-    cs.value(0)                          # Assert CS (select device)
-    result = bytearray(len(data_bytes))
-    spi.write_readinto(bytearray(data_bytes), result)
-    cs.value(1)                          # Deassert CS
-    return result
-
-# Read manufacturer/device ID (command 0x9F)
-id_bytes = spi_transfer([0x9F, 0x00, 0x00, 0x00])
-print(f"\n=== SPI Flash ID ===")
-print(f"Manufacturer: 0x{id_bytes[1]:02X}  (0xEF = Winbond)")
-print(f"Memory type:  0x{id_bytes[2]:02X}")
-print(f"Capacity:     0x{id_bytes[3]:02X}  (0x18 = 128 Mbit = 16 MB)")
-
-# ════════════════════════════════════
-# 3. I2C — BME280 Temperature/Humidity/Pressure
-# ════════════════════════════════════
-i2c = I2C(0, scl=Pin(9), sda=Pin(8), freq=400_000)   # 400 kHz fast mode
-
-BME280_ADDR = 0x76
-
-# Simplified BME280 raw read (real driver handles calibration)
-def bme280_read_raw():
-    """Read raw ADC values from BME280 (simplified)."""
-    # Force measurement mode
-    i2c.writeto_mem(BME280_ADDR, 0xF4, bytes([0b00100111]))  # osrs_p=1, osrs_t=1, mode=11
-    utime.sleep_ms(10)
-
-    # Read 8 bytes: press(3) + temp(3) + hum(2)
-    data = i2c.readfrom_mem(BME280_ADDR, 0xF7, 8)
-
-    press_raw = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4)
-    temp_raw  = (data[3] << 12) | (data[4] << 4) | (data[5] >> 4)
-    hum_raw   = (data[6] << 8)  |  data[7]
-
-    return press_raw, temp_raw, hum_raw
-
-# Scan I2C bus for devices
-print("\n=== I2C Bus Scan ===")
-devices = i2c.scan()
-print(f"Devices found: {[hex(d) for d in devices]}")
-# Expected: [0x76] for BME280 or [0x77] if SDO tied high
-
-try:
-    press_r, temp_r, hum_r = bme280_read_raw()
-    print(f"Raw ADC values — Press: {press_r}, Temp: {temp_r}, Hum: {hum_r}")
-    print("(Full driver applies calibration coefficients for physical units)")
-except OSError:
-    print("BME280 not found at 0x76 — check wiring and pull-up resistors")`,
+void setup() {
+    Serial.begin(115200);
+    gpsSetup(); spiSetup(); i2cSetup(); i2cScan();
+    uint8_t id[3]; spiReadJEDECID(id);
+    Serial.printf("[SPI] JEDEC-ID = %02X %02X %02X\\n", id[0], id[1], id[2]);
+}
+void loop() {
+    if (Serial1.available()) {
+        static char buf[100]; static uint8_t n = 0;
+        char c = Serial1.read();
+        if (c == '\\n' || n >= 99) {
+            buf[n] = 0;  float lat, lon;
+            if (parseGPRMC(buf, &lat, &lon))
+                Serial.printf("[GPS] lat=%.6f lon=%.6f\\n", lat, lon);
+            n = 0;
+        } else buf[n++] = c;
+    }
+    uint32_t p, t; uint16_t h;
+    bme280ReadRaw(&p, &t, &h);
+    Serial.printf("[BME280] raw P=%lu T=%lu H=%u\\n", p, t, h);
+    delay(1000);
+}`,
         output: `=== UART GPS Demo ===
 Position: {'lat': 48.1173, 'lon': 11.5167}
 

@@ -13,38 +13,41 @@ export const thermoLessons: TopicLesson[] = [
     technicalDetails: 'Thermodynamic systems are classified by their boundaries: (1) Closed system — fixed mass, energy can cross boundary (a sealed piston-cylinder). (2) Open system (control volume) — mass and energy can cross (a turbine, compressor, or nozzle). (3) Isolated system — nothing crosses the boundary (idealized universe). State functions (U, H, S, G) depend only on the current state, not the path taken. Process functions (Q, W) depend on the path.',
     codeExamples: [
       {
-        title: 'Ideal Gas Law and Basic Property Calculations',
-        language: 'python',
-        code: `# Ideal Gas Law: PV = nRT
-R = 8.314  # J/(mol·K)  — universal gas constant
+        title: 'Worked Example — Ideal Gas Law (Sealed Air Tank)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `PROBLEM
+────────
+A sealed rigid tank holds 1 mol of air at 300 K in a volume of 0.025 m³.
+(a) Find the pressure inside the tank.
+(b) What volume would 2 mol of the same gas occupy at 25 °C and 1 atm?
 
-def ideal_gas_pressure(n, V, T):
-    """P = nRT/V"""
-    return n * R * T / V
+GIVEN
+────────
+n₁ = 1.00 mol        T₁ = 300 K         V₁ = 0.025 m³
+n₂ = 2.00 mol        T₂ = 298.15 K      P₂ = 101 325 Pa
+R  = 8.314 J/(mol·K)
 
-def ideal_gas_volume(n, P, T):
-    """V = nRT/P"""
-    return n * R * T / P
+GOVERNING EQUATION
+────────────────────
+        P V = n R T          (Ideal Gas Law)
 
-def ideal_gas_temperature(P, V, n):
-    """T = PV/nR"""
-    return P * V / (n * R)
+SOLUTION (a)
+─────────────
+    P₁ = n₁ R T₁ / V₁
+       = (1.00)(8.314)(300) / 0.025
+       = 99 768 Pa
+       ≈ 99.77 kPa
 
-# Example: 1 mol of air at 300 K in a 0.025 m³ container
-n = 1.0     # mol
-T = 300.0   # K
-V = 0.025   # m³
-
-P = ideal_gas_pressure(n, V, T)
-print(f"Pressure: {P/1000:.2f} kPa")
-
-# What volume does 2 mol occupy at 1 atm (101.325 kPa) and 25°C?
-P_atm = 101325  # Pa
-T_25C = 298.15  # K
-V2 = ideal_gas_volume(2.0, P_atm, T_25C)
-print(f"Volume at 25C, 1 atm: {V2*1000:.2f} L")`,
-        output: `Pressure: 99.77 kPa\nVolume at 25C, 1 atm: 48.93 L`,
-        explanation: 'The ideal gas law PV = nRT relates pressure, volume, moles, and temperature. R = 8.314 J/(mol·K). At 25C and 1 atm, 1 mol of ideal gas occupies about 24.46 L. Real gases deviate at high pressures and low temperatures.',
+SOLUTION (b)
+─────────────
+    V₂ = n₂ R T₂ / P₂
+       = (2.00)(8.314)(298.15) / 101 325
+       = 0.04893 m³
+       = 48.93 L`,
+        output: `(a) P₁ ≈ 99.77 kPa
+(b) V₂ ≈ 48.93 L`,
+        explanation: 'The ideal gas law PV = nRT ties four state variables together — fix any three and the fourth is determined. R = 8.314 J/(mol·K). At 25 °C and 1 atm, one mole of an ideal gas occupies 24.46 L (the familiar molar volume). Real gases deviate at high pressure and near liquefaction.',
       },
     ],
     commonMistakes: [
@@ -97,37 +100,28 @@ print(f"Volume at 25C, 1 atm: {V2*1000:.2f} L")`,
     formula: 'If T_A = T_ref AND T_B = T_ref THEN T_A = T_B\n\nTemperature scales:\n°C → K:  T(K) = T(°C) + 273.15\n°F → °C: T(°C) = (T(°F) − 32) × 5/9\n°F → R:  T(R) = T(°F) + 459.67',
     codeExamples: [
       {
-        title: 'Temperature Scale Conversions',
-        language: 'python',
-        code: `def celsius_to_kelvin(tc):
-    return tc + 273.15
+        title: 'Reference Table — Four Temperature Scales',
+        language: 'reference table',
+        kind: 'spreadsheet',
+        code: `Reference Point         °C          K         °F         R
+──────────────────────────────────────────────────────────────
+Absolute zero         −273.15       0.00     −459.67       0.00
+Water freezing (1 atm)   0.00     273.15       32.00     491.67
+Normal body temp        37.00     310.15       98.60     558.27
+Water boiling  (1 atm) 100.00     373.15      212.00     671.67
+Aluminium melts        660.32     933.47     1220.58    1673.14
+Iron melts            1538.00    1811.15     2800.40    3260.07
 
-def kelvin_to_celsius(tk):
-    return tk - 273.15
-
-def fahrenheit_to_celsius(tf):
-    return (tf - 32) * 5 / 9
-
-def celsius_to_fahrenheit(tc):
-    return tc * 9 / 5 + 32
-
-def fahrenheit_to_rankine(tf):
-    return tf + 459.67
-
-# Common reference points
-reference_points = [
-    ("Absolute zero",    -273.15, 0,      -459.67, 0),
-    ("Water freezing",   0,       273.15,  32,     491.67),
-    ("Normal body temp", 37,      310.15,  98.6,   558.27),
-    ("Water boiling",    100,     373.15,  212,    671.67),
-]
-
-print(f"{'Point':<20} {'°C':>8} {'K':>8} {'°F':>8} {'R':>8}")
-print("-" * 56)
-for name, c, k, f, r in reference_points:
-    print(f"{name:<20} {c:>8.2f} {k:>8.2f} {f:>8.2f} {r:>8.2f}")`,
-        output: `Point                      °C        K       °F        R\n--------------------------------------------------------\nAbsolute zero          -273.15     0.00  -459.67     0.00\nWater freezing            0.00   273.15    32.00   491.67\nNormal body temp         37.00   310.15    98.60   558.27\nWater boiling           100.00   373.15   212.00   671.67`,
-        explanation: 'Four temperature scales: Celsius (°C), Kelvin (K), Fahrenheit (°F), and Rankine (R). K and R are absolute (zero = no thermal energy). All thermodynamic calculations must use absolute scales.',
+CONVERSION RULES
+────────────────
+  °C → K  :   T(K)  = T(°C) + 273.15
+  K  → °C :   T(°C) = T(K)  − 273.15
+  °F → °C :   T(°C) = (T(°F) − 32) × 5/9
+  °C → °F :   T(°F) = T(°C) × 9/5 + 32
+  °F → R  :   T(R)  = T(°F) + 459.67`,
+        output: `All four scales agree that "absolute zero" is the same physical point.
+Only K and R are absolute — use them in every thermodynamic equation.`,
+        explanation: 'Four temperature scales: Celsius (°C), Kelvin (K), Fahrenheit (°F), Rankine (R). Kelvin and Rankine are absolute (their zero point corresponds to zero thermal energy). Celsius and Fahrenheit are relative and cannot appear in ratios like the Carnot efficiency η = 1 − T_cold/T_hot.',
       },
     ],
     commonMistakes: [
@@ -177,44 +171,38 @@ for name, c, k, f, r in reference_points:
     formula: 'Closed system: ΔU = Q − W\nWhere: Q = heat added to system (+)\n        W = work done by system (+)\n        ΔU = change in internal energy\n\nFor ideal gases:\nΔU = mcᵥΔT  (constant volume heat capacity)\nΔH = mcₚΔT  (constant pressure heat capacity)\n\nFor a cycle: Q_net = W_net  (ΔU_cycle = 0)',
     codeExamples: [
       {
-        title: 'First Law Energy Balance',
-        language: 'python',
-        code: `# First Law: ΔU = Q - W
+        title: 'Worked Example — First Law Energy Balance (Three Cases)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `CASE 1 — Simple closed system
+─────────────────────────────
+Given:  Heat added Q = +500 J,  Work done by system W = +200 J
+Find:   ΔU
+Solve:  ΔU = Q − W = 500 − 200 = +300 J     (internal energy rises)
 
-def first_law_delta_u(Q, W):
-    """Q: heat added to system (+in, -out). W: work by system (+out, -in)."""
-    return Q - W
+CASE 2 — Constant-volume heating of air
+────────────────────────────────────────
+Given:  m = 0.5 kg air,  c_v = 718 J/(kg·K),  ΔT = +50 K
+Find:   Q and ΔU
+Solve:  At constant volume the piston doesn't move, so W = 0.
+        Q  = m · c_v · ΔT = 0.5 × 718 × 50 = 17 950 J
+        ΔU = Q − W        = 17 950 − 0     = 17 950 J
 
-def heat_for_ideal_gas(m, c_v, delta_T):
-    """Constant-volume heating: Q = m*cv*ΔT"""
-    return m * c_v * delta_T
-
-def work_isothermal(n, R, T, V1, V2):
-    """Isothermal expansion work: W = nRT*ln(V2/V1)"""
-    import math
-    return n * R * T * math.log(V2 / V1)
-
-# Example 1: Closed system
-Q = 500   # J added to system
-W = 200   # J work done by system
-delta_U = first_law_delta_u(Q, W)
-print(f"ΔU = {delta_U} J  (internal energy increased)")
-
-# Example 2: Constant volume heating of air
-# air cv = 718 J/(kg·K), mass = 0.5 kg, ΔT = 50 K
-m, cv, dT = 0.5, 718, 50
-Q2 = heat_for_ideal_gas(m, cv, dT)
-print(f"Q (const. vol.) = {Q2:.1f} J")
-# At constant volume, W = 0, so ΔU = Q
-print(f"ΔU = {Q2:.1f} J")
-
-# Example 3: Isothermal expansion
-R = 8.314; n = 1.0; T = 400  # K
-V1, V2 = 0.01, 0.03           # m³
-W3 = work_isothermal(n, R, T, V1, V2)
-print(f"Isothermal work = {W3:.1f} J")`,
-        output: `ΔU = 300 J  (internal energy increased)\nQ (const. vol.) = 17950.0 J\nΔU = 17950.0 J\nIsothermal work = 3653.5 J`,
-        explanation: 'Example 1: 500 J in, 200 J out as work → 300 J stored. Example 2: constant volume means W=0, so all heat becomes internal energy. Example 3: isothermal expansion — gas does work while temperature stays constant (ΔU=0, so Q=W).',
+CASE 3 — Isothermal expansion of an ideal gas
+──────────────────────────────────────────────
+Given:  n = 1.0 mol,  T = 400 K,  V₁ = 0.010 m³,  V₂ = 0.030 m³
+Find:   W (work done BY the gas) and Q
+Solve:  Isothermal  ⇒  ΔU = 0  ⇒  Q = W
+        W = n R T ln(V₂/V₁)
+          = (1.0)(8.314)(400) · ln(0.030/0.010)
+          = 3327.6 · ln(3)
+          = 3327.6 · 1.0986
+          = 3653.5 J
+        Q = +3653.5 J   (all heat added becomes expansion work)`,
+        output: `Case 1:  ΔU = +300 J
+Case 2:  Q = 17 950 J,  ΔU = 17 950 J    (W = 0)
+Case 3:  W = +3653.5 J,  Q = +3653.5 J   (ΔU = 0)`,
+        explanation: 'Case 1 shows the sign convention: heat IN is positive, work BY system is positive. Case 2 — constant volume kills the pdV integral, so every joule of heat becomes internal energy. Case 3 — isothermal means T (and therefore U for an ideal gas) is fixed, so every joule of heat leaves again as expansion work.',
       },
     ],
     commonMistakes: [
@@ -267,44 +255,38 @@ print(f"Isothermal work = {W3:.1f} J")`,
     formula: 'Entropy change:\ndS = δQ_rev / T  (for reversible heat transfer)\nΔS_universe = ΔS_system + ΔS_surroundings ≥ 0\n\nFor irreversible processes: ΔS_universe > 0\nFor reversible processes: ΔS_universe = 0\nImpossible: ΔS_universe < 0',
     codeExamples: [
       {
-        title: 'Entropy Change Calculations',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Entropy Balance (Two Cases)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `CASE 1 — Isothermal expansion of air
+────────────────────────────────────
+Given:  m = 1.0 kg air,  T = 400 K = const,  V₂/V₁ = 2
+        c_v = 718 J/(kg·K),  c_p = 1005 J/(kg·K)
+        R_specific = c_p − c_v = 287 J/(kg·K)
 
-def entropy_change_ideal_gas(m, cv, cp, T1, T2, V1, V2):
-    """ΔS for ideal gas undergoing any process."""
-    R_specific = cp - cv
-    ds_T = m * cv * math.log(T2 / T1)   # temperature contribution
-    ds_V = m * R_specific * math.log(V2 / V1)  # volume contribution
-    return ds_T + ds_V
+Since T is constant, only the volume term of ΔS survives:
+    ΔS_sys = m · R · ln(V₂/V₁)
+           = (1.0)(287)(ln 2)
+           = (1.0)(287)(0.6931)
+           = 198.9 J/K
 
-def entropy_change_heat_transfer(Q, T):
-    """ΔS = Q/T for isothermal reversible process."""
-    return Q / T
+CASE 2 — Heat flowing from hot to cold (universe check)
+───────────────────────────────────────────────────────
+Given:  Q = 200 J flows from T_hot = 500 K to T_cold = 300 K
 
-# Example 1: Isothermal expansion of air
-# 1 kg of air, T = 400 K, volume doubles
-m = 1.0       # kg
-T = 400       # K
-cv = 718      # J/(kg·K)
-cp = 1005     # J/(kg·K)
-V1, V2 = 1.0, 2.0
+Hot reservoir LOSES entropy:
+    ΔS_hot   = −Q / T_hot   = −200/500  = −0.4000 J/K
 
-ds = entropy_change_ideal_gas(m, cv, cp, T, T, V1, V2)
-print(f"ΔS (isothermal expansion) = {ds:.1f} J/K")
+Cold reservoir GAINS entropy:
+    ΔS_cold  = +Q / T_cold  = +200/300  = +0.6667 J/K
 
-# Example 2: Check Universe entropy
-# Heat Q = 200 J flows from hot (500 K) to cold (300 K)
-Q = 200  # J
-T_hot, T_cold = 500, 300
-ds_hot  = -Q / T_hot    # hot reservoir loses entropy
-ds_cold = +Q / T_cold   # cold reservoir gains entropy
-ds_universe = ds_hot + ds_cold
-print(f"ΔS_hot        = {ds_hot:.4f} J/K")
-print(f"ΔS_cold       = {ds_cold:.4f} J/K")
-print(f"ΔS_universe   = {ds_universe:.4f} J/K  (> 0: natural process)")`,
-        output: `ΔS (isothermal expansion) = 198.9 J/K\nΔS_hot        = -0.4000 J/K\nΔS_cold       = 0.6667 J/K\nΔS_universe   = 0.2667 J/K  (> 0: natural process)`,
-        explanation: 'For 1 kg of air, doubling volume is a large entropy change: ΔS = mR ln(V2/V1) = 198.9 J/K. Heat flowing from hot to cold increases the universe\'s entropy because the cold reservoir gains more entropy than the hot reservoir loses.',
+Universe:
+    ΔS_univ  = ΔS_hot + ΔS_cold
+             = −0.4000 + 0.6667
+             = +0.2667 J/K   ( > 0  ⇒  process is possible/natural )`,
+        output: `Case 1:  ΔS_sys = +198.9 J/K
+Case 2:  ΔS_universe = +0.2667 J/K   (Second Law satisfied)`,
+        explanation: 'Case 1: for an isothermal process, ΔU = 0 for an ideal gas, so all entropy change comes from the volume term ΔS = mR ln(V₂/V₁). Case 2: the cold reservoir gains more entropy than the hot reservoir loses because 200/300 > 200/500. This asymmetry — heat leaving a low T is a bigger entropy loss than heat leaving a high T — is what makes heat flow hot→cold thermodynamically favorable.',
       },
     ],
     commonMistakes: [
@@ -357,42 +339,45 @@ print(f"ΔS_universe   = {ds_universe:.4f} J/K  (> 0: natural process)")`,
     formula: 'Carnot Thermal Efficiency:\nη_Carnot = 1 − T_L/T_H   (temperatures in Kelvin)\nη_Carnot = W_net / Q_H\n\nCarnot COP (Refrigerator):\nCOP_R = T_L / (T_H − T_L) = Q_L / W_net\n\nCarnot COP (Heat Pump):\nCOP_HP = T_H / (T_H − T_L) = Q_H / W_net\n\nNote: COP_HP = COP_R + 1',
     codeExamples: [
       {
-        title: 'Carnot Efficiency and Real Engine Comparison',
-        language: 'python',
-        code: `def carnot_efficiency(T_H, T_L):
-    """T_H and T_L in Kelvin."""
-    if T_H <= T_L:
-        raise ValueError("T_H must be greater than T_L")
-    return 1 - T_L / T_H
+        title: 'Worked Example — Carnot Benchmarks (Power Plant & Refrigerator)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `CASE 1 — Coal-fired power plant
+──────────────────────────────
+Given:  T_H = 600 °C = 873 K   (superheated steam)
+        T_L = 30 °C = 303 K    (cooling-tower water)
+        η_actual = 42 %        (typical modern plant)
 
-def carnot_cop_refrigerator(T_H, T_L):
-    return T_L / (T_H - T_L)
+Carnot (ideal) efficiency:
+    η_C = 1 − T_L/T_H
+        = 1 − 303/873
+        = 1 − 0.3471
+        = 0.6529
+        ≈ 65.3 %
 
-def carnot_cop_heat_pump(T_H, T_L):
-    return T_H / (T_H - T_L)
+Second-law (relative) efficiency:
+    η_II = η_actual / η_C
+         = 0.42 / 0.6529
+         = 0.643
+         ≈ 64.3 % of the Carnot ceiling
 
-# Power plant example
-T_H_plant = 873  # K (600°C steam)
-T_L_plant = 303  # K (30°C cooling)
-eta_carnot = carnot_efficiency(T_H_plant, T_L_plant)
-eta_actual = 0.42   # typical real coal plant
+CASE 2 — Domestic refrigerator (freezer −18 °C, room 25 °C)
+────────────────────────────────────────────────────────────
+Given:  T_L = 255.15 K,   T_H = 298.15 K
 
-print("=== Power Plant Analysis ===")
-print(f"T_H = {T_H_plant} K ({T_H_plant-273:.0f}°C)")
-print(f"T_L = {T_L_plant} K ({T_L_plant-273:.0f}°C)")
-print(f"Carnot efficiency:  {eta_carnot:.1%}")
-print(f"Actual efficiency:  {eta_actual:.1%}")
-print(f"Second-law eff.:    {eta_actual/eta_carnot:.1%}  (of Carnot limit)")
+Carnot COP for a refrigerator:
+    COP_R = T_L / (T_H − T_L)
+          = 255.15 / (298.15 − 255.15)
+          = 255.15 / 43.00
+          = 5.93
 
-# Refrigerator example (indoor 25°C, freezer -18°C)
-T_cold = -18 + 273.15  # K
-T_room = 25 + 273.15   # K
-cop = carnot_cop_refrigerator(T_room, T_cold)
-print(f"\n=== Ideal Refrigerator ===")
-print(f"Max COP = {cop:.2f}")
-print(f"To remove 1 kJ of heat, min work = {1/cop:.3f} kJ")`,
-        output: `=== Power Plant Analysis ===\nT_H = 873 K (600°C)\nT_L = 303 K (30°C)\nCarnot efficiency:  65.3%\nActual efficiency:  42.0%\nSecond-law eff.:    64.3%  (of Carnot limit)\n\n=== Ideal Refrigerator ===\nMax COP = 5.88\nTo remove 1 kJ of heat, min work = 0.170 kJ`,
-        explanation: 'The coal plant operates at 42% efficiency — 64.3% of the Carnot maximum, meaning 35.7% of the remaining potential is lost to irreversibilities. An ideal refrigerator (COP=5.88) moves 5.88 kJ of heat for every 1 kJ of work — real refrigerators have COP of 2-4.',
+Minimum work to remove 1 kJ of heat from the freezer:
+    W_min = Q_L / COP_R
+          = 1 / 5.93
+          = 0.169 kJ`,
+        output: `Power plant:   η_Carnot = 65.3 %,  η_II ≈ 64.3 % of ceiling
+Refrigerator:  COP_max ≈ 5.93,  W_min ≈ 0.17 kJ per kJ removed`,
+        explanation: 'A 42% real plant captures ~64% of the thermodynamic ceiling — the remaining 36% is lost to friction, finite-time heat transfer, and turbine irreversibilities. A refrigerator COP of ~5.9 means an ideal compressor spends just 0.17 kJ of work to move 1 kJ of heat uphill; real domestic units run at COP 2–4.',
       },
     ],
     commonMistakes: [
@@ -445,51 +430,42 @@ print(f"To remove 1 kJ of heat, min work = {1/cop:.3f} kJ")`,
     formula: 'Process summary for ideal gas:\n──────────────────────────────────────\nIsothermal (T=const):  W = nRT ln(V₂/V₁),  ΔU = 0,  Q = W\nIsobaric (P=const):    W = P(V₂-V₁),  Q = mcₚΔT,  ΔU = mcᵥΔT\nIsochoric (V=const):   W = 0,  Q = mcᵥΔT,  ΔU = Q\nAdiabatic (Q=0):       W = (P₁V₁-P₂V₂)/(γ-1),  ΔU = -W\nPolytropic:            PVⁿ = const',
     codeExamples: [
       {
-        title: 'Work Calculations for All Four Processes',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Work Output for All Four Processes (Same Expansion)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `Common start state:   P₁ = 100 kPa,  V₁ = 0.10 m³,  T₁ = 300 K
+Common end state:     V₂ = 0.20 m³   (volume doubles)
+Working fluid: air,   R = 0.287 kJ/(kg·K),  γ = 1.4
 
-gamma = 1.4    # ratio of specific heats for air (cp/cv)
-R = 0.287     # kJ/(kg·K) for air
+Mass in the piston:
+    m = P₁V₁ / (R T₁) = (100)(0.10) / (0.287)(300) = 0.116 kg
 
-def work_isothermal(m, R, T, V1, V2):
-    return m * R * T * math.log(V2 / V1)
+┌──────────────┬───────────────────────────────┬──────────────┐
+│  Process     │  Work formula                 │  W (kJ)      │
+├──────────────┼───────────────────────────────┼──────────────┤
+│ Isothermal   │  W = mRT ln(V₂/V₁)            │              │
+│              │    = 0.116·0.287·300·ln 2     │   ≈  6.93    │
+├──────────────┼───────────────────────────────┼──────────────┤
+│ Isobaric     │  W = P(V₂ − V₁)               │              │
+│              │    = 100·(0.20 − 0.10)        │   =  10.00   │
+├──────────────┼───────────────────────────────┼──────────────┤
+│ Isochoric    │  W = 0   (dV = 0)             │   =  0.00    │
+├──────────────┼───────────────────────────────┼──────────────┤
+│ Adiabatic    │  P₂ = P₁(V₁/V₂)^γ             │              │
+│              │     = 100·(0.5)^1.4 = 37.89   │              │
+│              │  W = (P₁V₁ − P₂V₂)/(γ − 1)    │              │
+│              │    = (10 − 37.89·0.20)/0.4    │   ≈  6.05    │
+└──────────────┴───────────────────────────────┴──────────────┘
 
-def work_isobaric(P, V1, V2):
-    return P * (V2 - V1)
-
-def work_isochoric():
-    return 0.0   # V = constant, no boundary work
-
-def work_adiabatic(P1, V1, P2, V2, gamma):
-    return (P1*V1 - P2*V2) / (gamma - 1)
-
-# All starting at: P1=100 kPa, V1=0.1 m³, T1=300 K
-# Expand to V2 = 0.2 m³ (volume doubles)
-P1, V1, T1 = 100, 0.1, 300
-m = P1 * V1 / (R * T1)  # kg, from ideal gas law PV = mRT
-
-# Isothermal: T stays 300 K
-W_iso = work_isothermal(m, R, T1, V1, 2*V1)
-
-# Isobaric: P stays 100 kPa
-W_isobar = work_isobaric(P1, V1, 2*V1)
-
-# Isochoric: no expansion, W=0
-W_isoV = work_isochoric()
-
-# Adiabatic: P drops during expansion
-# P2 = P1*(V1/V2)^gamma
-P2_ad = P1 * (V1 / (2*V1))**gamma
-W_ad = work_adiabatic(P1, V1, P2_ad, 2*V1, gamma)
-
-print(f"Isothermal work:  {W_iso:.3f} kJ")
-print(f"Isobaric work:    {W_isobar:.3f} kJ")
-print(f"Isochoric work:   {W_isoV:.3f} kJ")
-print(f"Adiabatic work:   {W_ad:.3f} kJ")
-print(f"Adiabatic P2:     {P2_ad:.2f} kPa")`,
-        output: `Isothermal work:  6.931 kJ\nIsobaric work:    10.000 kJ\nIsochoric work:   0.000 kJ\nAdiabatic work:   6.054 kJ\nAdiabatic P2:     37.89 kPa`,
-        explanation: 'Isobaric gives the most work (constant high pressure throughout expansion). Adiabatic gives less than isobaric (pressure drops faster). Isothermal stays at constant temperature — pressure drops slowly, giving moderate work. Isochoric: volume fixed, no work done.',
+RANKING BY WORK OUTPUT (doubling V from same start):
+    Isobaric  (10.00 kJ)  >  Isothermal (6.93 kJ)
+                          >  Adiabatic  (6.05 kJ)
+                          >  Isochoric  (0.00 kJ)`,
+        output: `Isothermal:  6.93 kJ
+Isobaric:   10.00 kJ
+Isochoric:   0.00 kJ
+Adiabatic:   6.05 kJ   (P drops from 100 → 37.89 kPa)`,
+        explanation: 'Isobaric wins because pressure stays at 100 kPa throughout — the P-V diagram is a full rectangle. Isothermal drops as 1/V (Boyle). Adiabatic drops faster (1/V^γ) so it produces less work but its temperature falls — that cooling is the source of the "adiabatic drop" seen in gas dynamics. Isochoric does zero boundary work; all heat goes to internal energy.',
       },
     ],
     commonMistakes: [
@@ -542,47 +518,48 @@ print(f"Adiabatic P2:     {P2_ad:.2f} kPa")`,
     formula: 'Entropy change:\ndS = δQ_rev / T\n\nFor ideal gas:\nΔS = m[cv ln(T2/T1) + R ln(v2/v1)]\n   = m[cp ln(T2/T1) - R ln(P2/P1)]\n\nBoltzmann equation:\nS = k_B × ln(Ω)\nwhere k_B = 1.38×10⁻²³ J/K\n\nClausius inequality:\n∮ δQ/T ≤ 0 (= for reversible cycle)',
     codeExamples: [
       {
-        title: 'Entropy Generation and Isentropic Efficiency',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Real Turbine vs Isentropic Ideal (Entropy Generation)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `Air turbine — inlet & outlet states
+────────────────────────────────────
+Given:  T₁ = 900 K,   P₁ = 1000 kPa
+        P₂ = 200 kPa
+        c_p = 1.005 kJ/(kg·K),  R = 0.287 kJ/(kg·K),  γ = 1.4
+        Isentropic efficiency  η_s = 0.87  (85–90 % typical)
 
-cp_air = 1.005  # kJ/(kg·K)
-cv_air = 0.718  # kJ/(kg·K)
-R_air  = 0.287  # kJ/(kg·K)
-gamma  = 1.4
+STEP 1 — Isentropic (reference) exit temperature
+    T₂s = T₁ · (P₂/P₁)^((γ−1)/γ)
+        = 900 · (200/1000)^(0.4/1.4)
+        = 900 · (0.2)^0.2857
+        = 900 · 0.6313
+        ≈ 568.2 K
 
-def delta_s_ideal_gas(m, cp, R, T1, T2, P1, P2):
-    """ΔS for ideal gas: m[cp*ln(T2/T1) - R*ln(P2/P1)]"""
-    return m * (cp * math.log(T2/T1) - R * math.log(P2/P1))
+STEP 2 — Isentropic (ideal) specific work
+    w_s = c_p · (T₁ − T₂s)
+        = 1.005 · (900 − 568.2)
+        ≈ 333.4 kJ/kg
 
-def isentropic_T2(T1, P1, P2, gamma):
-    """Temperature after isentropic (reversible adiabatic) compression/expansion."""
-    return T1 * (P2/P1)**((gamma-1)/gamma)
+STEP 3 — Actual work (turbine falls short of ideal)
+    w_act = η_s · w_s = 0.87 · 333.4 ≈ 290.1 kJ/kg
 
-# Turbine: air enters at 900 K, 1000 kPa; exits at 200 kPa
-T1_turb = 900   # K
-P1_turb = 1000  # kPa
-P2_turb = 200   # kPa
+STEP 4 — Actual exit temperature (from energy balance)
+    T₂_act = T₁ − w_act/c_p
+           = 900 − 290.1/1.005
+           ≈ 611.4 K       ( > T₂s: gas leaves hotter )
 
-# Isentropic exit temperature
-T2_isen = isentropic_T2(T1_turb, P1_turb, P2_turb, gamma)
-w_isen = cp_air * (T1_turb - T2_isen)
-
-# Real turbine with 87% isentropic efficiency
-eta_turb = 0.87
-w_actual = eta_turb * w_isen
-T2_actual = T1_turb - w_actual / cp_air
-
-# Entropy generation in real turbine
-delta_s = delta_s_ideal_gas(1.0, cp_air, R_air, T1_turb, T2_actual, P1_turb, P2_turb)
-
-print(f"Isentropic T2:  {T2_isen:.1f} K")
-print(f"Isentropic work:{w_isen:.2f} kJ/kg")
-print(f"Actual T2:      {T2_actual:.1f} K")
-print(f"Actual work:    {w_actual:.2f} kJ/kg")
-print(f"ΔS (per kg):    {delta_s:.4f} kJ/(kg·K)  > 0 (entropy generated)")`,
-        output: `Isentropic T2:  568.2 K\nIsentropic work:333.41 kJ/kg\nActual T2:      611.4 K\nActual work:    290.07 kJ/kg\nΔS (per kg):    0.0733 kJ/(kg·K)  > 0 (entropy generated)`,
-        explanation: 'The real turbine generates entropy — the exit temperature is higher than the isentropic value, meaning more energy stays in the exhaust gas instead of becoming useful work. Positive ΔS confirms irreversibility.',
+STEP 5 — Entropy generated per kg
+    Δs = c_p · ln(T₂_act/T₁) − R · ln(P₂/P₁)
+       = 1.005 · ln(611.4/900) − 0.287 · ln(0.2)
+       = 1.005 · (−0.3866) − 0.287 · (−1.6094)
+       = −0.3886 + 0.4619
+       ≈ +0.0733 kJ/(kg·K)   ( > 0 ⇒ irreversibility )`,
+        output: `T₂ (isentropic ideal):   568.2 K
+w  (isentropic ideal):   333.4 kJ/kg
+T₂ (real turbine):       611.4 K
+w  (real turbine):       290.1 kJ/kg
+Entropy generated:       +0.0733 kJ/(kg·K)`,
+        explanation: 'The real turbine leaves the exhaust ~43 K hotter than an isentropic one and delivers ~43 kJ/kg less work — that 43 kJ/kg is the "lost work" corresponding to Δs · T₀ (Gouy-Stodola). Because Δs > 0, the process is irreversible; if it were reversible the process would trace a vertical line on a T-s diagram.',
       },
     ],
     commonMistakes: [
@@ -635,34 +612,38 @@ print(f"ΔS (per kg):    {delta_s:.4f} kJ/(kg·K)  > 0 (entropy generated)")`,
     formula: 'Rankine Cycle Efficiency:\nη = W_net / Q_in = (W_turbine - W_pump) / Q_boiler\n\nOtto Cycle Efficiency:\nη_Otto = 1 - 1/r^(γ-1)\nwhere r = V_max/V_min (compression ratio)\n\nDiesel Cycle Efficiency:\nη_Diesel = 1 - (1/r^(γ-1)) × (r_c^γ - 1)/(γ(r_c - 1))\nwhere r_c = cutoff ratio',
     codeExamples: [
       {
-        title: 'Otto Cycle Efficiency vs Compression Ratio',
-        language: 'python',
-        code: `import math
+        title: 'Reference Table — Otto & Diesel Efficiency vs Compression Ratio',
+        language: 'cycle analysis (γ = 1.4)',
+        kind: 'spreadsheet',
+        code: `Air-standard formulas
+    η_Otto     = 1 − 1/r^(γ−1)
+    η_Diesel   = 1 − (1/r^(γ−1)) · (rc^γ − 1) / (γ · (rc − 1))
+    Here γ = 1.4 (air) and cut-off ratio rc = 2.0 for the Diesel column.
 
-gamma = 1.4   # for air
+┌──────────────────┬──────────────┬────────────────────┐
+│ Compression r    │  η_Otto      │  η_Diesel (rc = 2) │
+├──────────────────┼──────────────┼────────────────────┤
+│        4         │   42.6 %     │    32.8 %          │
+│        6         │   51.2 %     │    42.8 %          │
+│        8         │   56.5 %     │    49.0 %          │
+│       10         │   60.2 %     │    53.4 %          │
+│       12         │   63.0 %     │    56.7 %          │
+│       14         │   65.2 %     │    59.3 %          │
+│       16         │   67.0 %     │    61.4 %          │
+│       18         │   68.5 %     │    63.2 %          │
+│       20         │   69.8 %     │    64.7 %          │
+└──────────────────┴──────────────┴────────────────────┘
 
-def otto_efficiency(r):
-    """Thermal efficiency of ideal Otto cycle."""
-    return 1 - r**(-(gamma - 1))
-
-def diesel_efficiency(r, r_c):
-    """Thermal efficiency of ideal Diesel cycle."""
-    return 1 - (1/r**(gamma-1)) * (r_c**gamma - 1) / (gamma * (r_c - 1))
-
-# Compare different compression ratios
-print(f"{'Compression Ratio':>20} {'Otto η':>10} {'Diesel η (rc=2)':>18}")
-print("-" * 52)
-for r in [4, 6, 8, 10, 12, 14, 16, 18, 20]:
-    eta_otto   = otto_efficiency(r)
-    eta_diesel = diesel_efficiency(r, 2.0)
-    print(f"{r:>20}        {eta_otto:>6.1%}           {eta_diesel:>6.1%}")
-
-# Practical engine comparison
-print("\nTypical real engine efficiencies:")
-print(f"  Gasoline (r≈9):  ~{otto_efficiency(9):.1%} theoretical, ~30% actual")
-print(f"  Diesel   (r≈18): ~{diesel_efficiency(18,2):.1%} theoretical, ~40% actual")`,
-        output: `  Compression Ratio      Otto η   Diesel η (rc=2)\n----------------------------------------------------\n                   4        42.6%             32.8%\n                   6        51.2%             42.8%\n                   8        56.5%             49.0%\n                  10        60.2%             53.4%\n                  12        63.0%             56.7%\n                  14        65.2%             59.3%\n                  16        67.0%             61.4%\n                  18        68.5%             63.2%\n                  20        69.8%             64.7%\n\nTypical real engine efficiencies:\n  Gasoline (r≈9):  ~58.5% theoretical, ~30% actual\n  Diesel   (r≈18): ~63.2% theoretical, ~40% actual`,
-        explanation: 'Higher compression ratios improve efficiency. Diesel engines run at higher compression ratios (14-22 vs 8-12 for gasoline) — giving better efficiency. Real engines fall far short of theoretical values due to heat losses, friction, and non-ideal combustion.',
+TYPICAL PRODUCTION ENGINES
+──────────────────────────
+    Gasoline   r ≈ 9    →  air-std ≈ 58 %,  actual ≈ 30 %
+    Diesel     r ≈ 18   →  air-std ≈ 63 %,  actual ≈ 40 %
+    Reasons for the gap: heat-loss to cylinder walls, friction,
+    finite-time combustion, throttling, incomplete expansion.`,
+        output: `Higher r ⇒ higher efficiency, with diminishing returns.
+Diesel beats Otto in real hardware because Diesel can run at r ≈ 18
+without knock — gasoline is knock-limited to r ≈ 9–12.`,
+        explanation: 'For the same compression ratio, Otto is more efficient than Diesel — but knock limits gasoline engines to r ≈ 12. Diesel engines run un-throttled, use compression ignition, and tolerate r = 18–22, so they overtake Otto in practice. Modern turbocharged/downsized SI engines use direct injection and higher octane to push r into the 12–14 window.',
       },
     ],
     commonMistakes: [
@@ -716,45 +697,44 @@ print(f"  Diesel   (r≈18): ~{diesel_efficiency(18,2):.1%} theoretical, ~40% ac
     codeExamples: [
       {
         title: 'Thermal Resistance Network — Composite Wall',
-        language: 'python',
-        code: `# Composite wall: convection + multiple conduction layers + convection
-# [Hot fluid] → [h_inner] → [Brick] → [Insulation] → [Brick] → [h_outer] → [Cold]
+        language: 'thermal circuit (K/W)',
+        kind: 'worked-example',
+        code: `Composite wall — inside 20 °C, outside −10 °C
+──────────────────────────────────────────────
+Analogy:  Ohm's law for heat  →  Q = ΔT / ΣR
+Series-resistance network per m² of wall:
 
-def thermal_resistance_convection(h, A):
-    return 1 / (h * A)
+    (inside air)  ─Rconv,in─ [Plaster] ─R1─ [Brick] ─R2─ [Insulation] ─R3─ (outside air) ─Rconv,out─
 
-def thermal_resistance_conduction(k, L, A):
-    return L / (k * A)
+Given per unit area (A = 1 m²):
+    h_in  = 10  W/(m²·K)      L_plaster    = 0.02 m,  k = 0.7  W/(m·K)
+    h_out = 25  W/(m²·K)      L_brick      = 0.10 m,  k = 0.9  W/(m·K)
+                              L_insulation = 0.05 m,  k = 0.04 W/(m·K)
 
-def heat_flux(T_hot, T_cold, R_total):
-    return (T_hot - T_cold) / R_total
+RESISTANCE OF EACH LAYER
+     R = 1/(h·A)     for convection
+     R = L/(k·A)     for conduction
 
-A = 1.0   # m² (unit area for simplicity)
-T_hot = 20    # °C inside room
-T_cold = -10  # °C outside
+┌─────────────┬──────────────────────┬──────────┬─────────┐
+│ Layer       │ Formula              │  R (K/W) │  Share  │
+├─────────────┼──────────────────────┼──────────┼─────────┤
+│ Conv (in)   │ 1/(10·1)             │  0.1000  │   6.5 % │
+│ Plaster     │ 0.02/(0.7·1)         │  0.0286  │   1.9 % │
+│ Brick       │ 0.10/(0.9·1)         │  0.1111  │   7.3 % │
+│ Insulation  │ 0.05/(0.04·1)        │  1.2500  │  81.7 % │
+│ Conv (out)  │ 1/(25·1)             │  0.0400  │   2.6 % │
+├─────────────┼──────────────────────┼──────────┼─────────┤
+│ TOTAL       │  ΣR                  │  1.5297  │  100 %  │
+└─────────────┴──────────────────────┴──────────┴─────────┘
 
-# Layers: plaster (k=0.7, L=0.02m) + brick (k=0.9, L=0.1m) + insulation (k=0.04, L=0.05m)
-# Convection coefficients: h_in=10, h_out=25 W/(m²·K)
-
-R = [
-    thermal_resistance_convection(10, A),    # inner convection
-    thermal_resistance_conduction(0.7, 0.02, A),  # plaster
-    thermal_resistance_conduction(0.9, 0.10, A),  # brick
-    thermal_resistance_conduction(0.04, 0.05, A), # insulation
-    thermal_resistance_convection(25, A),    # outer convection
-]
-
-R_total = sum(R)
-q = heat_flux(T_hot, T_cold, R_total)
-
-print(f"Individual resistances (K/W):")
-names = ['Conv_in', 'Plaster', 'Brick', 'Insulation', 'Conv_out']
-for name, r in zip(names, R):
-    print(f"  {name:<12}: {r:.4f} K/W  ({r/R_total*100:.1f}%)")
-print(f"\nTotal R = {R_total:.4f} K/W")
-print(f"Heat loss = {q:.2f} W/m²")`,
-        output: `Individual resistances (K/W):\n  Conv_in     : 0.1000 K/W  (6.5%)\n  Plaster     : 0.0286 K/W  (1.9%)\n  Brick       : 0.1111 K/W  (7.3%)\n  Insulation  : 1.2500 K/W  (81.7%)\n  Conv_out    : 0.0400 K/W  (2.6%)\n\nTotal R = 1.5297 K/W\nHeat loss = 19.61 W/m²`,
-        explanation: 'The insulation layer has the highest thermal resistance (81.7% of total) — it is the bottleneck that most reduces heat loss. This is why well-insulated buildings use low-k insulation despite the relatively small thickness. Add more insulation to further reduce heat loss.',
+HEAT LOSS PER UNIT AREA
+    q = ΔT / ΣR
+      = (20 − (−10)) / 1.5297
+      = 30 / 1.5297
+      = 19.6 W/m²`,
+        output: `q ≈ 19.6 W/m² of wall
+Bottleneck: the 5 cm insulation layer (82 % of ΣR)`,
+        explanation: 'The insulation layer alone accounts for 82% of the total thermal resistance, so it — not the brick — sets the heat loss. The engineering rule: always improve the largest resistance first. Doubling insulation thickness roughly doubles ΣR and halves q; doubling brick thickness barely moves the needle.',
       },
     ],
     commonMistakes: [

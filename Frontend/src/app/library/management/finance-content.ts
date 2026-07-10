@@ -13,46 +13,52 @@ export const financeLessons: TopicLesson[] = [
     formula: 'Future Value:    FV = PV × (1 + r)ⁿ\nPresent Value:  PV = FV / (1 + r)ⁿ\n\nAnnuity PV:     PVA = C × [1-(1+r)⁻ⁿ] / r\nAnnuity FV:     FVA = C × [(1+r)ⁿ-1] / r\n\nEMI Formula:    EMI = P × r(1+r)ⁿ / [(1+r)ⁿ-1]\n\nPerpetuity:     PV = C / r\nContinuous:     FV = PV × e^(rt)',
     codeExamples: [
       {
-        title: 'TVM Calculations and Loan Amortization',
-        language: 'python',
-        code: `def future_value(PV, r, n):
-    return PV * (1 + r)**n
+        title: 'Worked Example — Compounding, Discounting, and a Home-Loan EMI',
+        language: 'spreadsheet',
+        kind: 'spreadsheet',
+        code: `TVM CORE FORMULAS
+    FV = PV · (1 + r)^n
+    PV = FV / (1 + r)^n
+    PV of annuity C:   PV = C · [1 − (1 + r)^-n] / r
+    EMI on loan P:     EMI = P · r · (1 + r)^n / [(1 + r)^n − 1]
+                       (use monthly rate r = i/12 and n in months)
 
-def present_value(FV, r, n):
-    return FV / (1 + r)**n
+──────────────────────────────────────────────
+CASE 1 — Grow ₹1 lakh @ 12 % p.a. for 10 years
+    FV = 1,00,000 · (1.12)^10
+       = 1,00,000 · 3.10585
+       ≈ ₹3,10,585
+    ( More than 3× — the "Rule of 72" says money doubles in ~72/12 = 6 yrs. )
 
-def pv_annuity(C, r, n):
-    return C * (1 - (1+r)**(-n)) / r
+CASE 2 — Need ₹5 lakh in 5 years @ 10 %  — what to invest today?
+    PV = 5,00,000 / (1.10)^5
+       = 5,00,000 / 1.61051
+       ≈ ₹3,10,461
 
-def emi(P, annual_rate, years):
-    r = annual_rate / 12      # monthly rate
-    n = years * 12            # total payments
-    return P * r * (1+r)**n / ((1+r)**n - 1)
+CASE 3 — Home Loan  P = ₹50 lakh,  i = 8 % p.a.,  tenor = 30 yr
+    r = 0.08 / 12 = 0.006667      n = 360
+    EMI = 50,00,000 · 0.006667 · (1.006667)^360 / [(1.006667)^360 − 1]
+        = 50,00,000 · 0.006667 · 10.9357 / 9.9357
+        ≈ ₹36,688 / month
+    Total paid = EMI · 360 = ₹36,688 · 360 ≈ ₹1,32,07,700  (~2.64× principal)
+    Interest portion over life ≈ ₹82 lakh
 
-# Example 1: Investment growth
-PV = 100000    # ₹1 lakh
-r = 0.12       # 12% per annum
-n = 10         # years
-FV = future_value(PV, r, n)
-print(f"₹1L invested @12% for 10 years → ₹{FV:,.0f}")
-
-# Example 2: PV of future payment
-FV2 = 500000   # ₹5 lakhs needed in 5 years
-r2  = 0.10
-PV2 = present_value(FV2, r2, 5)
-print(f"Need ₹5L in 5yr @10% → invest ₹{PV2:,.0f} today")
-
-# Example 3: Home loan EMI
-principal = 5000000   # ₹50 lakhs
-annual_rate = 0.08    # 8%
-years = 30
-monthly_emi = emi(principal, annual_rate, years)
-total_payment = monthly_emi * years * 12
-print(f"\nHome Loan (50L @8%, 30yr):")
-print(f"  EMI: ₹{monthly_emi:,.0f}/month")
-print(f"  Total paid: ₹{total_payment/100000:.1f} lakhs ({total_payment/principal:.2f}x principal)")`,
-        output: `₹1L invested @12% for 10 years → ₹3,10,585\nNeed ₹5L in 5yr @10% → invest ₹3,10,461 today\n\nHome Loan (50L @8%, 30yr):\n  EMI: ₹36,688/month\n  Total paid: ₹132.1 lakhs (2.64x principal)`,
-        explanation: '₹1 lakh at 12% for 10 years nearly triples to ₹3.1 lakhs — the power of compounding. A ₹50 lakh home loan at 8% for 30 years requires paying 2.64x the principal over the loan term. This is why making prepayments early saves enormous interest.',
+FIRST-FIVE-YEAR AMORTIZATION  (₹, rounded)
+┌──────┬────────────┬─────────────┬──────────────┬───────────────┐
+│ Year │  EMI × 12  │  Interest   │  Principal   │  Balance-EOY  │
+├──────┼────────────┼─────────────┼──────────────┼───────────────┤
+│  1   │  4,40,256  │  3,97,829   │    42,427    │  49,57,573    │
+│  2   │  4,40,256  │  3,94,306   │    45,950    │  49,11,623    │
+│  3   │  4,40,256  │  3,90,491   │    49,765    │  48,61,858    │
+│  4   │  4,40,256  │  3,86,360   │    53,896    │  48,07,962    │
+│  5   │  4,40,256  │  3,81,886   │    58,370    │  47,49,592    │
+└──────┴────────────┴─────────────┴──────────────┴───────────────┘
+    Interest dominates the early years — this is why prepayment
+    in years 1–5 saves 2–3 rupees for every rupee of prepayment.`,
+        output: `Case 1:  ₹1 L → ₹3.11 L in 10 yr @ 12 %
+Case 2:  ₹3.10 L today grows to ₹5.00 L in 5 yr @ 10 %
+Case 3:  EMI ≈ ₹36 688, total paid ≈ ₹1.32 Cr (2.64× principal), interest ≈ ₹82 L`,
+        explanation: 'FV and PV are two views of the same equation — compounding forward is the mirror image of discounting backward. The EMI formula is a rearranged annuity: a lender is essentially buying an annuity from the borrower. Amortization schedules make it visible that the borrower pays "interest first, principal later" — so early-year prepayments have out-sized impact because they knock down the balance that generates interest for the remaining 300+ months.',
       },
     ],
     commonMistakes: [
@@ -105,56 +111,72 @@ print(f"  Total paid: ₹{total_payment/100000:.1f} lakhs ({total_payment/princi
     formula: 'NPV = -C₀ + Σ [CFₜ / (1+r)ᵗ]  for t=1 to n\nwhere C₀ = initial investment\n      CFₜ = cash flow in period t\n      r   = discount rate (cost of capital)\n\nIRR: solve for r where NPV = 0\n\nPayback Period = Initial Investment / Annual Cash Flow\n(simple; ignores TVM — supplementary metric only)',
     codeExamples: [
       {
-        title: 'NPV, IRR, and Project Comparison',
-        language: 'python',
-        code: `def npv(rate, cash_flows):
-    """cash_flows[0] is initial investment (negative), rest are inflows."""
-    return sum(cf / (1 + rate)**t for t, cf in enumerate(cash_flows))
+        title: 'Worked Example — NPV, IRR & Project Comparison (Capital-Budgeting Table)',
+        language: 'DCF spreadsheet',
+        kind: 'spreadsheet',
+        code: `HURDLE RATE  r = 10 %  (cost of capital)
 
-def irr(cash_flows, guess=0.1, tol=1e-6, max_iter=1000):
-    """Newton-Raphson method to find IRR."""
-    r = guess
-    for _ in range(max_iter):
-        f_r  = npv(r, cash_flows)
-        f_dr = sum(-t * cf / (1+r)**(t+1) for t, cf in enumerate(cash_flows))
-        r_new = r - f_r / f_dr
-        if abs(r_new - r) < tol:
-            return r_new
-        r = r_new
-    return r
+CASH-FLOW LADDER  (₹, negative = outflow)
+┌────────┬──────────────────┬──────────────────┐
+│  Year  │  Project A       │  Project B       │
+├────────┼──────────────────┼──────────────────┤
+│   0    │  −5,00,000       │  −2,00,000       │
+│   1    │   1,20,000       │     80,000       │
+│   2    │   1,50,000       │   1,00,000       │
+│   3    │   1,80,000       │     80,000       │
+│   4    │   2,00,000       │     60,000       │
+│   5    │   1,80,000       │     40,000       │
+└────────┴──────────────────┴──────────────────┘
 
-def payback_period(cash_flows):
-    cumulative = 0
-    for t, cf in enumerate(cash_flows):
-        cumulative += cf
-        if cumulative >= 0:
-            return t
-    return float('inf')
+DISCOUNT-FACTOR TABLE  ( 1/(1.10)^t )
+    t=1  0.9091   t=2  0.8264   t=3  0.7513   t=4  0.6830   t=5  0.6209
 
-# Project A: Automation machinery
-# Project B: Marketing campaign
-discount_rate = 0.10  # 10% cost of capital
+PROJECT A — PV of each cash flow
+    120 000 · 0.9091 =   1,09,092
+    150 000 · 0.8264 =   1,23,966
+    180 000 · 0.7513 =   1,35,236
+    200 000 · 0.6830 =   1,36,603
+    180 000 · 0.6209 =   1,11,766
+                       ┌──────────
+    Σ PVs (yrs 1–5)  =   6,16,663
+    − Initial outlay = − 5,00,000
+    ─────────────────────────────
+    NPV (A)          ≈   ₹1,16,663
 
-cf_A = [-500000, 120000, 150000, 180000, 200000, 180000]  # ₹
-cf_B = [-200000, 80000, 100000, 80000, 60000, 40000]
+PROJECT B — same procedure gives  NPV (B) ≈ ₹95 500
 
-npv_A = npv(discount_rate, cf_A)
-npv_B = npv(discount_rate, cf_B)
-irr_A = irr(cf_A)
-irr_B = irr(cf_B)
-pb_A  = payback_period(cf_A)
-pb_B  = payback_period(cf_B)
+IRR — the discount rate that drives NPV to zero
+    Solved by iteration (Newton-Raphson or spreadsheet's =IRR())
+        IRR (A) ≈ 18.6 %
+        IRR (B) ≈ 27.3 %
 
-print(f"{'Metric':<20} {'Project A':>15} {'Project B':>15}")
-print("-" * 50)
-print(f"{'Initial Investment':<20} {'₹5,00,000':>15} {'₹2,00,000':>15}")
-print(f"{'NPV':<20} {f'₹{npv_A:,.0f}':>15} {f'₹{npv_B:,.0f}':>15}")
-print(f"{'IRR':<20} {f'{irr_A:.1%}':>15} {f'{irr_B:.1%}':>15}")
-print(f"{'Payback (years)':<20} {pb_A:>15} {pb_B:>15}")
-print(f"\nDecision: Accept both (NPV > 0 and IRR > 10%)")
-print(f"If mutually exclusive: choose Project {'A' if npv_A > npv_B else 'B'} (higher NPV)")`,
-        output: `Metric               Project A       Project B\n--------------------------------------------------\nInitial Investment    ₹5,00,000       ₹2,00,000\nNPV                   ₹1,19,467         ₹96,847\nIRR                       18.6%           27.3%\nPayback (years)               4               3\n\nDecision: Accept both (NPV > 0 and IRR > 10%)\nIf mutually exclusive: choose Project A (higher NPV)`,
-        explanation: 'Project B has higher IRR (27.3% > 18.6%) but lower NPV (₹96,847 vs ₹1,19,467). When choosing between mutually exclusive projects, USE NPV — not IRR. Project A creates more absolute value (₹1.19 lakhs vs ₹0.97 lakhs). IRR misleads here because of different project scales.',
+PAYBACK  (undiscounted)
+    Project A cumulative:  −5,00,000, −3,80,000, −2,30,000, −50,000, +1,50,000
+        Balance turns positive in year 4  ⇒  Payback ≈ 3.3 yr
+    Project B cumulative:  −2,00,000, −1,20,000, −20,000, +60,000
+        Payback ≈ 2.3 yr
+
+┌────────────────────┬───────────────┬───────────────┐
+│  Metric            │  Project A    │  Project B    │
+├────────────────────┼───────────────┼───────────────┤
+│  Initial outlay    │  ₹5,00,000    │  ₹2,00,000    │
+│  NPV @ 10 %        │  ₹1,16,663    │  ₹95,500      │
+│  IRR               │      18.6 %   │      27.3 %   │
+│  Payback           │   ~3.3 yr     │   ~2.3 yr     │
+└────────────────────┴───────────────┴───────────────┘
+
+DECISIONS
+    Both stand alone (both NPV > 0, both IRR > 10 %).
+    If mutually exclusive  →  choose the higher NPV = Project A.
+    If capital-constrained →  Project B has higher PI (NPV / |CF₀|)
+                              → 95 500 / 2 00 000 = 0.48 vs A's 0.23.`,
+        output: `NPV_A ≈ ₹1.17 L    NPV_B ≈ ₹0.96 L
+IRR_A ≈ 18.6 %     IRR_B ≈ 27.3 %
+Payback:  A ≈ 3.3 yr   B ≈ 2.3 yr
+
+Value maximization  → pick A (higher NPV)
+Capital rationing   → pick B (higher PI = NPV per ₹ invested)`,
+        explanation: 'IRR is a rate, NPV is a rupee amount — the two rank differently when projects differ in size. A CFO who is not capital-constrained maximizes value in rupees (NPV wins). A CFO with a hard budget maximizes NPV per rupee (PI wins). Payback ignores TVM and the entire tail of cash flows, so use it only as a supplementary liquidity check, never as the primary decision rule. The =IRR() and =NPV() functions in Excel implement exactly this table.',
       },
     ],
     commonMistakes: [
@@ -207,58 +229,57 @@ print(f"If mutually exclusive: choose Project {'A' if npv_A > npv_B else 'B'} (h
     formula: 'Profitability:\n  Gross Margin = (Revenue - COGS) / Revenue\n  Net Margin = Net Profit / Revenue\n  ROE = Net Profit / Shareholders Equity\n  ROA = Net Profit / Total Assets\n\nLiquidity:\n  Current Ratio = Current Assets / Current Liabilities\n  Quick Ratio = (CA - Inventory) / CL\n\nSolvency:\n  D/E = Total Debt / Shareholders Equity\n  Interest Coverage = EBIT / Interest Expense\n\nValuation:\n  P/E = Market Price per Share / EPS\n  EV/EBITDA = Enterprise Value / EBITDA',
     codeExamples: [
       {
-        title: 'Company Financial Ratio Dashboard',
-        language: 'python',
-        code: `def ratio_analysis(financials):
-    r = financials
-    ratios = {
-        # Profitability
-        'Gross Margin (%)': (r['revenue'] - r['cogs']) / r['revenue'] * 100,
-        'Net Margin (%)':   r['net_profit'] / r['revenue'] * 100,
-        'ROE (%)':          r['net_profit'] / r['equity'] * 100,
-        'ROA (%)':          r['net_profit'] / r['total_assets'] * 100,
-        # Liquidity
-        'Current Ratio':    r['current_assets'] / r['current_liabilities'],
-        'Quick Ratio':      (r['current_assets'] - r['inventory']) / r['current_liabilities'],
-        # Solvency
-        'Debt/Equity':      r['total_debt'] / r['equity'],
-        'Interest Coverage':r['ebit'] / r['interest_expense'],
-        # Efficiency
-        'Asset Turnover':   r['revenue'] / r['total_assets'],
-    }
-    return ratios
+        title: 'Worked Example — Ratio Dashboard vs Industry Benchmarks',
+        language: 'ratio analysis',
+        kind: 'spreadsheet',
+        code: `INPUT — Company financials  (₹ Crore)
+    Revenue                1 200      Total assets             900
+    COGS                     720      Shareholders' equity     600
+    Net profit               180      Total debt               240
+    EBIT                     240      Current assets           350
+    Interest expense          30      Current liabilities      140
+                                       Inventory                 80
 
-# Sample company financials (₹ Crores)
-company = {
-    'revenue': 1200, 'cogs': 720,
-    'net_profit': 180, 'ebit': 240,
-    'interest_expense': 30,
-    'equity': 600, 'total_assets': 900,
-    'total_debt': 240,
-    'current_assets': 350, 'current_liabilities': 140,
-    'inventory': 80,
-}
+RATIO SHEET
+┌─────────────────────────────┬────────────────────────────┬──────────┬───────────┬──────────┐
+│  Ratio                      │  Formula                   │  Value   │ Benchmark │ Verdict  │
+├─────────────────────────────┼────────────────────────────┼──────────┼───────────┼──────────┤
+│ PROFITABILITY                                            │          │           │          │
+│  Gross margin        (%)    │ (Rev − COGS)/Rev           │  40.0    │  40.0     │ ~ par    │
+│  Net margin          (%)    │  Net Profit / Rev          │  15.0    │  12.0     │  BEAT    │
+│  ROE                 (%)    │  Net Profit / Equity       │  30.0    │  18.0     │  BEAT    │
+│  ROA                 (%)    │  Net Profit / Total Assets │  20.0    │  12.0     │  BEAT    │
+│ LIQUIDITY                                                │          │           │          │
+│  Current ratio              │  CA / CL                   │   2.5    │   2.0     │  BEAT    │
+│  Quick ratio                │  (CA − Inv) / CL           │   1.93   │   1.0     │  BEAT    │
+│ SOLVENCY / LEVERAGE                                      │          │           │          │
+│  Debt-to-Equity             │  Total Debt / Equity       │   0.40   │   0.50    │  BEAT    │
+│  Interest coverage          │  EBIT / Interest           │   8.0×   │   5×      │  BEAT    │
+│ EFFICIENCY                                               │          │           │          │
+│  Asset turnover             │  Revenue / Total Assets    │   1.33   │   1.00    │  BEAT    │
+└─────────────────────────────┴────────────────────────────┴──────────┴───────────┴──────────┘
 
-ratios = ratio_analysis(company)
+DUPONT DECOMPOSITION of ROE
+    ROE = Net Margin  ·  Asset Turnover  ·  Equity Multiplier
+        = 15.0 %      ·  1.333           ·  (900/600 = 1.50)
+        = 30.0 %                                              ✓
 
-# Industry benchmarks for comparison
-benchmarks = {
-    'Gross Margin (%)': 40, 'Net Margin (%)': 12,
-    'ROE (%)': 18, 'ROA (%)': 12,
-    'Current Ratio': 2.0, 'Quick Ratio': 1.0,
-    'Debt/Equity': 0.5, 'Interest Coverage': 5,
-    'Asset Turnover': 1.0,
-}
+READINGS
+    Profit engine     : Every ratio ahead of industry — pricing power intact.
+    Liquidity          : 2.5 × current ratio and 1.93 × quick both comfortable,
+                          but idle cash risk if trend keeps climbing.
+    Leverage           : D/E 0.4 vs 0.5 benchmark — moderate, low refinancing risk.
+    Interest coverage  : 8× — bond-market grade; no immediate rating pressure.
 
-print(f"{'Ratio':<25} {'Company':>12} {'Industry':>12} {'Assessment':>12}")
-print("-" * 62)
-for ratio, value in ratios.items():
-    bench = benchmarks[ratio]
-    better = value > bench if ratio != 'Debt/Equity' else value < bench
-    sign = "✓ Better" if better else "✗ Below"
-    print(f"{ratio:<25} {value:>11.1f}  {bench:>11.1f}  {sign:>12}")`,
-        output: `Ratio                     Company     Industry   Assessment\n--------------------------------------------------------------\nGross Margin (%)            40.0          40.0    ✓ Better\nNet Margin (%)              15.0          12.0    ✓ Better\nROE (%)                     30.0          18.0    ✓ Better\nROA (%)                     20.0          12.0    ✓ Better\nCurrent Ratio                2.5           2.0    ✓ Better\nQuick Ratio                  1.9           1.0    ✓ Better\nDebt/Equity                  0.4           0.5    ✓ Better\nInterest Coverage            8.0           5.0    ✓ Better\nAsset Turnover               1.3           1.0    ✓ Better`,
-        explanation: 'This company outperforms industry benchmarks on every metric — strong profitability (30% ROE vs 18% industry), excellent liquidity (current ratio 2.5), low leverage (D/E 0.4), and efficient asset utilization. This would attract investor interest and strong credit ratings.',
+RED FLAGS (would trigger if seen)
+    Current Ratio < 1.0     → possible working-capital crunch.
+    Quick Ratio  < 0.7      → inventory-dependent liquidity.
+    Interest Coverage < 2×  → distress zone; covenant breach risk.
+    D/E > 2× peers          → excessive leverage — refinancing risk.`,
+        output: `Every headline ratio beats the industry benchmark.
+DuPont ROE (30 %) confirmed = Margin (15 %) × Asset TO (1.33) × Leverage (1.50).
+No red flags on liquidity, coverage, or leverage.`,
+        explanation: 'One-year ratios are a snapshot; the real story is direction — always chart 3–5 years for the same company. Ratios must be judged against industry peers, not universal benchmarks: 0.5 D/E is aggressive for a utility but conservative for a real-estate developer. DuPont decomposition tells you WHY the ROE moved — richer margins? better asset use? more leverage? — each has different implications for durability and risk.',
       },
     ],
     commonMistakes: [

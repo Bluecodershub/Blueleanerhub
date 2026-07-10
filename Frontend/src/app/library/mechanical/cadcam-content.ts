@@ -13,46 +13,49 @@ export const cadCamLessons: TopicLesson[] = [
     formula: 'Mass = volume x density\nCylinder hole volume = pi x (d/2)^2 x thickness\nBolt circle coordinate:\nx = R cos(theta)\ny = R sin(theta)',
     codeExamples: [
       {
-        title: 'Bracket Mass Properties and Bolt Circle Coordinates',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Bracket Mass Properties + Bolt-Circle Coordinates',
+        language: 'CAD design table',
+        kind: 'worked-example',
+        code: `PARAMETRIC BRACKET  (aluminium, ρ = 2.70 g/cm³ = 2.70 × 10⁻⁶ kg/mm³)
+────────────────────────────────────────────────────────────────────
+Feature          Symbol         Value
+Base plate       L × W × t      120 × 80 × 12 mm
+Vertical web     l × t × h      90 × 10 × 45 mm
+Through-hole     Ø × n          10 mm × 4  (on Ø 90 bolt circle)
 
-def cylinder_volume(diameter_mm, height_mm):
-    radius = diameter_mm / 2
-    return math.pi * radius**2 * height_mm
+VOLUME BUDGET
+    V_base     = 120 · 80 · 12                    = 115 200 mm³
+    V_web      = 90  · 10 · 45                    =  40 500 mm³
+    V_gross    = V_base + V_web                   = 155 700 mm³
+    V_hole     = π/4 · (10)² · 12                 ≈    942.5 mm³ (per hole)
+    V_holes    = 4 · V_hole                       ≈   3770  mm³
+    V_net      = V_gross − V_holes                = 151 930 mm³
 
-# Parametric bracket dimensions
-base_length = 120  # mm
-base_width = 80    # mm
-base_thickness = 12
-web_length = 90
-web_thickness = 10
-web_height = 45
+ESTIMATED MASS
+    m = ρ · V_net = 2.70e-6 · 151 930 ≈ 0.410 kg
 
-hole_diameter = 10
-hole_count = 4
-bolt_circle_radius = 45
-aluminium_density = 2.70e-6  # kg/mm^3
+BOLT-CIRCLE COORDINATES  (R = 45 mm, first hole at 45°, 4 holes)
+┌────────────┬──────────────┬──────────────┐
+│  Hole      │   X (mm)     │   Y (mm)     │
+├────────────┼──────────────┼──────────────┤
+│  45°       │   +31.82     │   +31.82     │
+│ 135°       │   −31.82     │   +31.82     │
+│ 225°       │   −31.82     │   −31.82     │
+│ 315°       │   +31.82     │   −31.82     │
+└────────────┴──────────────┴──────────────┘
+    X = R cos θ,   Y = R sin θ
 
-base_volume = base_length * base_width * base_thickness
-web_volume = web_length * web_thickness * web_height
-hole_volume = hole_count * cylinder_volume(hole_diameter, base_thickness)
-net_volume = base_volume + web_volume - hole_volume
-mass = net_volume * aluminium_density
-
-print(f"Gross volume: {base_volume + web_volume:.1f} mm^3")
-print(f"Hole volume removed: {hole_volume:.1f} mm^3")
-print(f"Net volume: {net_volume:.1f} mm^3")
-print(f"Estimated mass: {mass:.3f} kg")
-
-print("\\nBolt hole centers:")
-for angle_deg in [45, 135, 225, 315]:
-    angle_rad = math.radians(angle_deg)
-    x = bolt_circle_radius * math.cos(angle_rad)
-    y = bolt_circle_radius * math.sin(angle_rad)
-    print(f"  {angle_deg:3d} deg: x={x:6.2f} mm, y={y:6.2f} mm")`,
-        output: `Gross volume: 155700.0 mm^3\nHole volume removed: 3769.9 mm^3\nNet volume: 151930.1 mm^3\nEstimated mass: 0.410 kg\n\nBolt hole centers:\n   45 deg: x= 31.82 mm, y= 31.82 mm\n  135 deg: x=-31.82 mm, y= 31.82 mm\n  225 deg: x=-31.82 mm, y=-31.82 mm\n  315 deg: x= 31.82 mm, y=-31.82 mm`,
-        explanation: 'This is a real CAD-style calculation: dimensions drive volume, mass, and hole positions. The four holes are placed on a 45 mm radius bolt circle. The mass estimate uses aluminium density in kg/mm^3, so the unit conversion is explicit.',
+DESIGN-INTENT DIMENSIONS  (parametric — drive the whole model)
+    plate_thickness  = 12 mm
+    web_height       = 45 mm
+    bolt_circle_R    = 45 mm
+    hole_D           = 10 mm
+    material         = "AL 6061-T6"    ρ = 2.70 g/cm³`,
+        output: `V_gross = 155 700 mm³
+V_net   = 151 930 mm³  (holes subtract 3 770 mm³)
+Mass    ≈ 0.410 kg  (aluminium)
+4 bolt-circle hole centers at (±31.82, ±31.82)`,
+        explanation: 'A well-modeled part exposes a small set of named parameters (plate_thickness, bolt_circle_R, hole_D) that drive every downstream feature — drawings, mass estimate, CAM roughing extents. Changing "bolt_circle_R" from 45 to 60 mm should re-derive all four coordinates automatically; changing plate_thickness should re-flow the hole-through depth. This is the payoff for using stable datums and named dimensions.',
       },
     ],
     commonMistakes: [
@@ -97,48 +100,61 @@ for angle_deg in [45, 135, 225, 315]:
     formula: 'Spindle speed: N = 1000 Vc / (pi D)\nFeed rate: F = N x z x fz\nPocket passes = ceil(width / step_over)\nCycle time = total_toolpath_length / feed_rate',
     codeExamples: [
       {
-        title: 'CNC Feed, Speed, and Pocket Time',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Feed/Speed + Pocket Cycle Time + Starter G-Code',
+        language: 'CAM + G-code',
+        kind: 'worked-example',
+        code: `POCKET ROUGHING — Aluminium block, 4-flute carbide end mill
+────────────────────────────────────────────────────────────
+Cutting speed  Vc = 180 m/min   (Al with carbide, aggressive)
+Tool           D  = 16 mm,  z = 4 flutes
+Chip load      fz = 0.06 mm/tooth
+Pocket         L × W = 220 × 40 mm
+Step-over      ae = 6 mm
 
-def spindle_speed_rpm(cutting_speed_m_min, tool_diameter_mm):
-    return 1000 * cutting_speed_m_min / (math.pi * tool_diameter_mm)
+STEP 1 — Spindle speed
+    N = 1000 · Vc / (π · D)
+      = 1000 · 180 / (π · 16)
+      = 3581 rpm
 
-def feed_rate_mm_min(rpm, flute_count, chip_load_mm_tooth):
-    return rpm * flute_count * chip_load_mm_tooth
+STEP 2 — Feed rate
+    F = N · z · fz
+      = 3581 · 4 · 0.06
+      ≈ 859 mm/min
 
-def pocket_roughing_time(length_mm, width_mm, stepover_mm, feed_mm_min):
-    passes = math.ceil(width_mm / stepover_mm)
-    total_toolpath = passes * length_mm
-    time_min = total_toolpath / feed_mm_min
-    return passes, total_toolpath, time_min
+STEP 3 — Number of roughing passes (X-stepovers)
+    passes = ceil(W / ae) = ceil(40 / 6) = 7
 
-Vc = 180          # m/min, aluminium with carbide tool
-D = 16            # mm end mill diameter
-z = 4             # flutes
-fz = 0.06         # mm/tooth chip load
-pocket_length = 220
-pocket_width = 40
-stepover = 6
+STEP 4 — Total toolpath length & cycle time
+    L_path = passes · L = 7 · 220 = 1540 mm
+    t_cut  = L_path / F = 1540 / 859 ≈ 1.79 min
 
-rpm = spindle_speed_rpm(Vc, D)
-feed = feed_rate_mm_min(rpm, z, fz)
-passes, path_length, time_min = pocket_roughing_time(
-    pocket_length, pocket_width, stepover, feed
-)
-
-print(f"Spindle speed: {rpm:.0f} rpm")
-print(f"Feed rate: {feed:.0f} mm/min")
-print(f"Roughing passes: {passes}")
-print(f"Toolpath length: {path_length:.0f} mm")
-print(f"Cutting time: {time_min:.2f} min")
-
-print("\\nStarter G-code:")
-print(f\"G90 G54 G17\")
-print(f\"S{rpm:.0f} M03\")
-print(f\"G01 F{feed:.0f}\")`,
-        output: `Spindle speed: 3581 rpm\nFeed rate: 859 mm/min\nRoughing passes: 7\nToolpath length: 1540 mm\nCutting time: 1.79 min\n\nStarter G-code:\nG90 G54 G17\nS3581 M03\nG01 F859`,
-        explanation: 'The spindle speed comes from surface speed and cutter diameter. Feed rate comes from RPM, flute count, and chip load. The pocket needs 7 roughing passes because 40 mm width divided by 6 mm step-over rounds up to 7.',
+STARTER G-CODE  (Fanuc-style, absolute, Ø 16 mm end mill in T01)
+    %
+    O1001  (POCKET ROUGH — 220x40x?)
+    G90 G54 G17 G21           ; abs, WCS 1, XY plane, mm
+    G28 G91 Z0                 ; home Z
+    G90 G00 X-8. Y-8.          ; rapid to pocket start-corner + step-in
+    T01 M06                    ; load 16 mm 4-flute carbide
+    S3581 M03                  ; spindle 3581 rpm CW
+    G43 H01 Z25.               ; tool length offset
+    G00 Z2.                    ; rapid to clearance
+    G01 Z-2. F300.             ; plunge (slow)
+    (— roughing raster loop —)
+    G01 X212. F859.
+    G01 Y-2.
+    G01 X-8.
+    G01 Y4.
+    G01 X212.
+    ...
+    G00 Z25.
+    M05                        ; spindle stop
+    M30                        ; end program
+    %`,
+        output: `N ≈ 3581 rpm   F ≈ 859 mm/min
+Roughing passes  = 7
+Toolpath length  = 1540 mm
+Cutting time     ≈ 1.79 min (does not include rapids or plunges)`,
+        explanation: 'Feed and speed come from three inputs the operator can trust: manufacturer\'s Vc, cutter geometry, and per-tooth chip load. The pocket cycle time above is optimistic — it excludes rapids, tool-length probing, spindle warm-up, and any finishing pass. Rule of thumb: multiply pure cutting time by 1.3–1.5 to get real cycle time. Also always verify Z clearance, work offset, and start-corner in the CAM simulation before posting.',
       },
     ],
     commonMistakes: [

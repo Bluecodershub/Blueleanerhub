@@ -13,130 +13,60 @@ export const geotechLessons: TopicLesson[] = [
     formula: 'Phase relationships:\nVoid ratio:     e = Vv/Vs\nPorosity:       n = Vv/V = e/(1+e)\nSaturation:     S = Vw/Vv\nMoisture content: w = Ww/Ws × 100%\n\nFor saturated soil: e = w × G\n\nUnit weights:\nDry:        γd = Gs × γw / (1+e)\nSaturated:  γsat = (Gs + e)/(1+e) × γw\nSubmerged:  γ\' = γsat − γw\n\nPlasticity Index: PI = LL − PL\nLiquidity Index:  LI = (w − PL) / PI',
     codeExamples: [
       {
-        title: 'Soil Phase Calculations & Classification',
-        language: 'python',
-        code: `def phase_relationships(Gs=2.67, w_pct=None, e=None, S_pct=None, gamma_w=9.81):
-    """
-    Compute all phase relationships given any two of w, e, S.
-    Gs: specific gravity of solids (2.67 default for most soils)
-    gamma_w: unit weight of water kN/m³
-    """
-    w = w_pct / 100 if w_pct else None
-    S = S_pct / 100 if S_pct else None
+        title: 'Worked Example — Soil Phase Relationships & USCS Classification',
+        language: 'IS 1498 / USCS',
+        kind: 'worked-example',
+        code: `PHASE-RELATIONSHIP FUNDAMENTALS
+────────────────────────────────
+Volumes:   V = V_a + V_w + V_s    (air + water + solids)
+Weights:   W = W_w + W_s          (weightless air)
 
-    # Solve for missing variable
-    if w is not None and S is not None and e is None:
-        e = w * Gs / S
-    elif w is not None and e is not None and S is None:
-        S = w * Gs / e
-    elif S is not None and e is not None and w is None:
-        w = S * e / Gs
+    Void ratio      e = V_v / V_s
+    Porosity        n = V_v / V     ⇒   n = e / (1 + e)
+    Saturation      S = V_w / V_v
+    Water content   w = W_w / W_s
+    Fundamental identity:   S·e = w·Gs
 
-    if any(v is None for v in [w, e, S]):
-        raise ValueError("Provide any 2 of: w_pct, e, S_pct")
+Unit-weight family  (γ_w = 9.81 kN/m³)
+    γ_d    = Gs · γ_w / (1 + e)                dry
+    γ_sat  = (Gs + e) · γ_w / (1 + e)          saturated
+    γ_sub  = γ_sat − γ_w                       submerged
+    γ_bulk = (Gs + S·e) · γ_w / (1 + e)        bulk
 
-    n           = e / (1 + e)
-    gamma_d     = Gs * gamma_w / (1 + e)
-    gamma_sat   = (Gs + e) / (1 + e) * gamma_w
-    gamma_sub   = gamma_sat - gamma_w
-    gamma_bulk  = (Gs + S * e) / (1 + e) * gamma_w
+────────────────────────────────────────────────
+CASE 1 — Dense sand at bearing depth
+    Given:  Gs = 2.67,   w = 18 %,   S = 85 %
+    e = w · Gs / S = 0.18 · 2.67 / 0.85 = 0.5647
+    n = 0.5647 / 1.5647       = 36.1 %
+    γ_d    = 2.67 · 9.81 / 1.5647     ≈ 16.97 kN/m³
+    γ_bulk = (2.67 + 0.85·0.5647) · 9.81 / 1.5647 ≈ 19.02 kN/m³
+    γ_sat  = (2.67 + 0.5647) · 9.81 / 1.5647      ≈ 19.97 kN/m³
 
-    return {
-        'void_ratio':           round(e, 4),
-        'porosity_%':           round(n * 100, 2),
-        'saturation_%':         round(S * 100, 2),
-        'moisture_content_%':   round(w * 100, 2),
-        'gamma_dry_kN/m3':      round(gamma_d, 3),
-        'gamma_sat_kN/m3':      round(gamma_sat, 3),
-        'gamma_sub_kN/m3':      round(gamma_sub, 3),
-        'gamma_bulk_kN/m3':     round(gamma_bulk, 3),
-    }
+CASE 2 — Soft marine clay (saturated)
+    Given:  Gs = 2.70,   w = 52 %,   S = 100 %  ⇒  e = w·Gs = 1.404
+                                                 (use e = 1.4)
+    n = 1.4/2.4      = 58.3 %
+    γ_d   = 2.70 · 9.81 / 2.4     ≈ 11.09 kN/m³
+    γ_sat = (2.70 + 1.4) · 9.81 / 2.4 ≈ 16.87 kN/m³
+    γ_sub = 16.87 − 9.81           =  7.06 kN/m³
 
+USCS CLASSIFICATION  (IS 1498)
+    Coarse-grained if fines (<75 µm) ≤ 50 %
+        Cu = D₆₀ / D₁₀            (uniformity)
+        Cc = D₃₀² / (D₆₀·D₁₀)     (curvature)
+        Well-graded sand:  Cu ≥ 6  AND  1 ≤ Cc ≤ 3
 
-def classify_soil_uscs(D60, D30, D10=None, LL=None, PL=None, fines_pct=0):
-    """
-    Simplified USCS classification for coarse-grained soils.
-    D10, D30, D60: grain sizes (mm) at 10%, 30%, 60% passing
-    LL, PL: Liquid Limit and Plastic Limit (for fine-grained soils)
-    fines_pct: percentage passing 0.075mm sieve
-    """
-    PI = (LL - PL) if (LL and PL) else None
-
-    if fines_pct > 50:
-        # Fine-grained soil
-        if LL is None or PL is None:
-            return "ML/MH/CL/CH — needs Atterberg limits"
-        if LL < 50:
-            return "CL (lean clay)" if PI > 7 else "ML (low plasticity silt)"
-        else:
-            return "CH (fat clay, PI>10)" if PI > 10 else "MH (elastic silt)"
-
-    # Coarse-grained
-    if D10 is None:
-        return "GW/GP/SW/SP — needs full gradation"
-
-    Cu = D60 / D10                          # Coefficient of uniformity
-    Cc = (D30**2) / (D60 * D10)            # Coefficient of curvature
-
-    gravel_fraction = 100 - fines_pct      # simplified assumption
-
-    if D60 > 4.75:  # Gravel dominant
-        if Cu >= 4 and 1 <= Cc <= 3:
-            return f"GW (well-graded gravel): Cu={Cu:.1f}, Cc={Cc:.2f}"
-        else:
-            return f"GP (poorly-graded gravel): Cu={Cu:.1f}, Cc={Cc:.2f}"
-    else:  # Sand dominant
-        if Cu >= 6 and 1 <= Cc <= 3:
-            return f"SW (well-graded sand): Cu={Cu:.1f}, Cc={Cc:.2f}"
-        else:
-            return f"SP (poorly-graded sand): Cu={Cu:.1f}, Cc={Cc:.2f}"
-
-
-# ── Example 1: Dense sand layer (foundation bearing stratum) ──
-props = phase_relationships(Gs=2.67, w_pct=18, S_pct=85)
-print("Dense sand properties (w=18%, S=85%):")
-for k, v in props.items():
-    print(f"  {k:<25} {v}")
-
-# ── Example 2: Soft marine clay ──
-print("\nSoft marine clay properties (w=52%, e=1.4):")
-clay_props = phase_relationships(Gs=2.70, w_pct=52, e=1.4)
-for k, v in clay_props.items():
-    print(f"  {k:<25} {v}")
-
-# ── Example 3: Classification ──
-print("\nSoil classifications:")
-print(" River sand (D10=0.2, D30=0.6, D60=1.5):",
-      classify_soil_uscs(D60=1.5, D30=0.6, D10=0.2, fines_pct=3))
-print(" Gravel (D10=2, D30=8, D60=15):",
-      classify_soil_uscs(D60=15, D30=8, D10=2, fines_pct=5))
-print(" Chennai marine clay (LL=68, PL=28, fines=85%):",
-      classify_soil_uscs(D60=0.001, D30=0.0005, LL=68, PL=28, fines_pct=85))`,
-        output: `Dense sand properties (w=18%, S=85%):
-  void_ratio              0.5647
-  porosity_%              36.10
-  saturation_%            85.0
-  moisture_content_%      18.0
-  gamma_dry_kN/m3         16.968
-  gamma_sat_kN/m3         19.969
-  gamma_sub_kN/m3         10.159
-  gamma_bulk_kN/m3        19.024
-
-Soft marine clay properties (w=52%, e=1.4):
-  void_ratio              1.4
-  porosity_%              58.33
-  saturation_%            100.0
-  moisture_content_%      52.0
-  gamma_dry_kN/m3         11.092
-  gamma_sat_kN/m3         16.871
-  gamma_sub_kN/m3         7.061
-  gamma_bulk_kN/m3        16.871
-
-Soil classifications:
- River sand: SW (well-graded sand): Cu=7.5, Cc=1.20
- Gravel:     GW (well-graded gravel): Cu=7.5, Cc=2.13
- Chennai marine clay: CH (fat clay, PI>10)`,
-        explanation: 'The marine clay (e=1.4, γd=11.1 kN/m³) has nearly 60% voids and is 100% saturated — it will consolidate significantly under load. Compare to the dense sand (e=0.56, γd=17.0 kN/m³) which has far fewer voids and is much stiffer. CH classification (LL=68, PI=40) flags this as high-plasticity fat clay — a problematic foundation material requiring deep foundations or ground improvement.',
+┌────────────────────────┬───────┬──────┬───────────────┐
+│  Sample                │  Cu   │  Cc  │  Class        │
+├────────────────────────┼───────┼──────┼───────────────┤
+│ River sand D₁₀=0.2, D₃₀=0.6, D₆₀=1.5 │ 7.5 │ 1.20 │ SW (well-graded sand) │
+│ Gravel D₁₀=2, D₃₀=8, D₆₀=15          │ 7.5 │ 2.13 │ GW (well-graded gravel) │
+│ Chennai marine clay  LL=68, PL=28    │  —  │  —   │ CH (fat clay, PI=40)  │
+└────────────────────────┴───────┴──────┴───────────────┘`,
+        output: `Dense sand   e = 0.56,  γ_d ≈ 17.0 kN/m³,  γ_bulk ≈ 19.0 kN/m³
+Marine clay  e = 1.40,  γ_d ≈ 11.1 kN/m³,  γ_sat ≈ 16.9 kN/m³
+Classes:  river sand → SW,  gravel → GW,  Chennai clay → CH (fat clay)`,
+        explanation: 'The identity S·e = w·Gs lets you close the phase diagram from any two of {w, e, S} — this is what geotech interviews test. Marine clay with e = 1.4 has ~58 % voids and 100 % saturation, so it will consolidate heavily under load and long-term. Dense sand has ~36 % voids and is a stiff bearing stratum. CH classification (LL = 68) flags the Chennai clay as high-plasticity — treat as an unfavourable foundation and choose piles or ground improvement.',
       },
     ],
     commonMistakes: [
@@ -189,122 +119,71 @@ Soil classifications:
     formula: 'Terzaghi General Bearing Capacity (IS 6403):\nqu = c·Nc·Fcs·Fcd·Fci + q·Nq·Fqs·Fqd·Fqi + 0.5·γ·B·Nγ·Fγs·Fγd·Fγi\n\nSimplified (square footing, general shear):\nqu = 1.3c·Nc + q·Nq + 0.4γ·B·Nγ\n\nBearing capacity factors (Terzaghi):\nNc = cot(φ)·(Nq − 1)\nNq = e^(π·tanφ)·tan²(45 + φ/2)\nNγ = 2(Nq+1)·tan(φ)\n\nNet safe bearing capacity:\nqsafe = (qu − γ·Df) / FOS + γ·Df',
     codeExamples: [
       {
-        title: 'Terzaghi Bearing Capacity & Footing Size',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Terzaghi Bearing Capacity & Footing Sizing',
+        language: 'IS 6403 / Terzaghi',
+        kind: 'worked-example',
+        code: `BEARING-CAPACITY FACTORS  (Terzaghi, general shear)
+──────────────────────────────────────────────────
+    Nq = e^(π tan φ) · tan²(45 + φ/2)
+    Nc = cot φ · (Nq − 1)                 (or 5.14 if φ = 0)
+    Nγ = 2 (Nq + 1) · tan φ
 
-def terzaghi_bc_factors(phi_deg):
-    """
-    Terzaghi's bearing capacity factors Nc, Nq, Ngamma.
-    phi_deg: angle of internal friction in degrees
-    """
-    phi = math.radians(phi_deg)
-    Nq = math.exp(math.pi * math.tan(phi)) * math.tan(math.radians(45 + phi_deg/2))**2
-    Nc = (Nq - 1) / math.tan(phi) if phi_deg > 0 else 5.14
-    Ng = 2 * (Nq + 1) * math.tan(phi)
-    return round(Nc, 2), round(Nq, 2), round(Ng, 2)
+┌────────┬──────────┬──────────┬──────────┐
+│  φ°    │   N_c    │   N_q    │   N_γ    │
+├────────┼──────────┼──────────┼──────────┤
+│  20    │  14.83   │   6.40   │   3.64   │
+│  25    │  20.72   │  10.66   │  10.88   │
+│  30    │  30.14   │  18.40   │  22.40   │
+│  32    │  35.49   │  23.18   │  30.22   │
+│  35    │  46.12   │  33.30   │  48.03   │
+└────────┴──────────┴──────────┴──────────┘
 
-def ultimate_bearing_capacity(c, phi_deg, gamma, Df, B, footing='square'):
-    """
-    Terzaghi's ultimate bearing capacity.
-    c: cohesion (kPa)
-    phi_deg: friction angle (degrees)
-    gamma: unit weight of soil (kN/m³)
-    Df: depth of foundation (m)
-    B: width of footing (m)
-    footing: 'square', 'strip', or 'circular'
-    """
-    Nc, Nq, Ng = terzaghi_bc_factors(phi_deg)
-    q = gamma * Df   # overburden pressure
+TERZAGHI EQUATION — SQUARE FOOTING
+    q_u = 1.3 c N_c + q̄ N_q + 0.4 γ B N_γ           (q̄ = γ · D_f)
 
-    if footing == 'strip':
-        qu = c * Nc + q * Nq + 0.5 * gamma * B * Ng
-    elif footing == 'square':
-        qu = 1.3 * c * Nc + q * Nq + 0.4 * gamma * B * Ng
-    elif footing == 'circular':
-        qu = 1.3 * c * Nc + q * Nq + 0.3 * gamma * B * Ng
-    else:
-        raise ValueError("footing must be 'square', 'strip', or 'circular'")
+────────────────────────────────────────────────
+CASE 1 — Bangalore laterite (c = 20 kPa, φ = 25°, γ = 17 kN/m³)
+    Column load       P = 600 kN
+    Depth of footing  D_f = 1.5 m,   FOS = 3.0
 
-    return qu, Nc, Nq, Ng
+    Overburden        q̄ = 17 · 1.5 = 25.5 kPa
+    Try  B = 1.80 m:
+        q_u = 1.3·20·20.72 + 25.5·10.66 + 0.4·17·1.80·10.88
+            = 538.7 + 271.8 + 133.2
+            = 943.7 kPa   (rounded 944)   *note: revised factors*
+    Net safe:
+        q_safe = (q_u − q̄)/FOS + q̄
+               = (944 − 25.5)/3 + 25.5
+               ≈ 331 kPa
+    Area required = P / q_safe = 600 / 331 ≈ 1.81 m²
+    Provided       = 1.80 · 1.80 = 3.24 m²  ✓
 
-def design_footing(column_load_kN, c, phi_deg, gamma, Df,
-                   FOS=3.0, footing='square'):
-    """
-    Find required footing size for a given column load.
-    Returns: B (width in m), qu, qsafe
-    """
-    # Iterate B from 0.5m to 5m
-    for B in [x/10 for x in range(5, 51)]:
-        qu, Nc, Nq, Ng = ultimate_bearing_capacity(c, phi_deg, gamma, Df, B, footing)
-        q_safe = (qu - gamma * Df) / FOS + gamma * Df
-        area_required = column_load_kN / q_safe
-        area_provided = B * B if footing in ('square','circular') else B  # per unit length for strip
+CASE 2 — Dense sand  (c = 0,  φ = 32°,  γ = 19 kN/m³)
+    P = 800 kN,  D_f = 1.2 m,  FOS = 2.5
+    q̄ = 22.8 kPa
+    Try B = 1.60 m:
+        q_u = 0 + 22.8·23.18 + 0.4·19·1.6·30.22
+            = 528.5 + 367.5
+            ≈ 896 kPa
+    q_safe = (896 − 22.8)/2.5 + 22.8 ≈ 372 kPa
+    Area req = 800/372 ≈ 2.15 m² > 1.60² = 2.56 m² ✓
 
-        if area_provided >= area_required:
-            return {
-                'B_m':          round(B, 2),
-                'qu_kPa':       round(qu, 1),
-                'q_safe_kPa':   round(q_safe, 1),
-                'area_reqd_m2': round(area_required, 2),
-                'area_provd_m2':round(area_provided, 2),
-                'Nc':           Nc, 'Nq': Nq, 'Ng': Ng,
-            }
-    return None  # No adequate size found in range
-
-# ── Example 1: Bangalore laterite (c=20 kPa, φ=25°) ──
-print("=== Isolated Square Footing Design ===")
-result = design_footing(
-    column_load_kN=600, c=20, phi_deg=25,
-    gamma=17, Df=1.5, FOS=3.0, footing='square'
-)
-print(f"Column load:    600 kN | Depth Df = 1.5 m")
-print(f"BC factors:     Nc={result['Nc']}, Nq={result['Nq']}, Nγ={result['Ng']}")
-print(f"Ultimate BC:    {result['qu_kPa']} kPa")
-print(f"Safe BC:        {result['q_safe_kPa']} kPa")
-print(f"Required area:  {result['area_reqd_m2']} m²")
-print(f"Footing size:   {result['B_m']} m × {result['B_m']} m = {result['area_provd_m2']} m²")
-
-# ── Example 2: Pure sand (c=0, φ=32°) ──
-print("\n=== Dense Sand Footing ===")
-sand = design_footing(
-    column_load_kN=800, c=0, phi_deg=32,
-    gamma=19, Df=1.2, FOS=2.5, footing='square'
-)
-print(f"Column load: 800 kN | c=0, φ=32°, γ=19 kN/m³, Df=1.2m")
-print(f"BC factors:  Nc={sand['Nc']}, Nq={sand['Nq']}, Nγ={sand['Ng']}")
-print(f"Safe BC:     {sand['q_safe_kPa']} kPa")
-print(f"Footing:     {sand['B_m']} m × {sand['B_m']} m")
-
-# ── Example 3: Effect of footing depth ──
-print("\n=== Effect of Depth on Safe Bearing Capacity ===")
-print(f"{'Df (m)':>8} {'qu (kPa)':>10} {'q_safe (kPa)':>13}")
-for Df in [0.5, 1.0, 1.5, 2.0, 2.5]:
-    qu, *_ = ultimate_bearing_capacity(c=25, phi_deg=20, gamma=18, Df=Df, B=1.5, footing='square')
-    q_safe = (qu - 18*Df) / 3.0 + 18*Df
-    print(f"{Df:>8.1f} {qu:>10.1f} {q_safe:>13.1f}")`,
-        output: `=== Isolated Square Footing Design ===
-Column load:    600 kN | Depth Df = 1.5 m
-BC factors:     Nc=14.83, Nq=9.60, Nγ=5.59  (for φ=25°)
-Ultimate BC:    548.5 kPa
-Safe BC:        191.3 kPa
-Required area:  3.14 m²
-Footing size:   1.80 m × 1.80 m = 3.24 m²
-
-=== Dense Sand Footing ===
-Column load: 800 kN | c=0, φ=32°, γ=19 kN/m³, Df=1.2m
-BC factors:  Nc=35.49, Nq=23.18, Nγ=22.02
-Safe BC:     332.8 kPa
-Footing:     1.60 m × 1.60 m
-
-=== Effect of Depth on Safe Bearing Capacity ===
-  Df (m)   qu (kPa)  q_safe (kPa)
-     0.5      312.7         106.6
-     1.0      370.5         130.2
-     1.5      428.3         153.8
-     2.0      486.0         177.4
-     2.5      543.8         201.1`,
-        explanation: 'Increasing foundation depth (Df) increases bearing capacity because the overburden pressure q = γ·Df strengthens the soil by confining it. Each 0.5m increase in depth adds ~23 kPa safe bearing capacity in this example. For the same load, a deeper footing can be smaller. In practice, Df is controlled by the firm stratum depth, water table, and IS 1904 minimum depth (0.5m for non-expansive soils, deeper for expansive clay).',
+CASE 3 — Effect of embedment depth  (c = 25 kPa, φ = 20°, γ = 18 kN/m³, B = 1.5 m)
+┌────────┬────────────┬────────────────┐
+│ D_f m  │ q_u (kPa)  │ q_safe (kPa)   │
+├────────┼────────────┼────────────────┤
+│  0.5   │   312.7    │   106.6        │
+│  1.0   │   370.5    │   130.2        │
+│  1.5   │   428.3    │   153.8        │
+│  2.0   │   486.0    │   177.4        │
+│  2.5   │   543.8    │   201.1        │
+└────────┴────────────┴────────────────┘
+    Each +0.5 m of embedment ⇒ +≈ 24 kPa of safe bearing
+    (from the q̄ N_q "surcharge" term).`,
+        output: `Bangalore laterite   B = 1.80 m square,  q_safe ≈ 331 kPa
+Dense sand           B = 1.60 m square,  q_safe ≈ 372 kPa
+Depth study:  every 0.5 m of embedment adds ~24 kPa of safe capacity`,
+        explanation: 'Terzaghi splits bearing capacity into three additive contributions: cohesion (c N_c), overburden (q̄ N_q), and self-weight (0.5 γ B N_γ). Squares and circles get shape factors (1.3 and 0.4 respectively). Always divide the NET ultimate capacity by FOS and add back the overburden — never divide gross q_u by FOS. Deeper footings gain capacity through the q̄ term; if a water table sits at foundation level, γ drops to γ′ ≈ 9 kN/m³ and the N_γ term nearly halves — always check the WT depth before committing to B.',
       },
     ],
     commonMistakes: [

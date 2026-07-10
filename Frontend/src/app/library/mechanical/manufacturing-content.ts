@@ -13,112 +13,56 @@ export const manufacturingLessons: TopicLesson[] = [
     formula: 'Chvorinov\'s Rule:\nt_solidification = C × (V/SA)²\n\nwhere V = casting volume, SA = surface area\nC = mould constant (depends on mould material, metal)\n\nShrinkage allowance:\nPattern dimension = Part dimension × (1 + shrinkage_fraction)\n  Cast iron:   +1.0%\n  Steel:       +2.0%\n  Aluminium:   +1.5%\n\nPouring time:\nt_pour = W / (C_sprue × ρ × A_sprue × √(2gH))\nW = weight of metal, H = effective head of metal',
     codeExamples: [
       {
-        title: 'Casting Design Calculations',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Riser Sizing by Chvorinov\'s Rule (Plate Casting)',
+        language: 'foundry design',
+        kind: 'worked-example',
+        code: `CASTING GEOMETRY
+────────────────
+Plate: 200 mm × 100 mm × 20 mm  =  20 cm × 10 cm × 2 cm
 
-# ── Chvorinov's Rule: solidification time ──
-def solidification_time(volume_cm3, surface_area_cm2, C=1.0):
-    """
-    Estimate relative solidification time using Chvorinov's Rule.
-    t ∝ C × (V/SA)²
-    C is a mould constant — use C=1 for relative comparisons.
-    """
-    modulus = volume_cm3 / surface_area_cm2
-    return C * modulus**2
+    V_casting  = 20 · 10 · 2                      = 400 cm³
+    SA_casting = 2·(20·10 + 20·2 + 10·2)          = 520 cm²
+    Modulus  M_c = V/SA = 400 / 520               = 0.769 cm
 
-# ── Riser design: riser must solidify AFTER the casting ──
-def check_riser_design(
-        casting_V, casting_SA,
-        riser_V, riser_SA, C=1.0):
-    t_casting = solidification_time(casting_V, casting_SA, C)
-    t_riser   = solidification_time(riser_V, riser_SA, C)
-    margin    = (t_riser - t_casting) / t_casting * 100
-    ok        = t_riser > t_casting
-    return {
-        'casting_modulus_cm':  round(casting_V/casting_SA, 3),
-        'riser_modulus_cm':    round(riser_V/riser_SA, 3),
-        't_casting (rel)':     round(t_casting, 4),
-        't_riser (rel)':       round(t_riser, 4),
-        'riser_solidifies_after': ok,
-        'margin_%':            round(margin, 1),
-    }
+Rule of thumb:   M_riser ≥ 1.20 · M_casting
 
-# ── Pattern dimensions with shrinkage and machining allowance ──
-def pattern_dimensions(nominal_dim_mm, material='steel',
-                        machining_allowance_mm=3.0):
-    shrinkage = {'cast_iron': 0.010, 'steel': 0.020,
-                 'aluminium': 0.015, 'bronze': 0.016}
-    s = shrinkage.get(material, 0.020)
-    shrinkage_add = nominal_dim_mm * s
-    pattern_dim   = nominal_dim_mm + shrinkage_add + machining_allowance_mm
-    return {
-        'nominal_mm':         nominal_dim_mm,
-        'shrinkage_mm':       round(shrinkage_add, 2),
-        'machining_allow_mm': machining_allowance_mm,
-        'pattern_dim_mm':     round(pattern_dim, 2),
-    }
+TRY:  Blind cylindrical top riser,  D = H = 8 cm
+    V_r  = π/4·D²·H = π/4·(8)²·8               = 402.1 cm³
+    SA_r = 2·(π/4·D²)  + π·D·H  =  50.27 + 201.06 = 251.3 cm²
+        (top open? NO — blind riser, both ends counted)
+    M_r  = V_r / SA_r = 402.1 / 251.3          = 1.60 cm
 
-# ── Example 1: Plate casting ──
-# Casting: 200mm × 100mm × 20mm plate
-L, W, H = 20, 10, 2  # cm
-V_cast  = L * W * H
-SA_cast = 2*(L*W + L*H + W*H)
+Actually for a blind top riser only the cylindrical surface + one end
+loses heat (the bottom mates with the casting), so:
+    SA_r' = π/4·D² + π·D·H = 25.13 + 201.06     = 226.2 cm²
+    M_r'  = 402.1 / 226.2                       = 1.78 cm
 
-# Riser: blind cylindrical riser, D = H_riser = 8 cm
-D_r = 8
-V_riser  = math.pi * (D_r/2)**2 * D_r
-SA_riser = 2 * math.pi * (D_r/2)**2 + math.pi * D_r * D_r  # closed/blind riser
+Check margin:  M_r' / M_c = 1.78 / 0.769 = 2.31  ⇒  231 % of casting modulus.
 
-result = check_riser_design(V_cast, SA_cast, V_riser, SA_riser)
-print("=== Casting: 200×100×20mm Plate ===")
-print(f"Casting volume: {V_cast} cm³  |  Surface area: {SA_cast} cm²")
-print(f"Riser: D=H={D_r}cm blind cylinder")
-for k, v in result.items():
-    print(f"  {k:<30} {v}")
+RISER SIZE STUDY  (Chvorinov's t ∝ M²)
+┌────────────┬───────────┬───────────────────────┬────────────┐
+│ D = H (cm) │ Modulus M │  t_riser / t_casting  │ Adequate?  │
+├────────────┼───────────┼───────────────────────┼────────────┤
+│      4     │   0.667   │    0.75               │    No      │
+│      6     │   1.000   │    1.69               │    Yes     │
+│      7     │   1.167   │    2.30               │    Yes     │
+│      8     │   1.333   │    3.01               │    Yes  ★  │
+│     10     │   1.667   │    4.69               │    Yes     │
+└────────────┴───────────┴───────────────────────┴────────────┘
 
-# ── Example 2: Pattern dimensions for steel casting ──
-print("\n=== Pattern Dimensions (Steel Casting) ===")
-for dim in [100, 250, 500]:
-    p = pattern_dimensions(dim, 'steel', machining_allowance_mm=3)
-    print(f"  Nominal {p['nominal_mm']:>4}mm → "
-          f"Shrinkage +{p['shrinkage_mm']}mm + "
-          f"Machining +{p['machining_allow_mm']}mm = "
-          f"Pattern {p['pattern_dim_mm']}mm")
+PATTERN ALLOWANCES  (for a steel casting)
+    Shrinkage:  2 % on all dimensions
+    Machining:  +3 mm on machined faces
 
-# ── Example 3: Compare solidification of different riser sizes ──
-print("\n=== Riser Size vs Solidification Time ===")
-print(f"{'Riser D (cm)':>14} {'Modulus':>10} {'t_riser/t_cast':>15} {'Adequate?':>10}")
-for D in [4, 6, 7, 8, 10]:
-    V_r  = math.pi * (D/2)**2 * D
-    SA_r = 2 * math.pi * (D/2)**2 + math.pi * D * D
-    ratio = solidification_time(V_r, SA_r) / solidification_time(V_cast, SA_cast)
-    ok    = "Yes" if ratio > 1.0 else "No"
-    print(f"{D:>14}    {V_r/SA_r:>10.3f} {ratio:>15.3f} {ok:>10}")`,
-        output: `=== Casting: 200×100×20mm Plate ===
-Casting volume: 400 cm³  |  Surface area: 520 cm²
-Riser: D=H=8cm blind cylinder
+    Nominal 100 mm  →  pattern = 100 · 1.02 + 3   = 105.0 mm
+    Nominal 250 mm  →  pattern = 250 · 1.02 + 3   = 258.0 mm
+    Nominal 500 mm  →  pattern = 500 · 1.02 + 3   = 513.0 mm`,
+        output: `Casting modulus M_c = 0.769 cm
+Chosen riser  8 × 8 cm  →  M_r ≈ 1.33 cm  ( > 1.2 · M_c )
+Solidifies 3.0× slower than the casting  ⇒  feeds shrinkage successfully.
 
-  casting_modulus_cm             0.769
-  riser_modulus_cm               1.333
-  t_casting (rel)                0.5917
-  t_riser (rel)                  1.7778
-  riser_solidifies_after         True
-  margin_%                       200.5
-
-=== Pattern Dimensions (Steel Casting) ===
-  Nominal  100mm → Shrinkage +2.0mm + Machining +3.0mm = Pattern 105.0mm
-  Nominal  250mm → Shrinkage +5.0mm + Machining +3.0mm = Pattern 258.0mm
-  Nominal  500mm → Shrinkage +10.0mm + Machining +3.0mm = Pattern 513.0mm
-
-=== Riser Size vs Solidification Time ===
-  Riser D (cm)    Modulus  t_riser/t_cast   Adequate?
-             4      0.667           0.752         No
-             6      1.000           1.691        Yes
-             7      1.167           2.303        Yes
-             8      1.333           3.007        Yes
-            10      1.667           4.694        Yes`,
-        explanation: 'Chvorinov\'s Rule shows that the riser modulus (V/SA = 1.333) is 73% larger than the casting modulus (0.769), giving 200% margin — the riser solidifies 3× slower, ensuring it feeds the casting throughout solidification. A D=4cm riser has lower modulus than the casting (inadequate — would solidify first, cutting off feed metal). D=6cm is the minimum adequate size. Pattern for a 500mm steel casting is 13mm larger (10mm shrink + 3mm machining) — critical for dimensional accuracy.',
+Steel-casting pattern for a 500 mm feature = 513 mm (2 % shrink + 3 mm stock).`,
+        explanation: 'Chvorinov\'s rule (t ∝ M², where M = V/SA) says the last thing to freeze is the piece with the biggest modulus. Risers must beat the casting on modulus by a comfortable margin (20 % is a foundry rule of thumb; 3× on time here is safe). A D=4 cm riser would freeze BEFORE the casting and cut off feed — the plate would develop shrinkage porosity. Pattern allowances stack multiplicatively (shrinkage) and additively (machining stock).',
       },
     ],
     commonMistakes: [
@@ -181,124 +125,55 @@ Riser: D=H=8cm blind cylinder
     formula: 'Material Removal Rate:\nMRR = V x f x d   (mm3/min or cm3/min)\nV in mm/min, f in mm/rev, d in mm\n\nTaylor Tool Life Equation:\nV x T^n = C\nT = (C/V)^(1/n)\n\nMinimum-cost tool life:\nT_opt = (C_t/C_m + t_c) x (1/n - 1)\nV_opt = C / T_opt^n\n\nShear plane angle (Merchant):\nphi = 45 deg + alpha/2 - beta/2\nalpha = rake angle, beta = friction angle = arctan(mu)',
     codeExamples: [
       {
-        title: 'Taylor\'s Tool Life and Optimal Cutting Speed',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Taylor Tool Life, Cost-Optimum Speed, and Turning Cycle Time',
+        language: 'metal cutting',
+        kind: 'worked-example',
+        code: `TAYLOR'S TOOL LIFE       VT^n = C     ⇒     T = (C/V)^(1/n)
 
-# ── Taylor's Tool Life: VT^n = C ──
-def tool_life(V, C, n):
-    """Tool life T (minutes) given cutting speed V (m/min)."""
-    return (C / V) ** (1/n)
+┌───────────────┬─────────┬───────┬────────────────────────────────┐
+│ Tool material │   C     │   n   │  Comment                       │
+├───────────────┼─────────┼───────┼────────────────────────────────┤
+│ HSS           │   80    │ 0.125 │ economical, low-speed          │
+│ Carbide (P20) │  300    │ 0.25  │ typical steel finishing/roughing│
+│ Ceramic       │  600    │ 0.40  │ high V, low interruption       │
+└───────────────┴─────────┴───────┴────────────────────────────────┘
 
-def cutting_speed_for_life(T, C, n):
-    """Cutting speed V to achieve tool life T minutes."""
-    return C / (T ** n)
+TOOL LIFE vs CUTTING SPEED  (mild steel workpiece)
+┌────────────┬──────────┬──────────────┬──────────┐
+│ V (m/min)  │  HSS     │ Carbide      │ Ceramic  │
+├────────────┼──────────┼──────────────┼──────────┤
+│      50    │  42.9 m  │   1 296 m    │  498.8 m │
+│      80    │   1.0 m  │     197.8 m  │  154.0 m │
+│     100    │  <1 min  │      81.0 m  │   88.2 m │
+│     150    │  ✗       │      16.0 m  │   32.0 m │
+│     200    │  ✗       │       5.1 m  │   15.6 m │
+│     250    │  ✗       │       2.1 m  │    8.9 m │
+│     300    │  ✗       │       1.0 m  │    5.7 m │
+└────────────┴──────────┴──────────────┴──────────┘
 
-# ── Material Removal Rate ──
-def mrr(V_mm_per_min, f_mm_per_rev, d_mm, rpm=None, D_mm=None):
-    """
-    MRR in mm³/min for turning.
-    V: cutting speed in mm/min (= π × D × N)
-    f: feed rate mm/rev
-    d: depth of cut mm
-    """
-    return V_mm_per_min * f_mm_per_rev * d_mm
+MINIMUM-COST CUTTING SPEED  (Carbide P20 on mild steel)
+    Tool-change time  T_c = 2 min
+    Cost per edge     C_t = ₹50
+    Machine + labour  C_m = ₹5/min
 
-# ── Optimum speed for minimum cost per piece ──
-def optimal_speed_min_cost(C, n, T_c, C_t, C_m):
-    """
-    V_opt for minimum machining cost per piece.
-    C, n: Taylor's constants
-    T_c: tool change time (min)
-    C_t: tool cost per edge (₹)
-    C_m: machine + operator cost per minute (₹/min)
-    """
-    T_opt = (C_t / C_m + T_c) * (1/n - 1)
-    V_opt = C / (T_opt ** n)
-    return V_opt, T_opt
+    T_opt = (C_t/C_m + T_c) · (1/n − 1)
+          = (50/5 + 2) · (1/0.25 − 1)
+          = 12 · 3
+          = 36 min
 
-# ── Example: HSS vs Carbide for mild steel ──
-materials = {
-    'HSS':           {'C': 80,  'n': 0.125},   # High-Speed Steel
-    'Carbide (P20)': {'C': 300, 'n': 0.25},    # Cemented carbide
-    'Ceramic':       {'C': 600, 'n': 0.40},    # Ceramic insert
-}
+    V_opt = C / T_opt^n
+          = 300 / (36)^0.25
+          ≈ 122.5 m/min
 
-print("=== Tool Life vs Cutting Speed ===")
-speeds = [50, 80, 100, 150, 200, 250, 300]
-
-print(f"{'Speed (m/min)':>14}", end='')
-for name in materials:
-    print(f"{name:>18}", end='')
-print()
-
-for V in speeds:
-    print(f"{V:>14}", end='')
-    for name, params in materials.items():
-        T = tool_life(V, params['C'], params['n'])
-        if T < 0.1:
-            print(f"{'< 0.1 min':>18}", end='')
-        else:
-            print(f"{T:>17.1f}m", end='')
-    print()
-
-# ── Optimal cutting speed for minimum cost ──
-print("\n=== Optimal Cutting Speed (Carbide P20, Mild Steel) ===")
-C, n = 300, 0.25
-T_c  = 2    # min per tool change
-C_t  = 50   # Rs per cutting edge
-C_m  = 5    # Rs/min (machine + operator)
-
-V_opt, T_opt = optimal_speed_min_cost(C, n, T_c, C_t, C_m)
-print(f"Tool change time:     {T_c} min")
-print(f"Tool cost per edge:   Rs {C_t}")
-print(f"Machine cost:         Rs {C_m}/min")
-print(f"Optimum tool life:    {T_opt:.1f} min")
-print(f"Optimum speed V_opt:  {V_opt:.1f} m/min")
-print(f"Actual tool life at V_opt: {tool_life(V_opt, C, n):.1f} min ok")
-
-# ── MRR and cycle time ──
-print("\n=== Turning Operation: MRR & Cycle Time ===")
-D_mm    = 80        # workpiece diameter mm
-L_mm    = 300       # workpiece length mm
-f       = 0.2       # mm/rev
-d       = 2.5       # depth of cut mm
-V_mpm   = 200       # cutting speed m/min = 200,000 mm/min
-
-N_rpm   = V_mpm * 1000 / (math.pi * D_mm)   # spindle speed
-MRR_val = mrr(V_mpm * 1000, f, d)
-t_cycle = L_mm / (f * N_rpm)
-
-print(f"Workpiece: D={D_mm}mm, L={L_mm}mm")
-print(f"V={V_mpm} m/min, f={f} mm/rev, d={d} mm")
-print(f"Spindle speed N:   {N_rpm:.0f} rpm")
-print(f"MRR:               {MRR_val/1000:.0f} cm³/min")
-print(f"Machining time:    {t_cycle:.2f} min")`,
-        output: `=== Tool Life vs Cutting Speed ===
-  Speed (m/min)               HSS  Carbide (P20)           Ceramic
-            50           42.9m         1296.0m           498.8m
-            80            1.0m          197.8m           154.0m
-           100            0.2m           81.0m            88.2m
-           150          < 0.1 min           16.0m            32.0m
-           200          < 0.1 min            5.1m            15.6m
-           250          < 0.1 min            2.1m             8.9m
-           300          < 0.1 min            1.0m             5.7m
-
-=== Optimal Cutting Speed (Carbide P20, Mild Steel) ===
-Tool change time:     2 min
-Tool cost per edge:   Rs 50
-Machine cost:         Rs 5/min
-Optimum tool life:    36.0 min
-Optimum speed V_opt:  122.5 m/min
-Actual tool life at V_opt: 36.0 min ok
-
-=== Turning Operation: MRR & Cycle Time ===
-Workpiece: D=80mm, L=300mm
-V=200 m/min, f=0.2 mm/rev, d=2.5 mm
-Spindle speed N:   796 rpm
-MRR:               100 cm³/min
-Machining time:    1.88 min`,
-        explanation: 'The table is calculated directly from Taylor\'s equation VT^n = C. HSS tool life collapses at high cutting speed, while carbide and ceramic tools remain usable. For the cost inputs shown, the minimum-cost carbide speed is 122.5 m/min and the matching tool life is 36.0 min. Increasing machine cost pushes V_opt higher; increasing tool cost pushes V_opt lower.',
+TURNING CYCLE — Ø 80 × 300 mm bar,  V = 200 m/min
+    Spindle speed:  N = 1000 · V / (π D) = 1000·200 / (π·80) = 796 rpm
+    Feed:           f = 0.20 mm/rev
+    Depth of cut:   d = 2.5 mm
+    MRR = 1000·V · f · d = 200 000 · 0.2 · 2.5 = 100 000 mm³/min = 100 cm³/min
+    Machining time = L / (f · N) = 300 / (0.2 · 796) = 1.88 min`,
+        output: `V_optimum (carbide, mild steel) ≈ 122.5 m/min, T ≈ 36 min per edge
+Ø 80 × 300 mm bar at 200 m/min: N ≈ 796 rpm, MRR = 100 cm³/min, t ≈ 1.88 min`,
+        explanation: 'Taylor\'s VT^n = C is empirical — n captures how sensitive tool life is to cutting speed. HSS (n = 0.125) collapses fast; ceramic (n = 0.4) is speed-tolerant. The Gilbert cost-minimum tool life T_opt = (C_t/C_m + T_c)·(1/n − 1) balances tool cost against machine idle-time during tool changes. Double V and T drops by (½)^(1/n) — for carbide that\'s 1/16.',
       },
     ],
     commonMistakes: [

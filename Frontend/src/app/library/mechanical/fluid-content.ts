@@ -13,55 +13,41 @@ export const fluidLessons: TopicLesson[] = [
     formula: 'Newton\'s Law of Viscosity:\nτ = μ · (du/dy)   [Pa]\nwhere τ = shear stress, μ = dynamic viscosity, du/dy = velocity gradient\n\nKinematic viscosity: ν = μ/ρ   [m²/s]\n\nDensity of ideal gas: ρ = P/(RT)   [kg/m³]\nwhere R = specific gas constant\n\nReynolds Number: Re = ρVD/μ = VD/ν\nRe < 2300: laminar flow\nRe > 4000: turbulent flow',
     codeExamples: [
       {
-        title: 'Fluid Property Calculations and Reynolds Number',
-        language: 'python',
-        code: `def reynolds_number(rho, V, D, mu):
-    """Re = ρVD/μ. Determines laminar vs turbulent flow."""
-    return rho * V * D / mu
+        title: 'Worked Example — Reynolds Number & Transition Velocities',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `FLUID PROPERTIES (20 °C, 1 atm)
+─────────────────────────────────
+Water:  ρ = 998.2  kg/m³,   μ = 1.002 × 10⁻³ Pa·s
+        ν = μ/ρ    = 1.004 × 10⁻⁶ m²/s
+Air:    ρ = P/(RT) = 101 325 / (287 · 293.15) = 1.204 kg/m³
+        μ = 1.81  × 10⁻⁵ Pa·s
+        ν = 1.503 × 10⁻⁵ m²/s     (~15× water)
 
-def flow_regime(Re):
-    if Re < 2300:
-        return "Laminar"
-    elif Re > 4000:
-        return "Turbulent"
-    else:
-        return "Transitional"
+PROBLEM
+────────
+Water flows at V = 2.0 m/s through a D = 50 mm smooth pipe.
+(a) Classify the flow regime.
+(b) Find the transition velocities for the same pipe.
 
-def air_density(P, T, R_air=287.0):
-    """ρ = P/(RT) for ideal gas. P in Pa, T in K."""
-    return P / (R_air * T)
+REYNOLDS NUMBER
+    Re = ρ V D / μ
+       = (998.2)(2.0)(0.050) / (1.002 × 10⁻³)
+       = 99 621
+    Re ≈ 1.0 × 10⁵   ⇒   TURBULENT   (Re > 4000)
 
-# Water properties at 20°C
-rho_water = 998.2   # kg/m³
-mu_water  = 1.002e-3  # Pa·s
-nu_water  = mu_water / rho_water
+TRANSITION VELOCITIES  (V = Re · ν / D)
+    V_laminar-limit    = 2300 · 1.004e-6 / 0.050 ≈ 0.046 m/s
+    V_turbulent-onset  = 4000 · 1.004e-6 / 0.050 ≈ 0.080 m/s
+    2300 < Re < 4000 is the transitional zone.
 
-# Air properties at 20°C, 101.325 kPa
-T_air = 293.15    # K
-P_air = 101325    # Pa
-rho_air = air_density(P_air, T_air)
-mu_air  = 1.81e-5   # Pa·s
-nu_air  = mu_air / rho_air
-
-print("=== Fluid Properties at 20°C ===")
-print(f"Water: ρ = {rho_water:.1f} kg/m³,  ν = {nu_water*1e6:.3f}×10⁻⁶ m²/s")
-print(f"Air:   ρ = {rho_air:.3f} kg/m³, ν = {nu_air*1e6:.3f}×10⁻⁶ m²/s")
-
-# Reynolds number for water in a pipe
-D_pipe = 0.05   # m (50 mm diameter pipe)
-V_water = 2.0   # m/s flow velocity
-
-Re = reynolds_number(rho_water, V_water, D_pipe, mu_water)
-print(f"\nPipe flow: V={V_water} m/s, D={D_pipe*1000:.0f}mm")
-print(f"Re = {Re:,.0f} -> {flow_regime(Re)}")
-
-# Threshold velocities for transition
-V_lam = 2300 * nu_water / D_pipe
-V_turb = 4000 * nu_water / D_pipe
-print(f"Laminar below: {V_lam:.3f} m/s")
-print(f"Turbulent above: {V_turb:.3f} m/s")`,
-        output: `=== Fluid Properties at 20C ===\nWater: rho = 998.2 kg/m3,  nu = 1.004e-6 m2/s\nAir:   rho = 1.204 kg/m3, nu = 15.029e-6 m2/s\n\nPipe flow: V=2.0 m/s, D=50mm\nRe = 99,621 -> Turbulent\nLaminar below: 0.046 m/s\nTurbulent above: 0.080 m/s`,
-        explanation: 'Water flowing at 2 m/s in a 50mm pipe has Re about 100,000, firmly turbulent. The flow becomes turbulent at very low velocities in pipes of this size. Note that air has kinematic viscosity about 15 times higher than water, despite being far less dense.',
+TAKEAWAY
+    Domestic water lines (typ. V ≈ 1–3 m/s) are always turbulent.
+    Laminar water flow in a 50 mm pipe would require V < 5 cm/s.`,
+        output: `Re ≈ 99 600  (Turbulent)
+V_laminar   < 0.046 m/s
+V_turbulent > 0.080 m/s`,
+        explanation: 'Re = ρVD/μ is a dimensionless ratio of inertial to viscous forces. Below 2300 viscous forces dominate (laminar); above 4000 inertial forces win (turbulent). Because water has such low kinematic viscosity, any practical piping velocity puts water into the turbulent regime — laminar water flow only shows up in capillary and micro-channel systems.',
       },
     ],
     commonMistakes: [
@@ -114,50 +100,50 @@ print(f"Turbulent above: {V_turb:.3f} m/s")`,
     formula: "Bernoulli's Equation (along streamline):\nP₁ + ½ρV₁² + ρgz₁ = P₂ + ½ρV₂² + ρgz₂ = const\n\nFor horizontal flow (z₁=z₂):\nP₁ + ½ρV₁² = P₂ + ½ρV₂²\n\nContinuity Equation (incompressible):\nA₁V₁ = A₂V₂  (Q = AV = constant)\n\nVenturi flow rate:\nQ = A₂√(2ΔP / (ρ(1-(A₂/A₁)²)))",
     codeExamples: [
       {
-        title: 'Venturi Meter and Nozzle Analysis',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Venturi Meter + Pitot-Static Tube',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `PROBLEM 1 — Venturi flow meter (water)
+──────────────────────────────────────
+Given:  D₁ = 100 mm (upstream),  D₂ = 50 mm (throat)
+        ρ = 1000 kg/m³,          ΔP = 15 kPa
+        Discharge coefficient  C_d = 0.98
 
-rho_water = 1000  # kg/m³
-g = 9.81          # m/s²
+Step 1  Areas
+    A₁ = π/4 · (0.10)² = 7.854 × 10⁻³ m²
+    A₂ = π/4 · (0.05)² = 1.963 × 10⁻³ m²
+    Area ratio (A₂/A₁)² = (0.25)² = 0.0625
 
-def velocity_from_bernoulli(P1, P2, V1, rho, z1=0, z2=0):
-    """Find V2 from Bernoulli's equation given P1, P2, V1."""
-    # P1 + 0.5ρV1² + ρgz1 = P2 + 0.5ρV2² + ρgz2
-    rhs = P1 - P2 + 0.5*rho*V1**2 + rho*g*(z1-z2)
-    V2_sq = 2 * rhs / rho
-    if V2_sq < 0:
-        raise ValueError("No real solution — check inputs")
-    return math.sqrt(V2_sq)
+Step 2  Ideal flow rate (Bernoulli + Continuity)
+    Q_ideal = A₂ · √{ 2 ΔP / [ ρ (1 − (A₂/A₁)²) ] }
+            = 1.963e-3 · √{ 2·15000 / [ 1000·(1 − 0.0625) ] }
+            = 1.963e-3 · √{ 30 000 / 937.5 }
+            = 1.963e-3 · 5.657
+            = 0.01111 m³/s
 
-def venturi_flow_rate(A1, A2, delta_P, rho, Cd=0.98):
-    """Flow rate through a venturi meter. Cd = discharge coefficient."""
-    Q_ideal = A2 * math.sqrt(2 * delta_P / (rho * (1 - (A2/A1)**2)))
-    return Cd * Q_ideal
+Step 3  Actual flow
+    Q = C_d · Q_ideal = 0.98 · 0.01111 = 0.01089 m³/s
+      ≈ 10.89 L/s
 
-# Example 1: Water flowing through a venturi
-# Pipe D1=0.1m narrows to D2=0.05m; ΔP = 15 kPa
-D1, D2 = 0.10, 0.05
-A1 = math.pi * D1**2 / 4
-A2 = math.pi * D2**2 / 4
-dP = 15000  # Pa
+Step 4  Velocities
+    V₁ = Q/A₁ = 0.01089 / 7.854e-3 = 1.39 m/s
+    V₂ = Q/A₂ = 0.01089 / 1.963e-3 = 5.55 m/s   ( 4× V₁, as continuity demands )
 
-Q = venturi_flow_rate(A1, A2, dP, rho_water)
-V1 = Q / A1
-V2 = Q / A2
-print(f"Venturi Meter:")
-print(f"  Flow rate Q = {Q*1000:.2f} L/s")
-print(f"  V1 = {V1:.2f} m/s,  V2 = {V2:.2f} m/s")
+PROBLEM 2 — Pitot-static tube (aircraft, sea level)
+────────────────────────────────────────────────────
+Given:  P_static = 101 325 Pa,  P_total = 102 525 Pa
+        Dynamic pressure  q = P_total − P_static = 1200 Pa
+        ρ_air = 1.225 kg/m³
 
-# Example 2: Pitot tube (stagnation point)
-# Aircraft airspeed at sea level, static P = 101325 Pa, total P = 101325 + 1200 Pa
-P_static = 101325
-P_total  = 101325 + 1200
-rho_air  = 1.225
-V_aircraft = math.sqrt(2 * (P_total - P_static) / rho_air)
-print(f"\nPitot tube airspeed: {V_aircraft:.1f} m/s ({V_aircraft*3.6:.1f} km/h)")`,
-        output: `Venturi Meter:\n  Flow rate Q = 10.89 L/s\n  V1 = 1.39 m/s,  V2 = 5.54 m/s\n\nPitot tube airspeed: 44.3 m/s (159.3 km/h)`,
-        explanation: 'Venturi: the narrow section (D2=50mm) has 4 times the velocity of the wide section (D1=100mm), per continuity (A1V1=A2V2). With a 15 kPa pressure drop and Cd=0.98, the flow is 10.89 L/s. Pitot tube: total pressure = static + dynamic. The 1.2 kPa overpressure gives 44.3 m/s, about 159 km/h.',
+By Bernoulli at a stagnation point:
+    V = √(2 q / ρ)
+      = √(2 · 1200 / 1.225)
+      = √1959.2
+      = 44.3 m/s
+      ≈ 159 km/h`,
+        output: `Venturi:      Q ≈ 10.89 L/s   V₁ = 1.39 m/s   V₂ = 5.55 m/s
+Pitot tube:   V ≈ 44.3 m/s (~ 159 km/h)`,
+        explanation: 'The venturi uses the pressure drop caused by acceleration (V₂ = 4V₁ because area shrinks by 4). C_d ≈ 0.98 accounts for small viscous losses. The pitot tube converts kinetic energy to a stagnation pressure rise — solving Bernoulli backwards gives airspeed from a differential pressure gauge.',
       },
     ],
     commonMistakes: [
@@ -210,60 +196,55 @@ print(f"\nPitot tube airspeed: {V_aircraft:.1f} m/s ({V_aircraft*3.6:.1f} km/h)"
     formula: 'Darcy-Weisbach:\nhf = f · (L/D) · V²/(2g)   [m of head]\nΔP = f · (L/D) · ρV²/2    [Pa]\n\nFriction factor:\nLaminar: f = 64/Re\nTurbulent (Blasius): f = 0.316/Re^0.25  (Re < 10⁵)\nColebrook-White:\n1/√f = -2 log(ε/(3.7D) + 2.51/(Re√f))\n\nMinor loss:\nhm = K_L · V²/(2g)',
     codeExamples: [
       {
-        title: 'Pipe System Head Loss Calculation',
-        language: 'python',
-        code: `import math
+        title: 'Worked Example — Head Loss & Pump Power (Commercial Steel Pipe)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `PIPE SYSTEM
+────────────
+Fluid:  Water at 20 °C   (ρ = 998 kg/m³,  ν = 1.004×10⁻⁶ m²/s)
+Pipe:   D = 50 mm,  L = 100 m,  ε = 0.046 mm  (commercial steel)
+Flow:   Q = 3 L/s = 3 × 10⁻³ m³/s
+Fittings: 2 × 90° elbow  (K_L = 0.9 each),  1 × gate valve  (K_L = 0.2)
+g = 9.81 m/s²
 
-g = 9.81   # m/s²
-rho = 998  # kg/m³ (water at 20°C)
-nu  = 1.004e-6  # m²/s (kinematic viscosity)
+STEP 1 — Velocity
+    A = π/4 · D² = π/4 · (0.05)² = 1.963 × 10⁻³ m²
+    V = Q / A = 3e-3 / 1.963e-3 = 1.53 m/s
 
-def darcy_friction_factor(Re, eps_D=0.0):
-    """Friction factor: laminar or turbulent (Swamee-Jain approximation)."""
-    if Re < 2300:
-        return 64 / Re
-    elif eps_D == 0:
-        # Blasius (smooth pipe, Re < 100000)
-        return 0.316 * Re**(-0.25)
-    else:
-        # Swamee-Jain (approximate Colebrook)
-        return 0.25 / (math.log10(eps_D/3.7 + 5.74/Re**0.9))**2
+STEP 2 — Reynolds number
+    Re = V D / ν = 1.53 · 0.05 / 1.004e-6 ≈ 76 090   ( turbulent )
 
-def friction_head_loss(f, L, D, V):
-    """hf = f*(L/D)*(V²/2g)  [m]"""
-    return f * (L / D) * V**2 / (2 * g)
+STEP 3 — Relative roughness & friction factor (Swamee-Jain)
+    ε/D = 0.046 / 50 = 9.2 × 10⁻⁴
+    f = 0.25 / [ log₁₀( ε/(3.7D) + 5.74/Re^0.9 ) ]²
+      ≈ 0.0227    ( Moody chart, turbulent rough region )
 
-def minor_head_loss(K_L, V):
-    """hm = K_L * V²/(2g)  [m]"""
-    return K_L * V**2 / (2 * g)
+STEP 4 — Major (friction) head loss  (Darcy-Weisbach)
+    h_f = f · (L/D) · V² / (2g)
+        = 0.0227 · (100/0.05) · (1.53)² / (2·9.81)
+        = 0.0227 · 2000 · 0.1193
+        ≈ 5.40 m of water
 
-# Pipe system: 100m long, D=0.05m, Q=3 L/s, ε=0.046mm (commercial steel)
-D = 0.05      # m
-L = 100       # m
-Q = 0.003     # m³/s
-eps = 0.046e-3  # m (pipe roughness)
+STEP 5 — Minor (fitting) head loss
+    ΣK_L = 2·0.9 + 0.2 = 2.0
+    h_m = ΣK_L · V² / (2g)
+        = 2.0 · (1.53)² / (2·9.81)
+        ≈ 0.24 m
 
-A = math.pi * D**2 / 4
-V = Q / A
-Re = V * D / nu
-eps_D = eps / D
-f = darcy_friction_factor(Re, eps_D)
+STEP 6 — Total head & hydraulic pump power
+    H_total = h_f + h_m = 5.40 + 0.24 = 5.64 m
+    P_hyd   = ρ g Q H  = 998 · 9.81 · 3e-3 · 5.64
+            ≈ 166 W   (before pump efficiency)
 
-hf = friction_head_loss(f, L, D, V)
-
-# Minor losses: 2 elbows (KL=0.9 each) + 1 gate valve (KL=0.2)
-K_elbow = 0.9; K_valve = 0.2
-hm = minor_head_loss(2*K_elbow + K_valve, V)
-
-print(f"Flow velocity:  {V:.2f} m/s")
-print(f"Reynolds No.:   {Re:.0f} -> {('Laminar' if Re<2300 else 'Turbulent')}")
-print(f"Friction factor: f = {f:.4f}")
-print(f"Major loss:      hf = {hf:.2f} m")
-print(f"Minor loss:      hm = {hm:.2f} m")
-print(f"Total head loss: {hf+hm:.2f} m")
-print(f"Pump power needed: {rho*g*Q*(hf+hm)/1000:.3f} kW")`,
-        output: `Flow velocity:  1.53 m/s\nReynolds No.:   76090 -> Turbulent\nFriction factor: f = 0.0227\nMajor loss:      hf = 5.40 m\nMinor loss:      hm = 0.24 m\nTotal head loss: 5.64 m\nPump power needed: 0.166 kW`,
-        explanation: 'For 100m of 50mm commercial steel pipe at 3 L/s: major friction loss dominates at 5.40m vs 0.24m minor losses. Minor losses are about 4.2% of total. A pump must provide at least 5.64m head at 3 L/s flow, requiring about 166W of hydraulic power before pump efficiency is considered.',
+MINOR-LOSS SHARE
+    h_m / (h_f + h_m) = 0.24 / 5.64 ≈ 4.3 %`,
+        output: `Re ≈ 76 090   (Turbulent)
+f  ≈ 0.0227
+Major loss  h_f ≈ 5.40 m
+Minor loss  h_m ≈ 0.24 m   (~4.3 % of total)
+Total H     = 5.64 m
+Pump power  ≈ 0.166 kW  (hydraulic; divide by η_pump for shaft)`,
+        explanation: 'For long pipes the Darcy-Weisbach term (h_f) dominates because it scales with L/D. Minor losses matter more for short pipes with many fittings (e.g. HVAC coils). Note that h_f scales with V² — cutting the pipe diameter in half at fixed Q makes V four times larger and h_f rises by roughly a factor of 30, which is why upsizing pipe is often cheaper than upsizing the pump.',
       },
     ],
     commonMistakes: [
@@ -316,46 +297,48 @@ print(f"Pump power needed: {rho*g*Q*(hf+hm)/1000:.3f} kW")`,
     formula: 'Pump hydraulic power:\nP_hydraulic = ρ·g·Q·H   [W]\n\nPump efficiency:\nη_pump = P_hydraulic / P_shaft = (ρgQH) / (τω)\n\nSpecific speed (dimensionless):\nNs = N·Q^0.5 / H^0.75\nLow Ns → centrifugal, High Ns → axial/propeller\n\nAffinity Laws (same pump, different speed):\nQ₂/Q₁ = N₂/N₁\nH₂/H₁ = (N₂/N₁)²\nP₂/P₁ = (N₂/N₁)³',
     codeExamples: [
       {
-        title: 'Pump Sizing and Affinity Laws',
-        language: 'python',
-        code: `def pump_power(rho, g, Q, H, eta):
-    """Shaft power required to drive a pump."""
-    return rho * g * Q * H / eta
+        title: 'Worked Example — Pump Sizing + Affinity Laws (Speed Change)',
+        language: 'SI units',
+        kind: 'worked-example',
+        code: `DUTY POINT
+───────────
+Deliver Q = 50 L/s to a reservoir H_static = 30 m above suction.
+Pipe & fitting losses at design flow:  h_f = 8.5 m,  h_m = 2.1 m
+Water: ρ = 1000 kg/m³,  g = 9.81 m/s²
+Assume overall pump efficiency η_p = 0.78
 
-def affinity_laws(Q1, H1, P1, N1, N2):
-    """Scale pump performance to new speed N2."""
-    ratio = N2 / N1
-    Q2 = Q1 * ratio
-    H2 = H1 * ratio**2
-    P2 = P1 * ratio**3
-    return Q2, H2, P2
+STEP 1 — Total dynamic head (TDH)
+    H = H_static + h_f + h_m = 30 + 8.5 + 2.1 = 40.6 m
 
-# Pump sizing example
-# Supply 50 L/s to a reservoir 30m above;
-# pipe losses = 8.5m; pipe friction factor system curve
-rho = 1000    # kg/m³
-g   = 9.81    # m/s²
-Q   = 0.050   # m³/s
-H_static = 30 # m
-H_loss   = 8.5 + 2.1  # m (friction + minor)
-H_total  = H_static + H_loss
-eta_pump = 0.78
+STEP 2 — Hydraulic power (energy delivered to water)
+    P_hyd = ρ g Q H
+          = 1000 · 9.81 · 0.050 · 40.6
+          = 19 914 W
+          ≈ 19.9 kW
 
-P_shaft = pump_power(rho, g, Q, H_total, eta_pump)
-print(f"Required pump head:   {H_total:.1f} m")
-print(f"Shaft power required: {P_shaft/1000:.2f} kW")
-print(f"Hydraulic power:      {rho*g*Q*H_total/1000:.2f} kW")
+STEP 3 — Shaft power (motor rating)
+    P_shaft = P_hyd / η_p
+            = 19.9 / 0.78
+            ≈ 25.5 kW   → specify a 30 kW motor (next-standard-size)
 
-# Affinity laws: reduce speed from 1450 to 1160 RPM
-Q1, H1, P1 = 0.050, 40.6, P_shaft/1000
-N1, N2 = 1450, 1160
-Q2, H2, P2 = affinity_laws(Q1, H1, P1, N1, N2)
-print(f"\nAt {N2} RPM (affinity laws):")
-print(f"  Q2 = {Q2*1000:.1f} L/s")
-print(f"  H2 = {H2:.1f} m")
-print(f"  P2 = {P2:.2f} kW  ({P2/P1*100:.0f}% of original power)")`,
-        output: `Required pump head:   40.6 m\nShaft power required: 25.53 kW\nHydraulic power:      19.91 kW\n\nAt 1160 RPM (affinity laws):\n  Q2 = 40.0 L/s\n  H2 = 26.0 m\n  P2 = 13.07 kW  (51% of original power)`,
-        explanation: 'Reducing pump speed from 1450 to 1160 RPM (80% speed) reduces flow by 20%, head by 36%, but power by about 49%, because power scales with the cube of speed. Variable-speed drives are highly effective for energy savings when full flow is not always needed.',
+────────────────────────────────────────────────────────────
+AFFINITY LAWS  — same pump, slow it down from 1450 to 1160 RPM
+    Speed ratio  k = N₂/N₁ = 1160/1450 = 0.80  (80 %)
+
+        Q₂ = Q₁ · k     = 50 · 0.80        = 40.0 L/s
+        H₂ = H₁ · k²    = 40.6 · (0.80)²   ≈ 26.0 m
+        P₂ = P₁ · k³    = 25.5 · (0.80)³   ≈ 13.1 kW
+
+ENERGY IMPACT
+    80 % speed  →  20 % less flow, 36 % less head, but ~49 % less power.
+    This cubic power law is why VFDs pay back so quickly in
+    variable-demand systems (HVAC secondary loops, wastewater lift stations).`,
+        output: `TDH = 40.6 m
+Hydraulic power  ≈ 19.9 kW
+Shaft power       ≈ 25.5 kW (spec 30 kW motor)
+
+At 80 % speed:  Q = 40 L/s,  H ≈ 26 m,  P ≈ 13.1 kW   (≈ 51 % of design)`,
+        explanation: 'Total dynamic head sums the static lift plus all losses, giving what the pump must overcome. Shaft power = hydraulic / η — always oversize the motor to the next standard frame. The affinity laws (Q ∝ N, H ∝ N², P ∝ N³) mean a variable-frequency drive turning the pump down 20% cuts power almost in half — this is the single biggest energy-saving lever in fluid systems.',
       },
     ],
     commonMistakes: [

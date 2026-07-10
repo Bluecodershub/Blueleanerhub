@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Menu, X, LogOut, User as UserIcon, ShieldAlert, Award, Compass, LayoutDashboard, Bell, LockKeyhole, ChevronDown, Code2, CalendarDays, Trophy } from 'lucide-react'
+import { Menu, X, LogOut, User as UserIcon, ShieldAlert, Award, Compass, LayoutDashboard, Bell, LockKeyhole, ChevronDown, Code2, CalendarDays, Trophy, Presentation, Rocket } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { getHomeByRole } from '@/lib/authRoutes'
 import api from '@/lib/api'
@@ -34,8 +34,10 @@ const spacesDropdown: HeaderNavItem = {
 // Core platform modules: Home · Lessons · Courses · Spaces
 // (For Colleges / For Corporates / Pricing live in the footer, not the header.)
 const publicNav: HeaderNavItem[] = [
-  { label: 'Lessons',  href: '/lessons',  icon: Compass },
-  { label: 'Courses',  href: '/courses',  icon: Award },
+  { label: 'Lessons',  href: '/lessons',   icon: Compass },
+  { label: 'Courses',  href: '/courses',   icon: Award },
+  { label: 'Workshop', href: '/workshops', icon: Presentation },
+  { label: 'Bootcamp', href: '/bootcamp',  icon: Rocket },
   spacesDropdown,
 ]
 
@@ -43,6 +45,8 @@ const studentNav: HeaderNavItem[] = [
   { label: 'Dashboard',  href: '/student/dashboard',    icon: LayoutDashboard },
   { label: 'Lessons',    href: '/lessons',              icon: Compass },
   { label: 'Courses',    href: '/courses',              icon: Award },
+  { label: 'Workshop',   href: '/workshops',            icon: Presentation },
+  { label: 'Bootcamp',   href: '/bootcamp',             icon: Rocket },
   spacesDropdown,
   { label: 'Profile',    href: '/profile',              icon: UserIcon },
 ]

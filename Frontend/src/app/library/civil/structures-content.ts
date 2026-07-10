@@ -13,44 +13,51 @@ export const structureLessons: TopicLesson[] = [
     formula: 'Dead Load (DL) = Unit Weight × Volume\nFor RCC: γ = 25 kN/m³\nFor steel: γ = 78.5 kN/m³\n\nIS 456 Load Combinations:\nFd = 1.5(DL + LL)         — Gravity only\nFd = 1.2(DL + LL ± WL)    — With wind\nFd = 1.5(DL ± WL)         — Wind governs\nFd = 1.2(DL + LL ± EL)    — With earthquake',
     codeExamples: [
       {
-        title: 'Load Calculation for a Residential Floor Slab',
-        language: 'python',
-        code: `# IS 875 load calculation for residential building
-def slab_dead_load(thickness_m, unit_wt=25):
-    """RCC slab self-weight. unit_wt in kN/m³."""
-    return unit_wt * thickness_m
+        title: 'Worked Example — Factored Load on a Residential Floor Slab (IS 456 / IS 875)',
+        language: 'IS 456 / IS 875',
+        kind: 'worked-example',
+        code: `SLAB PANEL                4 m × 5 m,  RCC,  t = 150 mm
+USE                       Residential floor
+CODE                      IS 456:2000  (limit state)  +  IS 875 Part 2 (LL)
+RCC unit wt γ             25 kN/m³  (IS 875 Part 1, Table 1)
 
-def factored_load_gravity(DL, LL, gamma_DL=1.5, gamma_LL=1.5):
-    """IS 456 factored load: 1.5(DL + LL)"""
-    return gamma_DL * DL + gamma_LL * LL
+STEP 1 — CHARACTERISTIC LOADS  (per unit area)
 
-def factored_load_wind(DL, LL, WL):
-    """IS 456 factored load: 1.2(DL + LL + WL)"""
-    return 1.2 * (DL + LL + WL)
+  Dead loads (DL)
+    (a) Slab self-wt        = γ · t  = 25 · 0.15         = 3.75 kN/m²
+    (b) Floor finish        (IS 875 Pt 1)                = 1.00 kN/m²
+    (c) Partition allowance (IS 875 Pt 1, cl. 3.1.2)     = 1.50 kN/m²
+                                                       ────────────
+    Total DL                                             = 6.25 kN/m²
 
-# Residential floor slab: 150mm thick, 4m × 5m panel
-slab_thickness = 0.15   # m
-floor_area = 4 * 5      # m²
+  Live load  (LL)   IS 875 Part 2, Table 1  (residential rooms)
+                                                         = 2.00 kN/m²
 
-DL_slab    = slab_dead_load(slab_thickness)  # kN/m²
-DL_finish  = 1.0    # floor finish (IS 875 Part 1)
-DL_partition = 1.5  # partition allowance
-DL_total   = DL_slab + DL_finish + DL_partition
+STEP 2 — FACTORED (DESIGN) LOAD  (IS 456 : 2000, cl. 36.4)
 
-LL = 2.0   # residential live load (IS 875 Part 2, Table 1)
+  Gravity-only critical combination
+        Fd = 1.5 (DL + LL)
+           = 1.5 · (6.25 + 2.00)
+           = 1.5 · 8.25
+           = 12.375 kN/m²
 
-Fd_gravity = factored_load_gravity(DL_total, LL)
+STEP 3 — TOTAL FACTORED PANEL FORCE
 
-print(f"=== Floor Slab Load Analysis ===")
-print(f"Slab self-weight:    {DL_slab:.2f} kN/m²")
-print(f"Floor finish:        {DL_finish:.2f} kN/m²")
-print(f"Partition allowance: {DL_partition:.2f} kN/m²")
-print(f"Total Dead Load:     {DL_total:.2f} kN/m²")
-print(f"Live Load:           {LL:.2f} kN/m²")
-print(f"\nFactored Load 1.5(DL+LL): {Fd_gravity:.3f} kN/m²")
-print(f"Total factored force on panel: {Fd_gravity*floor_area:.1f} kN")`,
-        output: `=== Floor Slab Load Analysis ===\nSlab self-weight:    3.75 kN/m²\nFloor finish:        1.00 kN/m²\nPartition allowance: 1.50 kN/m²\nTotal Dead Load:     6.25 kN/m²\nLive Load:           2.00 kN/m²\n\nFactored Load 1.5(DL+LL): 12.375 kN/m²\nTotal factored force on panel: 247.5 kN`,
-        explanation: 'The 4×5m slab panel carries 247.5 kN of factored load — this drives the bending moment and shear force design. The factor 1.5 provides safety against uncertainty in load estimation and material strength.',
+  Panel area A = 4 · 5 = 20 m²
+        W_d  = Fd · A = 12.375 · 20 = 247.5 kN
+
+STEP 4 — SANITY CHECK
+  Design bending moment (short span, one-way plate strip 1 m wide):
+        M_u ≈ w · lx² / 8 (approx.)
+            ≈ 12.375 · (4)² / 8
+            = 24.75 kN·m  per metre width
+  This is the value that drives reinforcement design in IS 456 cl. 38.`,
+        output: `Total DL = 6.25 kN/m²
+LL       = 2.00 kN/m²
+Factored Fd  = 12.375 kN/m²
+W_d panel    = 247.5 kN
+M_u ≈ 24.75 kN·m per m width  (drives reinforcement design)`,
+        explanation: 'IS 456 limit-state design multiplies characteristic loads by partial factors (1.5 for the DL+LL combo) to give the design load. Do NOT hunt for the factor in a single number — it accounts for uncertainty in loads, material strength, workmanship, and analysis. Missing the partition allowance (a common oversight) can under-design a slab by 20 %.',
       },
     ],
     commonMistakes: [
@@ -103,53 +110,56 @@ print(f"Total factored force on panel: {Fd_gravity*floor_area:.1f} kN")`,
     formula: 'Relationships:\ndV/dx = −w(x)  [distributed load w in kN/m]\ndM/dx = V\n\nSimply Supported Beam, UDL w (kN/m), span L:\n  R_A = R_B = wL/2\n  V(x) = wL/2 - wx\n  M(x) = (wL/2)x - wx²/2\n  M_max = wL²/8  at x=L/2\n  V_max = wL/2  at supports\n\nSS Beam, Point Load P at midspan:\n  M_max = PL/4',
     codeExamples: [
       {
-        title: 'BMD and SFD for Simply Supported Beam with UDL',
-        language: 'python',
-        code: `import numpy as np
+        title: 'Worked Example — SFD & BMD for Simply Supported Beam (UDL + Central Point Load)',
+        language: 'structural analysis',
+        kind: 'worked-example',
+        code: `BEAM  A ──────────────── B     Span  L = 6.0 m
+LOAD 1  UDL w = 15 kN/m along entire span
+LOAD 2  Point load P = 40 kN at midspan (x = 3 m)
 
-def ss_beam_udl(w, L, num_points=100):
-    """
-    Simply supported beam with UDL w (kN/m) over span L (m).
-    Returns x, V (shear), M (moment) arrays.
-    """
-    x = np.linspace(0, L, num_points)
-    R = w * L / 2          # reaction at each support
-    V = R - w * x          # shear force (kN)
-    M = R * x - w * x**2 / 2  # bending moment (kN·m)
-    return x, V, M
+REACTIONS  (symmetry — both loads centered)
+    R_A = R_B = (w·L)/2 + P/2
+            = (15·6)/2 + 40/2
+            = 45 + 20
+            = 65 kN
 
-def ss_beam_point_load(P, a, L, num_points=100):
-    """Simply supported beam with point load P at distance a from A."""
-    b = L - a
-    R_A = P * b / L
-    R_B = P * a / L
-    x = np.linspace(0, L, num_points)
-    V = np.where(x < a, R_A, R_A - P)
-    M = np.where(x <= a, R_A * x, R_A * x - P * (x - a))
-    return x, V, M
+────────────────────────────────────────────────
+CASE (a):  UDL only
+    V(x) = R_A − w·x                        (linear, zero at midspan)
+    M(x) = R_A·x − w·x²/2                   (parabolic, peak at midspan)
 
-# Example: 6m span, UDL = 15 kN/m
-w = 15    # kN/m
-L = 6     # m
-x, V, M = ss_beam_udl(w, L)
+    V_max = w·L/2      = 45.0 kN      @ x = 0 and x = L (at supports)
+    M_max = w·L²/8     = 15·6²/8 = 67.5 kN·m   @ x = L/2
 
-print(f"Simply Supported Beam: w={w} kN/m, L={L}m")
-print(f"Support reactions:    R_A = R_B = {w*L/2:.1f} kN")
-print(f"Maximum shear force:  {w*L/2:.1f} kN  (at supports)")
-print(f"Maximum bending moment: {w*L**2/8:.2f} kN·m  (at midspan)")
+    SHEAR-FORCE DIAGRAM (UDL)          BENDING-MOMENT DIAGRAM
+    +45 ┐                              0┐        ,-'''-.        ┌0
+        └──────┐                        \\     ,'         '.     /
+               \\   crosses 0             \\  ,'  M_max=67.5 '.  /
+                \\──── x=3 m               \\.                .\/
+                     └──────┐              '─┴────────────┴─'
+    −45                     ┘
 
-# Point load example
-P = 40  # kN at midspan
-x2, V2, M2 = ss_beam_point_load(P, L/2, L)
-print(f"\nPoint Load P={P}kN at midspan:")
-print(f"Maximum shear force:    {P/2:.1f} kN")
-print(f"Maximum bending moment: {P*L/4:.2f} kN·m")
+────────────────────────────────────────────────
+CASE (b):  Point load only  (P = 40 kN at midspan)
+    V:  +P/2 from A to midspan, then −P/2 to B
+    V_max = P/2 = 20 kN
+    M_max = P·L/4 = 40·6/4 = 60 kN·m   @ midspan
+    BMD is a triangle peaking at midspan.
 
-# Combined loading
-M_max_combined = w*L**2/8 + P*L/4
-print(f"\nCombined (superposition): M_max = {M_max_combined:.2f} kN·m")`,
-        output: `Simply Supported Beam: w=15 kN/m, L=6m\nSupport reactions:    R_A = R_B = 45.0 kN\nMaximum shear force:  45.0 kN  (at supports)\nMaximum bending moment: 67.50 kN·m  (at midspan)\n\nPoint Load P=40kN at midspan:\nMaximum shear force:    20.0 kN\nMaximum bending moment: 60.00 kN·m\n\nCombined (superposition): M_max = 127.50 kN·m`,
-        explanation: 'For UDL: maximum moment = wL²/8 at midspan, maximum shear = wL/2 at supports. For midspan point load: M_max = PL/4, V_max = P/2. Superposition applies for linear systems: combined M_max = 127.5 kN·m drives beam design.',
+────────────────────────────────────────────────
+CASE (c):  SUPERPOSITION (linear elastic — valid)
+    V_max total  = w·L/2 + P/2  = 45 + 20 = 65 kN   @ supports
+    M_max total  = w·L²/8 + P·L/4
+                 = 67.5 + 60.0
+                 = 127.5 kN·m   @ midspan
+
+DESIGN VALUES  (drive RCC/steel design in IS 456 / IS 800)
+    M_u ≈ 127.5 kN·m
+    V_u ≈ 65    kN`,
+        output: `R_A = R_B = 65 kN
+V_max = 65 kN (at supports)
+M_max = 127.5 kN·m (at midspan)  ← drives beam depth & reinforcement`,
+        explanation: 'For a simply supported beam under symmetric load, both reactions equal half the total load. UDL gives a parabolic BMD with peak wL²/8; a central point load gives a triangular BMD with peak PL/4. Linear elastic superposition lets you add the two peaks directly. Real bridges apply the concept over many concurrent load cases (dead + live + wind + seismic) and take the envelope.',
       },
     ],
     commonMistakes: [
