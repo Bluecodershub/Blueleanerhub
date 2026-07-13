@@ -20,11 +20,17 @@ services:
           name: bluelearnerhub-redis
           property: connectionString
       - key: FRONTEND_URL
-        sync: false   # Set after deploying the frontend (e.g. https://bluelearnerhub.vercel.app)
+        sync: false   # Set in Render Dashboard — your deployed Vercel URL (e.g. https://bluelearnerhub.vercel.app)
+      - key: BACKEND_URL
+        sync: false   # Set in Render Dashboard — your Render service URL (e.g. https://bluelearnerhub-backend.onrender.com)
+      - key: CORS_ORIGINS
+        sync: false   # Set in Render Dashboard — comma-separated list: https://bluelearnerhub.vercel.app,https://bluelearnerhub.com
       - key: AI_PROVIDER
         value: local
       - key: AI_SERVICE_URL
         sync: false   # URL of the Python AI worker (optional; features degrade if unset)
+      - key: INTERNAL_SERVICE_SECRET
+        generateValue: true   # Shared secret for backend↔AI-worker authentication
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -35,6 +41,8 @@ services:
         generateValue: true
       - key: TRUST_PROXY
         value: "true"
+      - key: LOG_LEVEL
+        value: info
 
   # ─── Redis ───────────────────────────────────────────────────────────────────
   - type: redis
